@@ -1,0 +1,285 @@
+<?php
+/**
+ * Init Configuration
+ *
+ * @author {{author_name}}
+ * @package {{slug}}
+ */
+
+namespace {{theme_slug_cap}};
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Init Class
+ *
+ * @package {{slug}}
+ */
+class Init {
+
+	/**
+	 * Instance variable
+	 *
+	 * @var $instance
+	 */
+	private static $instance;
+
+	/**
+	 * Class instance.
+	 *
+	 * @return Init
+	 */
+	public static function instance() {
+		if ( null === static::$instance ) {
+			static::$instance = new static();
+		}
+
+		return static::$instance;
+	}
+
+	/**
+	 * Class constructor.
+	 */
+	private function __construct() {
+		$this->load_hooks();
+		$this->init_instance();
+	}
+
+	/**
+	 * Load initial hooks.
+	 */
+	private function load_hooks() {
+		add_action( 'init', array( $this, 'register_block_patterns' ), 9 );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'dashboard_scripts' ) );
+
+		add_filter( 'gutenverse_template_path', array( $this, 'template_path' ), null, 3 );
+		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 2 );
+		add_filter( 'gutenverse_block_config', array( $this, 'default_font' ), 10 );
+		add_filter( 'gutenverse_font_header', array( $this, 'default_header_font' ) );
+		add_filter( 'gutenverse_global_css', array( $this, 'global_header_style' ) );
+	}
+
+	public function init_instance() {
+		new Asset_Enqueue();
+	}
+
+	/**
+	 * Generate Global Font
+	 *
+	 * @param string $value  Value of the option.
+	 *
+	 * @return string
+	 */
+	public function global_header_style( $value ) {
+		$theme_name      = get_stylesheet();
+		$global_variable = get_option( 'gutenverse-global-variable-font-' . $theme_name );
+
+		if ( empty( $global_variable ) && function_exists( 'gutenverse_global_font_style_generator' ) ) {
+			$font_variable = $this->default_font_variable();
+			$value        .= \gutenverse_global_font_style_generator( $font_variable );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Header Font.
+	 *
+	 * @param mixed $value  Value of the option.
+	 *
+	 * @return mixed Value of the option.
+	 */
+	public function default_header_font( $value ) {
+		if ( ! $value ) {
+			$value = array(
+				array(
+					'value'  => 'Alfa Slab One',
+					'type'   => 'google',
+					'weight' => 'bold',
+				),
+			);
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Alter Default Font.
+	 *
+	 * @param array $config Array of Config.
+	 *
+	 * @return array
+	 */
+	public function default_font( $config ) {
+		if ( empty( $config['globalVariable']['fonts'] ) ) {
+			$config['globalVariable']['fonts'] = $this->default_font_variable();
+
+			return $config;
+		}
+
+		if ( ! empty( $config['globalVariable']['fonts'] ) ) {
+			// Handle existing fonts.
+			$theme_name   = get_stylesheet();
+			$initial_font = get_option( 'gutenverse-font-init-' . $theme_name );
+
+			if ( ! $initial_font ) {
+				$config['globalVariable']['fonts'] = array_merge( $config['globalVariable']['fonts'], $this->default_font_variable() );
+				update_option( 'gutenverse-font-init-' . $theme_name, true );
+			}
+		}
+
+		return $config;
+	}
+
+	/**
+	 * Default Font Variable.
+	 *
+	 * @return array
+	 */
+	public function default_font_variable() {
+		return array(
+            {{theme_fonts}}
+		);
+	}
+
+
+
+	/**
+	 * Add Template to Editor.
+	 *
+	 * @param array $template_files Path to Template File.
+	 * @param array $template_type Template Type.
+	 *
+	 * @return array
+	 */
+	public function add_template( $template_files, $template_type ) {
+		$directory = get_template_directory();
+
+		if ( 'wp_template' === $template_type ) {
+			$new_templates = array(
+				{{template_names}}
+			);
+
+			foreach ( $new_templates as $template ) {
+				$template_files[] = array(
+					'slug'  => $template,
+					'path'  => $directory . "/gutenverse-templates/templates/{$template}.html",
+					'theme' => get_template(),
+					'type'  => 'wp_template',
+				);
+			}
+		}
+
+		return $template_files;
+	}
+
+	/**
+	 * Use gutenverse template file instead.
+	 *
+	 * @param string $template_file Path to Template File.
+	 * @param string $theme_slug Theme Slug.
+	 * @param string $template_slug Template Slug.
+	 *
+	 * @return string
+	 */
+	public function template_path( $template_file, $theme_slug, $template_slug ) {
+		$directory = get_template_directory();
+
+		switch ( $template_slug ) {
+            {{template_cases}}
+		}
+
+		return $template_file;
+	}
+
+	/**
+	 * Register Block Pattern.
+	 */
+	public function register_block_patterns() {
+		new Block_Patterns();
+	}
+
+	/**
+	 * Enqueue scripts and styles.
+	 */
+	public function dashboard_scripts() {
+		$screen = get_current_screen();
+
+		if ( $screen->id === 'appearance_page_{{slug}}-dashboard' ) {
+			// enqueue css.
+			wp_enqueue_style(
+				'{{slug}}-dashboard',
+				{{slug_upper}}_URI . '/assets/css/theme-dashboard.css',
+				array(),
+				{{slug_upper}}_VERSION
+			);
+
+			// enqueue js.
+			wp_enqueue_script(
+				'{{slug}}-dashboard',
+				{{slug_upper}}_URI . '/assets/js/theme-dashboard.js',
+				array( 'wp-api-fetch' ),
+				{{slug_upper}}_VERSION,
+				true
+			);
+
+			wp_localize_script( '{{slug}}-dashboard', 'GutenThemeConfig', $this->theme_config() );
+		}
+	}
+
+	/**
+	 * Register static data to be used in theme's js file
+	 */
+	public function theme_config() {
+		{{plugins_variable}}
+
+		return array(
+			'images'       => {{slug_upper}}_URI . '/assets/img/',
+			'title'        => esc_html__( '{{title}}', '{{slug}}' ),
+			'description'  => esc_html__( '{{description}}', '{{slug}}' ),
+			'pluginTitle'  => esc_html__( 'Plugin Requirement', '{{slug}}' ),
+			'pluginDesc'   => esc_html__( 'This theme require some plugins. Please make sure all the plugin below are installed and activated.', '{{slug}}' ),
+			'note'         => esc_html__( '', '{{slug}}' ),
+			'note2'        => esc_html__( '', '{{slug}}' ),
+			'demo'         => esc_html__( '', '{{slug}}' ),
+			'demoUrl'      => esc_url( 'https:/gutenverse.com/demo?name={{slug}}' ),
+			'install'      => '',
+			'installText'  => esc_html__( 'Install Gutenverse Plugin', '{{slug}}' ),
+			'activateText' => esc_html__( 'Activate Gutenverse Plugin', '{{slug}}' ),
+			'doneText'     => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
+			'pages'        => array(
+				{{page_list}}
+			),
+			'plugins'      => array(
+				{{plugins_required}}
+			),
+		);
+	}
+
+	/**
+	 * Add Menu
+	 */
+	public function admin_menu() {
+		add_theme_page(
+			'Theme Dashboard',
+			'Theme Dashboard',
+			'manage_options',
+			'{{slug}}-dashboard',
+			array( $this, 'load_dashboard' ),
+			1
+		);
+	}
+
+	/**
+	 * Template page
+	 */
+	public function load_dashboard() {
+		?>
+			<div id="gutenverse-theme-dashboard">
+			</div>
+		<?php
+	}
+}

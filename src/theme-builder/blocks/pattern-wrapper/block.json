@@ -1,0 +1,26 @@
+{
+  "apiVersion": 2,
+  "name": "gutenverse-themes-builder/pattern-wrapper",
+  "class_callback": "\\GTB\\Block\\Pattern_Wrapper",
+  "title": "Pattern Wrapper",
+  "description": "Pattern Wrapper for Gutenverse Themes Builder.",
+  "category": "gutenverse-theme-builder",
+  "attributes": {
+    "elementId": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "default": ""
+    },
+    "pattern": {
+      "type": "object",
+      "default": null
+    }
+  },
+  "supports": {
+    "className": false
+  },
+  "keywords": ["pattern", "wrapper", "section"],
+  "style": "gutenverse-theme-builder"
+}

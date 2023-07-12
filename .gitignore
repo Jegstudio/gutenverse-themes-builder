@@ -1,0 +1,20 @@
+# Folders to ignore
+build
+vendor
+release
+node_modules
+.idea
+gutenverse-themes-builder/lib/dependencies
+
+# Files to ignore
+package-lock.json
+composer.lock
+gbp.js
+builder.js
+dashboard.js
+dashboard.css
+note.txt
+gutenverse-themes-builder/assets/js/*
+gutenverse-themes-builder/assets/css/*
+gutenverse-themes-builder/block
+gutenverse-core

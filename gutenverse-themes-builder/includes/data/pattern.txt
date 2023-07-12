@@ -1,0 +1,9 @@
+<?php
+/**
+ * Pattern content.
+ */
+return array(
+	'title'      => __( '{{pattern_title}}', '{{theme_slug}}' ),
+	'categories' => array( '{{pattern_category}}' ),
+	'content'    => '{{pattern_content}}',
+);

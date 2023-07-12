@@ -1,0 +1,92 @@
+<?php
+/**
+ * Block Pattern Class
+ *
+ * @author Jegstudio
+ * @package {{theme_slug}}
+ */
+
+namespace {{theme_slug_cap}};
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+use WP_Block_Pattern_Categories_Registry;
+
+/**
+ * Init Class
+ *
+ * @package {{theme_slug}}
+ */
+class Block_Patterns {
+
+	/**
+	 * Instance variable
+	 *
+	 * @var $instance
+	 */
+	private static $instance;
+
+	/**
+	 * Class instance.
+	 *
+	 * @return BlockPatterns
+	 */
+	public static function instance() {
+		if ( null === static::$instance ) {
+			static::$instance = new static();
+		}
+
+		return static::$instance;
+	}
+
+	/**
+	 * Class constructor.
+	 */
+	public function __construct() {
+		$this->register_block_patterns();
+	}
+
+	/**
+	 * Register Block Patterns
+	 */
+	private function register_block_patterns() {
+		$block_pattern_categories = array(
+			'{{theme_slug}}-basic' => array( 'label' => __( '{{theme_slug_cap}} Basic Patterns', '{{theme_slug}}' ) ),
+		);
+
+		if ( defined( 'GUTENVERSE' ) ) {
+			$block_pattern_categories['{{theme_slug}}-gutenverse'] = array( 'label' => __( '{{theme_slug_cap}} Gutenverse Patterns', '{{theme_slug}}' ) );
+		}
+
+		$block_pattern_categories = apply_filters( '{{theme_slug}}_block_pattern_categories', $block_pattern_categories );
+
+		foreach ( $block_pattern_categories as $name => $properties ) {
+			if ( ! WP_Block_Pattern_Categories_Registry::get_instance()->is_registered( $name ) ) {
+				register_block_pattern_category( $name, $properties );
+			}
+		}
+
+		$block_patterns = array(
+            {{core_patterns}}
+		);
+
+		if ( defined( 'GUTENVERSE' ) ) {
+            {{gutenverse_patterns}}
+		}
+
+		$block_patterns = apply_filters( '{{theme_slug}}_block_patterns', $block_patterns );
+
+		if ( function_exists( 'register_block_pattern' ) ) {
+			foreach ( $block_patterns as $block_pattern ) {
+				$pattern_file = get_theme_file_path( '/inc/patterns/' . $block_pattern . '.php' );
+
+				register_block_pattern(
+					'{{theme_slug}}/' . $block_pattern,
+					require $pattern_file
+				);
+			}
+		}
+	}
+}
