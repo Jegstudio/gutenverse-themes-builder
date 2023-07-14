@@ -41,6 +41,7 @@ class Themes_Asset_Db extends Database_Abstract {
 			id				INT NOT NULL AUTO_INCREMENT,
 			handler			VARCHAR(100) NOT NULL,
 		    theme_id		CHAR(20) NOT NULL,
+			enqueue			CHAR(20) NOT NULL,
             type			VARCHAR(20) NOT NULL,
 			preset			VARCHAR(20),
 			media_type		LONGTEXT,
