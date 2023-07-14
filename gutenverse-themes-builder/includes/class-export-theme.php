@@ -692,7 +692,7 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_colors( $html_content[ $slug_key ] );
-					$content = $this->fix_core_navigation( $html_content[ $slug_key ] );
+					$content = $this->fix_core_navigation( $content );
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 
 					foreach ( $headers as $header ) {
