@@ -44,16 +44,22 @@ module.exports = {
         new DependencyExtractionWebpackPlugin(),
         new FileManagerPlugin({
             events: {
+                onStart: {
+                    delete: [
+                        "./gutenverse-themes-builder/assets/js/blocks.js*",
+                        "./gutenverse-themes-builder/lib/dependencies/blocks.asset.php"
+                    ]
+                },
                 onEnd: {
                     copy: [
                         ...copyPath,
                         {
-                            source: './build/blocks.asset.php',
-                            destination: './gutenverse-themes-builder/lib/dependencies/blocks.asset.php',
+                            source: process.env.NODE_ENV === 'development' ? "./build/blocks.js*" : "./build/blocks.js",
+                            destination: './gutenverse-themes-builder/assets/js/',
                         },
                         {
-                            source: './build/blocks.js',
-                            destination: './gutenverse-themes-builder/assets/js/blocks.js',
+                            source: './build/blocks.asset.php',
+                            destination: './gutenverse-themes-builder/lib/dependencies/blocks.asset.php',
                         },
                     ],
                 },

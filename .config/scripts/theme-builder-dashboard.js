@@ -1,15 +1,5 @@
 const path = require('path');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
-const copyPath = [
-    {
-        source: './build/theme-dashboard/theme-dashboard.js',
-        destination: './gutenverse-themes-builder/includes/data/assets/js/theme-dashboard.js',
-    },
-    {
-        source: './build/theme-dashboard/theme-dashboard.css',
-        destination: './gutenverse-themes-builder/includes/data/assets/css/theme-dashboard.css',
-    },
-]
 
 module.exports = {
     mode: 'development',
@@ -54,8 +44,23 @@ module.exports = {
     plugins: [
         new FileManagerPlugin({
             events: {
+                onStart: {
+                    delete: [
+                        "./gutenverse-themes-builder/includes/data/assets/js/theme-dashboard.js*",
+                        "./gutenverse-themes-builder/includes/data/assets/css/theme-dashboard.css"
+                    ]
+                },
                 onEnd: {
-                    copy: copyPath,
+                    copy: [
+                        {
+                            source: process.env.NODE_ENV === 'development' ? './build/theme-dashboard/theme-dashboard.js*' : './build/theme-dashboard/theme-dashboard.js',                            
+                            destination: './gutenverse-themes-builder/includes/data/assets/js/',
+                        },
+                        {
+                            source: './build/theme-dashboard/theme-dashboard.css',
+                            destination: './gutenverse-themes-builder/includes/data/assets/css/theme-dashboard.css',
+                        },
+                    ],
                 },
             },
             runTasksInSeries: true,

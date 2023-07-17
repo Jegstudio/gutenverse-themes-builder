@@ -28,15 +28,21 @@ module.exports = {
         new DependencyExtractionWebpackPlugin(),
         new FileManagerPlugin({
             events: {
+                onStart: {
+                    delete: [
+                        "./gutenverse-themes-builder/assets/js/builder.js*",
+                        "./gutenverse-themes-builder/lib/dependencies/builder.asset.php"
+                    ]
+                },
                 onEnd: {
                     copy: [
                         {
-                            source: './build/builder.asset.php',
-                            destination: './gutenverse-themes-builder/lib/dependencies/builder.asset.php',
+                            source: process.env.NODE_ENV === 'development' ? "./build/builder.js*" : "./build/builder.js",
+                            destination: './gutenverse-themes-builder/assets/js/',
                         },
                         {
-                            source: './build/builder.js',
-                            destination: './gutenverse-themes-builder/assets/js/builder.js',
+                            source: './build/builder.asset.php',
+                            destination: './gutenverse-themes-builder/lib/dependencies/builder.asset.php',
                         },
                     ],
                 },
