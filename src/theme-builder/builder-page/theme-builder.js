@@ -8,6 +8,7 @@ import ManageFonts from './components/manage-fonts';
 import ManageFontSizes from './components/manage-font-sizes';
 import ManagePlugins from './components/manage-plugins';
 import ManageScreenshots from './components/manage-screenshots';
+import ReadmeEditor from './components/readme-editor';
 
 const ThemeBuilder = ({ location }) => {
     const [path, setPath] = useState('list');
@@ -40,6 +41,9 @@ const ThemeBuilder = ({ location }) => {
             break;
         case 'manage-screenshots':
             Content = ManageScreenshots;
+            break;
+        case 'readme-editor':
+            Content = ReadmeEditor;
             break;
         case 'export-theme':
             Content = ExportTheme;

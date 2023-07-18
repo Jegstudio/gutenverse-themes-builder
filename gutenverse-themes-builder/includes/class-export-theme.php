@@ -111,6 +111,11 @@ class Export_Theme {
 		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/readme.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+
+		if ( ! empty( $other['readme'] ) ) {
+			$placeholder = $other['readme'];
+		}
 
 		$placeholder = ! empty( $theme_data['title'] ) ? str_replace( '{{title}}', $theme_data['title'], $placeholder ) : $placeholder;
 		$placeholder = ! empty( $theme_data['author_name'] ) ? str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder ) : $placeholder;

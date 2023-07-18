@@ -139,12 +139,22 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
+			esc_html__( 'Readme Editor', 'gutenverse' ),
+			esc_html__( 'Readme Editor', 'gutenverse' ),
+			'manage_options',
+			$path . 'readme-editor',
+			array( $this, 'theme_builder_page' ),
+			8
+		);
+
+		add_submenu_page(
+			self::TYPE,
 			esc_html__( 'Export Theme', 'gutenverse' ),
 			esc_html__( 'Export Theme', 'gutenverse' ),
 			'manage_options',
 			$path . 'export-theme',
 			array( $this, 'theme_builder_page' ),
-			8
+			9
 		);
 	}
 

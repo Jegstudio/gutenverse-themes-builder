@@ -54,6 +54,11 @@ const Navigation = ({ location }) => {
             path: 'manage-screenshots',
         },
         {
+            name: __('Readme Editor', 'gutenverse'),
+            slug: pageSlug,
+            path: 'readme-editor',
+        },
+        {
             name: __('Export Theme', 'gutenverse'),
             slug: pageSlug,
             path: 'export-theme',
