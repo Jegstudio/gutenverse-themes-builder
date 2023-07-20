@@ -32,7 +32,9 @@ const ReadmeEditor = () => {
             title={__('Readme Editor', 'gtb')}
             description={__('Edit your current active theme readme content here. This will be built as readme.txt file in your exported theme.', 'gtb')}
         >
-            <p>{__('You can keep or replace the text wrapped by "{{" and "}}" (e.g: {{title}} ). If you keep it, it will be automatically converted into the data you\'ve provide in theme\'s details.', 'gtb')}</p>
+            <p>{__('You can keep or replace the text wrapped by "{{" and "}}" (e.g: {{title}} ).', 'gtb')}</p>
+            <p>{__('If you want to replace it, please make sure you replace the whole text including the curly brackets. (example: from "{{title}}" into "My Amazing Theme"', 'gtb')}</p>
+            <p>{__('If you keep it, it will be automatically converted into the data you\'ve provide in theme\'s details.', 'gtb')}</p>
             <CodeEditor
                 value={readmeContent}
                 language={'text'}
