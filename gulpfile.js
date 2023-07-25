@@ -12,6 +12,7 @@ const concat = require("gulp-concat");
 const sass = require("gulp-sass")(require("sass"));
 const zip = require('gulp-zip');
 const del = require("del");
+const replace = require('gulp-string-replace');
 
 const postCSSOptions = [
     autoprefixer(),
@@ -102,17 +103,25 @@ gulp.task("copy-framework", function () {
         .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
 });
 
+gulp.task('replace-text-domain', function () {
+    return gulp
+        .src('./release/gutenverse-themes-builder/lib/framework/**/*')
+        .pipe(replace('--gctd--', 'gtb'))
+        .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
+});
+
+
+gulp.task("release", gulp.series(
+    "copy-plugin-folder",
+    "copy-framework",
+    "replace-text-domain"
+));
+
 gulp.task("zip", function () {
     return gulp
         .src('./release/gutenverse-themes-builder/**')
         .pipe(zip('gutenverse-themes-builder.zip'))
         .pipe(gulp.dest('./release'));
 });
-
-gulp.task("release", gulp.series(
-    "copy-plugin-folder",
-    "copy-framework",
-    "zip"
-));
 
 module.exports.watchProcess = watchProcess;
