@@ -438,7 +438,7 @@ class Export_Theme {
 			}
 		}
 
-		$placeholder = str_replace( '{{font_sizes}}', join( ",\n\t\t\t\t", $sizes ), $placeholder );
+		$placeholder = str_replace( '{{font_sizes}}', ",\n\t\t\t\t" . join( ",\n\t\t\t\t", $sizes ), $placeholder );
 
 		/**
 		 * Update Layout Size

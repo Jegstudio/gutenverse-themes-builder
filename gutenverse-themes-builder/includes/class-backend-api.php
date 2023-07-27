@@ -1577,7 +1577,7 @@ class Backend_Api {
 			}
 		}
 
-		$placeholder = str_replace( '{{font_sizes}}', join( ",\n\t\t\t\t", $sizes ), $placeholder );
+		$placeholder = str_replace( '{{font_sizes}}', ",\n\t\t\t\t" . join( ",\n\t\t\t\t", $sizes ), $placeholder );
 
 		$theme_id = get_option( 'gtb_active_theme_id' );
 		$layout   = array();

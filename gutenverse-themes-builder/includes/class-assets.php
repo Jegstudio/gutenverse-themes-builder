@@ -126,8 +126,6 @@ class Assets {
 		// Register & Enqueue Style.
 		$include = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
 
-		array_push( $include['dependencies'], 'gutenverse-editor-event' );
-
 		wp_enqueue_script(
 			'gtb-block',
 			GTB_URL . '/assets/js/blocks.js',
@@ -136,7 +134,7 @@ class Assets {
 			true
 		);
 
-		defined( 'GUTENVERSE_LANG_DIR' ) ? wp_set_script_translations( 'gutenverse-server-block', 'gutenverse-server', GUTENVERSE_LANG_DIR ) : null;
+		defined( 'GTB_LANG_DIR' ) ? wp_set_script_translations( 'gtb', 'gtb', GTB_LANG_DIR ) : null;
 		wp_localize_script( 'gutenverse-theme-builder-block', 'GutenverseThemeBuilder', $this->js_config() );
 
 		wp_enqueue_style(

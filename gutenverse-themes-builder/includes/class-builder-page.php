@@ -36,7 +36,7 @@ class Builder_Page {
 	 */
 	private function init_hooks() {
 		add_action( 'admin_menu', array( $this, 'register_builder_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_builder_scripts' ) );
+		add_action( 'gutenverse_include_dashboard', array( $this, 'load_builder_scripts' ) );
 	}
 
 	/**
@@ -169,13 +169,12 @@ class Builder_Page {
 
 	/**
 	 * Load builder scripts
-	 *
-	 * @param string $path .
 	 */
-	public function load_builder_scripts( $path ) {
-		if ( 'toplevel_page_gutenverse-theme-builder' === $path ) {
+	public function load_builder_scripts() {
+		global $current_screen;
+
+		if ( 'toplevel_page_gutenverse-theme-builder' === $current_screen->id ) {
 			$include   = ( include GTB_DIR . '/lib/dependencies/builder.asset.php' ) ['dependencies'];
-			$include[] = 'gutenverse-editor-event';
 
 			wp_enqueue_media();
 
