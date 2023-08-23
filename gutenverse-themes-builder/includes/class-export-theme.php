@@ -605,8 +605,12 @@ class Export_Theme {
 		foreach ( $templates_data as $template ) {
 			if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
 				$template_name    = strtolower( str_replace( ' ', '-', $template['name'] ) );
-				$template_names[] = "'{$template_name}'";
 				$template_type    = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+
+				if ( 'templates' === $template_type ) {
+					$template_names[] = "'{$template_name}'";
+				}
+
 				$template_cases[] = 'case \'' . $template_name . '\':
 				return $directory . \'/gutenverse-templates/' . $template_type . '/' . $template_name . '.html\';';
 			}
@@ -654,6 +658,7 @@ class Export_Theme {
 		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
 		$headers           = array();
 		$footers           = array();
+		$template_parts    = array();
 
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
@@ -839,6 +844,7 @@ class Export_Theme {
 						$content     = str_replace( "'", "\'", $posts[0]->post_content );
 						$content     = $this->extract_images( $content, $system, $theme_slug );
 						$content     = $this->fix_colors( $content );
+						$content     = $this->fix_core_navigation( $content );
 						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
 						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
