@@ -242,12 +242,10 @@ class Export_Theme {
 			} else {
 				return "wp_enqueue_script( '{$handler}' );";
 			}
-		} else {
-			if ( 'css' === $type ) {
+		} elseif ( 'css' === $type ) {
 				return "wp_enqueue_style( '{$handler}', {$media}, array(), {$theme_version} );";
-			} else {
-				return "wp_enqueue_script( '{$handler}', {$media}, array(), {$theme_version}, true );";
-			}
+		} else {
+			return "wp_enqueue_script( '{$handler}', {$media}, array(), {$theme_version}, true );";
 		}
 	}
 
@@ -604,8 +602,8 @@ class Export_Theme {
 
 		foreach ( $templates_data as $template ) {
 			if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
-				$template_name    = strtolower( str_replace( ' ', '-', $template['name'] ) );
-				$template_type    = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+				$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
+				$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
 
 				if ( 'templates' === $template_type ) {
 					$template_names[] = "'{$template_name}'";
@@ -1045,7 +1043,6 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	private function create_dashboard( $system, $data ) {
-
 	}
 
 	/**
