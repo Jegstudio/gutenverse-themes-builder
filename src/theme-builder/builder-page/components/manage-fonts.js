@@ -7,9 +7,9 @@ import { createFont, deleteFont, getFontList, updateFont } from '../../../data/a
 import { ArrowLeft } from 'react-feather';
 import SelectControl from '../controls/select-control';
 import { WarningPopup } from './warning-popup';
-import { FONT_FAMILIES } from '../data/default';
 import ContentWrapper from './content-wrapper';
 import { checkDetails } from '../data/helper';
+import { GOOGLE_FONTS } from '../data/google-fonts';
 
 const importantData = {
     family: true,
@@ -36,7 +36,7 @@ const ManageFontOption = ({ title, fontData, setMode, updateDetails, loading, ac
                         id={'family'}
                         title={__('Font Family', 'gtb')}
                         value={fontData?.family}
-                        options={FONT_FAMILIES}
+                        options={GOOGLE_FONTS}
                         onChange={value => updateDetails('family', value)}
                         important={true}
                     />
