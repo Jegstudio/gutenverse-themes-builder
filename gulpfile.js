@@ -119,7 +119,7 @@ gulp.task("release", gulp.series(
 
 gulp.task("zip", function () {
     return gulp
-        .src('./release/gutenverse-themes-builder/**')
+        .src('./release/gutenverse-themes-builder/**', {base: './release'})
         .pipe(zip('gutenverse-themes-builder.zip'))
         .pipe(gulp.dest('./release'));
 });
