@@ -33,8 +33,8 @@ class Assets {
 	 * @param array $config Config.
 	 */
 	public function block_config( $config ) {
-		$config['pluginVersion']    = GTB_VERSION;
-		$config['gutenverseImgDir'] = GTB_URL . '/assets/img';
+		$config['pluginVersion'] = GTB_VERSION;
+		$config['gtbImgDir']     = GTB_URL . '/assets/img';
 
 		return $config;
 	}

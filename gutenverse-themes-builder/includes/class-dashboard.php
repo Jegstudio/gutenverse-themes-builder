@@ -50,7 +50,7 @@ class Dashboard {
 			'currentNotice'  => GTB_NOTICE_VERSION,
 			'noticeVersions' => array( '1.0.0' ),
 		);
-		$config['gutenverseImgDir']      = GTB_URL . '/assets/img';
+		$config['gtbImgDir']             = GTB_URL . '/assets/img';
 
 		return $config;
 	}
