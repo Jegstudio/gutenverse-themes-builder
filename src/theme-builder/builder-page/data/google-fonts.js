@@ -14,6279 +14,6279 @@
 
 export const GOOGLE_FONTS = [
     {
-        value: "abeezee",
+        value: "ABeeZee",
         label: "ABeeZee"
     },
     {
-        value: "abel",
+        value: "Abel",
         label: "Abel"
     },
     {
-        value: "abhaya-libre",
+        value: "Abhaya Libre",
         label: "Abhaya Libre"
     },
     {
-        value: "aboreto",
+        value: "Aboreto",
         label: "Aboreto"
     },
     {
-        value: "abril-fatface",
+        value: "Abril Fatface",
         label: "Abril Fatface"
     },
     {
-        value: "abyssinica-sil",
+        value: "Abyssinica SIL",
         label: "Abyssinica SIL"
     },
     {
-        value: "aclonica",
+        value: "Aclonica",
         label: "Aclonica"
     },
     {
-        value: "acme",
+        value: "Acme",
         label: "Acme"
     },
     {
-        value: "actor",
+        value: "Actor",
         label: "Actor"
     },
     {
-        value: "adamina",
+        value: "Adamina",
         label: "Adamina"
     },
     {
-        value: "adlam-display",
+        value: "ADLaM Display",
         label: "ADLaM Display"
     },
     {
-        value: "advent-pro",
+        value: "Advent Pro",
         label: "Advent Pro"
     },
     {
-        value: "agdasima",
+        value: "Agdasima",
         label: "Agdasima"
     },
     {
-        value: "aguafina-script",
+        value: "Aguafina Script",
         label: "Aguafina Script"
     },
     {
-        value: "akatab",
+        value: "Akatab",
         label: "Akatab"
     },
     {
-        value: "akaya-kanadaka",
+        value: "Akaya Kanadaka",
         label: "Akaya Kanadaka"
     },
     {
-        value: "akaya-telivigala",
+        value: "Akaya Telivigala",
         label: "Akaya Telivigala"
     },
     {
-        value: "akronim",
+        value: "Akronim",
         label: "Akronim"
     },
     {
-        value: "akshar",
+        value: "Akshar",
         label: "Akshar"
     },
     {
-        value: "aladin",
+        value: "Aladin",
         label: "Aladin"
     },
     {
-        value: "alata",
+        value: "Alata",
         label: "Alata"
     },
     {
-        value: "alatsi",
+        value: "Alatsi",
         label: "Alatsi"
     },
     {
-        value: "albert-sans",
+        value: "Albert Sans",
         label: "Albert Sans"
     },
     {
-        value: "aldrich",
+        value: "Aldrich",
         label: "Aldrich"
     },
     {
-        value: "alef",
+        value: "Alef",
         label: "Alef"
     },
     {
-        value: "alegreya",
+        value: "Alegreya",
         label: "Alegreya"
     },
     {
-        value: "alegreya-sans",
+        value: "Alegreya Sans",
         label: "Alegreya Sans"
     },
     {
-        value: "alegreya-sans-sc",
+        value: "Alegreya Sans SC",
         label: "Alegreya Sans SC"
     },
     {
-        value: "alegreya-sc",
+        value: "Alegreya SC",
         label: "Alegreya SC"
     },
     {
-        value: "aleo",
+        value: "Aleo",
         label: "Aleo"
     },
     {
-        value: "alex-brush",
+        value: "Alex Brush",
         label: "Alex Brush"
     },
     {
-        value: "alexandria",
+        value: "Alexandria",
         label: "Alexandria"
     },
     {
-        value: "alfa-slab-one",
+        value: "Alfa Slab One",
         label: "Alfa Slab One"
     },
     {
-        value: "alice",
+        value: "Alice",
         label: "Alice"
     },
     {
-        value: "alike",
+        value: "Alike",
         label: "Alike"
     },
     {
-        value: "alike-angular",
+        value: "Alike Angular",
         label: "Alike Angular"
     },
     {
-        value: "alkalami",
+        value: "Alkalami",
         label: "Alkalami"
     },
     {
-        value: "alkatra",
+        value: "Alkatra",
         label: "Alkatra"
     },
     {
-        value: "allan",
+        value: "Allan",
         label: "Allan"
     },
     {
-        value: "allerta",
+        value: "Allerta",
         label: "Allerta"
     },
     {
-        value: "allerta-stencil",
+        value: "Allerta Stencil",
         label: "Allerta Stencil"
     },
     {
-        value: "allison",
+        value: "Allison",
         label: "Allison"
     },
     {
-        value: "allura",
+        value: "Allura",
         label: "Allura"
     },
     {
-        value: "almarai",
+        value: "Almarai",
         label: "Almarai"
     },
     {
-        value: "almendra",
+        value: "Almendra",
         label: "Almendra"
     },
     {
-        value: "almendra-display",
+        value: "Almendra Display",
         label: "Almendra Display"
     },
     {
-        value: "almendra-sc",
+        value: "Almendra SC",
         label: "Almendra SC"
     },
     {
-        value: "alumni-sans",
+        value: "Alumni Sans",
         label: "Alumni Sans"
     },
     {
-        value: "alumni-sans-collegiate-one",
+        value: "Alumni Sans Collegiate One",
         label: "Alumni Sans Collegiate One"
     },
     {
-        value: "alumni-sans-inline-one",
+        value: "Alumni Sans Inline One",
         label: "Alumni Sans Inline One"
     },
     {
-        value: "alumni-sans-pinstripe",
+        value: "Alumni Sans Pinstripe",
         label: "Alumni Sans Pinstripe"
     },
     {
-        value: "amarante",
+        value: "Amarante",
         label: "Amarante"
     },
     {
-        value: "amaranth",
+        value: "Amaranth",
         label: "Amaranth"
     },
     {
-        value: "amatic-sc",
+        value: "Amatic SC",
         label: "Amatic SC"
     },
     {
-        value: "amethysta",
+        value: "Amethysta",
         label: "Amethysta"
     },
     {
-        value: "amiko",
+        value: "Amiko",
         label: "Amiko"
     },
     {
-        value: "amiri",
+        value: "Amiri",
         label: "Amiri"
     },
     {
-        value: "amiri-quran",
+        value: "Amiri Quran",
         label: "Amiri Quran"
     },
     {
-        value: "amita",
+        value: "Amita",
         label: "Amita"
     },
     {
-        value: "anaheim",
+        value: "Anaheim",
         label: "Anaheim"
     },
     {
-        value: "andada-pro",
+        value: "Andada Pro",
         label: "Andada Pro"
     },
     {
-        value: "andika",
+        value: "Andika",
         label: "Andika"
     },
     {
-        value: "anek-bangla",
+        value: "Anek Bangla",
         label: "Anek Bangla"
     },
     {
-        value: "anek-devanagari",
+        value: "Anek Devanagari",
         label: "Anek Devanagari"
     },
     {
-        value: "anek-gujarati",
+        value: "Anek Gujarati",
         label: "Anek Gujarati"
     },
     {
-        value: "anek-gurmukhi",
+        value: "Anek Gurmukhi",
         label: "Anek Gurmukhi"
     },
     {
-        value: "anek-kannada",
+        value: "Anek Kannada",
         label: "Anek Kannada"
     },
     {
-        value: "anek-latin",
+        value: "Anek Latin",
         label: "Anek Latin"
     },
     {
-        value: "anek-malayalam",
+        value: "Anek Malayalam",
         label: "Anek Malayalam"
     },
     {
-        value: "anek-odia",
+        value: "Anek Odia",
         label: "Anek Odia"
     },
     {
-        value: "anek-tamil",
+        value: "Anek Tamil",
         label: "Anek Tamil"
     },
     {
-        value: "anek-telugu",
+        value: "Anek Telugu",
         label: "Anek Telugu"
     },
     {
-        value: "angkor",
+        value: "Angkor",
         label: "Angkor"
     },
     {
-        value: "annie-use-your-telescope",
+        value: "Annie Use Your Telescope",
         label: "Annie Use Your Telescope"
     },
     {
-        value: "anonymous-pro",
+        value: "Anonymous Pro",
         label: "Anonymous Pro"
     },
     {
-        value: "antic",
+        value: "Antic",
         label: "Antic"
     },
     {
-        value: "antic-didone",
+        value: "Antic Didone",
         label: "Antic Didone"
     },
     {
-        value: "antic-slab",
+        value: "Antic Slab",
         label: "Antic Slab"
     },
     {
-        value: "anton",
+        value: "Anton",
         label: "Anton"
     },
     {
-        value: "antonio",
+        value: "Antonio",
         label: "Antonio"
     },
     {
-        value: "anuphan",
+        value: "Anuphan",
         label: "Anuphan"
     },
     {
-        value: "anybody",
+        value: "Anybody",
         label: "Anybody"
     },
     {
-        value: "aoboshi-one",
+        value: "Aoboshi One",
         label: "Aoboshi One"
     },
     {
-        value: "arapey",
+        value: "Arapey",
         label: "Arapey"
     },
     {
-        value: "arbutus",
+        value: "Arbutus",
         label: "Arbutus"
     },
     {
-        value: "arbutus-slab",
+        value: "Arbutus Slab",
         label: "Arbutus Slab"
     },
     {
-        value: "architects-daughter",
+        value: "Architects Daughter",
         label: "Architects Daughter"
     },
     {
-        value: "archivo",
+        value: "Archivo",
         label: "Archivo"
     },
     {
-        value: "archivo-black",
+        value: "Archivo Black",
         label: "Archivo Black"
     },
     {
-        value: "archivo-narrow",
+        value: "Archivo Narrow",
         label: "Archivo Narrow"
     },
     {
-        value: "are-you-serious",
+        value: "Are You Serious",
         label: "Are You Serious"
     },
     {
-        value: "aref-ruqaa",
+        value: "Aref Ruqaa",
         label: "Aref Ruqaa"
     },
     {
-        value: "aref-ruqaa-ink",
+        value: "Aref Ruqaa Ink",
         label: "Aref Ruqaa Ink"
     },
     {
-        value: "arima",
+        value: "Arima",
         label: "Arima"
     },
     {
-        value: "arimo",
+        value: "Arimo",
         label: "Arimo"
     },
     {
-        value: "arizonia",
+        value: "Arizonia",
         label: "Arizonia"
     },
     {
-        value: "armata",
+        value: "Armata",
         label: "Armata"
     },
     {
-        value: "arsenal",
+        value: "Arsenal",
         label: "Arsenal"
     },
     {
-        value: "artifika",
+        value: "Artifika",
         label: "Artifika"
     },
     {
-        value: "arvo",
+        value: "Arvo",
         label: "Arvo"
     },
     {
-        value: "arya",
+        value: "Arya",
         label: "Arya"
     },
     {
-        value: "asap",
+        value: "Asap",
         label: "Asap"
     },
     {
-        value: "asap-condensed",
+        value: "Asap Condensed",
         label: "Asap Condensed"
     },
     {
-        value: "asar",
+        value: "Asar",
         label: "Asar"
     },
     {
-        value: "asset",
+        value: "Asset",
         label: "Asset"
     },
     {
-        value: "assistant",
+        value: "Assistant",
         label: "Assistant"
     },
     {
-        value: "astloch",
+        value: "Astloch",
         label: "Astloch"
     },
     {
-        value: "asul",
+        value: "Asul",
         label: "Asul"
     },
     {
-        value: "athiti",
+        value: "Athiti",
         label: "Athiti"
     },
     {
-        value: "atkinson-hyperlegible",
+        value: "Atkinson Hyperlegible",
         label: "Atkinson Hyperlegible"
     },
     {
-        value: "atma",
+        value: "Atma",
         label: "Atma"
     },
     {
-        value: "atomic-age",
+        value: "Atomic Age",
         label: "Atomic Age"
     },
     {
-        value: "aubrey",
+        value: "Aubrey",
         label: "Aubrey"
     },
     {
-        value: "audiowide",
+        value: "Audiowide",
         label: "Audiowide"
     },
     {
-        value: "autour-one",
+        value: "Autour One",
         label: "Autour One"
     },
     {
-        value: "average",
+        value: "Average",
         label: "Average"
     },
     {
-        value: "average-sans",
+        value: "Average Sans",
         label: "Average Sans"
     },
     {
-        value: "averia-gruesa-libre",
+        value: "Averia Gruesa Libre",
         label: "Averia Gruesa Libre"
     },
     {
-        value: "averia-libre",
+        value: "Averia Libre",
         label: "Averia Libre"
     },
     {
-        value: "averia-sans-libre",
+        value: "Averia Sans Libre",
         label: "Averia Sans Libre"
     },
     {
-        value: "averia-serif-libre",
+        value: "Averia Serif Libre",
         label: "Averia Serif Libre"
     },
     {
-        value: "azeret-mono",
+        value: "Azeret Mono",
         label: "Azeret Mono"
     },
     {
-        value: "b612",
+        value: "B612",
         label: "B612"
     },
     {
-        value: "b612-mono",
+        value: "B612 Mono",
         label: "B612 Mono"
     },
     {
-        value: "babylonica",
+        value: "Babylonica",
         label: "Babylonica"
     },
     {
-        value: "bacasime-antique",
+        value: "Bacasime Antique",
         label: "Bacasime Antique"
     },
     {
-        value: "bad-script",
+        value: "Bad Script",
         label: "Bad Script"
     },
     {
-        value: "bagel-fat-one",
+        value: "Bagel Fat One",
         label: "Bagel Fat One"
     },
     {
-        value: "bahiana",
+        value: "Bahiana",
         label: "Bahiana"
     },
     {
-        value: "bahianita",
+        value: "Bahianita",
         label: "Bahianita"
     },
     {
-        value: "bai-jamjuree",
+        value: "Bai Jamjuree",
         label: "Bai Jamjuree"
     },
     {
-        value: "bakbak-one",
+        value: "Bakbak One",
         label: "Bakbak One"
     },
     {
-        value: "ballet",
+        value: "Ballet",
         label: "Ballet"
     },
     {
-        value: "baloo-2",
+        value: "Baloo 2",
         label: "Baloo 2"
     },
     {
-        value: "baloo-bhai-2",
+        value: "Baloo Bhai 2",
         label: "Baloo Bhai 2"
     },
     {
-        value: "baloo-bhaijaan-2",
+        value: "Baloo Bhaijaan 2",
         label: "Baloo Bhaijaan 2"
     },
     {
-        value: "baloo-bhaina-2",
+        value: "Baloo Bhaina 2",
         label: "Baloo Bhaina 2"
     },
     {
-        value: "baloo-chettan-2",
+        value: "Baloo Chettan 2",
         label: "Baloo Chettan 2"
     },
     {
-        value: "baloo-da-2",
+        value: "Baloo Da 2",
         label: "Baloo Da 2"
     },
     {
-        value: "baloo-paaji-2",
+        value: "Baloo Paaji 2",
         label: "Baloo Paaji 2"
     },
     {
-        value: "baloo-tamma-2",
+        value: "Baloo Tamma 2",
         label: "Baloo Tamma 2"
     },
     {
-        value: "baloo-tammudu-2",
+        value: "Baloo Tammudu 2",
         label: "Baloo Tammudu 2"
     },
     {
-        value: "baloo-thambi-2",
+        value: "Baloo Thambi 2",
         label: "Baloo Thambi 2"
     },
     {
-        value: "balsamiq-sans",
+        value: "Balsamiq Sans",
         label: "Balsamiq Sans"
     },
     {
-        value: "balthazar",
+        value: "Balthazar",
         label: "Balthazar"
     },
     {
-        value: "bangers",
+        value: "Bangers",
         label: "Bangers"
     },
     {
-        value: "barlow",
+        value: "Barlow",
         label: "Barlow"
     },
     {
-        value: "barlow-condensed",
+        value: "Barlow Condensed",
         label: "Barlow Condensed"
     },
     {
-        value: "barlow-semi-condensed",
+        value: "Barlow Semi Condensed",
         label: "Barlow Semi Condensed"
     },
     {
-        value: "barriecito",
+        value: "Barriecito",
         label: "Barriecito"
     },
     {
-        value: "barrio",
+        value: "Barrio",
         label: "Barrio"
     },
     {
-        value: "basic",
+        value: "Basic",
         label: "Basic"
     },
     {
-        value: "baskervville",
+        value: "Baskervville",
         label: "Baskervville"
     },
     {
-        value: "battambang",
+        value: "Battambang",
         label: "Battambang"
     },
     {
-        value: "baumans",
+        value: "Baumans",
         label: "Baumans"
     },
     {
-        value: "bayon",
+        value: "Bayon",
         label: "Bayon"
     },
     {
-        value: "be-vietnam-pro",
+        value: "Be Vietnam Pro",
         label: "Be Vietnam Pro"
     },
     {
-        value: "beau-rivage",
+        value: "Beau Rivage",
         label: "Beau Rivage"
     },
     {
-        value: "bebas-neue",
+        value: "Bebas Neue",
         label: "Bebas Neue"
     },
     {
-        value: "belanosima",
+        value: "Belanosima",
         label: "Belanosima"
     },
     {
-        value: "belgrano",
+        value: "Belgrano",
         label: "Belgrano"
     },
     {
-        value: "bellefair",
+        value: "Bellefair",
         label: "Bellefair"
     },
     {
-        value: "belleza",
+        value: "Belleza",
         label: "Belleza"
     },
     {
-        value: "bellota",
+        value: "Bellota",
         label: "Bellota"
     },
     {
-        value: "bellota-text",
+        value: "Bellota Text",
         label: "Bellota Text"
     },
     {
-        value: "benchnine",
+        value: "BenchNine",
         label: "BenchNine"
     },
     {
-        value: "benne",
+        value: "Benne",
         label: "Benne"
     },
     {
-        value: "bentham",
+        value: "Bentham",
         label: "Bentham"
     },
     {
-        value: "berkshire-swash",
+        value: "Berkshire Swash",
         label: "Berkshire Swash"
     },
     {
-        value: "besley",
+        value: "Besley",
         label: "Besley"
     },
     {
-        value: "beth-ellen",
+        value: "Beth Ellen",
         label: "Beth Ellen"
     },
     {
-        value: "bevan",
+        value: "Bevan",
         label: "Bevan"
     },
     {
-        value: "bhutuka-expanded-one",
+        value: "BhuTuka Expanded One",
         label: "BhuTuka Expanded One"
     },
     {
-        value: "big-shoulders-display",
+        value: "Big Shoulders Display",
         label: "Big Shoulders Display"
     },
     {
-        value: "big-shoulders-inline-display",
+        value: "Big Shoulders Inline Display",
         label: "Big Shoulders Inline Display"
     },
     {
-        value: "big-shoulders-inline-text",
+        value: "Big Shoulders Inline Text",
         label: "Big Shoulders Inline Text"
     },
     {
-        value: "big-shoulders-stencil-display",
+        value: "Big Shoulders Stencil Display",
         label: "Big Shoulders Stencil Display"
     },
     {
-        value: "big-shoulders-stencil-text",
+        value: "Big Shoulders Stencil Text",
         label: "Big Shoulders Stencil Text"
     },
     {
-        value: "big-shoulders-text",
+        value: "Big Shoulders Text",
         label: "Big Shoulders Text"
     },
     {
-        value: "bigelow-rules",
+        value: "Bigelow Rules",
         label: "Bigelow Rules"
     },
     {
-        value: "bigshot-one",
+        value: "Bigshot One",
         label: "Bigshot One"
     },
     {
-        value: "bilbo",
+        value: "Bilbo",
         label: "Bilbo"
     },
     {
-        value: "bilbo-swash-caps",
+        value: "Bilbo Swash Caps",
         label: "Bilbo Swash Caps"
     },
     {
-        value: "biorhyme",
+        value: "BioRhyme",
         label: "BioRhyme"
     },
     {
-        value: "biorhyme-expanded",
+        value: "BioRhyme Expanded",
         label: "BioRhyme Expanded"
     },
     {
-        value: "birthstone",
+        value: "Birthstone",
         label: "Birthstone"
     },
     {
-        value: "birthstone-bounce",
+        value: "Birthstone Bounce",
         label: "Birthstone Bounce"
     },
     {
-        value: "biryani",
+        value: "Biryani",
         label: "Biryani"
     },
     {
-        value: "bitter",
+        value: "Bitter",
         label: "Bitter"
     },
     {
-        value: "biz-udgothic",
+        value: "BIZ UDGothic",
         label: "BIZ UDGothic"
     },
     {
-        value: "biz-udmincho",
+        value: "BIZ UDMincho",
         label: "BIZ UDMincho"
     },
     {
-        value: "biz-udpgothic",
+        value: "BIZ UDPGothic",
         label: "BIZ UDPGothic"
     },
     {
-        value: "biz-udpmincho",
+        value: "BIZ UDPMincho",
         label: "BIZ UDPMincho"
     },
     {
-        value: "black-and-white-picture",
+        value: "Black And White Picture",
         label: "Black And White Picture"
     },
     {
-        value: "black-han-sans",
+        value: "Black Han Sans",
         label: "Black Han Sans"
     },
     {
-        value: "black-ops-one",
+        value: "Black Ops One",
         label: "Black Ops One"
     },
     {
-        value: "blaka",
+        value: "Blaka",
         label: "Blaka"
     },
     {
-        value: "blaka-hollow",
+        value: "Blaka Hollow",
         label: "Blaka Hollow"
     },
     {
-        value: "blaka-ink",
+        value: "Blaka Ink",
         label: "Blaka Ink"
     },
     {
-        value: "blinker",
+        value: "Blinker",
         label: "Blinker"
     },
     {
-        value: "bodoni-moda",
+        value: "Bodoni Moda",
         label: "Bodoni Moda"
     },
     {
-        value: "bokor",
+        value: "Bokor",
         label: "Bokor"
     },
     {
-        value: "bona-nova",
+        value: "Bona Nova",
         label: "Bona Nova"
     },
     {
-        value: "bonbon",
+        value: "Bonbon",
         label: "Bonbon"
     },
     {
-        value: "bonheur-royale",
+        value: "Bonheur Royale",
         label: "Bonheur Royale"
     },
     {
-        value: "boogaloo",
+        value: "Boogaloo",
         label: "Boogaloo"
     },
     {
-        value: "borel",
+        value: "Borel",
         label: "Borel"
     },
     {
-        value: "bowlby-one",
+        value: "Bowlby One",
         label: "Bowlby One"
     },
     {
-        value: "bowlby-one-sc",
+        value: "Bowlby One SC",
         label: "Bowlby One SC"
     },
     {
-        value: "braah-one",
+        value: "Braah One",
         label: "Braah One"
     },
     {
-        value: "brawler",
+        value: "Brawler",
         label: "Brawler"
     },
     {
-        value: "bree-serif",
+        value: "Bree Serif",
         label: "Bree Serif"
     },
     {
-        value: "bricolage-grotesque",
+        value: "Bricolage Grotesque",
         label: "Bricolage Grotesque"
     },
     {
-        value: "bruno-ace",
+        value: "Bruno Ace",
         label: "Bruno Ace"
     },
     {
-        value: "bruno-ace-sc",
+        value: "Bruno Ace SC",
         label: "Bruno Ace SC"
     },
     {
-        value: "brygada-1918",
+        value: "Brygada 1918",
         label: "Brygada 1918"
     },
     {
-        value: "bubblegum-sans",
+        value: "Bubblegum Sans",
         label: "Bubblegum Sans"
     },
     {
-        value: "bubbler-one",
+        value: "Bubbler One",
         label: "Bubbler One"
     },
     {
-        value: "buda",
+        value: "Buda",
         label: "Buda"
     },
     {
-        value: "buenard",
+        value: "Buenard",
         label: "Buenard"
     },
     {
-        value: "bungee",
+        value: "Bungee",
         label: "Bungee"
     },
     {
-        value: "bungee-hairline",
+        value: "Bungee Hairline",
         label: "Bungee Hairline"
     },
     {
-        value: "bungee-inline",
+        value: "Bungee Inline",
         label: "Bungee Inline"
     },
     {
-        value: "bungee-outline",
+        value: "Bungee Outline",
         label: "Bungee Outline"
     },
     {
-        value: "bungee-shade",
+        value: "Bungee Shade",
         label: "Bungee Shade"
     },
     {
-        value: "bungee-spice",
+        value: "Bungee Spice",
         label: "Bungee Spice"
     },
     {
-        value: "butcherman",
+        value: "Butcherman",
         label: "Butcherman"
     },
     {
-        value: "butterfly-kids",
+        value: "Butterfly Kids",
         label: "Butterfly Kids"
     },
     {
-        value: "cabin",
+        value: "Cabin",
         label: "Cabin"
     },
     {
-        value: "cabin-condensed",
+        value: "Cabin Condensed",
         label: "Cabin Condensed"
     },
     {
-        value: "cabin-sketch",
+        value: "Cabin Sketch",
         label: "Cabin Sketch"
     },
     {
-        value: "caesar-dressing",
+        value: "Caesar Dressing",
         label: "Caesar Dressing"
     },
     {
-        value: "cagliostro",
+        value: "Cagliostro",
         label: "Cagliostro"
     },
     {
-        value: "cairo",
+        value: "Cairo",
         label: "Cairo"
     },
     {
-        value: "cairo-play",
+        value: "Cairo Play",
         label: "Cairo Play"
     },
     {
-        value: "caladea",
+        value: "Caladea",
         label: "Caladea"
     },
     {
-        value: "calistoga",
+        value: "Calistoga",
         label: "Calistoga"
     },
     {
-        value: "calligraffitti",
+        value: "Calligraffitti",
         label: "Calligraffitti"
     },
     {
-        value: "cambay",
+        value: "Cambay",
         label: "Cambay"
     },
     {
-        value: "cambo",
+        value: "Cambo",
         label: "Cambo"
     },
     {
-        value: "candal",
+        value: "Candal",
         label: "Candal"
     },
     {
-        value: "cantarell",
+        value: "Cantarell",
         label: "Cantarell"
     },
     {
-        value: "cantata-one",
+        value: "Cantata One",
         label: "Cantata One"
     },
     {
-        value: "cantora-one",
+        value: "Cantora One",
         label: "Cantora One"
     },
     {
-        value: "caprasimo",
+        value: "Caprasimo",
         label: "Caprasimo"
     },
     {
-        value: "capriola",
+        value: "Capriola",
         label: "Capriola"
     },
     {
-        value: "caramel",
+        value: "Caramel",
         label: "Caramel"
     },
     {
-        value: "carattere",
+        value: "Carattere",
         label: "Carattere"
     },
     {
-        value: "cardo",
+        value: "Cardo",
         label: "Cardo"
     },
     {
-        value: "carlito",
+        value: "Carlito",
         label: "Carlito"
     },
     {
-        value: "carme",
+        value: "Carme",
         label: "Carme"
     },
     {
-        value: "carrois-gothic",
+        value: "Carrois Gothic",
         label: "Carrois Gothic"
     },
     {
-        value: "carrois-gothic-sc",
+        value: "Carrois Gothic SC",
         label: "Carrois Gothic SC"
     },
     {
-        value: "carter-one",
+        value: "Carter One",
         label: "Carter One"
     },
     {
-        value: "castoro",
+        value: "Castoro",
         label: "Castoro"
     },
     {
-        value: "castoro-titling",
+        value: "Castoro Titling",
         label: "Castoro Titling"
     },
     {
-        value: "catamaran",
+        value: "Catamaran",
         label: "Catamaran"
     },
     {
-        value: "caudex",
+        value: "Caudex",
         label: "Caudex"
     },
     {
-        value: "caveat",
+        value: "Caveat",
         label: "Caveat"
     },
     {
-        value: "caveat-brush",
+        value: "Caveat Brush",
         label: "Caveat Brush"
     },
     {
-        value: "cedarville-cursive",
+        value: "Cedarville Cursive",
         label: "Cedarville Cursive"
     },
     {
-        value: "ceviche-one",
+        value: "Ceviche One",
         label: "Ceviche One"
     },
     {
-        value: "chakra-petch",
+        value: "Chakra Petch",
         label: "Chakra Petch"
     },
     {
-        value: "changa",
+        value: "Changa",
         label: "Changa"
     },
     {
-        value: "changa-one",
+        value: "Changa One",
         label: "Changa One"
     },
     {
-        value: "chango",
+        value: "Chango",
         label: "Chango"
     },
     {
-        value: "charis-sil",
+        value: "Charis SIL",
         label: "Charis SIL"
     },
     {
-        value: "charm",
+        value: "Charm",
         label: "Charm"
     },
     {
-        value: "charmonman",
+        value: "Charmonman",
         label: "Charmonman"
     },
     {
-        value: "chathura",
+        value: "Chathura",
         label: "Chathura"
     },
     {
-        value: "chau-philomene-one",
+        value: "Chau Philomene One",
         label: "Chau Philomene One"
     },
     {
-        value: "chela-one",
+        value: "Chela One",
         label: "Chela One"
     },
     {
-        value: "chelsea-market",
+        value: "Chelsea Market",
         label: "Chelsea Market"
     },
     {
-        value: "chenla",
+        value: "Chenla",
         label: "Chenla"
     },
     {
-        value: "cherish",
+        value: "Cherish",
         label: "Cherish"
     },
     {
-        value: "cherry-bomb-one",
+        value: "Cherry Bomb One",
         label: "Cherry Bomb One"
     },
     {
-        value: "cherry-cream-soda",
+        value: "Cherry Cream Soda",
         label: "Cherry Cream Soda"
     },
     {
-        value: "cherry-swash",
+        value: "Cherry Swash",
         label: "Cherry Swash"
     },
     {
-        value: "chewy",
+        value: "Chewy",
         label: "Chewy"
     },
     {
-        value: "chicle",
+        value: "Chicle",
         label: "Chicle"
     },
     {
-        value: "chilanka",
+        value: "Chilanka",
         label: "Chilanka"
     },
     {
-        value: "chivo",
+        value: "Chivo",
         label: "Chivo"
     },
     {
-        value: "chivo-mono",
+        value: "Chivo Mono",
         label: "Chivo Mono"
     },
     {
-        value: "chokokutai",
+        value: "Chokokutai",
         label: "Chokokutai"
     },
     {
-        value: "chonburi",
+        value: "Chonburi",
         label: "Chonburi"
     },
     {
-        value: "cinzel",
+        value: "Cinzel",
         label: "Cinzel"
     },
     {
-        value: "cinzel-decorative",
+        value: "Cinzel Decorative",
         label: "Cinzel Decorative"
     },
     {
-        value: "clicker-script",
+        value: "Clicker Script",
         label: "Clicker Script"
     },
     {
-        value: "climate-crisis",
+        value: "Climate Crisis",
         label: "Climate Crisis"
     },
     {
-        value: "coda",
+        value: "Coda",
         label: "Coda"
     },
     {
-        value: "codystar",
+        value: "Codystar",
         label: "Codystar"
     },
     {
-        value: "coiny",
+        value: "Coiny",
         label: "Coiny"
     },
     {
-        value: "combo",
+        value: "Combo",
         label: "Combo"
     },
     {
-        value: "comfortaa",
+        value: "Comfortaa",
         label: "Comfortaa"
     },
     {
-        value: "comforter",
+        value: "Comforter",
         label: "Comforter"
     },
     {
-        value: "comforter-brush",
+        value: "Comforter Brush",
         label: "Comforter Brush"
     },
     {
-        value: "comic-neue",
+        value: "Comic Neue",
         label: "Comic Neue"
     },
     {
-        value: "coming-soon",
+        value: "Coming Soon",
         label: "Coming Soon"
     },
     {
-        value: "comme",
+        value: "Comme",
         label: "Comme"
     },
     {
-        value: "commissioner",
+        value: "Commissioner",
         label: "Commissioner"
     },
     {
-        value: "concert-one",
+        value: "Concert One",
         label: "Concert One"
     },
     {
-        value: "condiment",
+        value: "Condiment",
         label: "Condiment"
     },
     {
-        value: "content",
+        value: "Content",
         label: "Content"
     },
     {
-        value: "contrail-one",
+        value: "Contrail One",
         label: "Contrail One"
     },
     {
-        value: "convergence",
+        value: "Convergence",
         label: "Convergence"
     },
     {
-        value: "cookie",
+        value: "Cookie",
         label: "Cookie"
     },
     {
-        value: "copse",
+        value: "Copse",
         label: "Copse"
     },
     {
-        value: "corben",
+        value: "Corben",
         label: "Corben"
     },
     {
-        value: "corinthia",
+        value: "Corinthia",
         label: "Corinthia"
     },
     {
-        value: "cormorant",
+        value: "Cormorant",
         label: "Cormorant"
     },
     {
-        value: "cormorant-garamond",
+        value: "Cormorant Garamond",
         label: "Cormorant Garamond"
     },
     {
-        value: "cormorant-infant",
+        value: "Cormorant Infant",
         label: "Cormorant Infant"
     },
     {
-        value: "cormorant-sc",
+        value: "Cormorant SC",
         label: "Cormorant SC"
     },
     {
-        value: "cormorant-unicase",
+        value: "Cormorant Unicase",
         label: "Cormorant Unicase"
     },
     {
-        value: "cormorant-upright",
+        value: "Cormorant Upright",
         label: "Cormorant Upright"
     },
     {
-        value: "courgette",
+        value: "Courgette",
         label: "Courgette"
     },
     {
-        value: "courier-prime",
+        value: "Courier Prime",
         label: "Courier Prime"
     },
     {
-        value: "cousine",
+        value: "Cousine",
         label: "Cousine"
     },
     {
-        value: "coustard",
+        value: "Coustard",
         label: "Coustard"
     },
     {
-        value: "covered-by-your-grace",
+        value: "Covered By Your Grace",
         label: "Covered By Your Grace"
     },
     {
-        value: "crafty-girls",
+        value: "Crafty Girls",
         label: "Crafty Girls"
     },
     {
-        value: "creepster",
+        value: "Creepster",
         label: "Creepster"
     },
     {
-        value: "crete-round",
+        value: "Crete Round",
         label: "Crete Round"
     },
     {
-        value: "crimson-pro",
+        value: "Crimson Pro",
         label: "Crimson Pro"
     },
     {
-        value: "crimson-text",
+        value: "Crimson Text",
         label: "Crimson Text"
     },
     {
-        value: "croissant-one",
+        value: "Croissant One",
         label: "Croissant One"
     },
     {
-        value: "crushed",
+        value: "Crushed",
         label: "Crushed"
     },
     {
-        value: "cuprum",
+        value: "Cuprum",
         label: "Cuprum"
     },
     {
-        value: "cute-font",
+        value: "Cute Font",
         label: "Cute Font"
     },
     {
-        value: "cutive",
+        value: "Cutive",
         label: "Cutive"
     },
     {
-        value: "cutive-mono",
+        value: "Cutive Mono",
         label: "Cutive Mono"
     },
     {
-        value: "dai-banna-sil",
+        value: "Dai Banna SIL",
         label: "Dai Banna SIL"
     },
     {
-        value: "damion",
+        value: "Damion",
         label: "Damion"
     },
     {
-        value: "dancing-script",
+        value: "Dancing Script",
         label: "Dancing Script"
     },
     {
-        value: "dangrek",
+        value: "Dangrek",
         label: "Dangrek"
     },
     {
-        value: "darker-grotesque",
+        value: "Darker Grotesque",
         label: "Darker Grotesque"
     },
     {
-        value: "darumadrop-one",
+        value: "Darumadrop One",
         label: "Darumadrop One"
     },
     {
-        value: "david-libre",
+        value: "David Libre",
         label: "David Libre"
     },
     {
-        value: "dawning-of-a-new-day",
+        value: "Dawning of a New Day",
         label: "Dawning of a New Day"
     },
     {
-        value: "days-one",
+        value: "Days One",
         label: "Days One"
     },
     {
-        value: "dekko",
+        value: "Dekko",
         label: "Dekko"
     },
     {
-        value: "dela-gothic-one",
+        value: "Dela Gothic One",
         label: "Dela Gothic One"
     },
     {
-        value: "delicious-handrawn",
+        value: "Delicious Handrawn",
         label: "Delicious Handrawn"
     },
     {
-        value: "delius",
+        value: "Delius",
         label: "Delius"
     },
     {
-        value: "delius-swash-caps",
+        value: "Delius Swash Caps",
         label: "Delius Swash Caps"
     },
     {
-        value: "delius-unicase",
+        value: "Delius Unicase",
         label: "Delius Unicase"
     },
     {
-        value: "della-respira",
+        value: "Della Respira",
         label: "Della Respira"
     },
     {
-        value: "denk-one",
+        value: "Denk One",
         label: "Denk One"
     },
     {
-        value: "devonshire",
+        value: "Devonshire",
         label: "Devonshire"
     },
     {
-        value: "dhurjati",
+        value: "Dhurjati",
         label: "Dhurjati"
     },
     {
-        value: "didact-gothic",
+        value: "Didact Gothic",
         label: "Didact Gothic"
     },
     {
-        value: "diphylleia",
+        value: "Diphylleia",
         label: "Diphylleia"
     },
     {
-        value: "diplomata",
+        value: "Diplomata",
         label: "Diplomata"
     },
     {
-        value: "diplomata-sc",
+        value: "Diplomata SC",
         label: "Diplomata SC"
     },
     {
-        value: "dm-mono",
+        value: "DM Mono",
         label: "DM Mono"
     },
     {
-        value: "dm-sans",
+        value: "DM Sans",
         label: "DM Sans"
     },
     {
-        value: "dm-serif-display",
+        value: "DM Serif Display",
         label: "DM Serif Display"
     },
     {
-        value: "dm-serif-text",
+        value: "DM Serif Text",
         label: "DM Serif Text"
     },
     {
-        value: "do-hyeon",
+        value: "Do Hyeon",
         label: "Do Hyeon"
     },
     {
-        value: "dokdo",
+        value: "Dokdo",
         label: "Dokdo"
     },
     {
-        value: "domine",
+        value: "Domine",
         label: "Domine"
     },
     {
-        value: "donegal-one",
+        value: "Donegal One",
         label: "Donegal One"
     },
     {
-        value: "dongle",
+        value: "Dongle",
         label: "Dongle"
     },
     {
-        value: "doppio-one",
+        value: "Doppio One",
         label: "Doppio One"
     },
     {
-        value: "dorsa",
+        value: "Dorsa",
         label: "Dorsa"
     },
     {
-        value: "dosis",
+        value: "Dosis",
         label: "Dosis"
     },
     {
-        value: "dotgothic16",
+        value: "DotGothic16",
         label: "DotGothic16"
     },
     {
-        value: "dr-sugiyama",
+        value: "Dr Sugiyama",
         label: "Dr Sugiyama"
     },
     {
-        value: "duru-sans",
+        value: "Duru Sans",
         label: "Duru Sans"
     },
     {
-        value: "dynalight",
+        value: "Dynalight",
         label: "Dynalight"
     },
     {
-        value: "dynapuff",
+        value: "DynaPuff",
         label: "DynaPuff"
     },
     {
-        value: "eagle-lake",
+        value: "Eagle Lake",
         label: "Eagle Lake"
     },
     {
-        value: "east-sea-dokdo",
+        value: "East Sea Dokdo",
         label: "East Sea Dokdo"
     },
     {
-        value: "eater",
+        value: "Eater",
         label: "Eater"
     },
     {
-        value: "eb-garamond",
+        value: "EB Garamond",
         label: "EB Garamond"
     },
     {
-        value: "economica",
+        value: "Economica",
         label: "Economica"
     },
     {
-        value: "eczar",
+        value: "Eczar",
         label: "Eczar"
     },
     {
-        value: "edu-nsw-act-foundation",
+        value: "Edu NSW ACT Foundation",
         label: "Edu NSW ACT Foundation"
     },
     {
-        value: "edu-qld-beginner",
+        value: "Edu QLD Beginner",
         label: "Edu QLD Beginner"
     },
     {
-        value: "edu-sa-beginner",
+        value: "Edu SA Beginner",
         label: "Edu SA Beginner"
     },
     {
-        value: "edu-tas-beginner",
+        value: "Edu TAS Beginner",
         label: "Edu TAS Beginner"
     },
     {
-        value: "edu-vic-wa-nt-beginner",
+        value: "Edu VIC WA NT Beginner",
         label: "Edu VIC WA NT Beginner"
     },
     {
-        value: "el-messiri",
+        value: "El Messiri",
         label: "El Messiri"
     },
     {
-        value: "electrolize",
+        value: "Electrolize",
         label: "Electrolize"
     },
     {
-        value: "elsie",
+        value: "Elsie",
         label: "Elsie"
     },
     {
-        value: "elsie-swash-caps",
+        value: "Elsie Swash Caps",
         label: "Elsie Swash Caps"
     },
     {
-        value: "emblema-one",
+        value: "Emblema One",
         label: "Emblema One"
     },
     {
-        value: "emilys-candy",
+        value: "Emilys Candy",
         label: "Emilys Candy"
     },
     {
-        value: "encode-sans",
+        value: "Encode Sans",
         label: "Encode Sans"
     },
     {
-        value: "encode-sans-condensed",
+        value: "Encode Sans Condensed",
         label: "Encode Sans Condensed"
     },
     {
-        value: "encode-sans-expanded",
+        value: "Encode Sans Expanded",
         label: "Encode Sans Expanded"
     },
     {
-        value: "encode-sans-sc",
+        value: "Encode Sans SC",
         label: "Encode Sans SC"
     },
     {
-        value: "encode-sans-semi-condensed",
+        value: "Encode Sans Semi Condensed",
         label: "Encode Sans Semi Condensed"
     },
     {
-        value: "encode-sans-semi-expanded",
+        value: "Encode Sans Semi Expanded",
         label: "Encode Sans Semi Expanded"
     },
     {
-        value: "engagement",
+        value: "Engagement",
         label: "Engagement"
     },
     {
-        value: "englebert",
+        value: "Englebert",
         label: "Englebert"
     },
     {
-        value: "enriqueta",
+        value: "Enriqueta",
         label: "Enriqueta"
     },
     {
-        value: "ephesis",
+        value: "Ephesis",
         label: "Ephesis"
     },
     {
-        value: "epilogue",
+        value: "Epilogue",
         label: "Epilogue"
     },
     {
-        value: "erica-one",
+        value: "Erica One",
         label: "Erica One"
     },
     {
-        value: "esteban",
+        value: "Esteban",
         label: "Esteban"
     },
     {
-        value: "estonia",
+        value: "Estonia",
         label: "Estonia"
     },
     {
-        value: "euphoria-script",
+        value: "Euphoria Script",
         label: "Euphoria Script"
     },
     {
-        value: "ewert",
+        value: "Ewert",
         label: "Ewert"
     },
     {
-        value: "exo",
+        value: "Exo",
         label: "Exo"
     },
     {
-        value: "exo-2",
+        value: "Exo 2",
         label: "Exo 2"
     },
     {
-        value: "expletus-sans",
+        value: "Expletus Sans",
         label: "Expletus Sans"
     },
     {
-        value: "explora",
+        value: "Explora",
         label: "Explora"
     },
     {
-        value: "fahkwang",
+        value: "Fahkwang",
         label: "Fahkwang"
     },
     {
-        value: "familjen-grotesk",
+        value: "Familjen Grotesk",
         label: "Familjen Grotesk"
     },
     {
-        value: "fanwood-text",
+        value: "Fanwood Text",
         label: "Fanwood Text"
     },
     {
-        value: "farro",
+        value: "Farro",
         label: "Farro"
     },
     {
-        value: "farsan",
+        value: "Farsan",
         label: "Farsan"
     },
     {
-        value: "fascinate",
+        value: "Fascinate",
         label: "Fascinate"
     },
     {
-        value: "fascinate-inline",
+        value: "Fascinate Inline",
         label: "Fascinate Inline"
     },
     {
-        value: "faster-one",
+        value: "Faster One",
         label: "Faster One"
     },
     {
-        value: "fasthand",
+        value: "Fasthand",
         label: "Fasthand"
     },
     {
-        value: "fauna-one",
+        value: "Fauna One",
         label: "Fauna One"
     },
     {
-        value: "faustina",
+        value: "Faustina",
         label: "Faustina"
     },
     {
-        value: "federant",
+        value: "Federant",
         label: "Federant"
     },
     {
-        value: "federo",
+        value: "Federo",
         label: "Federo"
     },
     {
-        value: "felipa",
+        value: "Felipa",
         label: "Felipa"
     },
     {
-        value: "fenix",
+        value: "Fenix",
         label: "Fenix"
     },
     {
-        value: "festive",
+        value: "Festive",
         label: "Festive"
     },
     {
-        value: "figtree",
+        value: "Figtree",
         label: "Figtree"
     },
     {
-        value: "finger-paint",
+        value: "Finger Paint",
         label: "Finger Paint"
     },
     {
-        value: "finlandica",
+        value: "Finlandica",
         label: "Finlandica"
     },
     {
-        value: "fira-code",
+        value: "Fira Code",
         label: "Fira Code"
     },
     {
-        value: "fira-mono",
+        value: "Fira Mono",
         label: "Fira Mono"
     },
     {
-        value: "fira-sans",
+        value: "Fira Sans",
         label: "Fira Sans"
     },
     {
-        value: "fira-sans-condensed",
+        value: "Fira Sans Condensed",
         label: "Fira Sans Condensed"
     },
     {
-        value: "fira-sans-extra-condensed",
+        value: "Fira Sans Extra Condensed",
         label: "Fira Sans Extra Condensed"
     },
     {
-        value: "fjalla-one",
+        value: "Fjalla One",
         label: "Fjalla One"
     },
     {
-        value: "fjord-one",
+        value: "Fjord One",
         label: "Fjord One"
     },
     {
-        value: "flamenco",
+        value: "Flamenco",
         label: "Flamenco"
     },
     {
-        value: "flavors",
+        value: "Flavors",
         label: "Flavors"
     },
     {
-        value: "fleur-de-leah",
+        value: "Fleur De Leah",
         label: "Fleur De Leah"
     },
     {
-        value: "flow-block",
+        value: "Flow Block",
         label: "Flow Block"
     },
     {
-        value: "flow-circular",
+        value: "Flow Circular",
         label: "Flow Circular"
     },
     {
-        value: "flow-rounded",
+        value: "Flow Rounded",
         label: "Flow Rounded"
     },
     {
-        value: "foldit",
+        value: "Foldit",
         label: "Foldit"
     },
     {
-        value: "fondamento",
+        value: "Fondamento",
         label: "Fondamento"
     },
     {
-        value: "fontdiner-swanky",
+        value: "Fontdiner Swanky",
         label: "Fontdiner Swanky"
     },
     {
-        value: "forum",
+        value: "Forum",
         label: "Forum"
     },
     {
-        value: "fragment-mono",
+        value: "Fragment Mono",
         label: "Fragment Mono"
     },
     {
-        value: "francois-one",
+        value: "Francois One",
         label: "Francois One"
     },
     {
-        value: "frank-ruhl-libre",
+        value: "Frank Ruhl Libre",
         label: "Frank Ruhl Libre"
     },
     {
-        value: "fraunces",
+        value: "Fraunces",
         label: "Fraunces"
     },
     {
-        value: "freckle-face",
+        value: "Freckle Face",
         label: "Freckle Face"
     },
     {
-        value: "fredericka-the-great",
+        value: "Fredericka the Great",
         label: "Fredericka the Great"
     },
     {
-        value: "fredoka",
+        value: "Fredoka",
         label: "Fredoka"
     },
     {
-        value: "freehand",
+        value: "Freehand",
         label: "Freehand"
     },
     {
-        value: "fresca",
+        value: "Fresca",
         label: "Fresca"
     },
     {
-        value: "frijole",
+        value: "Frijole",
         label: "Frijole"
     },
     {
-        value: "fruktur",
+        value: "Fruktur",
         label: "Fruktur"
     },
     {
-        value: "fugaz-one",
+        value: "Fugaz One",
         label: "Fugaz One"
     },
     {
-        value: "fuggles",
+        value: "Fuggles",
         label: "Fuggles"
     },
     {
-        value: "fuzzy-bubbles",
+        value: "Fuzzy Bubbles",
         label: "Fuzzy Bubbles"
     },
     {
-        value: "gabriela",
+        value: "Gabriela",
         label: "Gabriela"
     },
     {
-        value: "gaegu",
+        value: "Gaegu",
         label: "Gaegu"
     },
     {
-        value: "gafata",
+        value: "Gafata",
         label: "Gafata"
     },
     {
-        value: "gajraj-one",
+        value: "Gajraj One",
         label: "Gajraj One"
     },
     {
-        value: "galada",
+        value: "Galada",
         label: "Galada"
     },
     {
-        value: "galdeano",
+        value: "Galdeano",
         label: "Galdeano"
     },
     {
-        value: "galindo",
+        value: "Galindo",
         label: "Galindo"
     },
     {
-        value: "gamja-flower",
+        value: "Gamja Flower",
         label: "Gamja Flower"
     },
     {
-        value: "gantari",
+        value: "Gantari",
         label: "Gantari"
     },
     {
-        value: "gasoek-one",
+        value: "Gasoek One",
         label: "Gasoek One"
     },
     {
-        value: "gayathri",
+        value: "Gayathri",
         label: "Gayathri"
     },
     {
-        value: "gelasio",
+        value: "Gelasio",
         label: "Gelasio"
     },
     {
-        value: "gemunu-libre",
+        value: "Gemunu Libre",
         label: "Gemunu Libre"
     },
     {
-        value: "genos",
+        value: "Genos",
         label: "Genos"
     },
     {
-        value: "gentium-book-plus",
+        value: "Gentium Book Plus",
         label: "Gentium Book Plus"
     },
     {
-        value: "gentium-plus",
+        value: "Gentium Plus",
         label: "Gentium Plus"
     },
     {
-        value: "geo",
+        value: "Geo",
         label: "Geo"
     },
     {
-        value: "geologica",
+        value: "Geologica",
         label: "Geologica"
     },
     {
-        value: "georama",
+        value: "Georama",
         label: "Georama"
     },
     {
-        value: "geostar",
+        value: "Geostar",
         label: "Geostar"
     },
     {
-        value: "geostar-fill",
+        value: "Geostar Fill",
         label: "Geostar Fill"
     },
     {
-        value: "germania-one",
+        value: "Germania One",
         label: "Germania One"
     },
     {
-        value: "gfs-didot",
+        value: "GFS Didot",
         label: "GFS Didot"
     },
     {
-        value: "gfs-neohellenic",
+        value: "GFS Neohellenic",
         label: "GFS Neohellenic"
     },
     {
-        value: "gideon-roman",
+        value: "Gideon Roman",
         label: "Gideon Roman"
     },
     {
-        value: "gidugu",
+        value: "Gidugu",
         label: "Gidugu"
     },
     {
-        value: "gilda-display",
+        value: "Gilda Display",
         label: "Gilda Display"
     },
     {
-        value: "girassol",
+        value: "Girassol",
         label: "Girassol"
     },
     {
-        value: "give-you-glory",
+        value: "Give You Glory",
         label: "Give You Glory"
     },
     {
-        value: "glass-antiqua",
+        value: "Glass Antiqua",
         label: "Glass Antiqua"
     },
     {
-        value: "glegoo",
+        value: "Glegoo",
         label: "Glegoo"
     },
     {
-        value: "gloock",
+        value: "Gloock",
         label: "Gloock"
     },
     {
-        value: "gloria-hallelujah",
+        value: "Gloria Hallelujah",
         label: "Gloria Hallelujah"
     },
     {
-        value: "glory",
+        value: "Glory",
         label: "Glory"
     },
     {
-        value: "gluten",
+        value: "Gluten",
         label: "Gluten"
     },
     {
-        value: "goblin-one",
+        value: "Goblin One",
         label: "Goblin One"
     },
     {
-        value: "gochi-hand",
+        value: "Gochi Hand",
         label: "Gochi Hand"
     },
     {
-        value: "goldman",
+        value: "Goldman",
         label: "Goldman"
     },
     {
-        value: "golos-text",
+        value: "Golos Text",
         label: "Golos Text"
     },
     {
-        value: "gorditas",
+        value: "Gorditas",
         label: "Gorditas"
     },
     {
-        value: "gothic-a1",
+        value: "Gothic A1",
         label: "Gothic A1"
     },
     {
-        value: "gotu",
+        value: "Gotu",
         label: "Gotu"
     },
     {
-        value: "goudy-bookletter-1911",
+        value: "Goudy Bookletter 1911",
         label: "Goudy Bookletter 1911"
     },
     {
-        value: "gowun-batang",
+        value: "Gowun Batang",
         label: "Gowun Batang"
     },
     {
-        value: "gowun-dodum",
+        value: "Gowun Dodum",
         label: "Gowun Dodum"
     },
     {
-        value: "graduate",
+        value: "Graduate",
         label: "Graduate"
     },
     {
-        value: "grand-hotel",
+        value: "Grand Hotel",
         label: "Grand Hotel"
     },
     {
-        value: "grandiflora-one",
+        value: "Grandiflora One",
         label: "Grandiflora One"
     },
     {
-        value: "grandstander",
+        value: "Grandstander",
         label: "Grandstander"
     },
     {
-        value: "grape-nuts",
+        value: "Grape Nuts",
         label: "Grape Nuts"
     },
     {
-        value: "gravitas-one",
+        value: "Gravitas One",
         label: "Gravitas One"
     },
     {
-        value: "great-vibes",
+        value: "Great Vibes",
         label: "Great Vibes"
     },
     {
-        value: "grechen-fuemen",
+        value: "Grechen Fuemen",
         label: "Grechen Fuemen"
     },
     {
-        value: "grenze",
+        value: "Grenze",
         label: "Grenze"
     },
     {
-        value: "grenze-gotisch",
+        value: "Grenze Gotisch",
         label: "Grenze Gotisch"
     },
     {
-        value: "grey-qo",
+        value: "Grey Qo",
         label: "Grey Qo"
     },
     {
-        value: "griffy",
+        value: "Griffy",
         label: "Griffy"
     },
     {
-        value: "gruppo",
+        value: "Gruppo",
         label: "Gruppo"
     },
     {
-        value: "gudea",
+        value: "Gudea",
         label: "Gudea"
     },
     {
-        value: "gugi",
+        value: "Gugi",
         label: "Gugi"
     },
     {
-        value: "gulzar",
+        value: "Gulzar",
         label: "Gulzar"
     },
     {
-        value: "gupter",
+        value: "Gupter",
         label: "Gupter"
     },
     {
-        value: "gurajada",
+        value: "Gurajada",
         label: "Gurajada"
     },
     {
-        value: "gwendolyn",
+        value: "Gwendolyn",
         label: "Gwendolyn"
     },
     {
-        value: "habibi",
+        value: "Habibi",
         label: "Habibi"
     },
     {
-        value: "hachi-maru-pop",
+        value: "Hachi Maru Pop",
         label: "Hachi Maru Pop"
     },
     {
-        value: "hahmlet",
+        value: "Hahmlet",
         label: "Hahmlet"
     },
     {
-        value: "halant",
+        value: "Halant",
         label: "Halant"
     },
     {
-        value: "hammersmith-one",
+        value: "Hammersmith One",
         label: "Hammersmith One"
     },
     {
-        value: "hanalei",
+        value: "Hanalei",
         label: "Hanalei"
     },
     {
-        value: "hanalei-fill",
+        value: "Hanalei Fill",
         label: "Hanalei Fill"
     },
     {
-        value: "handjet",
+        value: "Handjet",
         label: "Handjet"
     },
     {
-        value: "handlee",
+        value: "Handlee",
         label: "Handlee"
     },
     {
-        value: "hanken-grotesk",
+        value: "Hanken Grotesk",
         label: "Hanken Grotesk"
     },
     {
-        value: "hanuman",
+        value: "Hanuman",
         label: "Hanuman"
     },
     {
-        value: "happy-monkey",
+        value: "Happy Monkey",
         label: "Happy Monkey"
     },
     {
-        value: "harmattan",
+        value: "Harmattan",
         label: "Harmattan"
     },
     {
-        value: "headland-one",
+        value: "Headland One",
         label: "Headland One"
     },
     {
-        value: "heebo",
+        value: "Heebo",
         label: "Heebo"
     },
     {
-        value: "henny-penny",
+        value: "Henny Penny",
         label: "Henny Penny"
     },
     {
-        value: "hepta-slab",
+        value: "Hepta Slab",
         label: "Hepta Slab"
     },
     {
-        value: "herr-von-muellerhoff",
+        value: "Herr Von Muellerhoff",
         label: "Herr Von Muellerhoff"
     },
     {
-        value: "hi-melody",
+        value: "Hi Melody",
         label: "Hi Melody"
     },
     {
-        value: "hina-mincho",
+        value: "Hina Mincho",
         label: "Hina Mincho"
     },
     {
-        value: "hind",
+        value: "Hind",
         label: "Hind"
     },
     {
-        value: "hind-guntur",
+        value: "Hind Guntur",
         label: "Hind Guntur"
     },
     {
-        value: "hind-madurai",
+        value: "Hind Madurai",
         label: "Hind Madurai"
     },
     {
-        value: "hind-siliguri",
+        value: "Hind Siliguri",
         label: "Hind Siliguri"
     },
     {
-        value: "hind-vadodara",
+        value: "Hind Vadodara",
         label: "Hind Vadodara"
     },
     {
-        value: "holtwood-one-sc",
+        value: "Holtwood One SC",
         label: "Holtwood One SC"
     },
     {
-        value: "homemade-apple",
+        value: "Homemade Apple",
         label: "Homemade Apple"
     },
     {
-        value: "homenaje",
+        value: "Homenaje",
         label: "Homenaje"
     },
     {
-        value: "hubballi",
+        value: "Hubballi",
         label: "Hubballi"
     },
     {
-        value: "hurricane",
+        value: "Hurricane",
         label: "Hurricane"
     },
     {
-        value: "ibarra-real-nova",
+        value: "Ibarra Real Nova",
         label: "Ibarra Real Nova"
     },
     {
-        value: "ibm-plex-mono",
+        value: "IBM Plex Mono",
         label: "IBM Plex Mono"
     },
     {
-        value: "ibm-plex-sans",
+        value: "IBM Plex Sans",
         label: "IBM Plex Sans"
     },
     {
-        value: "ibm-plex-sans-arabic",
+        value: "IBM Plex Sans Arabic",
         label: "IBM Plex Sans Arabic"
     },
     {
-        value: "ibm-plex-sans-condensed",
+        value: "IBM Plex Sans Condensed",
         label: "IBM Plex Sans Condensed"
     },
     {
-        value: "ibm-plex-sans-devanagari",
+        value: "IBM Plex Sans Devanagari",
         label: "IBM Plex Sans Devanagari"
     },
     {
-        value: "ibm-plex-sans-hebrew",
+        value: "IBM Plex Sans Hebrew",
         label: "IBM Plex Sans Hebrew"
     },
     {
-        value: "ibm-plex-sans-jp",
+        value: "IBM Plex Sans JP",
         label: "IBM Plex Sans JP"
     },
     {
-        value: "ibm-plex-sans-kr",
+        value: "IBM Plex Sans KR",
         label: "IBM Plex Sans KR"
     },
     {
-        value: "ibm-plex-sans-thai",
+        value: "IBM Plex Sans Thai",
         label: "IBM Plex Sans Thai"
     },
     {
-        value: "ibm-plex-sans-thai-looped",
+        value: "IBM Plex Sans Thai Looped",
         label: "IBM Plex Sans Thai Looped"
     },
     {
-        value: "ibm-plex-serif",
+        value: "IBM Plex Serif",
         label: "IBM Plex Serif"
     },
     {
-        value: "iceberg",
+        value: "Iceberg",
         label: "Iceberg"
     },
     {
-        value: "iceland",
+        value: "Iceland",
         label: "Iceland"
     },
     {
-        value: "im-fell-double-pica",
+        value: "IM Fell Double Pica",
         label: "IM Fell Double Pica"
     },
     {
-        value: "im-fell-double-pica-sc",
+        value: "IM Fell Double Pica SC",
         label: "IM Fell Double Pica SC"
     },
     {
-        value: "im-fell-dw-pica",
+        value: "IM Fell DW Pica",
         label: "IM Fell DW Pica"
     },
     {
-        value: "im-fell-dw-pica-sc",
+        value: "IM Fell DW Pica SC",
         label: "IM Fell DW Pica SC"
     },
     {
-        value: "im-fell-english",
+        value: "IM Fell English",
         label: "IM Fell English"
     },
     {
-        value: "im-fell-english-sc",
+        value: "IM Fell English SC",
         label: "IM Fell English SC"
     },
     {
-        value: "im-fell-french-canon",
+        value: "IM Fell French Canon",
         label: "IM Fell French Canon"
     },
     {
-        value: "im-fell-french-canon-sc",
+        value: "IM Fell French Canon SC",
         label: "IM Fell French Canon SC"
     },
     {
-        value: "im-fell-great-primer",
+        value: "IM Fell Great Primer",
         label: "IM Fell Great Primer"
     },
     {
-        value: "im-fell-great-primer-sc",
+        value: "IM Fell Great Primer SC",
         label: "IM Fell Great Primer SC"
     },
     {
-        value: "imbue",
+        value: "Imbue",
         label: "Imbue"
     },
     {
-        value: "imperial-script",
+        value: "Imperial Script",
         label: "Imperial Script"
     },
     {
-        value: "imprima",
+        value: "Imprima",
         label: "Imprima"
     },
     {
-        value: "inconsolata",
+        value: "Inconsolata",
         label: "Inconsolata"
     },
     {
-        value: "inder",
+        value: "Inder",
         label: "Inder"
     },
     {
-        value: "indie-flower",
+        value: "Indie Flower",
         label: "Indie Flower"
     },
     {
-        value: "ingrid-darling",
+        value: "Ingrid Darling",
         label: "Ingrid Darling"
     },
     {
-        value: "inika",
+        value: "Inika",
         label: "Inika"
     },
     {
-        value: "inknut-antiqua",
+        value: "Inknut Antiqua",
         label: "Inknut Antiqua"
     },
     {
-        value: "inria-sans",
+        value: "Inria Sans",
         label: "Inria Sans"
     },
     {
-        value: "inria-serif",
+        value: "Inria Serif",
         label: "Inria Serif"
     },
     {
-        value: "inspiration",
+        value: "Inspiration",
         label: "Inspiration"
     },
     {
-        value: "instrument-sans",
+        value: "Instrument Sans",
         label: "Instrument Sans"
     },
     {
-        value: "instrument-serif",
+        value: "Instrument Serif",
         label: "Instrument Serif"
     },
     {
-        value: "inter",
+        value: "Inter",
         label: "Inter"
     },
     {
-        value: "inter-tight",
+        value: "Inter Tight",
         label: "Inter Tight"
     },
     {
-        value: "irish-grover",
+        value: "Irish Grover",
         label: "Irish Grover"
     },
     {
-        value: "island-moments",
+        value: "Island Moments",
         label: "Island Moments"
     },
     {
-        value: "istok-web",
+        value: "Istok Web",
         label: "Istok Web"
     },
     {
-        value: "italiana",
+        value: "Italiana",
         label: "Italiana"
     },
     {
-        value: "italianno",
+        value: "Italianno",
         label: "Italianno"
     },
     {
-        value: "itim",
+        value: "Itim",
         label: "Itim"
     },
     {
-        value: "jacques-francois",
+        value: "Jacques Francois",
         label: "Jacques Francois"
     },
     {
-        value: "jacques-francois-shadow",
+        value: "Jacques Francois Shadow",
         label: "Jacques Francois Shadow"
     },
     {
-        value: "jaldi",
+        value: "Jaldi",
         label: "Jaldi"
     },
     {
-        value: "jetbrains-mono",
+        value: "JetBrains Mono",
         label: "JetBrains Mono"
     },
     {
-        value: "jim-nightshade",
+        value: "Jim Nightshade",
         label: "Jim Nightshade"
     },
     {
-        value: "joan",
+        value: "Joan",
         label: "Joan"
     },
     {
-        value: "jockey-one",
+        value: "Jockey One",
         label: "Jockey One"
     },
     {
-        value: "jolly-lodger",
+        value: "Jolly Lodger",
         label: "Jolly Lodger"
     },
     {
-        value: "jomhuria",
+        value: "Jomhuria",
         label: "Jomhuria"
     },
     {
-        value: "jomolhari",
+        value: "Jomolhari",
         label: "Jomolhari"
     },
     {
-        value: "josefin-sans",
+        value: "Josefin Sans",
         label: "Josefin Sans"
     },
     {
-        value: "josefin-slab",
+        value: "Josefin Slab",
         label: "Josefin Slab"
     },
     {
-        value: "jost",
+        value: "Jost",
         label: "Jost"
     },
     {
-        value: "joti-one",
+        value: "Joti One",
         label: "Joti One"
     },
     {
-        value: "jua",
+        value: "Jua",
         label: "Jua"
     },
     {
-        value: "judson",
+        value: "Judson",
         label: "Judson"
     },
     {
-        value: "julee",
+        value: "Julee",
         label: "Julee"
     },
     {
-        value: "julius-sans-one",
+        value: "Julius Sans One",
         label: "Julius Sans One"
     },
     {
-        value: "junge",
+        value: "Junge",
         label: "Junge"
     },
     {
-        value: "jura",
+        value: "Jura",
         label: "Jura"
     },
     {
-        value: "just-another-hand",
+        value: "Just Another Hand",
         label: "Just Another Hand"
     },
     {
-        value: "just-me-again-down-here",
+        value: "Just Me Again Down Here",
         label: "Just Me Again Down Here"
     },
     {
-        value: "k2d",
+        value: "K2D",
         label: "K2D"
     },
     {
-        value: "kablammo",
+        value: "Kablammo",
         label: "Kablammo"
     },
     {
-        value: "kadwa",
+        value: "Kadwa",
         label: "Kadwa"
     },
     {
-        value: "kaisei-decol",
+        value: "Kaisei Decol",
         label: "Kaisei Decol"
     },
     {
-        value: "kaisei-harunoumi",
+        value: "Kaisei HarunoUmi",
         label: "Kaisei HarunoUmi"
     },
     {
-        value: "kaisei-opti",
+        value: "Kaisei Opti",
         label: "Kaisei Opti"
     },
     {
-        value: "kaisei-tokumin",
+        value: "Kaisei Tokumin",
         label: "Kaisei Tokumin"
     },
     {
-        value: "kalam",
+        value: "Kalam",
         label: "Kalam"
     },
     {
-        value: "kameron",
+        value: "Kameron",
         label: "Kameron"
     },
     {
-        value: "kanit",
+        value: "Kanit",
         label: "Kanit"
     },
     {
-        value: "kantumruy-pro",
+        value: "Kantumruy Pro",
         label: "Kantumruy Pro"
     },
     {
-        value: "karantina",
+        value: "Karantina",
         label: "Karantina"
     },
     {
-        value: "karla",
+        value: "Karla",
         label: "Karla"
     },
     {
-        value: "karma",
+        value: "Karma",
         label: "Karma"
     },
     {
-        value: "katibeh",
+        value: "Katibeh",
         label: "Katibeh"
     },
     {
-        value: "kaushan-script",
+        value: "Kaushan Script",
         label: "Kaushan Script"
     },
     {
-        value: "kavivanar",
+        value: "Kavivanar",
         label: "Kavivanar"
     },
     {
-        value: "kavoon",
+        value: "Kavoon",
         label: "Kavoon"
     },
     {
-        value: "kdam-thmor-pro",
+        value: "Kdam Thmor Pro",
         label: "Kdam Thmor Pro"
     },
     {
-        value: "keania-one",
+        value: "Keania One",
         label: "Keania One"
     },
     {
-        value: "kelly-slab",
+        value: "Kelly Slab",
         label: "Kelly Slab"
     },
     {
-        value: "kenia",
+        value: "Kenia",
         label: "Kenia"
     },
     {
-        value: "khand",
+        value: "Khand",
         label: "Khand"
     },
     {
-        value: "khmer",
+        value: "Khmer",
         label: "Khmer"
     },
     {
-        value: "khula",
+        value: "Khula",
         label: "Khula"
     },
     {
-        value: "kings",
+        value: "Kings",
         label: "Kings"
     },
     {
-        value: "kirang-haerang",
+        value: "Kirang Haerang",
         label: "Kirang Haerang"
     },
     {
-        value: "kite-one",
+        value: "Kite One",
         label: "Kite One"
     },
     {
-        value: "kiwi-maru",
+        value: "Kiwi Maru",
         label: "Kiwi Maru"
     },
     {
-        value: "klee-one",
+        value: "Klee One",
         label: "Klee One"
     },
     {
-        value: "knewave",
+        value: "Knewave",
         label: "Knewave"
     },
     {
-        value: "kodchasan",
+        value: "Kodchasan",
         label: "Kodchasan"
     },
     {
-        value: "koh-santepheap",
+        value: "Koh Santepheap",
         label: "Koh Santepheap"
     },
     {
-        value: "koho",
+        value: "KoHo",
         label: "KoHo"
     },
     {
-        value: "kolker-brush",
+        value: "Kolker Brush",
         label: "Kolker Brush"
     },
     {
-        value: "konkhmer-sleokchher",
+        value: "Konkhmer Sleokchher",
         label: "Konkhmer Sleokchher"
     },
     {
-        value: "kosugi",
+        value: "Kosugi",
         label: "Kosugi"
     },
     {
-        value: "kosugi-maru",
+        value: "Kosugi Maru",
         label: "Kosugi Maru"
     },
     {
-        value: "kotta-one",
+        value: "Kotta One",
         label: "Kotta One"
     },
     {
-        value: "koulen",
+        value: "Koulen",
         label: "Koulen"
     },
     {
-        value: "kranky",
+        value: "Kranky",
         label: "Kranky"
     },
     {
-        value: "kreon",
+        value: "Kreon",
         label: "Kreon"
     },
     {
-        value: "kristi",
+        value: "Kristi",
         label: "Kristi"
     },
     {
-        value: "krona-one",
+        value: "Krona One",
         label: "Krona One"
     },
     {
-        value: "krub",
+        value: "Krub",
         label: "Krub"
     },
     {
-        value: "kufam",
+        value: "Kufam",
         label: "Kufam"
     },
     {
-        value: "kulim-park",
+        value: "Kulim Park",
         label: "Kulim Park"
     },
     {
-        value: "kumar-one",
+        value: "Kumar One",
         label: "Kumar One"
     },
     {
-        value: "kumar-one-outline",
+        value: "Kumar One Outline",
         label: "Kumar One Outline"
     },
     {
-        value: "kumbh-sans",
+        value: "Kumbh Sans",
         label: "Kumbh Sans"
     },
     {
-        value: "kurale",
+        value: "Kurale",
         label: "Kurale"
     },
     {
-        value: "la-belle-aurore",
+        value: "La Belle Aurore",
         label: "La Belle Aurore"
     },
     {
-        value: "labrada",
+        value: "Labrada",
         label: "Labrada"
     },
     {
-        value: "lacquer",
+        value: "Lacquer",
         label: "Lacquer"
     },
     {
-        value: "laila",
+        value: "Laila",
         label: "Laila"
     },
     {
-        value: "lakki-reddy",
+        value: "Lakki Reddy",
         label: "Lakki Reddy"
     },
     {
-        value: "lalezar",
+        value: "Lalezar",
         label: "Lalezar"
     },
     {
-        value: "lancelot",
+        value: "Lancelot",
         label: "Lancelot"
     },
     {
-        value: "langar",
+        value: "Langar",
         label: "Langar"
     },
     {
-        value: "lateef",
+        value: "Lateef",
         label: "Lateef"
     },
     {
-        value: "lato",
+        value: "Lato",
         label: "Lato"
     },
     {
-        value: "lavishly-yours",
+        value: "Lavishly Yours",
         label: "Lavishly Yours"
     },
     {
-        value: "league-gothic",
+        value: "League Gothic",
         label: "League Gothic"
     },
     {
-        value: "league-script",
+        value: "League Script",
         label: "League Script"
     },
     {
-        value: "league-spartan",
+        value: "League Spartan",
         label: "League Spartan"
     },
     {
-        value: "leckerli-one",
+        value: "Leckerli One",
         label: "Leckerli One"
     },
     {
-        value: "ledger",
+        value: "Ledger",
         label: "Ledger"
     },
     {
-        value: "lekton",
+        value: "Lekton",
         label: "Lekton"
     },
     {
-        value: "lemon",
+        value: "Lemon",
         label: "Lemon"
     },
     {
-        value: "lemonada",
+        value: "Lemonada",
         label: "Lemonada"
     },
     {
-        value: "lexend",
+        value: "Lexend",
         label: "Lexend"
     },
     {
-        value: "lexend-deca",
+        value: "Lexend Deca",
         label: "Lexend Deca"
     },
     {
-        value: "lexend-exa",
+        value: "Lexend Exa",
         label: "Lexend Exa"
     },
     {
-        value: "lexend-giga",
+        value: "Lexend Giga",
         label: "Lexend Giga"
     },
     {
-        value: "lexend-mega",
+        value: "Lexend Mega",
         label: "Lexend Mega"
     },
     {
-        value: "lexend-peta",
+        value: "Lexend Peta",
         label: "Lexend Peta"
     },
     {
-        value: "lexend-tera",
+        value: "Lexend Tera",
         label: "Lexend Tera"
     },
     {
-        value: "lexend-zetta",
+        value: "Lexend Zetta",
         label: "Lexend Zetta"
     },
     {
-        value: "libre-barcode-128",
+        value: "Libre Barcode 128",
         label: "Libre Barcode 128"
     },
     {
-        value: "libre-barcode-128-text",
+        value: "Libre Barcode 128 Text",
         label: "Libre Barcode 128 Text"
     },
     {
-        value: "libre-barcode-39",
+        value: "Libre Barcode 39",
         label: "Libre Barcode 39"
     },
     {
-        value: "libre-barcode-39-extended",
+        value: "Libre Barcode 39 Extended",
         label: "Libre Barcode 39 Extended"
     },
     {
-        value: "libre-barcode-39-extended-text",
+        value: "Libre Barcode 39 Extended Text",
         label: "Libre Barcode 39 Extended Text"
     },
     {
-        value: "libre-barcode-39-text",
+        value: "Libre Barcode 39 Text",
         label: "Libre Barcode 39 Text"
     },
     {
-        value: "libre-barcode-ean13-text",
+        value: "Libre Barcode EAN13 Text",
         label: "Libre Barcode EAN13 Text"
     },
     {
-        value: "libre-baskerville",
+        value: "Libre Baskerville",
         label: "Libre Baskerville"
     },
     {
-        value: "libre-bodoni",
+        value: "Libre Bodoni",
         label: "Libre Bodoni"
     },
     {
-        value: "libre-caslon-display",
+        value: "Libre Caslon Display",
         label: "Libre Caslon Display"
     },
     {
-        value: "libre-caslon-text",
+        value: "Libre Caslon Text",
         label: "Libre Caslon Text"
     },
     {
-        value: "libre-franklin",
+        value: "Libre Franklin",
         label: "Libre Franklin"
     },
     {
-        value: "licorice",
+        value: "Licorice",
         label: "Licorice"
     },
     {
-        value: "life-savers",
+        value: "Life Savers",
         label: "Life Savers"
     },
     {
-        value: "lilita-one",
+        value: "Lilita One",
         label: "Lilita One"
     },
     {
-        value: "lily-script-one",
+        value: "Lily Script One",
         label: "Lily Script One"
     },
     {
-        value: "limelight",
+        value: "Limelight",
         label: "Limelight"
     },
     {
-        value: "linden-hill",
+        value: "Linden Hill",
         label: "Linden Hill"
     },
     {
-        value: "lisu-bosa",
+        value: "Lisu Bosa",
         label: "Lisu Bosa"
     },
     {
-        value: "literata",
+        value: "Literata",
         label: "Literata"
     },
     {
-        value: "liu-jian-mao-cao",
+        value: "Liu Jian Mao Cao",
         label: "Liu Jian Mao Cao"
     },
     {
-        value: "livvic",
+        value: "Livvic",
         label: "Livvic"
     },
     {
-        value: "lobster",
+        value: "Lobster",
         label: "Lobster"
     },
     {
-        value: "lobster-two",
+        value: "Lobster Two",
         label: "Lobster Two"
     },
     {
-        value: "londrina-outline",
+        value: "Londrina Outline",
         label: "Londrina Outline"
     },
     {
-        value: "londrina-shadow",
+        value: "Londrina Shadow",
         label: "Londrina Shadow"
     },
     {
-        value: "londrina-sketch",
+        value: "Londrina Sketch",
         label: "Londrina Sketch"
     },
     {
-        value: "londrina-solid",
+        value: "Londrina Solid",
         label: "Londrina Solid"
     },
     {
-        value: "long-cang",
+        value: "Long Cang",
         label: "Long Cang"
     },
     {
-        value: "lora",
+        value: "Lora",
         label: "Lora"
     },
     {
-        value: "love-light",
+        value: "Love Light",
         label: "Love Light"
     },
     {
-        value: "love-ya-like-a-sister",
+        value: "Love Ya Like A Sister",
         label: "Love Ya Like A Sister"
     },
     {
-        value: "loved-by-the-king",
+        value: "Loved by the King",
         label: "Loved by the King"
     },
     {
-        value: "lovers-quarrel",
+        value: "Lovers Quarrel",
         label: "Lovers Quarrel"
     },
     {
-        value: "luckiest-guy",
+        value: "Luckiest Guy",
         label: "Luckiest Guy"
     },
     {
-        value: "lugrasimo",
+        value: "Lugrasimo",
         label: "Lugrasimo"
     },
     {
-        value: "lumanosimo",
+        value: "Lumanosimo",
         label: "Lumanosimo"
     },
     {
-        value: "lunasima",
+        value: "Lunasima",
         label: "Lunasima"
     },
     {
-        value: "lusitana",
+        value: "Lusitana",
         label: "Lusitana"
     },
     {
-        value: "lustria",
+        value: "Lustria",
         label: "Lustria"
     },
     {
-        value: "luxurious-roman",
+        value: "Luxurious Roman",
         label: "Luxurious Roman"
     },
     {
-        value: "luxurious-script",
+        value: "Luxurious Script",
         label: "Luxurious Script"
     },
     {
-        value: "m-plus-1",
+        value: "M PLUS 1",
         label: "M PLUS 1"
     },
     {
-        value: "m-plus-1-code",
+        value: "M PLUS 1 Code",
         label: "M PLUS 1 Code"
     },
     {
-        value: "m-plus-1p",
+        value: "M PLUS 1p",
         label: "M PLUS 1p"
     },
     {
-        value: "m-plus-2",
+        value: "M PLUS 2",
         label: "M PLUS 2"
     },
     {
-        value: "m-plus-code-latin",
+        value: "M PLUS Code Latin",
         label: "M PLUS Code Latin"
     },
     {
-        value: "m-plus-rounded-1c",
+        value: "M PLUS Rounded 1c",
         label: "M PLUS Rounded 1c"
     },
     {
-        value: "ma-shan-zheng",
+        value: "Ma Shan Zheng",
         label: "Ma Shan Zheng"
     },
     {
-        value: "macondo",
+        value: "Macondo",
         label: "Macondo"
     },
     {
-        value: "macondo-swash-caps",
+        value: "Macondo Swash Caps",
         label: "Macondo Swash Caps"
     },
     {
-        value: "mada",
+        value: "Mada",
         label: "Mada"
     },
     {
-        value: "magra",
+        value: "Magra",
         label: "Magra"
     },
     {
-        value: "maiden-orange",
+        value: "Maiden Orange",
         label: "Maiden Orange"
     },
     {
-        value: "maitree",
+        value: "Maitree",
         label: "Maitree"
     },
     {
-        value: "major-mono-display",
+        value: "Major Mono Display",
         label: "Major Mono Display"
     },
     {
-        value: "mako",
+        value: "Mako",
         label: "Mako"
     },
     {
-        value: "mali",
+        value: "Mali",
         label: "Mali"
     },
     {
-        value: "mallanna",
+        value: "Mallanna",
         label: "Mallanna"
     },
     {
-        value: "mandali",
+        value: "Mandali",
         label: "Mandali"
     },
     {
-        value: "manjari",
+        value: "Manjari",
         label: "Manjari"
     },
     {
-        value: "manrope",
+        value: "Manrope",
         label: "Manrope"
     },
     {
-        value: "mansalva",
+        value: "Mansalva",
         label: "Mansalva"
     },
     {
-        value: "manuale",
+        value: "Manuale",
         label: "Manuale"
     },
     {
-        value: "marcellus",
+        value: "Marcellus",
         label: "Marcellus"
     },
     {
-        value: "marcellus-sc",
+        value: "Marcellus SC",
         label: "Marcellus SC"
     },
     {
-        value: "marck-script",
+        value: "Marck Script",
         label: "Marck Script"
     },
     {
-        value: "margarine",
+        value: "Margarine",
         label: "Margarine"
     },
     {
-        value: "marhey",
+        value: "Marhey",
         label: "Marhey"
     },
     {
-        value: "markazi-text",
+        value: "Markazi Text",
         label: "Markazi Text"
     },
     {
-        value: "marko-one",
+        value: "Marko One",
         label: "Marko One"
     },
     {
-        value: "marmelad",
+        value: "Marmelad",
         label: "Marmelad"
     },
     {
-        value: "martel",
+        value: "Martel",
         label: "Martel"
     },
     {
-        value: "martel-sans",
+        value: "Martel Sans",
         label: "Martel Sans"
     },
     {
-        value: "martian-mono",
+        value: "Martian Mono",
         label: "Martian Mono"
     },
     {
-        value: "marvel",
+        value: "Marvel",
         label: "Marvel"
     },
     {
-        value: "mate",
+        value: "Mate",
         label: "Mate"
     },
     {
-        value: "mate-sc",
+        value: "Mate SC",
         label: "Mate SC"
     },
     {
-        value: "material-icons",
+        value: "Material Icons",
         label: "Material Icons"
     },
     {
-        value: "material-icons-outlined",
+        value: "Material Icons Outlined",
         label: "Material Icons Outlined"
     },
     {
-        value: "material-icons-round",
+        value: "Material Icons Round",
         label: "Material Icons Round"
     },
     {
-        value: "material-icons-sharp",
+        value: "Material Icons Sharp",
         label: "Material Icons Sharp"
     },
     {
-        value: "material-icons-two-tone",
+        value: "Material Icons Two Tone",
         label: "Material Icons Two Tone"
     },
     {
-        value: "material-symbols-outlined",
+        value: "Material Symbols Outlined",
         label: "Material Symbols Outlined"
     },
     {
-        value: "material-symbols-rounded",
+        value: "Material Symbols Rounded",
         label: "Material Symbols Rounded"
     },
     {
-        value: "material-symbols-sharp",
+        value: "Material Symbols Sharp",
         label: "Material Symbols Sharp"
     },
     {
-        value: "maven-pro",
+        value: "Maven Pro",
         label: "Maven Pro"
     },
     {
-        value: "mclaren",
+        value: "McLaren",
         label: "McLaren"
     },
     {
-        value: "mea-culpa",
+        value: "Mea Culpa",
         label: "Mea Culpa"
     },
     {
-        value: "meddon",
+        value: "Meddon",
         label: "Meddon"
     },
     {
-        value: "medievalsharp",
+        value: "MedievalSharp",
         label: "MedievalSharp"
     },
     {
-        value: "medula-one",
+        value: "Medula One",
         label: "Medula One"
     },
     {
-        value: "meera-inimai",
+        value: "Meera Inimai",
         label: "Meera Inimai"
     },
     {
-        value: "megrim",
+        value: "Megrim",
         label: "Megrim"
     },
     {
-        value: "meie-script",
+        value: "Meie Script",
         label: "Meie Script"
     },
     {
-        value: "meow-script",
+        value: "Meow Script",
         label: "Meow Script"
     },
     {
-        value: "merienda",
+        value: "Merienda",
         label: "Merienda"
     },
     {
-        value: "merriweather",
+        value: "Merriweather",
         label: "Merriweather"
     },
     {
-        value: "merriweather-sans",
+        value: "Merriweather Sans",
         label: "Merriweather Sans"
     },
     {
-        value: "metal",
+        value: "Metal",
         label: "Metal"
     },
     {
-        value: "metal-mania",
+        value: "Metal Mania",
         label: "Metal Mania"
     },
     {
-        value: "metamorphous",
+        value: "Metamorphous",
         label: "Metamorphous"
     },
     {
-        value: "metrophobic",
+        value: "Metrophobic",
         label: "Metrophobic"
     },
     {
-        value: "michroma",
+        value: "Michroma",
         label: "Michroma"
     },
     {
-        value: "milonga",
+        value: "Milonga",
         label: "Milonga"
     },
     {
-        value: "miltonian",
+        value: "Miltonian",
         label: "Miltonian"
     },
     {
-        value: "miltonian-tattoo",
+        value: "Miltonian Tattoo",
         label: "Miltonian Tattoo"
     },
     {
-        value: "mina",
+        value: "Mina",
         label: "Mina"
     },
     {
-        value: "mingzat",
+        value: "Mingzat",
         label: "Mingzat"
     },
     {
-        value: "miniver",
+        value: "Miniver",
         label: "Miniver"
     },
     {
-        value: "miriam-libre",
+        value: "Miriam Libre",
         label: "Miriam Libre"
     },
     {
-        value: "mirza",
+        value: "Mirza",
         label: "Mirza"
     },
     {
-        value: "miss-fajardose",
+        value: "Miss Fajardose",
         label: "Miss Fajardose"
     },
     {
-        value: "mitr",
+        value: "Mitr",
         label: "Mitr"
     },
     {
-        value: "mochiy-pop-one",
+        value: "Mochiy Pop One",
         label: "Mochiy Pop One"
     },
     {
-        value: "mochiy-pop-p-one",
+        value: "Mochiy Pop P One",
         label: "Mochiy Pop P One"
     },
     {
-        value: "modak",
+        value: "Modak",
         label: "Modak"
     },
     {
-        value: "modern-antiqua",
+        value: "Modern Antiqua",
         label: "Modern Antiqua"
     },
     {
-        value: "mogra",
+        value: "Mogra",
         label: "Mogra"
     },
     {
-        value: "mohave",
+        value: "Mohave",
         label: "Mohave"
     },
     {
-        value: "moirai-one",
+        value: "Moirai One",
         label: "Moirai One"
     },
     {
-        value: "molengo",
+        value: "Molengo",
         label: "Molengo"
     },
     {
-        value: "molle",
+        value: "Molle",
         label: "Molle"
     },
     {
-        value: "monda",
+        value: "Monda",
         label: "Monda"
     },
     {
-        value: "monofett",
+        value: "Monofett",
         label: "Monofett"
     },
     {
-        value: "monomaniac-one",
+        value: "Monomaniac One",
         label: "Monomaniac One"
     },
     {
-        value: "monoton",
+        value: "Monoton",
         label: "Monoton"
     },
     {
-        value: "monsieur-la-doulaise",
+        value: "Monsieur La Doulaise",
         label: "Monsieur La Doulaise"
     },
     {
-        value: "montaga",
+        value: "Montaga",
         label: "Montaga"
     },
     {
-        value: "montagu-slab",
+        value: "Montagu Slab",
         label: "Montagu Slab"
     },
     {
-        value: "montecarlo",
+        value: "MonteCarlo",
         label: "MonteCarlo"
     },
     {
-        value: "montez",
+        value: "Montez",
         label: "Montez"
     },
     {
-        value: "montserrat",
+        value: "Montserrat",
         label: "Montserrat"
     },
     {
-        value: "montserrat-alternates",
+        value: "Montserrat Alternates",
         label: "Montserrat Alternates"
     },
     {
-        value: "montserrat-subrayada",
+        value: "Montserrat Subrayada",
         label: "Montserrat Subrayada"
     },
     {
-        value: "moo-lah-lah",
+        value: "Moo Lah Lah",
         label: "Moo Lah Lah"
     },
     {
-        value: "moon-dance",
+        value: "Moon Dance",
         label: "Moon Dance"
     },
     {
-        value: "moul",
+        value: "Moul",
         label: "Moul"
     },
     {
-        value: "moulpali",
+        value: "Moulpali",
         label: "Moulpali"
     },
     {
-        value: "mountains-of-christmas",
+        value: "Mountains of Christmas",
         label: "Mountains of Christmas"
     },
     {
-        value: "mouse-memoirs",
+        value: "Mouse Memoirs",
         label: "Mouse Memoirs"
     },
     {
-        value: "mr-bedfort",
+        value: "Mr Bedfort",
         label: "Mr Bedfort"
     },
     {
-        value: "mr-dafoe",
+        value: "Mr Dafoe",
         label: "Mr Dafoe"
     },
     {
-        value: "mr-de-haviland",
+        value: "Mr De Haviland",
         label: "Mr De Haviland"
     },
     {
-        value: "mrs-saint-delafield",
+        value: "Mrs Saint Delafield",
         label: "Mrs Saint Delafield"
     },
     {
-        value: "mrs-sheppards",
+        value: "Mrs Sheppards",
         label: "Mrs Sheppards"
     },
     {
-        value: "ms-madi",
+        value: "Ms Madi",
         label: "Ms Madi"
     },
     {
-        value: "mukta",
+        value: "Mukta",
         label: "Mukta"
     },
     {
-        value: "mukta-mahee",
+        value: "Mukta Mahee",
         label: "Mukta Mahee"
     },
     {
-        value: "mukta-malar",
+        value: "Mukta Malar",
         label: "Mukta Malar"
     },
     {
-        value: "mukta-vaani",
+        value: "Mukta Vaani",
         label: "Mukta Vaani"
     },
     {
-        value: "mulish",
+        value: "Mulish",
         label: "Mulish"
     },
     {
-        value: "murecho",
+        value: "Murecho",
         label: "Murecho"
     },
     {
-        value: "museomoderno",
+        value: "MuseoModerno",
         label: "MuseoModerno"
     },
     {
-        value: "my-soul",
+        value: "My Soul",
         label: "My Soul"
     },
     {
-        value: "mynerve",
+        value: "Mynerve",
         label: "Mynerve"
     },
     {
-        value: "mystery-quest",
+        value: "Mystery Quest",
         label: "Mystery Quest"
     },
     {
-        value: "nabla",
+        value: "Nabla",
         label: "Nabla"
     },
     {
-        value: "nanum-brush-script",
+        value: "Nanum Brush Script",
         label: "Nanum Brush Script"
     },
     {
-        value: "nanum-gothic",
+        value: "Nanum Gothic",
         label: "Nanum Gothic"
     },
     {
-        value: "nanum-gothic-coding",
+        value: "Nanum Gothic Coding",
         label: "Nanum Gothic Coding"
     },
     {
-        value: "nanum-myeongjo",
+        value: "Nanum Myeongjo",
         label: "Nanum Myeongjo"
     },
     {
-        value: "nanum-pen-script",
+        value: "Nanum Pen Script",
         label: "Nanum Pen Script"
     },
     {
-        value: "narnoor",
+        value: "Narnoor",
         label: "Narnoor"
     },
     {
-        value: "neonderthaw",
+        value: "Neonderthaw",
         label: "Neonderthaw"
     },
     {
-        value: "nerko-one",
+        value: "Nerko One",
         label: "Nerko One"
     },
     {
-        value: "neucha",
+        value: "Neucha",
         label: "Neucha"
     },
     {
-        value: "neuton",
+        value: "Neuton",
         label: "Neuton"
     },
     {
-        value: "new-rocker",
+        value: "New Rocker",
         label: "New Rocker"
     },
     {
-        value: "new-tegomin",
+        value: "New Tegomin",
         label: "New Tegomin"
     },
     {
-        value: "news-cycle",
+        value: "News Cycle",
         label: "News Cycle"
     },
     {
-        value: "newsreader",
+        value: "Newsreader",
         label: "Newsreader"
     },
     {
-        value: "niconne",
+        value: "Niconne",
         label: "Niconne"
     },
     {
-        value: "niramit",
+        value: "Niramit",
         label: "Niramit"
     },
     {
-        value: "nixie-one",
+        value: "Nixie One",
         label: "Nixie One"
     },
     {
-        value: "nobile",
+        value: "Nobile",
         label: "Nobile"
     },
     {
-        value: "nokora",
+        value: "Nokora",
         label: "Nokora"
     },
     {
-        value: "norican",
+        value: "Norican",
         label: "Norican"
     },
     {
-        value: "nosifer",
+        value: "Nosifer",
         label: "Nosifer"
     },
     {
-        value: "notable",
+        value: "Notable",
         label: "Notable"
     },
     {
-        value: "nothing-you-could-do",
+        value: "Nothing You Could Do",
         label: "Nothing You Could Do"
     },
     {
-        value: "noticia-text",
+        value: "Noticia Text",
         label: "Noticia Text"
     },
     {
-        value: "noto-color-emoji",
+        value: "Noto Color Emoji",
         label: "Noto Color Emoji"
     },
     {
-        value: "noto-emoji",
+        value: "Noto Emoji",
         label: "Noto Emoji"
     },
     {
-        value: "noto-kufi-arabic",
+        value: "Noto Kufi Arabic",
         label: "Noto Kufi Arabic"
     },
     {
-        value: "noto-music",
+        value: "Noto Music",
         label: "Noto Music"
     },
     {
-        value: "noto-naskh-arabic",
+        value: "Noto Naskh Arabic",
         label: "Noto Naskh Arabic"
     },
     {
-        value: "noto-nastaliq-urdu",
+        value: "Noto Nastaliq Urdu",
         label: "Noto Nastaliq Urdu"
     },
     {
-        value: "noto-rashi-hebrew",
+        value: "Noto Rashi Hebrew",
         label: "Noto Rashi Hebrew"
     },
     {
-        value: "noto-sans",
+        value: "Noto Sans",
         label: "Noto Sans"
     },
     {
-        value: "noto-sans-adlam",
+        value: "Noto Sans Adlam",
         label: "Noto Sans Adlam"
     },
     {
-        value: "noto-sans-adlam-unjoined",
+        value: "Noto Sans Adlam Unjoined",
         label: "Noto Sans Adlam Unjoined"
     },
     {
-        value: "noto-sans-anatolian-hieroglyphs",
+        value: "Noto Sans Anatolian Hieroglyphs",
         label: "Noto Sans Anatolian Hieroglyphs"
     },
     {
-        value: "noto-sans-arabic",
+        value: "Noto Sans Arabic",
         label: "Noto Sans Arabic"
     },
     {
-        value: "noto-sans-armenian",
+        value: "Noto Sans Armenian",
         label: "Noto Sans Armenian"
     },
     {
-        value: "noto-sans-avestan",
+        value: "Noto Sans Avestan",
         label: "Noto Sans Avestan"
     },
     {
-        value: "noto-sans-balinese",
+        value: "Noto Sans Balinese",
         label: "Noto Sans Balinese"
     },
     {
-        value: "noto-sans-bamum",
+        value: "Noto Sans Bamum",
         label: "Noto Sans Bamum"
     },
     {
-        value: "noto-sans-bassa-vah",
+        value: "Noto Sans Bassa Vah",
         label: "Noto Sans Bassa Vah"
     },
     {
-        value: "noto-sans-batak",
+        value: "Noto Sans Batak",
         label: "Noto Sans Batak"
     },
     {
-        value: "noto-sans-bengali",
+        value: "Noto Sans Bengali",
         label: "Noto Sans Bengali"
     },
     {
-        value: "noto-sans-bhaiksuki",
+        value: "Noto Sans Bhaiksuki",
         label: "Noto Sans Bhaiksuki"
     },
     {
-        value: "noto-sans-brahmi",
+        value: "Noto Sans Brahmi",
         label: "Noto Sans Brahmi"
     },
     {
-        value: "noto-sans-buginese",
+        value: "Noto Sans Buginese",
         label: "Noto Sans Buginese"
     },
     {
-        value: "noto-sans-buhid",
+        value: "Noto Sans Buhid",
         label: "Noto Sans Buhid"
     },
     {
-        value: "noto-sans-canadian-aboriginal",
+        value: "Noto Sans Canadian Aboriginal",
         label: "Noto Sans Canadian Aboriginal"
     },
     {
-        value: "noto-sans-carian",
+        value: "Noto Sans Carian",
         label: "Noto Sans Carian"
     },
     {
-        value: "noto-sans-caucasian-albanian",
+        value: "Noto Sans Caucasian Albanian",
         label: "Noto Sans Caucasian Albanian"
     },
     {
-        value: "noto-sans-chakma",
+        value: "Noto Sans Chakma",
         label: "Noto Sans Chakma"
     },
     {
-        value: "noto-sans-cham",
+        value: "Noto Sans Cham",
         label: "Noto Sans Cham"
     },
     {
-        value: "noto-sans-cherokee",
+        value: "Noto Sans Cherokee",
         label: "Noto Sans Cherokee"
     },
     {
-        value: "noto-sans-chorasmian",
+        value: "Noto Sans Chorasmian",
         label: "Noto Sans Chorasmian"
     },
     {
-        value: "noto-sans-coptic",
+        value: "Noto Sans Coptic",
         label: "Noto Sans Coptic"
     },
     {
-        value: "noto-sans-cuneiform",
+        value: "Noto Sans Cuneiform",
         label: "Noto Sans Cuneiform"
     },
     {
-        value: "noto-sans-cypriot",
+        value: "Noto Sans Cypriot",
         label: "Noto Sans Cypriot"
     },
     {
-        value: "noto-sans-cypro-minoan",
+        value: "Noto Sans Cypro Minoan",
         label: "Noto Sans Cypro Minoan"
     },
     {
-        value: "noto-sans-deseret",
+        value: "Noto Sans Deseret",
         label: "Noto Sans Deseret"
     },
     {
-        value: "noto-sans-devanagari",
+        value: "Noto Sans Devanagari",
         label: "Noto Sans Devanagari"
     },
     {
-        value: "noto-sans-display",
+        value: "Noto Sans Display",
         label: "Noto Sans Display"
     },
     {
-        value: "noto-sans-duployan",
+        value: "Noto Sans Duployan",
         label: "Noto Sans Duployan"
     },
     {
-        value: "noto-sans-egyptian-hieroglyphs",
+        value: "Noto Sans Egyptian Hieroglyphs",
         label: "Noto Sans Egyptian Hieroglyphs"
     },
     {
-        value: "noto-sans-elbasan",
+        value: "Noto Sans Elbasan",
         label: "Noto Sans Elbasan"
     },
     {
-        value: "noto-sans-elymaic",
+        value: "Noto Sans Elymaic",
         label: "Noto Sans Elymaic"
     },
     {
-        value: "noto-sans-ethiopic",
+        value: "Noto Sans Ethiopic",
         label: "Noto Sans Ethiopic"
     },
     {
-        value: "noto-sans-georgian",
+        value: "Noto Sans Georgian",
         label: "Noto Sans Georgian"
     },
     {
-        value: "noto-sans-glagolitic",
+        value: "Noto Sans Glagolitic",
         label: "Noto Sans Glagolitic"
     },
     {
-        value: "noto-sans-gothic",
+        value: "Noto Sans Gothic",
         label: "Noto Sans Gothic"
     },
     {
-        value: "noto-sans-grantha",
+        value: "Noto Sans Grantha",
         label: "Noto Sans Grantha"
     },
     {
-        value: "noto-sans-gujarati",
+        value: "Noto Sans Gujarati",
         label: "Noto Sans Gujarati"
     },
     {
-        value: "noto-sans-gunjala-gondi",
+        value: "Noto Sans Gunjala Gondi",
         label: "Noto Sans Gunjala Gondi"
     },
     {
-        value: "noto-sans-gurmukhi",
+        value: "Noto Sans Gurmukhi",
         label: "Noto Sans Gurmukhi"
     },
     {
-        value: "noto-sans-hanifi-rohingya",
+        value: "Noto Sans Hanifi Rohingya",
         label: "Noto Sans Hanifi Rohingya"
     },
     {
-        value: "noto-sans-hanunoo",
+        value: "Noto Sans Hanunoo",
         label: "Noto Sans Hanunoo"
     },
     {
-        value: "noto-sans-hatran",
+        value: "Noto Sans Hatran",
         label: "Noto Sans Hatran"
     },
     {
-        value: "noto-sans-hebrew",
+        value: "Noto Sans Hebrew",
         label: "Noto Sans Hebrew"
     },
     {
-        value: "noto-sans-hk",
+        value: "Noto Sans HK",
         label: "Noto Sans HK"
     },
     {
-        value: "noto-sans-imperial-aramaic",
+        value: "Noto Sans Imperial Aramaic",
         label: "Noto Sans Imperial Aramaic"
     },
     {
-        value: "noto-sans-indic-siyaq-numbers",
+        value: "Noto Sans Indic Siyaq Numbers",
         label: "Noto Sans Indic Siyaq Numbers"
     },
     {
-        value: "noto-sans-inscriptional-pahlavi",
+        value: "Noto Sans Inscriptional Pahlavi",
         label: "Noto Sans Inscriptional Pahlavi"
     },
     {
-        value: "noto-sans-inscriptional-parthian",
+        value: "Noto Sans Inscriptional Parthian",
         label: "Noto Sans Inscriptional Parthian"
     },
     {
-        value: "noto-sans-javanese",
+        value: "Noto Sans Javanese",
         label: "Noto Sans Javanese"
     },
     {
-        value: "noto-sans-jp",
+        value: "Noto Sans JP",
         label: "Noto Sans JP"
     },
     {
-        value: "noto-sans-kaithi",
+        value: "Noto Sans Kaithi",
         label: "Noto Sans Kaithi"
     },
     {
-        value: "noto-sans-kannada",
+        value: "Noto Sans Kannada",
         label: "Noto Sans Kannada"
     },
     {
-        value: "noto-sans-kayah-li",
+        value: "Noto Sans Kayah Li",
         label: "Noto Sans Kayah Li"
     },
     {
-        value: "noto-sans-kharoshthi",
+        value: "Noto Sans Kharoshthi",
         label: "Noto Sans Kharoshthi"
     },
     {
-        value: "noto-sans-khmer",
+        value: "Noto Sans Khmer",
         label: "Noto Sans Khmer"
     },
     {
-        value: "noto-sans-khojki",
+        value: "Noto Sans Khojki",
         label: "Noto Sans Khojki"
     },
     {
-        value: "noto-sans-khudawadi",
+        value: "Noto Sans Khudawadi",
         label: "Noto Sans Khudawadi"
     },
     {
-        value: "noto-sans-kr",
+        value: "Noto Sans KR",
         label: "Noto Sans KR"
     },
     {
-        value: "noto-sans-lao",
+        value: "Noto Sans Lao",
         label: "Noto Sans Lao"
     },
     {
-        value: "noto-sans-lao-looped",
+        value: "Noto Sans Lao Looped",
         label: "Noto Sans Lao Looped"
     },
     {
-        value: "noto-sans-lepcha",
+        value: "Noto Sans Lepcha",
         label: "Noto Sans Lepcha"
     },
     {
-        value: "noto-sans-limbu",
+        value: "Noto Sans Limbu",
         label: "Noto Sans Limbu"
     },
     {
-        value: "noto-sans-linear-a",
+        value: "Noto Sans Linear A",
         label: "Noto Sans Linear A"
     },
     {
-        value: "noto-sans-linear-b",
+        value: "Noto Sans Linear B",
         label: "Noto Sans Linear B"
     },
     {
-        value: "noto-sans-lisu",
+        value: "Noto Sans Lisu",
         label: "Noto Sans Lisu"
     },
     {
-        value: "noto-sans-lycian",
+        value: "Noto Sans Lycian",
         label: "Noto Sans Lycian"
     },
     {
-        value: "noto-sans-lydian",
+        value: "Noto Sans Lydian",
         label: "Noto Sans Lydian"
     },
     {
-        value: "noto-sans-mahajani",
+        value: "Noto Sans Mahajani",
         label: "Noto Sans Mahajani"
     },
     {
-        value: "noto-sans-malayalam",
+        value: "Noto Sans Malayalam",
         label: "Noto Sans Malayalam"
     },
     {
-        value: "noto-sans-mandaic",
+        value: "Noto Sans Mandaic",
         label: "Noto Sans Mandaic"
     },
     {
-        value: "noto-sans-manichaean",
+        value: "Noto Sans Manichaean",
         label: "Noto Sans Manichaean"
     },
     {
-        value: "noto-sans-marchen",
+        value: "Noto Sans Marchen",
         label: "Noto Sans Marchen"
     },
     {
-        value: "noto-sans-masaram-gondi",
+        value: "Noto Sans Masaram Gondi",
         label: "Noto Sans Masaram Gondi"
     },
     {
-        value: "noto-sans-math",
+        value: "Noto Sans Math",
         label: "Noto Sans Math"
     },
     {
-        value: "noto-sans-mayan-numerals",
+        value: "Noto Sans Mayan Numerals",
         label: "Noto Sans Mayan Numerals"
     },
     {
-        value: "noto-sans-medefaidrin",
+        value: "Noto Sans Medefaidrin",
         label: "Noto Sans Medefaidrin"
     },
     {
-        value: "noto-sans-meetei-mayek",
+        value: "Noto Sans Meetei Mayek",
         label: "Noto Sans Meetei Mayek"
     },
     {
-        value: "noto-sans-mende-kikakui",
+        value: "Noto Sans Mende Kikakui",
         label: "Noto Sans Mende Kikakui"
     },
     {
-        value: "noto-sans-meroitic",
+        value: "Noto Sans Meroitic",
         label: "Noto Sans Meroitic"
     },
     {
-        value: "noto-sans-miao",
+        value: "Noto Sans Miao",
         label: "Noto Sans Miao"
     },
     {
-        value: "noto-sans-modi",
+        value: "Noto Sans Modi",
         label: "Noto Sans Modi"
     },
     {
-        value: "noto-sans-mongolian",
+        value: "Noto Sans Mongolian",
         label: "Noto Sans Mongolian"
     },
     {
-        value: "noto-sans-mono",
+        value: "Noto Sans Mono",
         label: "Noto Sans Mono"
     },
     {
-        value: "noto-sans-mro",
+        value: "Noto Sans Mro",
         label: "Noto Sans Mro"
     },
     {
-        value: "noto-sans-multani",
+        value: "Noto Sans Multani",
         label: "Noto Sans Multani"
     },
     {
-        value: "noto-sans-myanmar",
+        value: "Noto Sans Myanmar",
         label: "Noto Sans Myanmar"
     },
     {
-        value: "noto-sans-nabataean",
+        value: "Noto Sans Nabataean",
         label: "Noto Sans Nabataean"
     },
     {
-        value: "noto-sans-nag-mundari",
+        value: "Noto Sans Nag Mundari",
         label: "Noto Sans Nag Mundari"
     },
     {
-        value: "noto-sans-nandinagari",
+        value: "Noto Sans Nandinagari",
         label: "Noto Sans Nandinagari"
     },
     {
-        value: "noto-sans-new-tai-lue",
+        value: "Noto Sans New Tai Lue",
         label: "Noto Sans New Tai Lue"
     },
     {
-        value: "noto-sans-newa",
+        value: "Noto Sans Newa",
         label: "Noto Sans Newa"
     },
     {
-        value: "noto-sans-nko",
+        value: "Noto Sans NKo",
         label: "Noto Sans NKo"
     },
     {
-        value: "noto-sans-nushu",
+        value: "Noto Sans Nushu",
         label: "Noto Sans Nushu"
     },
     {
-        value: "noto-sans-ogham",
+        value: "Noto Sans Ogham",
         label: "Noto Sans Ogham"
     },
     {
-        value: "noto-sans-ol-chiki",
+        value: "Noto Sans Ol Chiki",
         label: "Noto Sans Ol Chiki"
     },
     {
-        value: "noto-sans-old-hungarian",
+        value: "Noto Sans Old Hungarian",
         label: "Noto Sans Old Hungarian"
     },
     {
-        value: "noto-sans-old-italic",
+        value: "Noto Sans Old Italic",
         label: "Noto Sans Old Italic"
     },
     {
-        value: "noto-sans-old-north-arabian",
+        value: "Noto Sans Old North Arabian",
         label: "Noto Sans Old North Arabian"
     },
     {
-        value: "noto-sans-old-permic",
+        value: "Noto Sans Old Permic",
         label: "Noto Sans Old Permic"
     },
     {
-        value: "noto-sans-old-persian",
+        value: "Noto Sans Old Persian",
         label: "Noto Sans Old Persian"
     },
     {
-        value: "noto-sans-old-sogdian",
+        value: "Noto Sans Old Sogdian",
         label: "Noto Sans Old Sogdian"
     },
     {
-        value: "noto-sans-old-south-arabian",
+        value: "Noto Sans Old South Arabian",
         label: "Noto Sans Old South Arabian"
     },
     {
-        value: "noto-sans-old-turkic",
+        value: "Noto Sans Old Turkic",
         label: "Noto Sans Old Turkic"
     },
     {
-        value: "noto-sans-oriya",
+        value: "Noto Sans Oriya",
         label: "Noto Sans Oriya"
     },
     {
-        value: "noto-sans-osage",
+        value: "Noto Sans Osage",
         label: "Noto Sans Osage"
     },
     {
-        value: "noto-sans-osmanya",
+        value: "Noto Sans Osmanya",
         label: "Noto Sans Osmanya"
     },
     {
-        value: "noto-sans-pahawh-hmong",
+        value: "Noto Sans Pahawh Hmong",
         label: "Noto Sans Pahawh Hmong"
     },
     {
-        value: "noto-sans-palmyrene",
+        value: "Noto Sans Palmyrene",
         label: "Noto Sans Palmyrene"
     },
     {
-        value: "noto-sans-pau-cin-hau",
+        value: "Noto Sans Pau Cin Hau",
         label: "Noto Sans Pau Cin Hau"
     },
     {
-        value: "noto-sans-phags-pa",
+        value: "Noto Sans Phags Pa",
         label: "Noto Sans Phags Pa"
     },
     {
-        value: "noto-sans-phoenician",
+        value: "Noto Sans Phoenician",
         label: "Noto Sans Phoenician"
     },
     {
-        value: "noto-sans-psalter-pahlavi",
+        value: "Noto Sans Psalter Pahlavi",
         label: "Noto Sans Psalter Pahlavi"
     },
     {
-        value: "noto-sans-rejang",
+        value: "Noto Sans Rejang",
         label: "Noto Sans Rejang"
     },
     {
-        value: "noto-sans-runic",
+        value: "Noto Sans Runic",
         label: "Noto Sans Runic"
     },
     {
-        value: "noto-sans-samaritan",
+        value: "Noto Sans Samaritan",
         label: "Noto Sans Samaritan"
     },
     {
-        value: "noto-sans-saurashtra",
+        value: "Noto Sans Saurashtra",
         label: "Noto Sans Saurashtra"
     },
     {
-        value: "noto-sans-sc",
+        value: "Noto Sans SC",
         label: "Noto Sans SC"
     },
     {
-        value: "noto-sans-sharada",
+        value: "Noto Sans Sharada",
         label: "Noto Sans Sharada"
     },
     {
-        value: "noto-sans-shavian",
+        value: "Noto Sans Shavian",
         label: "Noto Sans Shavian"
     },
     {
-        value: "noto-sans-siddham",
+        value: "Noto Sans Siddham",
         label: "Noto Sans Siddham"
     },
     {
-        value: "noto-sans-signwriting",
+        value: "Noto Sans SignWriting",
         label: "Noto Sans SignWriting"
     },
     {
-        value: "noto-sans-sinhala",
+        value: "Noto Sans Sinhala",
         label: "Noto Sans Sinhala"
     },
     {
-        value: "noto-sans-sogdian",
+        value: "Noto Sans Sogdian",
         label: "Noto Sans Sogdian"
     },
     {
-        value: "noto-sans-sora-sompeng",
+        value: "Noto Sans Sora Sompeng",
         label: "Noto Sans Sora Sompeng"
     },
     {
-        value: "noto-sans-soyombo",
+        value: "Noto Sans Soyombo",
         label: "Noto Sans Soyombo"
     },
     {
-        value: "noto-sans-sundanese",
+        value: "Noto Sans Sundanese",
         label: "Noto Sans Sundanese"
     },
     {
-        value: "noto-sans-syloti-nagri",
+        value: "Noto Sans Syloti Nagri",
         label: "Noto Sans Syloti Nagri"
     },
     {
-        value: "noto-sans-symbols",
+        value: "Noto Sans Symbols",
         label: "Noto Sans Symbols"
     },
     {
-        value: "noto-sans-symbols-2",
+        value: "Noto Sans Symbols 2",
         label: "Noto Sans Symbols 2"
     },
     {
-        value: "noto-sans-syriac",
+        value: "Noto Sans Syriac",
         label: "Noto Sans Syriac"
     },
     {
-        value: "noto-sans-syriac-eastern",
+        value: "Noto Sans Syriac Eastern",
         label: "Noto Sans Syriac Eastern"
     },
     {
-        value: "noto-sans-tagalog",
+        value: "Noto Sans Tagalog",
         label: "Noto Sans Tagalog"
     },
     {
-        value: "noto-sans-tagbanwa",
+        value: "Noto Sans Tagbanwa",
         label: "Noto Sans Tagbanwa"
     },
     {
-        value: "noto-sans-tai-le",
+        value: "Noto Sans Tai Le",
         label: "Noto Sans Tai Le"
     },
     {
-        value: "noto-sans-tai-tham",
+        value: "Noto Sans Tai Tham",
         label: "Noto Sans Tai Tham"
     },
     {
-        value: "noto-sans-tai-viet",
+        value: "Noto Sans Tai Viet",
         label: "Noto Sans Tai Viet"
     },
     {
-        value: "noto-sans-takri",
+        value: "Noto Sans Takri",
         label: "Noto Sans Takri"
     },
     {
-        value: "noto-sans-tamil",
+        value: "Noto Sans Tamil",
         label: "Noto Sans Tamil"
     },
     {
-        value: "noto-sans-tamil-supplement",
+        value: "Noto Sans Tamil Supplement",
         label: "Noto Sans Tamil Supplement"
     },
     {
-        value: "noto-sans-tangsa",
+        value: "Noto Sans Tangsa",
         label: "Noto Sans Tangsa"
     },
     {
-        value: "noto-sans-tc",
+        value: "Noto Sans TC",
         label: "Noto Sans TC"
     },
     {
-        value: "noto-sans-telugu",
+        value: "Noto Sans Telugu",
         label: "Noto Sans Telugu"
     },
     {
-        value: "noto-sans-thaana",
+        value: "Noto Sans Thaana",
         label: "Noto Sans Thaana"
     },
     {
-        value: "noto-sans-thai",
+        value: "Noto Sans Thai",
         label: "Noto Sans Thai"
     },
     {
-        value: "noto-sans-thai-looped",
+        value: "Noto Sans Thai Looped",
         label: "Noto Sans Thai Looped"
     },
     {
-        value: "noto-sans-tifinagh",
+        value: "Noto Sans Tifinagh",
         label: "Noto Sans Tifinagh"
     },
     {
-        value: "noto-sans-tirhuta",
+        value: "Noto Sans Tirhuta",
         label: "Noto Sans Tirhuta"
     },
     {
-        value: "noto-sans-ugaritic",
+        value: "Noto Sans Ugaritic",
         label: "Noto Sans Ugaritic"
     },
     {
-        value: "noto-sans-vai",
+        value: "Noto Sans Vai",
         label: "Noto Sans Vai"
     },
     {
-        value: "noto-sans-vithkuqi",
+        value: "Noto Sans Vithkuqi",
         label: "Noto Sans Vithkuqi"
     },
     {
-        value: "noto-sans-wancho",
+        value: "Noto Sans Wancho",
         label: "Noto Sans Wancho"
     },
     {
-        value: "noto-sans-warang-citi",
+        value: "Noto Sans Warang Citi",
         label: "Noto Sans Warang Citi"
     },
     {
-        value: "noto-sans-yi",
+        value: "Noto Sans Yi",
         label: "Noto Sans Yi"
     },
     {
-        value: "noto-sans-zanabazar-square",
+        value: "Noto Sans Zanabazar Square",
         label: "Noto Sans Zanabazar Square"
     },
     {
-        value: "noto-serif",
+        value: "Noto Serif",
         label: "Noto Serif"
     },
     {
-        value: "noto-serif-ahom",
+        value: "Noto Serif Ahom",
         label: "Noto Serif Ahom"
     },
     {
-        value: "noto-serif-armenian",
+        value: "Noto Serif Armenian",
         label: "Noto Serif Armenian"
     },
     {
-        value: "noto-serif-balinese",
+        value: "Noto Serif Balinese",
         label: "Noto Serif Balinese"
     },
     {
-        value: "noto-serif-bengali",
+        value: "Noto Serif Bengali",
         label: "Noto Serif Bengali"
     },
     {
-        value: "noto-serif-devanagari",
+        value: "Noto Serif Devanagari",
         label: "Noto Serif Devanagari"
     },
     {
-        value: "noto-serif-display",
+        value: "Noto Serif Display",
         label: "Noto Serif Display"
     },
     {
-        value: "noto-serif-dogra",
+        value: "Noto Serif Dogra",
         label: "Noto Serif Dogra"
     },
     {
-        value: "noto-serif-ethiopic",
+        value: "Noto Serif Ethiopic",
         label: "Noto Serif Ethiopic"
     },
     {
-        value: "noto-serif-georgian",
+        value: "Noto Serif Georgian",
         label: "Noto Serif Georgian"
     },
     {
-        value: "noto-serif-grantha",
+        value: "Noto Serif Grantha",
         label: "Noto Serif Grantha"
     },
     {
-        value: "noto-serif-gujarati",
+        value: "Noto Serif Gujarati",
         label: "Noto Serif Gujarati"
     },
     {
-        value: "noto-serif-gurmukhi",
+        value: "Noto Serif Gurmukhi",
         label: "Noto Serif Gurmukhi"
     },
     {
-        value: "noto-serif-hebrew",
+        value: "Noto Serif Hebrew",
         label: "Noto Serif Hebrew"
     },
     {
-        value: "noto-serif-hk",
+        value: "Noto Serif HK",
         label: "Noto Serif HK"
     },
     {
-        value: "noto-serif-jp",
+        value: "Noto Serif JP",
         label: "Noto Serif JP"
     },
     {
-        value: "noto-serif-kannada",
+        value: "Noto Serif Kannada",
         label: "Noto Serif Kannada"
     },
     {
-        value: "noto-serif-khitan-small-script",
+        value: "Noto Serif Khitan Small Script",
         label: "Noto Serif Khitan Small Script"
     },
     {
-        value: "noto-serif-khmer",
+        value: "Noto Serif Khmer",
         label: "Noto Serif Khmer"
     },
     {
-        value: "noto-serif-khojki",
+        value: "Noto Serif Khojki",
         label: "Noto Serif Khojki"
     },
     {
-        value: "noto-serif-kr",
+        value: "Noto Serif KR",
         label: "Noto Serif KR"
     },
     {
-        value: "noto-serif-lao",
+        value: "Noto Serif Lao",
         label: "Noto Serif Lao"
     },
     {
-        value: "noto-serif-makasar",
+        value: "Noto Serif Makasar",
         label: "Noto Serif Makasar"
     },
     {
-        value: "noto-serif-malayalam",
+        value: "Noto Serif Malayalam",
         label: "Noto Serif Malayalam"
     },
     {
-        value: "noto-serif-myanmar",
+        value: "Noto Serif Myanmar",
         label: "Noto Serif Myanmar"
     },
     {
-        value: "noto-serif-np-hmong",
+        value: "Noto Serif NP Hmong",
         label: "Noto Serif NP Hmong"
     },
     {
-        value: "noto-serif-oriya",
+        value: "Noto Serif Oriya",
         label: "Noto Serif Oriya"
     },
     {
-        value: "noto-serif-ottoman-siyaq",
+        value: "Noto Serif Ottoman Siyaq",
         label: "Noto Serif Ottoman Siyaq"
     },
     {
-        value: "noto-serif-sc",
+        value: "Noto Serif SC",
         label: "Noto Serif SC"
     },
     {
-        value: "noto-serif-sinhala",
+        value: "Noto Serif Sinhala",
         label: "Noto Serif Sinhala"
     },
     {
-        value: "noto-serif-tamil",
+        value: "Noto Serif Tamil",
         label: "Noto Serif Tamil"
     },
     {
-        value: "noto-serif-tangut",
+        value: "Noto Serif Tangut",
         label: "Noto Serif Tangut"
     },
     {
-        value: "noto-serif-tc",
+        value: "Noto Serif TC",
         label: "Noto Serif TC"
     },
     {
-        value: "noto-serif-telugu",
+        value: "Noto Serif Telugu",
         label: "Noto Serif Telugu"
     },
     {
-        value: "noto-serif-thai",
+        value: "Noto Serif Thai",
         label: "Noto Serif Thai"
     },
     {
-        value: "noto-serif-tibetan",
+        value: "Noto Serif Tibetan",
         label: "Noto Serif Tibetan"
     },
     {
-        value: "noto-serif-toto",
+        value: "Noto Serif Toto",
         label: "Noto Serif Toto"
     },
     {
-        value: "noto-serif-vithkuqi",
+        value: "Noto Serif Vithkuqi",
         label: "Noto Serif Vithkuqi"
     },
     {
-        value: "noto-serif-yezidi",
+        value: "Noto Serif Yezidi",
         label: "Noto Serif Yezidi"
     },
     {
-        value: "noto-traditional-nushu",
+        value: "Noto Traditional Nushu",
         label: "Noto Traditional Nushu"
     },
     {
-        value: "nova-cut",
+        value: "Nova Cut",
         label: "Nova Cut"
     },
     {
-        value: "nova-flat",
+        value: "Nova Flat",
         label: "Nova Flat"
     },
     {
-        value: "nova-mono",
+        value: "Nova Mono",
         label: "Nova Mono"
     },
     {
-        value: "nova-oval",
+        value: "Nova Oval",
         label: "Nova Oval"
     },
     {
-        value: "nova-round",
+        value: "Nova Round",
         label: "Nova Round"
     },
     {
-        value: "nova-script",
+        value: "Nova Script",
         label: "Nova Script"
     },
     {
-        value: "nova-slim",
+        value: "Nova Slim",
         label: "Nova Slim"
     },
     {
-        value: "nova-square",
+        value: "Nova Square",
         label: "Nova Square"
     },
     {
-        value: "ntr",
+        value: "NTR",
         label: "NTR"
     },
     {
-        value: "numans",
+        value: "Numans",
         label: "Numans"
     },
     {
-        value: "nunito",
+        value: "Nunito",
         label: "Nunito"
     },
     {
-        value: "nunito-sans",
+        value: "Nunito Sans",
         label: "Nunito Sans"
     },
     {
-        value: "nuosu-sil",
+        value: "Nuosu SIL",
         label: "Nuosu SIL"
     },
     {
-        value: "odibee-sans",
+        value: "Odibee Sans",
         label: "Odibee Sans"
     },
     {
-        value: "odor-mean-chey",
+        value: "Odor Mean Chey",
         label: "Odor Mean Chey"
     },
     {
-        value: "offside",
+        value: "Offside",
         label: "Offside"
     },
     {
-        value: "oi",
+        value: "Oi",
         label: "Oi"
     },
     {
-        value: "old-standard-tt",
+        value: "Old Standard TT",
         label: "Old Standard TT"
     },
     {
-        value: "oldenburg",
+        value: "Oldenburg",
         label: "Oldenburg"
     },
     {
-        value: "ole",
+        value: "Ole",
         label: "Ole"
     },
     {
-        value: "oleo-script",
+        value: "Oleo Script",
         label: "Oleo Script"
     },
     {
-        value: "oleo-script-swash-caps",
+        value: "Oleo Script Swash Caps",
         label: "Oleo Script Swash Caps"
     },
     {
-        value: "oooh-baby",
+        value: "Oooh Baby",
         label: "Oooh Baby"
     },
     {
-        value: "open-sans",
+        value: "Open Sans",
         label: "Open Sans"
     },
     {
-        value: "oranienbaum",
+        value: "Oranienbaum",
         label: "Oranienbaum"
     },
     {
-        value: "orbit",
+        value: "Orbit",
         label: "Orbit"
     },
     {
-        value: "orbitron",
+        value: "Orbitron",
         label: "Orbitron"
     },
     {
-        value: "oregano",
+        value: "Oregano",
         label: "Oregano"
     },
     {
-        value: "orelega-one",
+        value: "Orelega One",
         label: "Orelega One"
     },
     {
-        value: "orienta",
+        value: "Orienta",
         label: "Orienta"
     },
     {
-        value: "original-surfer",
+        value: "Original Surfer",
         label: "Original Surfer"
     },
     {
-        value: "oswald",
+        value: "Oswald",
         label: "Oswald"
     },
     {
-        value: "outfit",
+        value: "Outfit",
         label: "Outfit"
     },
     {
-        value: "over-the-rainbow",
+        value: "Over the Rainbow",
         label: "Over the Rainbow"
     },
     {
-        value: "overlock",
+        value: "Overlock",
         label: "Overlock"
     },
     {
-        value: "overlock-sc",
+        value: "Overlock SC",
         label: "Overlock SC"
     },
     {
-        value: "overpass",
+        value: "Overpass",
         label: "Overpass"
     },
     {
-        value: "overpass-mono",
+        value: "Overpass Mono",
         label: "Overpass Mono"
     },
     {
-        value: "ovo",
+        value: "Ovo",
         label: "Ovo"
     },
     {
-        value: "oxanium",
+        value: "Oxanium",
         label: "Oxanium"
     },
     {
-        value: "oxygen",
+        value: "Oxygen",
         label: "Oxygen"
     },
     {
-        value: "oxygen-mono",
+        value: "Oxygen Mono",
         label: "Oxygen Mono"
     },
     {
-        value: "pacifico",
+        value: "Pacifico",
         label: "Pacifico"
     },
     {
-        value: "padauk",
+        value: "Padauk",
         label: "Padauk"
     },
     {
-        value: "padyakke-expanded-one",
+        value: "Padyakke Expanded One",
         label: "Padyakke Expanded One"
     },
     {
-        value: "palanquin",
+        value: "Palanquin",
         label: "Palanquin"
     },
     {
-        value: "palanquin-dark",
+        value: "Palanquin Dark",
         label: "Palanquin Dark"
     },
     {
-        value: "palette-mosaic",
+        value: "Palette Mosaic",
         label: "Palette Mosaic"
     },
     {
-        value: "pangolin",
+        value: "Pangolin",
         label: "Pangolin"
     },
     {
-        value: "paprika",
+        value: "Paprika",
         label: "Paprika"
     },
     {
-        value: "parisienne",
+        value: "Parisienne",
         label: "Parisienne"
     },
     {
-        value: "passero-one",
+        value: "Passero One",
         label: "Passero One"
     },
     {
-        value: "passion-one",
+        value: "Passion One",
         label: "Passion One"
     },
     {
-        value: "passions-conflict",
+        value: "Passions Conflict",
         label: "Passions Conflict"
     },
     {
-        value: "pathway-extreme",
+        value: "Pathway Extreme",
         label: "Pathway Extreme"
     },
     {
-        value: "pathway-gothic-one",
+        value: "Pathway Gothic One",
         label: "Pathway Gothic One"
     },
     {
-        value: "patrick-hand",
+        value: "Patrick Hand",
         label: "Patrick Hand"
     },
     {
-        value: "patrick-hand-sc",
+        value: "Patrick Hand SC",
         label: "Patrick Hand SC"
     },
     {
-        value: "pattaya",
+        value: "Pattaya",
         label: "Pattaya"
     },
     {
-        value: "patua-one",
+        value: "Patua One",
         label: "Patua One"
     },
     {
-        value: "pavanam",
+        value: "Pavanam",
         label: "Pavanam"
     },
     {
-        value: "paytone-one",
+        value: "Paytone One",
         label: "Paytone One"
     },
     {
-        value: "peddana",
+        value: "Peddana",
         label: "Peddana"
     },
     {
-        value: "peralta",
+        value: "Peralta",
         label: "Peralta"
     },
     {
-        value: "permanent-marker",
+        value: "Permanent Marker",
         label: "Permanent Marker"
     },
     {
-        value: "petemoss",
+        value: "Petemoss",
         label: "Petemoss"
     },
     {
-        value: "petit-formal-script",
+        value: "Petit Formal Script",
         label: "Petit Formal Script"
     },
     {
-        value: "petrona",
+        value: "Petrona",
         label: "Petrona"
     },
     {
-        value: "philosopher",
+        value: "Philosopher",
         label: "Philosopher"
     },
     {
-        value: "phudu",
+        value: "Phudu",
         label: "Phudu"
     },
     {
-        value: "piazzolla",
+        value: "Piazzolla",
         label: "Piazzolla"
     },
     {
-        value: "piedra",
+        value: "Piedra",
         label: "Piedra"
     },
     {
-        value: "pinyon-script",
+        value: "Pinyon Script",
         label: "Pinyon Script"
     },
     {
-        value: "pirata-one",
+        value: "Pirata One",
         label: "Pirata One"
     },
     {
-        value: "plaster",
+        value: "Plaster",
         label: "Plaster"
     },
     {
-        value: "play",
+        value: "Play",
         label: "Play"
     },
     {
-        value: "playball",
+        value: "Playball",
         label: "Playball"
     },
     {
-        value: "playfair",
+        value: "Playfair",
         label: "Playfair"
     },
     {
-        value: "playfair-display",
+        value: "Playfair Display",
         label: "Playfair Display"
     },
     {
-        value: "playfair-display-sc",
+        value: "Playfair Display SC",
         label: "Playfair Display SC"
     },
     {
-        value: "plus-jakarta-sans",
+        value: "Plus Jakarta Sans",
         label: "Plus Jakarta Sans"
     },
     {
-        value: "podkova",
+        value: "Podkova",
         label: "Podkova"
     },
     {
-        value: "poiret-one",
+        value: "Poiret One",
         label: "Poiret One"
     },
     {
-        value: "poller-one",
+        value: "Poller One",
         label: "Poller One"
     },
     {
-        value: "poltawski-nowy",
+        value: "Poltawski Nowy",
         label: "Poltawski Nowy"
     },
     {
-        value: "poly",
+        value: "Poly",
         label: "Poly"
     },
     {
-        value: "pompiere",
+        value: "Pompiere",
         label: "Pompiere"
     },
     {
-        value: "pontano-sans",
+        value: "Pontano Sans",
         label: "Pontano Sans"
     },
     {
-        value: "poor-story",
+        value: "Poor Story",
         label: "Poor Story"
     },
     {
-        value: "poppins",
+        value: "Poppins",
         label: "Poppins"
     },
     {
-        value: "port-lligat-sans",
+        value: "Port Lligat Sans",
         label: "Port Lligat Sans"
     },
     {
-        value: "port-lligat-slab",
+        value: "Port Lligat Slab",
         label: "Port Lligat Slab"
     },
     {
-        value: "potta-one",
+        value: "Potta One",
         label: "Potta One"
     },
     {
-        value: "pragati-narrow",
+        value: "Pragati Narrow",
         label: "Pragati Narrow"
     },
     {
-        value: "praise",
+        value: "Praise",
         label: "Praise"
     },
     {
-        value: "prata",
+        value: "Prata",
         label: "Prata"
     },
     {
-        value: "preahvihear",
+        value: "Preahvihear",
         label: "Preahvihear"
     },
     {
-        value: "press-start-2p",
+        value: "Press Start 2P",
         label: "Press Start 2P"
     },
     {
-        value: "pridi",
+        value: "Pridi",
         label: "Pridi"
     },
     {
-        value: "princess-sofia",
+        value: "Princess Sofia",
         label: "Princess Sofia"
     },
     {
-        value: "prociono",
+        value: "Prociono",
         label: "Prociono"
     },
     {
-        value: "prompt",
+        value: "Prompt",
         label: "Prompt"
     },
     {
-        value: "prosto-one",
+        value: "Prosto One",
         label: "Prosto One"
     },
     {
-        value: "proza-libre",
+        value: "Proza Libre",
         label: "Proza Libre"
     },
     {
-        value: "pt-mono",
+        value: "PT Mono",
         label: "PT Mono"
     },
     {
-        value: "pt-sans",
+        value: "PT Sans",
         label: "PT Sans"
     },
     {
-        value: "pt-sans-caption",
+        value: "PT Sans Caption",
         label: "PT Sans Caption"
     },
     {
-        value: "pt-sans-narrow",
+        value: "PT Sans Narrow",
         label: "PT Sans Narrow"
     },
     {
-        value: "pt-serif",
+        value: "PT Serif",
         label: "PT Serif"
     },
     {
-        value: "pt-serif-caption",
+        value: "PT Serif Caption",
         label: "PT Serif Caption"
     },
     {
-        value: "public-sans",
+        value: "Public Sans",
         label: "Public Sans"
     },
     {
-        value: "puppies-play",
+        value: "Puppies Play",
         label: "Puppies Play"
     },
     {
-        value: "puritan",
+        value: "Puritan",
         label: "Puritan"
     },
     {
-        value: "purple-purse",
+        value: "Purple Purse",
         label: "Purple Purse"
     },
     {
-        value: "qahiri",
+        value: "Qahiri",
         label: "Qahiri"
     },
     {
-        value: "quando",
+        value: "Quando",
         label: "Quando"
     },
     {
-        value: "quantico",
+        value: "Quantico",
         label: "Quantico"
     },
     {
-        value: "quattrocento",
+        value: "Quattrocento",
         label: "Quattrocento"
     },
     {
-        value: "quattrocento-sans",
+        value: "Quattrocento Sans",
         label: "Quattrocento Sans"
     },
     {
-        value: "questrial",
+        value: "Questrial",
         label: "Questrial"
     },
     {
-        value: "quicksand",
+        value: "Quicksand",
         label: "Quicksand"
     },
     {
-        value: "quintessential",
+        value: "Quintessential",
         label: "Quintessential"
     },
     {
-        value: "qwigley",
+        value: "Qwigley",
         label: "Qwigley"
     },
     {
-        value: "qwitcher-grypen",
+        value: "Qwitcher Grypen",
         label: "Qwitcher Grypen"
     },
     {
-        value: "racing-sans-one",
+        value: "Racing Sans One",
         label: "Racing Sans One"
     },
     {
-        value: "radio-canada",
+        value: "Radio Canada",
         label: "Radio Canada"
     },
     {
-        value: "radley",
+        value: "Radley",
         label: "Radley"
     },
     {
-        value: "rajdhani",
+        value: "Rajdhani",
         label: "Rajdhani"
     },
     {
-        value: "rakkas",
+        value: "Rakkas",
         label: "Rakkas"
     },
     {
-        value: "raleway",
+        value: "Raleway",
         label: "Raleway"
     },
     {
-        value: "raleway-dots",
+        value: "Raleway Dots",
         label: "Raleway Dots"
     },
     {
-        value: "ramabhadra",
+        value: "Ramabhadra",
         label: "Ramabhadra"
     },
     {
-        value: "ramaraja",
+        value: "Ramaraja",
         label: "Ramaraja"
     },
     {
-        value: "rambla",
+        value: "Rambla",
         label: "Rambla"
     },
     {
-        value: "rammetto-one",
+        value: "Rammetto One",
         label: "Rammetto One"
     },
     {
-        value: "rampart-one",
+        value: "Rampart One",
         label: "Rampart One"
     },
     {
-        value: "ranchers",
+        value: "Ranchers",
         label: "Ranchers"
     },
     {
-        value: "rancho",
+        value: "Rancho",
         label: "Rancho"
     },
     {
-        value: "ranga",
+        value: "Ranga",
         label: "Ranga"
     },
     {
-        value: "rasa",
+        value: "Rasa",
         label: "Rasa"
     },
     {
-        value: "rationale",
+        value: "Rationale",
         label: "Rationale"
     },
     {
-        value: "ravi-prakash",
+        value: "Ravi Prakash",
         label: "Ravi Prakash"
     },
     {
-        value: "readex-pro",
+        value: "Readex Pro",
         label: "Readex Pro"
     },
     {
-        value: "recursive",
+        value: "Recursive",
         label: "Recursive"
     },
     {
-        value: "red-hat-display",
+        value: "Red Hat Display",
         label: "Red Hat Display"
     },
     {
-        value: "red-hat-mono",
+        value: "Red Hat Mono",
         label: "Red Hat Mono"
     },
     {
-        value: "red-hat-text",
+        value: "Red Hat Text",
         label: "Red Hat Text"
     },
     {
-        value: "red-rose",
+        value: "Red Rose",
         label: "Red Rose"
     },
     {
-        value: "redacted",
+        value: "Redacted",
         label: "Redacted"
     },
     {
-        value: "redacted-script",
+        value: "Redacted Script",
         label: "Redacted Script"
     },
     {
-        value: "redressed",
+        value: "Redressed",
         label: "Redressed"
     },
     {
-        value: "reem-kufi",
+        value: "Reem Kufi",
         label: "Reem Kufi"
     },
     {
-        value: "reem-kufi-fun",
+        value: "Reem Kufi Fun",
         label: "Reem Kufi Fun"
     },
     {
-        value: "reem-kufi-ink",
+        value: "Reem Kufi Ink",
         label: "Reem Kufi Ink"
     },
     {
-        value: "reenie-beanie",
+        value: "Reenie Beanie",
         label: "Reenie Beanie"
     },
     {
-        value: "reggae-one",
+        value: "Reggae One",
         label: "Reggae One"
     },
     {
-        value: "rem",
+        value: "REM",
         label: "REM"
     },
     {
-        value: "revalia",
+        value: "Revalia",
         label: "Revalia"
     },
     {
-        value: "rhodium-libre",
+        value: "Rhodium Libre",
         label: "Rhodium Libre"
     },
     {
-        value: "ribeye",
+        value: "Ribeye",
         label: "Ribeye"
     },
     {
-        value: "ribeye-marrow",
+        value: "Ribeye Marrow",
         label: "Ribeye Marrow"
     },
     {
-        value: "righteous",
+        value: "Righteous",
         label: "Righteous"
     },
     {
-        value: "risque",
+        value: "Risque",
         label: "Risque"
     },
     {
-        value: "road-rage",
+        value: "Road Rage",
         label: "Road Rage"
     },
     {
-        value: "roboto",
+        value: "Roboto",
         label: "Roboto"
     },
     {
-        value: "roboto-condensed",
+        value: "Roboto Condensed",
         label: "Roboto Condensed"
     },
     {
-        value: "roboto-flex",
+        value: "Roboto Flex",
         label: "Roboto Flex"
     },
     {
-        value: "roboto-mono",
+        value: "Roboto Mono",
         label: "Roboto Mono"
     },
     {
-        value: "roboto-serif",
+        value: "Roboto Serif",
         label: "Roboto Serif"
     },
     {
-        value: "roboto-slab",
+        value: "Roboto Slab",
         label: "Roboto Slab"
     },
     {
-        value: "rochester",
+        value: "Rochester",
         label: "Rochester"
     },
     {
-        value: "rock-3d",
+        value: "Rock 3D",
         label: "Rock 3D"
     },
     {
-        value: "rock-salt",
+        value: "Rock Salt",
         label: "Rock Salt"
     },
     {
-        value: "rocknroll-one",
+        value: "RocknRoll One",
         label: "RocknRoll One"
     },
     {
-        value: "rokkitt",
+        value: "Rokkitt",
         label: "Rokkitt"
     },
     {
-        value: "romanesco",
+        value: "Romanesco",
         label: "Romanesco"
     },
     {
-        value: "ropa-sans",
+        value: "Ropa Sans",
         label: "Ropa Sans"
     },
     {
-        value: "rosario",
+        value: "Rosario",
         label: "Rosario"
     },
     {
-        value: "rosarivo",
+        value: "Rosarivo",
         label: "Rosarivo"
     },
     {
-        value: "rouge-script",
+        value: "Rouge Script",
         label: "Rouge Script"
     },
     {
-        value: "rowdies",
+        value: "Rowdies",
         label: "Rowdies"
     },
     {
-        value: "rozha-one",
+        value: "Rozha One",
         label: "Rozha One"
     },
     {
-        value: "rubik",
+        value: "Rubik",
         label: "Rubik"
     },
     {
-        value: "rubik-80s-fade",
+        value: "Rubik 80s Fade",
         label: "Rubik 80s Fade"
     },
     {
-        value: "rubik-beastly",
+        value: "Rubik Beastly",
         label: "Rubik Beastly"
     },
     {
-        value: "rubik-bubbles",
+        value: "Rubik Bubbles",
         label: "Rubik Bubbles"
     },
     {
-        value: "rubik-burned",
+        value: "Rubik Burned",
         label: "Rubik Burned"
     },
     {
-        value: "rubik-dirt",
+        value: "Rubik Dirt",
         label: "Rubik Dirt"
     },
     {
-        value: "rubik-distressed",
+        value: "Rubik Distressed",
         label: "Rubik Distressed"
     },
     {
-        value: "rubik-gemstones",
+        value: "Rubik Gemstones",
         label: "Rubik Gemstones"
     },
     {
-        value: "rubik-glitch",
+        value: "Rubik Glitch",
         label: "Rubik Glitch"
     },
     {
-        value: "rubik-iso",
+        value: "Rubik Iso",
         label: "Rubik Iso"
     },
     {
-        value: "rubik-marker-hatch",
+        value: "Rubik Marker Hatch",
         label: "Rubik Marker Hatch"
     },
     {
-        value: "rubik-maze",
+        value: "Rubik Maze",
         label: "Rubik Maze"
     },
     {
-        value: "rubik-microbe",
+        value: "Rubik Microbe",
         label: "Rubik Microbe"
     },
     {
-        value: "rubik-mono-one",
+        value: "Rubik Mono One",
         label: "Rubik Mono One"
     },
     {
-        value: "rubik-moonrocks",
+        value: "Rubik Moonrocks",
         label: "Rubik Moonrocks"
     },
     {
-        value: "rubik-pixels",
+        value: "Rubik Pixels",
         label: "Rubik Pixels"
     },
     {
-        value: "rubik-puddles",
+        value: "Rubik Puddles",
         label: "Rubik Puddles"
     },
     {
-        value: "rubik-spray-paint",
+        value: "Rubik Spray Paint",
         label: "Rubik Spray Paint"
     },
     {
-        value: "rubik-storm",
+        value: "Rubik Storm",
         label: "Rubik Storm"
     },
     {
-        value: "rubik-vinyl",
+        value: "Rubik Vinyl",
         label: "Rubik Vinyl"
     },
     {
-        value: "rubik-wet-paint",
+        value: "Rubik Wet Paint",
         label: "Rubik Wet Paint"
     },
     {
-        value: "ruda",
+        value: "Ruda",
         label: "Ruda"
     },
     {
-        value: "rufina",
+        value: "Rufina",
         label: "Rufina"
     },
     {
-        value: "ruge-boogie",
+        value: "Ruge Boogie",
         label: "Ruge Boogie"
     },
     {
-        value: "ruluko",
+        value: "Ruluko",
         label: "Ruluko"
     },
     {
-        value: "rum-raisin",
+        value: "Rum Raisin",
         label: "Rum Raisin"
     },
     {
-        value: "ruslan-display",
+        value: "Ruslan Display",
         label: "Ruslan Display"
     },
     {
-        value: "russo-one",
+        value: "Russo One",
         label: "Russo One"
     },
     {
-        value: "ruthie",
+        value: "Ruthie",
         label: "Ruthie"
     },
     {
-        value: "ruwudu",
+        value: "Ruwudu",
         label: "Ruwudu"
     },
     {
-        value: "rye",
+        value: "Rye",
         label: "Rye"
     },
     {
-        value: "sacramento",
+        value: "Sacramento",
         label: "Sacramento"
     },
     {
-        value: "sahitya",
+        value: "Sahitya",
         label: "Sahitya"
     },
     {
-        value: "sail",
+        value: "Sail",
         label: "Sail"
     },
     {
-        value: "saira",
+        value: "Saira",
         label: "Saira"
     },
     {
-        value: "saira-condensed",
+        value: "Saira Condensed",
         label: "Saira Condensed"
     },
     {
-        value: "saira-extra-condensed",
+        value: "Saira Extra Condensed",
         label: "Saira Extra Condensed"
     },
     {
-        value: "saira-semi-condensed",
+        value: "Saira Semi Condensed",
         label: "Saira Semi Condensed"
     },
     {
-        value: "saira-stencil-one",
+        value: "Saira Stencil One",
         label: "Saira Stencil One"
     },
     {
-        value: "salsa",
+        value: "Salsa",
         label: "Salsa"
     },
     {
-        value: "sanchez",
+        value: "Sanchez",
         label: "Sanchez"
     },
     {
-        value: "sancreek",
+        value: "Sancreek",
         label: "Sancreek"
     },
     {
-        value: "sansita",
+        value: "Sansita",
         label: "Sansita"
     },
     {
-        value: "sansita-swashed",
+        value: "Sansita Swashed",
         label: "Sansita Swashed"
     },
     {
-        value: "sarabun",
+        value: "Sarabun",
         label: "Sarabun"
     },
     {
-        value: "sarala",
+        value: "Sarala",
         label: "Sarala"
     },
     {
-        value: "sarina",
+        value: "Sarina",
         label: "Sarina"
     },
     {
-        value: "sarpanch",
+        value: "Sarpanch",
         label: "Sarpanch"
     },
     {
-        value: "sassy-frass",
+        value: "Sassy Frass",
         label: "Sassy Frass"
     },
     {
-        value: "satisfy",
+        value: "Satisfy",
         label: "Satisfy"
     },
     {
-        value: "sawarabi-gothic",
+        value: "Sawarabi Gothic",
         label: "Sawarabi Gothic"
     },
     {
-        value: "sawarabi-mincho",
+        value: "Sawarabi Mincho",
         label: "Sawarabi Mincho"
     },
     {
-        value: "scada",
+        value: "Scada",
         label: "Scada"
     },
     {
-        value: "scheherazade-new",
+        value: "Scheherazade New",
         label: "Scheherazade New"
     },
     {
-        value: "schibsted-grotesk",
+        value: "Schibsted Grotesk",
         label: "Schibsted Grotesk"
     },
     {
-        value: "schoolbell",
+        value: "Schoolbell",
         label: "Schoolbell"
     },
     {
-        value: "scope-one",
+        value: "Scope One",
         label: "Scope One"
     },
     {
-        value: "seaweed-script",
+        value: "Seaweed Script",
         label: "Seaweed Script"
     },
     {
-        value: "secular-one",
+        value: "Secular One",
         label: "Secular One"
     },
     {
-        value: "sedgwick-ave",
+        value: "Sedgwick Ave",
         label: "Sedgwick Ave"
     },
     {
-        value: "sedgwick-ave-display",
+        value: "Sedgwick Ave Display",
         label: "Sedgwick Ave Display"
     },
     {
-        value: "sen",
+        value: "Sen",
         label: "Sen"
     },
     {
-        value: "send-flowers",
+        value: "Send Flowers",
         label: "Send Flowers"
     },
     {
-        value: "sevillana",
+        value: "Sevillana",
         label: "Sevillana"
     },
     {
-        value: "seymour-one",
+        value: "Seymour One",
         label: "Seymour One"
     },
     {
-        value: "shadows-into-light",
+        value: "Shadows Into Light",
         label: "Shadows Into Light"
     },
     {
-        value: "shadows-into-light-two",
+        value: "Shadows Into Light Two",
         label: "Shadows Into Light Two"
     },
     {
-        value: "shalimar",
+        value: "Shalimar",
         label: "Shalimar"
     },
     {
-        value: "shantell-sans",
+        value: "Shantell Sans",
         label: "Shantell Sans"
     },
     {
-        value: "shanti",
+        value: "Shanti",
         label: "Shanti"
     },
     {
-        value: "share",
+        value: "Share",
         label: "Share"
     },
     {
-        value: "share-tech",
+        value: "Share Tech",
         label: "Share Tech"
     },
     {
-        value: "share-tech-mono",
+        value: "Share Tech Mono",
         label: "Share Tech Mono"
     },
     {
-        value: "shippori-antique",
+        value: "Shippori Antique",
         label: "Shippori Antique"
     },
     {
-        value: "shippori-antique-b1",
+        value: "Shippori Antique B1",
         label: "Shippori Antique B1"
     },
     {
-        value: "shippori-mincho",
+        value: "Shippori Mincho",
         label: "Shippori Mincho"
     },
     {
-        value: "shippori-mincho-b1",
+        value: "Shippori Mincho B1",
         label: "Shippori Mincho B1"
     },
     {
-        value: "shizuru",
+        value: "Shizuru",
         label: "Shizuru"
     },
     {
-        value: "shojumaru",
+        value: "Shojumaru",
         label: "Shojumaru"
     },
     {
-        value: "short-stack",
+        value: "Short Stack",
         label: "Short Stack"
     },
     {
-        value: "shrikhand",
+        value: "Shrikhand",
         label: "Shrikhand"
     },
     {
-        value: "siemreap",
+        value: "Siemreap",
         label: "Siemreap"
     },
     {
-        value: "sigmar",
+        value: "Sigmar",
         label: "Sigmar"
     },
     {
-        value: "sigmar-one",
+        value: "Sigmar One",
         label: "Sigmar One"
     },
     {
-        value: "signika",
+        value: "Signika",
         label: "Signika"
     },
     {
-        value: "signika-negative",
+        value: "Signika Negative",
         label: "Signika Negative"
     },
     {
-        value: "silkscreen",
+        value: "Silkscreen",
         label: "Silkscreen"
     },
     {
-        value: "simonetta",
+        value: "Simonetta",
         label: "Simonetta"
     },
     {
-        value: "single-day",
+        value: "Single Day",
         label: "Single Day"
     },
     {
-        value: "sintony",
+        value: "Sintony",
         label: "Sintony"
     },
     {
-        value: "sirin-stencil",
+        value: "Sirin Stencil",
         label: "Sirin Stencil"
     },
     {
-        value: "six-caps",
+        value: "Six Caps",
         label: "Six Caps"
     },
     {
-        value: "skranji",
+        value: "Skranji",
         label: "Skranji"
     },
     {
-        value: "slabo-13px",
+        value: "Slabo 13px",
         label: "Slabo 13px"
     },
     {
-        value: "slabo-27px",
+        value: "Slabo 27px",
         label: "Slabo 27px"
     },
     {
-        value: "slackey",
+        value: "Slackey",
         label: "Slackey"
     },
     {
-        value: "slackside-one",
+        value: "Slackside One",
         label: "Slackside One"
     },
     {
-        value: "smokum",
+        value: "Smokum",
         label: "Smokum"
     },
     {
-        value: "smooch",
+        value: "Smooch",
         label: "Smooch"
     },
     {
-        value: "smooch-sans",
+        value: "Smooch Sans",
         label: "Smooch Sans"
     },
     {
-        value: "smythe",
+        value: "Smythe",
         label: "Smythe"
     },
     {
-        value: "sniglet",
+        value: "Sniglet",
         label: "Sniglet"
     },
     {
-        value: "snippet",
+        value: "Snippet",
         label: "Snippet"
     },
     {
-        value: "snowburst-one",
+        value: "Snowburst One",
         label: "Snowburst One"
     },
     {
-        value: "sofadi-one",
+        value: "Sofadi One",
         label: "Sofadi One"
     },
     {
-        value: "sofia",
+        value: "Sofia",
         label: "Sofia"
     },
     {
-        value: "sofia-sans",
+        value: "Sofia Sans",
         label: "Sofia Sans"
     },
     {
-        value: "sofia-sans-condensed",
+        value: "Sofia Sans Condensed",
         label: "Sofia Sans Condensed"
     },
     {
-        value: "sofia-sans-extra-condensed",
+        value: "Sofia Sans Extra Condensed",
         label: "Sofia Sans Extra Condensed"
     },
     {
-        value: "sofia-sans-semi-condensed",
+        value: "Sofia Sans Semi Condensed",
         label: "Sofia Sans Semi Condensed"
     },
     {
-        value: "solitreo",
+        value: "Solitreo",
         label: "Solitreo"
     },
     {
-        value: "solway",
+        value: "Solway",
         label: "Solway"
     },
     {
-        value: "song-myung",
+        value: "Song Myung",
         label: "Song Myung"
     },
     {
-        value: "sono",
+        value: "Sono",
         label: "Sono"
     },
     {
-        value: "sonsie-one",
+        value: "Sonsie One",
         label: "Sonsie One"
     },
     {
-        value: "sora",
+        value: "Sora",
         label: "Sora"
     },
     {
-        value: "sorts-mill-goudy",
+        value: "Sorts Mill Goudy",
         label: "Sorts Mill Goudy"
     },
     {
-        value: "source-code-pro",
+        value: "Source Code Pro",
         label: "Source Code Pro"
     },
     {
-        value: "source-sans-3",
+        value: "Source Sans 3",
         label: "Source Sans 3"
     },
     {
-        value: "source-serif-4",
+        value: "Source Serif 4",
         label: "Source Serif 4"
     },
     {
-        value: "space-grotesk",
+        value: "Space Grotesk",
         label: "Space Grotesk"
     },
     {
-        value: "space-mono",
+        value: "Space Mono",
         label: "Space Mono"
     },
     {
-        value: "special-elite",
+        value: "Special Elite",
         label: "Special Elite"
     },
     {
-        value: "spectral",
+        value: "Spectral",
         label: "Spectral"
     },
     {
-        value: "spectral-sc",
+        value: "Spectral SC",
         label: "Spectral SC"
     },
     {
-        value: "spicy-rice",
+        value: "Spicy Rice",
         label: "Spicy Rice"
     },
     {
-        value: "spinnaker",
+        value: "Spinnaker",
         label: "Spinnaker"
     },
     {
-        value: "spirax",
+        value: "Spirax",
         label: "Spirax"
     },
     {
-        value: "splash",
+        value: "Splash",
         label: "Splash"
     },
     {
-        value: "spline-sans",
+        value: "Spline Sans",
         label: "Spline Sans"
     },
     {
-        value: "spline-sans-mono",
+        value: "Spline Sans Mono",
         label: "Spline Sans Mono"
     },
     {
-        value: "squada-one",
+        value: "Squada One",
         label: "Squada One"
     },
     {
-        value: "square-peg",
+        value: "Square Peg",
         label: "Square Peg"
     },
     {
-        value: "sree-krushnadevaraya",
+        value: "Sree Krushnadevaraya",
         label: "Sree Krushnadevaraya"
     },
     {
-        value: "sriracha",
+        value: "Sriracha",
         label: "Sriracha"
     },
     {
-        value: "srisakdi",
+        value: "Srisakdi",
         label: "Srisakdi"
     },
     {
-        value: "staatliches",
+        value: "Staatliches",
         label: "Staatliches"
     },
     {
-        value: "stalemate",
+        value: "Stalemate",
         label: "Stalemate"
     },
     {
-        value: "stalinist-one",
+        value: "Stalinist One",
         label: "Stalinist One"
     },
     {
-        value: "stardos-stencil",
+        value: "Stardos Stencil",
         label: "Stardos Stencil"
     },
     {
-        value: "stick",
+        value: "Stick",
         label: "Stick"
     },
     {
-        value: "stick-no-bills",
+        value: "Stick No Bills",
         label: "Stick No Bills"
     },
     {
-        value: "stint-ultra-condensed",
+        value: "Stint Ultra Condensed",
         label: "Stint Ultra Condensed"
     },
     {
-        value: "stint-ultra-expanded",
+        value: "Stint Ultra Expanded",
         label: "Stint Ultra Expanded"
     },
     {
-        value: "stix-two-text",
+        value: "STIX Two Text",
         label: "STIX Two Text"
     },
     {
-        value: "stoke",
+        value: "Stoke",
         label: "Stoke"
     },
     {
-        value: "strait",
+        value: "Strait",
         label: "Strait"
     },
     {
-        value: "style-script",
+        value: "Style Script",
         label: "Style Script"
     },
     {
-        value: "stylish",
+        value: "Stylish",
         label: "Stylish"
     },
     {
-        value: "sue-ellen-francisco",
+        value: "Sue Ellen Francisco",
         label: "Sue Ellen Francisco"
     },
     {
-        value: "suez-one",
+        value: "Suez One",
         label: "Suez One"
     },
     {
-        value: "sulphur-point",
+        value: "Sulphur Point",
         label: "Sulphur Point"
     },
     {
-        value: "sumana",
+        value: "Sumana",
         label: "Sumana"
     },
     {
-        value: "sunflower",
+        value: "Sunflower",
         label: "Sunflower"
     },
     {
-        value: "sunshiney",
+        value: "Sunshiney",
         label: "Sunshiney"
     },
     {
-        value: "supermercado-one",
+        value: "Supermercado One",
         label: "Supermercado One"
     },
     {
-        value: "sura",
+        value: "Sura",
         label: "Sura"
     },
     {
-        value: "suranna",
+        value: "Suranna",
         label: "Suranna"
     },
     {
-        value: "suravaram",
+        value: "Suravaram",
         label: "Suravaram"
     },
     {
-        value: "suwannaphum",
+        value: "Suwannaphum",
         label: "Suwannaphum"
     },
     {
-        value: "swanky-and-moo-moo",
+        value: "Swanky and Moo Moo",
         label: "Swanky and Moo Moo"
     },
     {
-        value: "syncopate",
+        value: "Syncopate",
         label: "Syncopate"
     },
     {
-        value: "syne",
+        value: "Syne",
         label: "Syne"
     },
     {
-        value: "syne-mono",
+        value: "Syne Mono",
         label: "Syne Mono"
     },
     {
-        value: "syne-tactile",
+        value: "Syne Tactile",
         label: "Syne Tactile"
     },
     {
-        value: "tai-heritage-pro",
+        value: "Tai Heritage Pro",
         label: "Tai Heritage Pro"
     },
     {
-        value: "tajawal",
+        value: "Tajawal",
         label: "Tajawal"
     },
     {
-        value: "tangerine",
+        value: "Tangerine",
         label: "Tangerine"
     },
     {
-        value: "tapestry",
+        value: "Tapestry",
         label: "Tapestry"
     },
     {
-        value: "taprom",
+        value: "Taprom",
         label: "Taprom"
     },
     {
-        value: "tauri",
+        value: "Tauri",
         label: "Tauri"
     },
     {
-        value: "taviraj",
+        value: "Taviraj",
         label: "Taviraj"
     },
     {
-        value: "teko",
+        value: "Teko",
         label: "Teko"
     },
     {
-        value: "tektur",
+        value: "Tektur",
         label: "Tektur"
     },
     {
-        value: "telex",
+        value: "Telex",
         label: "Telex"
     },
     {
-        value: "tenali-ramakrishna",
+        value: "Tenali Ramakrishna",
         label: "Tenali Ramakrishna"
     },
     {
-        value: "tenor-sans",
+        value: "Tenor Sans",
         label: "Tenor Sans"
     },
     {
-        value: "text-me-one",
+        value: "Text Me One",
         label: "Text Me One"
     },
     {
-        value: "texturina",
+        value: "Texturina",
         label: "Texturina"
     },
     {
-        value: "thasadith",
+        value: "Thasadith",
         label: "Thasadith"
     },
     {
-        value: "the-girl-next-door",
+        value: "The Girl Next Door",
         label: "The Girl Next Door"
     },
     {
-        value: "the-nautigal",
+        value: "The Nautigal",
         label: "The Nautigal"
     },
     {
-        value: "tienne",
+        value: "Tienne",
         label: "Tienne"
     },
     {
-        value: "tillana",
+        value: "Tillana",
         label: "Tillana"
     },
     {
-        value: "tilt-neon",
+        value: "Tilt Neon",
         label: "Tilt Neon"
     },
     {
-        value: "tilt-prism",
+        value: "Tilt Prism",
         label: "Tilt Prism"
     },
     {
-        value: "tilt-warp",
+        value: "Tilt Warp",
         label: "Tilt Warp"
     },
     {
-        value: "timmana",
+        value: "Timmana",
         label: "Timmana"
     },
     {
-        value: "tinos",
+        value: "Tinos",
         label: "Tinos"
     },
     {
-        value: "tiro-bangla",
+        value: "Tiro Bangla",
         label: "Tiro Bangla"
     },
     {
-        value: "tiro-devanagari-hindi",
+        value: "Tiro Devanagari Hindi",
         label: "Tiro Devanagari Hindi"
     },
     {
-        value: "tiro-devanagari-marathi",
+        value: "Tiro Devanagari Marathi",
         label: "Tiro Devanagari Marathi"
     },
     {
-        value: "tiro-devanagari-sanskrit",
+        value: "Tiro Devanagari Sanskrit",
         label: "Tiro Devanagari Sanskrit"
     },
     {
-        value: "tiro-gurmukhi",
+        value: "Tiro Gurmukhi",
         label: "Tiro Gurmukhi"
     },
     {
-        value: "tiro-kannada",
+        value: "Tiro Kannada",
         label: "Tiro Kannada"
     },
     {
-        value: "tiro-tamil",
+        value: "Tiro Tamil",
         label: "Tiro Tamil"
     },
     {
-        value: "tiro-telugu",
+        value: "Tiro Telugu",
         label: "Tiro Telugu"
     },
     {
-        value: "titan-one",
+        value: "Titan One",
         label: "Titan One"
     },
     {
-        value: "titillium-web",
+        value: "Titillium Web",
         label: "Titillium Web"
     },
     {
-        value: "tomorrow",
+        value: "Tomorrow",
         label: "Tomorrow"
     },
     {
-        value: "tourney",
+        value: "Tourney",
         label: "Tourney"
     },
     {
-        value: "trade-winds",
+        value: "Trade Winds",
         label: "Trade Winds"
     },
     {
-        value: "train-one",
+        value: "Train One",
         label: "Train One"
     },
     {
-        value: "trirong",
+        value: "Trirong",
         label: "Trirong"
     },
     {
-        value: "trispace",
+        value: "Trispace",
         label: "Trispace"
     },
     {
-        value: "trocchi",
+        value: "Trocchi",
         label: "Trocchi"
     },
     {
-        value: "trochut",
+        value: "Trochut",
         label: "Trochut"
     },
     {
-        value: "truculenta",
+        value: "Truculenta",
         label: "Truculenta"
     },
     {
-        value: "trykker",
+        value: "Trykker",
         label: "Trykker"
     },
     {
-        value: "tsukimi-rounded",
+        value: "Tsukimi Rounded",
         label: "Tsukimi Rounded"
     },
     {
-        value: "tulpen-one",
+        value: "Tulpen One",
         label: "Tulpen One"
     },
     {
-        value: "turret-road",
+        value: "Turret Road",
         label: "Turret Road"
     },
     {
-        value: "twinkle-star",
+        value: "Twinkle Star",
         label: "Twinkle Star"
     },
     {
-        value: "ubuntu",
+        value: "Ubuntu",
         label: "Ubuntu"
     },
     {
-        value: "ubuntu-condensed",
+        value: "Ubuntu Condensed",
         label: "Ubuntu Condensed"
     },
     {
-        value: "ubuntu-mono",
+        value: "Ubuntu Mono",
         label: "Ubuntu Mono"
     },
     {
-        value: "uchen",
+        value: "Uchen",
         label: "Uchen"
     },
     {
-        value: "ultra",
+        value: "Ultra",
         label: "Ultra"
     },
     {
-        value: "unbounded",
+        value: "Unbounded",
         label: "Unbounded"
     },
     {
-        value: "uncial-antiqua",
+        value: "Uncial Antiqua",
         label: "Uncial Antiqua"
     },
     {
-        value: "underdog",
+        value: "Underdog",
         label: "Underdog"
     },
     {
-        value: "unica-one",
+        value: "Unica One",
         label: "Unica One"
     },
     {
-        value: "unifrakturcook",
+        value: "UnifrakturCook",
         label: "UnifrakturCook"
     },
     {
-        value: "unifrakturmaguntia",
+        value: "UnifrakturMaguntia",
         label: "UnifrakturMaguntia"
     },
     {
-        value: "unkempt",
+        value: "Unkempt",
         label: "Unkempt"
     },
     {
-        value: "unlock",
+        value: "Unlock",
         label: "Unlock"
     },
     {
-        value: "unna",
+        value: "Unna",
         label: "Unna"
     },
     {
-        value: "updock",
+        value: "Updock",
         label: "Updock"
     },
     {
-        value: "urbanist",
+        value: "Urbanist",
         label: "Urbanist"
     },
     {
-        value: "vampiro-one",
+        value: "Vampiro One",
         label: "Vampiro One"
     },
     {
-        value: "varela",
+        value: "Varela",
         label: "Varela"
     },
     {
-        value: "varela-round",
+        value: "Varela Round",
         label: "Varela Round"
     },
     {
-        value: "varta",
+        value: "Varta",
         label: "Varta"
     },
     {
-        value: "vast-shadow",
+        value: "Vast Shadow",
         label: "Vast Shadow"
     },
     {
-        value: "vazirmatn",
+        value: "Vazirmatn",
         label: "Vazirmatn"
     },
     {
-        value: "vesper-libre",
+        value: "Vesper Libre",
         label: "Vesper Libre"
     },
     {
-        value: "viaoda-libre",
+        value: "Viaoda Libre",
         label: "Viaoda Libre"
     },
     {
-        value: "vibes",
+        value: "Vibes",
         label: "Vibes"
     },
     {
-        value: "vibur",
+        value: "Vibur",
         label: "Vibur"
     },
     {
-        value: "victor-mono",
+        value: "Victor Mono",
         label: "Victor Mono"
     },
     {
-        value: "vidaloka",
+        value: "Vidaloka",
         label: "Vidaloka"
     },
     {
-        value: "viga",
+        value: "Viga",
         label: "Viga"
     },
     {
-        value: "vina-sans",
+        value: "Vina Sans",
         label: "Vina Sans"
     },
     {
-        value: "voces",
+        value: "Voces",
         label: "Voces"
     },
     {
-        value: "volkhov",
+        value: "Volkhov",
         label: "Volkhov"
     },
     {
-        value: "vollkorn",
+        value: "Vollkorn",
         label: "Vollkorn"
     },
     {
-        value: "vollkorn-sc",
+        value: "Vollkorn SC",
         label: "Vollkorn SC"
     },
     {
-        value: "voltaire",
+        value: "Voltaire",
         label: "Voltaire"
     },
     {
-        value: "vt323",
+        value: "VT323",
         label: "VT323"
     },
     {
-        value: "vujahday-script",
+        value: "Vujahday Script",
         label: "Vujahday Script"
     },
     {
-        value: "waiting-for-the-sunrise",
+        value: "Waiting for the Sunrise",
         label: "Waiting for the Sunrise"
     },
     {
-        value: "wallpoet",
+        value: "Wallpoet",
         label: "Wallpoet"
     },
     {
-        value: "walter-turncoat",
+        value: "Walter Turncoat",
         label: "Walter Turncoat"
     },
     {
-        value: "warnes",
+        value: "Warnes",
         label: "Warnes"
     },
     {
-        value: "water-brush",
+        value: "Water Brush",
         label: "Water Brush"
     },
     {
-        value: "waterfall",
+        value: "Waterfall",
         label: "Waterfall"
     },
     {
-        value: "wavefont",
+        value: "Wavefont",
         label: "Wavefont"
     },
     {
-        value: "wellfleet",
+        value: "Wellfleet",
         label: "Wellfleet"
     },
     {
-        value: "wendy-one",
+        value: "Wendy One",
         label: "Wendy One"
     },
     {
-        value: "whisper",
+        value: "Whisper",
         label: "Whisper"
     },
     {
-        value: "windsong",
+        value: "WindSong",
         label: "WindSong"
     },
     {
-        value: "wire-one",
+        value: "Wire One",
         label: "Wire One"
     },
     {
-        value: "wix-madefor-display",
+        value: "Wix Madefor Display",
         label: "Wix Madefor Display"
     },
     {
-        value: "wix-madefor-text",
+        value: "Wix Madefor Text",
         label: "Wix Madefor Text"
     },
     {
-        value: "work-sans",
+        value: "Work Sans",
         label: "Work Sans"
     },
     {
-        value: "xanh-mono",
+        value: "Xanh Mono",
         label: "Xanh Mono"
     },
     {
-        value: "yaldevi",
+        value: "Yaldevi",
         label: "Yaldevi"
     },
     {
-        value: "yanone-kaffeesatz",
+        value: "Yanone Kaffeesatz",
         label: "Yanone Kaffeesatz"
     },
     {
-        value: "yantramanav",
+        value: "Yantramanav",
         label: "Yantramanav"
     },
     {
-        value: "yatra-one",
+        value: "Yatra One",
         label: "Yatra One"
     },
     {
-        value: "yellowtail",
+        value: "Yellowtail",
         label: "Yellowtail"
     },
     {
-        value: "yeon-sung",
+        value: "Yeon Sung",
         label: "Yeon Sung"
     },
     {
-        value: "yeseva-one",
+        value: "Yeseva One",
         label: "Yeseva One"
     },
     {
-        value: "yesteryear",
+        value: "Yesteryear",
         label: "Yesteryear"
     },
     {
-        value: "yomogi",
+        value: "Yomogi",
         label: "Yomogi"
     },
     {
-        value: "yrsa",
+        value: "Yrsa",
         label: "Yrsa"
     },
     {
-        value: "ysabeau",
+        value: "Ysabeau",
         label: "Ysabeau"
     },
     {
-        value: "ysabeau-infant",
+        value: "Ysabeau Infant",
         label: "Ysabeau Infant"
     },
     {
-        value: "ysabeau-office",
+        value: "Ysabeau Office",
         label: "Ysabeau Office"
     },
     {
-        value: "ysabeau-sc",
+        value: "Ysabeau SC",
         label: "Ysabeau SC"
     },
     {
-        value: "yuji-boku",
+        value: "Yuji Boku",
         label: "Yuji Boku"
     },
     {
-        value: "yuji-hentaigana-akari",
+        value: "Yuji Hentaigana Akari",
         label: "Yuji Hentaigana Akari"
     },
     {
-        value: "yuji-hentaigana-akebono",
+        value: "Yuji Hentaigana Akebono",
         label: "Yuji Hentaigana Akebono"
     },
     {
-        value: "yuji-mai",
+        value: "Yuji Mai",
         label: "Yuji Mai"
     },
     {
-        value: "yuji-syuku",
+        value: "Yuji Syuku",
         label: "Yuji Syuku"
     },
     {
-        value: "yusei-magic",
+        value: "Yusei Magic",
         label: "Yusei Magic"
     },
     {
-        value: "zcool-kuaile",
+        value: "ZCOOL KuaiLe",
         label: "ZCOOL KuaiLe"
     },
     {
-        value: "zcool-qingke-huangyou",
+        value: "ZCOOL QingKe HuangYou",
         label: "ZCOOL QingKe HuangYou"
     },
     {
-        value: "zcool-xiaowei",
+        value: "ZCOOL XiaoWei",
         label: "ZCOOL XiaoWei"
     },
     {
-        value: "zen-antique",
+        value: "Zen Antique",
         label: "Zen Antique"
     },
     {
-        value: "zen-antique-soft",
+        value: "Zen Antique Soft",
         label: "Zen Antique Soft"
     },
     {
-        value: "zen-dots",
+        value: "Zen Dots",
         label: "Zen Dots"
     },
     {
-        value: "zen-kaku-gothic-antique",
+        value: "Zen Kaku Gothic Antique",
         label: "Zen Kaku Gothic Antique"
     },
     {
-        value: "zen-kaku-gothic-new",
+        value: "Zen Kaku Gothic New",
         label: "Zen Kaku Gothic New"
     },
     {
-        value: "zen-kurenaido",
+        value: "Zen Kurenaido",
         label: "Zen Kurenaido"
     },
     {
-        value: "zen-loop",
+        value: "Zen Loop",
         label: "Zen Loop"
     },
     {
-        value: "zen-maru-gothic",
+        value: "Zen Maru Gothic",
         label: "Zen Maru Gothic"
     },
     {
-        value: "zen-old-mincho",
+        value: "Zen Old Mincho",
         label: "Zen Old Mincho"
     },
     {
-        value: "zen-tokyo-zoo",
+        value: "Zen Tokyo Zoo",
         label: "Zen Tokyo Zoo"
     },
     {
-        value: "zeyada",
+        value: "Zeyada",
         label: "Zeyada"
     },
     {
-        value: "zhi-mang-xing",
+        value: "Zhi Mang Xing",
         label: "Zhi Mang Xing"
     },
     {
-        value: "zilla-slab",
+        value: "Zilla Slab",
         label: "Zilla Slab"
     },
     {
-        value: "zilla-slab-highlight",
+        value: "Zilla Slab Highlight",
         label: "Zilla Slab Highlight"
     }
 ];

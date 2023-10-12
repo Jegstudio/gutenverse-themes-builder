@@ -1543,7 +1543,7 @@ class Backend_Api {
 								"fontStyle": "italic",
 								"fontWeight": "' . $weight . '",
 								"src": [
-									":' . $font_src . '/' . $italic_file . '"
+									"' . $font_src . '/' . $italic_file . '"
 								]
 							}';
 						}
