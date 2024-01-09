@@ -27,10 +27,9 @@ const PatternWrapper = ({ blockProps }) => {
 
 const insertBlocksTemplate = (data, clientId) => {
     return new Promise((resolve) => {
-        const { insertBlocks, replaceInnerBlocks } = dispatch('core/block-editor');
+        const { replaceInnerBlocks } = dispatch('core/block-editor');
         const blocks = parse(data);
-        replaceInnerBlocks(clientId, []);
-        insertBlocks(blocks, null, clientId);
+        replaceInnerBlocks(clientId, blocks);
         resolve();
     });
 };
