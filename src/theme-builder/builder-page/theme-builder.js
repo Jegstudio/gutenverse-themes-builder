@@ -9,6 +9,7 @@ import ManageFontSizes from './components/manage-font-sizes';
 import ManagePlugins from './components/manage-plugins';
 import ManageScreenshots from './components/manage-screenshots';
 import ReadmeEditor from './components/readme-editor';
+import ManageGlobal from './components/manage-global';
 
 const ThemeBuilder = ({ location }) => {
     const [path, setPath] = useState('list');
@@ -29,6 +30,9 @@ const ThemeBuilder = ({ location }) => {
             break;
         case 'manage-assets':
             Content = ManageAssets;
+            break;
+        case 'manage-global':
+            Content = ManageGlobal;
             break;
         case 'manage-fonts':
             Content = ManageFonts;

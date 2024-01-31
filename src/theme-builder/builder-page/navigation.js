@@ -29,6 +29,11 @@ const Navigation = ({ location }) => {
             path: 'manage-patterns',
         },
         {
+            name: __('Global Style', 'gutenverse'),
+            slug: pageSlug,
+            path: 'manage-global',
+        },
+        {
             name: __('Assets', 'gutenverse'),
             slug: pageSlug,
             path: 'manage-assets',

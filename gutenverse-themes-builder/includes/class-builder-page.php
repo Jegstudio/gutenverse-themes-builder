@@ -99,6 +99,16 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
+			esc_html__( 'Global Style', 'gutenverse' ),
+			esc_html__( 'Global Style', 'gutenverse' ),
+			'manage_options',
+			$path . 'manage-global',
+			array( $this, 'theme_builder_page' ),
+			3
+		);
+
+		add_submenu_page(
+			self::TYPE,
 			esc_html__( 'Core Fonts', 'gutenverse' ),
 			esc_html__( 'Core Fonts', 'gutenverse' ),
 			'manage_options',

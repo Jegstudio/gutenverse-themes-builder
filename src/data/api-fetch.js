@@ -329,7 +329,7 @@ export const deleteFontsize = (params, callback = def_callback) => {
 };
 
 /* Get WP.org plugin list */
-export const getPluginList = (search ='', callback = def_callback) => {
+export const getPluginList = (search = '', callback = def_callback) => {
     fetch(
         `https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[page]=1&request[per_page]=10&request[search]=${search}}`,
         {
@@ -343,3 +343,20 @@ export const getPluginList = (search ='', callback = def_callback) => {
     });
 };
 
+export const importGlobaStyle = (params, callback = def_callback) => {
+    const file = params.get('file');
+
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyle/import'),
+        body: params,
+        processData: false,
+        contentType: false,
+        headers: {
+            'Content-Disposition': 'attachment; filename="' + file.name + '"'
+        }
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};

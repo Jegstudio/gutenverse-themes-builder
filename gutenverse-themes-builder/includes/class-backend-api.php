@@ -349,6 +349,53 @@ class Backend_Api {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyle/import',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'global_style_import' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	/**
+	 * ==================================================================================================================================
+	 * Global Style APIs
+	 * ==================================================================================================================================
+	 */
+
+	/**
+	 * Import Global Style from Elementor Template kits Equivalent.
+	 */
+	public function global_style_import() {
+		$file = isset( $_FILES['file'] ) ? $_FILES['file'] : null;
+
+		// Use WordPress built-in file handling functions.
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		$movefile = wp_handle_upload(
+			$file,
+			array(
+				'test_form' => false,
+			)
+		);
+
+		if ( $movefile && ! isset( $movefile['error'] ) ) {
+			global $wp_filesystem;
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+
+			$content = $wp_filesystem->get_contents( $movefile['file'] );
+			$content = json_decode( $content, true );
+
+			// TODO: process importing json.
+
+			return array(
+				'status' => 'success',
+			);
+		}
 	}
 
 	/**

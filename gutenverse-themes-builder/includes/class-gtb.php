@@ -49,8 +49,39 @@ class Gtb {
 	 */
 	private function __construct() {
 		$this->register_framework();
+		add_filter( 'upload_mimes', array( $this, 'add_to_allowed_mimes' ) );
+		add_filter( 'wp_check_filetype_and_ext', array( $this, 'update_mime_types' ), 10, 3 );
 		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ) );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
+	}
+
+	/**
+	 * Add mime type
+	 *
+	 * @param array $mimes .
+	 *
+	 * @return array $mimes
+	 */
+	public function add_to_allowed_mimes( $mimes ) {
+		$mimes['json'] = 'application/json';
+
+		return $mimes;
+	}
+
+	/**
+	 * Update mime type
+	 *
+	 * @param array  $defaults .
+	 * @param array  $file .
+	 * @param string $filename .
+	 */
+	public function update_mime_types( $defaults, $file, $filename ) {
+		if ( 'json' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
+			$defaults['type'] = 'application/json';
+			$defaults['ext']  = 'json';
+		}
+
+		return $defaults;
 	}
 
 	/**
