@@ -51,6 +51,13 @@ class Database {
 	public $theme_fonts;
 
 	/**
+	 * Theme Globals.
+	 *
+	 * @var Themes_Global_Db
+	 */
+	public $theme_globals;
+
+	/**
 	 * Theme Templates.
 	 *
 	 * @var Themes_Template_Db
@@ -65,6 +72,7 @@ class Database {
 		$this->theme_assets    = new Themes_Asset_Db();
 		$this->theme_fonts     = new Themes_Font_Db();
 		$this->theme_fontsizes = new Themes_Fontsize_Db();
+		$this->theme_globals   = new Themes_Global_Db();
 		$this->theme_templates = new Themes_Template_Db();
 	}
 
@@ -89,6 +97,7 @@ class Database {
 		$this->theme_assets->initialize_table();
 		$this->theme_fonts->initialize_table();
 		$this->theme_fontsizes->initialize_table();
+		$this->theme_globals->initialize_table();
 		$this->theme_templates->initialize_table();
 	}
 }

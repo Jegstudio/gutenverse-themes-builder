@@ -14,18 +14,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class Themes_Asset_Db
+ * Class Themes_Global_Db
  *
  * @package gtb
  */
-class Themes_Asset_Db extends Database_Abstract {
+class Themes_Global_Db extends Database_Abstract {
 	/**
 	 * Return table name (without prefix)
 	 *
 	 * @return mixed|string
 	 */
 	public function table_name() {
-		return 'gtb_themes_asset';
+		return 'gtb_themes_global';
 	}
 
 	/**
@@ -39,30 +39,13 @@ class Themes_Asset_Db extends Database_Abstract {
 
 		$sql = "CREATE TABLE $table (
 			id				INT NOT NULL AUTO_INCREMENT,
-			handler			VARCHAR(100) NOT NULL,
-		    theme_id		CHAR(20) NOT NULL,
-			enqueue			CHAR(20) NOT NULL,
-            type			VARCHAR(20) NOT NULL,
-			preset			VARCHAR(20),
-			global_id		INT,
-			media_type		LONGTEXT,
-			content			LONGTEXT,
+			title			VARCHAR(200) NOT NULL,
+            fonts			TEXT,
+			colors			TEXT,
 			PRIMARY KEY 	(id)
 		) $charset;";
 
 		return $sql;
-	}
-
-	/**
-	 * Initialize Data
-	 *
-	 * @return array
-	 */
-	public function alter_table() {
-		$table = $this->get_table_name();
-		$query = $this->wpdb->prepare( "ALTER TABLE {$table} ADD global_id INT" ); // phpcs:ignore
-
-		return $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
 	}
 
 	/**
@@ -77,13 +60,11 @@ class Themes_Asset_Db extends Database_Abstract {
 	/**
 	 * Get All Assets.
 	 *
-	 * @param string $theme_id Theme Id.
-	 *
 	 * @return array|object|null
 	 */
-	public function get_all_assets( $theme_id ) {
+	public function get_all_globals() {
 		$table = $this->get_table_name();
-		$query = $this->wpdb->prepare( "SELECT * FROM $table WHERE theme_id =  %s", $theme_id ); // phpcs:ignore
+		$query = $this->wpdb->prepare( "SELECT * FROM $table" ); // phpcs:ignore
 
 		return $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
 	}

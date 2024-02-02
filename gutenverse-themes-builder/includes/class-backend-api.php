@@ -10,6 +10,7 @@
 namespace GTB;
 
 use GTB\Database\Database;
+use Gutenverse\Framework\Init;
 use ZipArchive;
 
 /**
@@ -350,12 +351,53 @@ class Backend_Api {
 			)
 		);
 
+		// Global Styles .
+		// register_rest_route(
+		// self::ENDPOINT,
+		// 'globalstyle/import',
+		// array(
+		// 'methods'             => 'POST',
+		// 'callback'            => array( $this, 'global_style_import' ),
+		// 'permission_callback' => 'gutenverse_permission_check_admin',
+		// )
+		// );
+
 		register_rest_route(
 			self::ENDPOINT,
-			'globalstyle/import',
+			'globalstyles/list',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_global_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyle/update',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'global_style_import' ),
+				'callback'            => array( $this, 'update_globalstyle' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyle/create',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'create_globalstyle' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyle/delete',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'delete_globalstyle' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -389,13 +431,95 @@ class Backend_Api {
 
 			$content = $wp_filesystem->get_contents( $movefile['file'] );
 			$content = json_decode( $content, true );
+			$active  = get_option( 'gtb_active_theme_id' );
+
+			$font = Init::instance()->global_variable->get_global_variable( 'font' );
 
 			// TODO: process importing json.
 
-			return array(
-				'status' => 'success',
-			);
+			// return array(
+			// 'status' => 'success',
+			// );
 		}
+
+		return array(
+			'fonts'  => '',
+			'colors' => '',
+		);
+	}
+
+	/**
+	 * Get theme list
+	 */
+	public function get_global_list() {
+		$global_db = Database::instance()->theme_globals;
+		$data      = $global_db->get_all_globals();
+
+		return array(
+			'data' => $data,
+		);
+	}
+
+	/**
+	 * Create Global Styles
+	 *
+	 * @param object $request .
+	 *
+	 * @return array
+	 */
+	public function create_globalstyle( $request ) {
+		$title     = $request->get_param( 'title' );
+		$imported  = $this->global_style_import();
+		$data      = array(
+			'title'  => $title,
+			'fonts'  => $imported['fonts'],
+			'colors' => $imported['colors'],
+		);
+		$global_db = Database::instance()->theme_globals;
+		$result    = $global_db->create_data( $data );
+
+		return $this->get_global_list();
+	}
+
+	/**
+	 * Edit Global Styles
+	 *
+	 * @param object $request .
+	 *
+	 * @return array
+	 */
+	public function update_globalstyle( $request ) {
+		$id        = $request->get_param( 'id' );
+		$title     = $request->get_param( 'title' );
+		$imported  = $this->global_style_import();
+		$where     = array(
+			'id' => $id,
+		);
+		$data      = array(
+			'title'  => $title,
+			'fonts'  => $imported['fonts'],
+			'colors' => $imported['colors'],
+		);
+		$global_db = Database::instance()->theme_globals;
+		$result    = $global_db->update_data( $data, $where );
+
+		return $this->get_global_list();
+	}
+
+	/**
+	 * Delete Global
+	 *
+	 * @param object $request .
+	 */
+	public function delete_globalstyle( $request ) {
+		$global_db = Database::instance()->theme_globals;
+		$id        = $request->get_param( 'id' );
+
+		$global_db->delete_data(
+			array( 'id' => $id )
+		);
+
+		return $this->get_global_list();
 	}
 
 	/**
@@ -791,7 +915,7 @@ class Backend_Api {
 
 			add_filter(
 				'posts_where',
-				function( $where ) use ( $search ) {
+				function ( $where ) use ( $search ) {
 					global $wpdb;
 					$where .= ' AND ' . $wpdb->posts . '.post_title LIKE \'%' . esc_sql( $wpdb->esc_like( $search ) ) . '%\'';
 					return $where;

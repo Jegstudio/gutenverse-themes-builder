@@ -169,16 +169,10 @@ class Gtb {
 	public function alter_table() {
 		$asset_db = Database::instance()->theme_assets;
 
-		$asset_altered = get_option( 'gtb_theme_asset_altered', false );
+		$asset_altered = get_option( 'gtb_theme_asset_altered_3', false );
 		if ( ! $asset_altered ) {
 			$asset_db->alter_table();
-			update_option( 'gtb_theme_asset_altered', true );
-		}
-
-		$asset_altered_2 = get_option( 'gtb_theme_asset_altered_2', false );
-		if ( ! $asset_altered_2 ) {
-			$asset_db->alter_table_2();
-			update_option( 'gtb_theme_asset_altered_2', true );
+			update_option( 'gtb_theme_asset_altered_3', true );
 		}
 	}
 

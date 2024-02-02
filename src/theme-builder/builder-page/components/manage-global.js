@@ -2,11 +2,16 @@ import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ContentWrapper from './content-wrapper';
 import { useDropzone } from 'react-dropzone';
-import { importGlobaStyle } from '../../../data/api-fetch';
+import { createGlobal, deleteGlobal, getGlobalList, importGlobaStyle, updateGlobal } from '../../../data/api-fetch';
+import Table from './table';
+import isEmpty from 'lodash/isEmpty';
+import { WarningPopup } from './warning-popup';
+import { DeleteIcon, EditIcon } from '../data/icons';
+import TextControl from '../controls/text-control';
+import { ArrowLeft } from 'react-feather';
 
-const ManageGlobal = () => {
+const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updateDetails, actionGlobalData, notice }) => {
     const [loading, setLoading] = useState(false);
-    const [files, setFiles] = useState([]);
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles);
@@ -17,45 +22,202 @@ const ManageGlobal = () => {
         multiple: false
     });
 
-    const disableLoading = () => {
-        setLoading(false);
-        setFiles([]);
-        alert(__('Import Success', 'gtn'));
-    };
-
-    const importGlobalStyle = () => {
-        const formData = new FormData();
-        formData.append('file', files[0]);
-        formData.append('name', 'name');
-        setLoading(true);
-        importGlobaStyle(formData, disableLoading);
-    };
-
-
-    return <ContentWrapper
-        title={__('Global Style', 'gtb')}
-        description={__('Import Global Style from elementor global style', 'gtb')}
-        headingButton={files.length > 0}
-        headingButtonIcon={false}
-        headingButtonText={loading ? __('Loading...', 'gtb') : __('Import Global Style', 'gtb')}
-        headingButtonOnClick={() => importGlobalStyle()}
-    >
-        <section className="container">
-            {files.length === 0 ?
-                <div {...getRootProps({ className: 'dropzone' })}>
-                    <input {...getInputProps()} />
-                    <p>{__('Upload global.json from your template kit files', 'gtn')}</p>
-                </div> :
-                files.length && files.map(file => {
-                    const { name, lastModified, size } = file;
-                    return <div key={lastModified} className="dropzone">
-                        <div><strong> {name} </strong></div>
-                        <h3 className="clear" onClick={() => setFiles('')}>{__('Clear', 'gtn')}</h3>
-                    </div>;
-                })
+    return <div className="font-data-wrapper">
+        <div className="data-header">
+            <div className="buttons inline">
+                <button className="button data" onClick={() => setMode('')}><ArrowLeft size={14} /></button>
+            </div>
+            <h3 className="subtitle">{title}</h3>
+        </div>
+        <div className="data-notice">
+            {notice}
+        </div>
+        <div className="data-body">
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> :
+                <>
+                    <TextControl
+                        id={'title'}
+                        title={__('Title', 'gtb')}
+                        value={globalData?.title}
+                        onChange={value => updateDetails('title', value)}
+                        important={true}
+                    />
+                    <section className="container">
+                        {files.length === 0 ?
+                            <div {...getRootProps({ className: 'dropzone' })}>
+                                <input {...getInputProps()} />
+                                <p>{__('Upload global.json from your template kit files', 'gtn')}</p>
+                            </div> :
+                            files.length && files.map(file => {
+                                const { name, lastModified, size } = file;
+                                return <div key={lastModified} className="dropzone">
+                                    <div><strong> {name} </strong></div>
+                                    <h3 className="clear" onClick={() => setFiles('')}>{__('Clear', 'gtn')}</h3>
+                                </div>;
+                            })
+                        }
+                    </section>
+                </>
             }
-        </section>
-    </ContentWrapper >;
+        </div>
+        {!loading && <div className="data-footer">
+            <div className="buttons inline"></div>
+            <div className="buttons inline">
+                <button className="button create" onClick={actionGlobalData}>{title}</button>
+            </div>
+        </div>}
+    </div>;
+};
+
+const EditGlobal = ({ data, setMode, updateGlobalList }) => {
+    const [globalData, setGlobalData] = useState(data);
+    const [loading, setLoading] = useState(false);
+    const [noticeMessage, setNoticeMessage] = useState('');
+    const [files, setFiles] = useState([]);
+
+    const updateCallback = (response) => {
+        setMode('');
+        updateGlobalList(response);
+        setLoading(false);
+    };
+
+    const updateGlobalData = () => {
+        // const formData = new FormData();
+        // formData.append('file', files[0]);
+        // formData.append('name', 'name');
+        // formData.append('title', 'Global Title');
+        setLoading(true);
+        updateGlobal({...globalData}, updateCallback);
+    };
+
+    const updateDetails = (name, value) => {
+        setGlobalData(data => {
+            return {
+                ...data,
+                [name]: value
+            };
+        });
+    };
+
+    const notice = !isEmpty(noticeMessage) && <div className="gtb-notice">
+        {noticeMessage}
+    </div>;
+
+    const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: updateGlobalData };
+    return <ManageGlobalOption
+        {...params}
+        title={__('Edit Global Detail', 'gtb')}
+    />;
+};
+
+const CreateGlobal = ({ setMode, updateGlobalList }) => {
+    const [globalData, setGlobalData] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [noticeMessage, setNoticeMessage] = useState('');
+    const [files, setFiles] = useState([]);
+
+    const updateCallback = (response) => {
+        setMode('');
+        updateGlobalList(response);
+        setLoading(false);
+    };
+
+    const createGlobalData = () => {
+        // const formData = new FormData();
+        // formData.append('file', files[0]);
+        // formData.append('name', 'name');
+        // formData.append('title', 'Global Title');
+        setLoading(true);
+        createGlobal({...globalData}, updateCallback);
+    };
+
+    const updateDetails = (name, value) => {
+        setGlobalData(data => {
+            return {
+                ...data,
+                [name]: value
+            };
+        });
+    };
+
+    const notice = !isEmpty(noticeMessage) && <div className="gtb-notice">
+        {noticeMessage}
+    </div>;
+
+    const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: createGlobalData };
+    return <ManageGlobalOption
+        {...params}
+        title={__('Create Global', 'gtb')}
+    />;
+};
+
+const ManageGlobal = () => {
+    const [mode, setMode] = useState();
+    const [globalList, setGlobalList] = useState([]);
+    const [data, setData] = useState(null);
+    const [deletePopup, setDeletePopup] = useState(false);
+
+    const setEditGlobal = (data) => {
+        setData(data);
+        setMode('edit');
+    };
+
+    const updateGlobalList = (result) => {
+        setGlobalList(result?.data);
+    };
+
+    const removeGlobal = () => {
+        return deleteGlobal({ id: deletePopup }, updateGlobalList);
+    };
+
+    useEffect(() => {
+        getGlobalList(updateGlobalList);
+    }, []);
+
+    let Content = null;
+
+    switch (mode) {
+        case 'edit':
+            Content =  <EditGlobal data={data} setMode={setMode} updateGlobalList={updateGlobalList} />;
+            break;
+        case 'create':
+            Content =  <CreateGlobal setMode={setMode} updateGlobalList={updateGlobalList} />;
+            break;
+        default:
+            Content = <ContentWrapper
+                title={__('Manage Global Styles', 'gtb')}
+                description={__('Select which global styles you want to use in your current theme. You might need to reapply some of the styling.', 'gtb')}
+                headingButton={true}
+                headingButtonOnClick={() => setMode('create')}
+            >
+                <>
+                    <Table heads={['ID', 'Global Title', 'Actions',]}>
+                        <>
+                            {!isEmpty(globalList) && globalList.map((global, key) => {
+                                return <tr key={key}>
+                                    <td>{global?.id}</td>
+                                    <td>{global?.title}</td>
+                                    <td>
+                                        <div className="actions">
+                                            <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gtb')}</a>
+                                            <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gtb')}</a>
+                                        </div>
+                                    </td>
+                                </tr>;
+                            })}
+                        </>
+                    </Table>
+                    {deletePopup && <WarningPopup
+                        title={__('Are you sure want to delete this global?', 'gtb')}
+                        detail={__('Please note, every element related to this global won\'t be working property after delete this aset.', 'gtb')}
+                        onProceed={removeGlobal}
+                        onClose={() => setDeletePopup(false)}
+                    />}
+                </>
+            </ContentWrapper>;
+    }
+
+    return Content;
 };
 
 export default ManageGlobal;

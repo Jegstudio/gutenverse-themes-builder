@@ -343,6 +343,57 @@ export const getPluginList = (search = '', callback = def_callback) => {
     });
 };
 
+/* Globalstles */
+
+export const getGlobalList = (callback = def_callback) => {
+    apiFetch({
+        path: addQueryArgs('gtb-backend/v1/globalstyles/list'),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const updateGlobal = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyle/update'),
+        data: {
+            ...params
+        },
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const createGlobal = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyle/create'),
+        data: {
+            ...params
+        },
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+
+export const deleteGlobal = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyle/delete'),
+        data: {
+            ...params
+        },
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 export const importGlobaStyle = (params, callback = def_callback) => {
     const file = params.get('file');
 
