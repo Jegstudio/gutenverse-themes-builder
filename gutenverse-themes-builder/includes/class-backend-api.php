@@ -36,7 +36,7 @@ class Backend_Api {
 	 * Register GTB APIs
 	 */
 	public function register_routes() {
-		if ( ! is_admin() && ! current_user_can( 'edit_theme_options' ) ) {
+		if ( ! is_admin() && ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
@@ -51,7 +51,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_theme' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -61,7 +61,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_theme' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -71,7 +71,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_theme_other_data' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -81,7 +81,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_theme' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -91,7 +91,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'set_active_theme' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -101,7 +101,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_theme_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -111,7 +111,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_theme_data' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -121,7 +121,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'export_theme' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -132,7 +132,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_asset_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -142,7 +142,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_asset' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -152,7 +152,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_asset' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -162,7 +162,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_asset' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -173,7 +173,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_font_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -183,7 +183,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_font' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -193,7 +193,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_font' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -203,7 +203,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_font' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -214,7 +214,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_fontsize_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -224,7 +224,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_fontsize' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -234,7 +234,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_fontsize' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -244,7 +244,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_fontsize' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -255,7 +255,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_template_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -265,7 +265,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_template' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -275,7 +275,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_template' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -286,7 +286,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'search_pattern' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -296,7 +296,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'create_pattern' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -306,7 +306,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'edit_pattern' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -316,7 +316,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'get_pattern' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -326,7 +326,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_pattern_data' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -336,7 +336,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_pattern_list' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -346,7 +346,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'delete_pattern' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 
@@ -356,7 +356,7 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'global_style_import' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
 	}
