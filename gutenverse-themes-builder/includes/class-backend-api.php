@@ -10,6 +10,7 @@
 namespace GTB;
 
 use GTB\Database\Database;
+use Gutenverse\Framework\Global_Variable;
 use Gutenverse\Framework\Init;
 use ZipArchive;
 
@@ -411,36 +412,33 @@ class Backend_Api {
 
 	/**
 	 * Import Global Style from Elementor Template kits Equivalent.
+	 *
+	 * @param array $filedata .
 	 */
-	public function global_style_import() {
-		$file = isset( $_FILES['file'] ) ? $_FILES['file'] : null;
+	public function global_style_import( $filedata ) {
+		if ( empty( $filedata ) ) {
+			return array(
+				'fonts'  => '',
+				'colors' => '',
+			);
+		}
 
-		// Use WordPress built-in file handling functions.
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		$movefile = wp_handle_upload(
-			$file,
-			array(
-				'test_form' => false,
-			)
+		$filepath  = get_attached_file( $filedata['id'] );
+		$jsondata  = file_get_contents( $filepath );
+		$globals   = new Global_Variable();
+		$converted = $jsondata; // <-- Olah data JSON
+		$result    = array(
+			'fonts'  => $converted['fonts'],
+			'colors' => $converted['colors'],
 		);
 
-		if ( $movefile && ! isset( $movefile['error'] ) ) {
-			global $wp_filesystem;
-			require_once ABSPATH . '/wp-admin/includes/file.php';
-			WP_Filesystem();
+		$globals->set_global_variable( $result );
 
-			$content = $wp_filesystem->get_contents( $movefile['file'] );
-			$content = json_decode( $content, true );
-			$active  = get_option( 'gtb_active_theme_id' );
+		// TODO: process importing json.
 
-			$font = Init::instance()->global_variable->get_global_variable( 'font' );
-
-			// TODO: process importing json.
-
-			// return array(
-			// 'status' => 'success',
-			// );
-		}
+		// return array(
+		// 'status' => 'success',
+		// );
 
 		return array(
 			'fonts'  => '',
@@ -454,6 +452,12 @@ class Backend_Api {
 	public function get_global_list() {
 		$global_db = Database::instance()->theme_globals;
 		$data      = $global_db->get_all_globals();
+
+		foreach ( $data as &$global ) {
+			if ( ! empty( $global['file'] ) ) {
+				$global['file'] = maybe_unserialize( $global['file'] );
+			}
+		}
 
 		return array(
 			'data' => $data,
@@ -469,14 +473,17 @@ class Backend_Api {
 	 */
 	public function create_globalstyle( $request ) {
 		$title     = $request->get_param( 'title' );
-		$imported  = $this->global_style_import();
+		$filedata  = $request->get_param( 'file' );
+		$imported  = $this->global_style_import( $filedata );
+		$global_db = Database::instance()->theme_globals;
 		$data      = array(
 			'title'  => $title,
+			'file'   => maybe_serialize( $filedata ),
 			'fonts'  => $imported['fonts'],
 			'colors' => $imported['colors'],
 		);
-		$global_db = Database::instance()->theme_globals;
-		$result    = $global_db->create_data( $data );
+
+		$global_db->create_data( $data );
 
 		return $this->get_global_list();
 	}
@@ -491,17 +498,20 @@ class Backend_Api {
 	public function update_globalstyle( $request ) {
 		$id        = $request->get_param( 'id' );
 		$title     = $request->get_param( 'title' );
-		$imported  = $this->global_style_import();
+		$filedata  = $request->get_param( 'file' );
+		$imported  = $this->global_style_import( $filedata );
+		$global_db = Database::instance()->theme_globals;
 		$where     = array(
 			'id' => $id,
 		);
 		$data      = array(
 			'title'  => $title,
+			'file'   => maybe_serialize( $filedata ),
 			'fonts'  => $imported['fonts'],
 			'colors' => $imported['colors'],
 		);
-		$global_db = Database::instance()->theme_globals;
-		$result    = $global_db->update_data( $data, $where );
+
+		$global_db->update_data( $data, $where );
 
 		return $this->get_global_list();
 	}

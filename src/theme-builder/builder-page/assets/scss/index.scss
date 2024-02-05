@@ -380,6 +380,7 @@ body {
         div {
             &.input-inner {
                 width: 100%;
+                display: flex;
 
                 input {
                     border: 1px solid var(--gtb-grey-soft);

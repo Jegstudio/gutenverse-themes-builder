@@ -9,6 +9,7 @@ import { WarningPopup } from './warning-popup';
 import { DeleteIcon, EditIcon } from '../data/icons';
 import TextControl from '../controls/text-control';
 import { ArrowLeft } from 'react-feather';
+import FileControl from '../controls/file-control';
 
 const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updateDetails, actionGlobalData, notice }) => {
     const [loading, setLoading] = useState(false);
@@ -42,7 +43,13 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
                         onChange={value => updateDetails('title', value)}
                         important={true}
                     />
-                    <section className="container">
+                    <FileControl
+                        id={'file'}
+                        title={__('Template kit global.json file', 'gtb')}
+                        value={globalData?.file}
+                        onChange={value => updateDetails('file', value)}
+                    />
+                    {/* <section className="container">
                         {files.length === 0 ?
                             <div {...getRootProps({ className: 'dropzone' })}>
                                 <input {...getInputProps()} />
@@ -56,7 +63,7 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
                                 </div>;
                             })
                         }
-                    </section>
+                    </section> */}
                 </>
             }
         </div>

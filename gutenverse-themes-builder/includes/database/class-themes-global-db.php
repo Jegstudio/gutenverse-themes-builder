@@ -40,6 +40,7 @@ class Themes_Global_Db extends Database_Abstract {
 		$sql = "CREATE TABLE $table (
 			id				INT NOT NULL AUTO_INCREMENT,
 			title			VARCHAR(200) NOT NULL,
+			file			TEXT,
             fonts			TEXT,
 			colors			TEXT,
 			PRIMARY KEY 	(id)
