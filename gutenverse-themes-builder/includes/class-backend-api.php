@@ -469,18 +469,10 @@ class Backend_Api {
 			}
 		}
 
+		// TODO: do some checking here, only update if current active theme using this global style.
 		$globals->set_global_variable( $converted );
 
-		// TODO: process importing json.
-
-		// return array(
-		// 'status' => 'success',
-		// );
-
-		return array(
-			'fonts'  => '',
-			'colors' => '',
-		);
+		return $converted;
 	}
 
 	/**
@@ -494,8 +486,6 @@ class Backend_Api {
 		$basesize = 16;
 
 		if ( isset( $spacing->unit ) ) {
-
-			jlog( $spacing );
 			switch ( $spacing->unit ) {
 				case 'rem':
 					return (float) $spacing->size * $basesize;
@@ -542,8 +532,8 @@ class Backend_Api {
 		$data      = array(
 			'title'  => $title,
 			'file'   => maybe_serialize( $filedata ),
-			'fonts'  => $imported['fonts'],
-			'colors' => $imported['colors'],
+			'fonts'  => maybe_serialize( $imported['fonts'] ),
+			'colors' => maybe_serialize( $imported['colors'] ),
 		);
 
 		$global_db->create_data( $data );
@@ -559,11 +549,10 @@ class Backend_Api {
 	 * @return array
 	 */
 	public function update_globalstyle( $request ) {
-		$id       = $request->get_param( 'id' );
-		$title    = $request->get_param( 'title' );
-		$filedata = $request->get_param( 'file' );
-		$imported = $this->global_style_import( $filedata );
-		return;
+		$id        = $request->get_param( 'id' );
+		$title     = $request->get_param( 'title' );
+		$filedata  = $request->get_param( 'file' );
+		$imported  = $this->global_style_import( $filedata );
 		$global_db = Database::instance()->theme_globals;
 		$where     = array(
 			'id' => $id,
@@ -571,8 +560,8 @@ class Backend_Api {
 		$data      = array(
 			'title'  => $title,
 			'file'   => maybe_serialize( $filedata ),
-			'fonts'  => $imported['fonts'],
-			'colors' => $imported['colors'],
+			'fonts'  => maybe_serialize( $imported['fonts'] ),
+			'colors' => maybe_serialize( $imported['colors'] ),
 		);
 
 		$global_db->update_data( $data, $where );
