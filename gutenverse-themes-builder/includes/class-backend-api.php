@@ -461,10 +461,7 @@ class Backend_Api {
 								),
 							),
 							'spacing'    => array(
-								'Desktop' => array(
-									'unit'  => $setting->typography_letter_spacing->unit,
-									'point' => $setting->typography_letter_spacing->size,
-								),
+								'Desktop' => $this->convert_spacing( $setting->typography_letter_spacing ),
 							),
 						),
 					);
@@ -484,6 +481,32 @@ class Backend_Api {
 			'fonts'  => '',
 			'colors' => '',
 		);
+	}
+
+	/**
+	 * Convert spacing value from template kit global.json
+	 *
+	 * @param object $spacing .
+	 *
+	 * @return int|string
+	 */
+	private function convert_spacing( $spacing ) {
+		$basesize = 16;
+
+		if ( isset( $spacing->unit ) ) {
+
+			jlog( $spacing );
+			switch ( $spacing->unit ) {
+				case 'rem':
+					return (float) $spacing->size * $basesize;
+				case 'px':
+					return (float) $spacing->size / $basesize;
+				case 'em':
+					return (float) $spacing->size;
+			}
+		}
+
+		return '';
 	}
 
 	/**
