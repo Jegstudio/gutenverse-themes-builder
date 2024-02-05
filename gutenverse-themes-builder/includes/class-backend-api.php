@@ -424,15 +424,55 @@ class Backend_Api {
 		}
 
 		$filepath  = get_attached_file( $filedata['id'] );
-		$jsondata  = file_get_contents( $filepath );
+		$jsondata  = json_decode( file_get_contents( $filepath ) );
 		$globals   = new Global_Variable();
-		$converted = $jsondata; // <-- Olah data JSON
-		$result    = array(
-			'fonts'  => $converted['fonts'],
-			'colors' => $converted['colors'],
-		);
+		$converted = array();
 
-		$globals->set_global_variable( $result );
+		foreach ( $jsondata->page_settings as $key => $settings ) {
+			if ( 'system_typography' === $key || 'custom_typography' === $key ) {
+				if ( empty( $converted['fonts'] ) ) {
+					$converted['fonts'] = array();
+				}
+
+				foreach ( $settings as $setting ) {
+					$converted['fonts'][] = array(
+						'id'   => $setting->_id,
+						'name' => $setting->title,
+						'font' => array(
+							'font'       => array(
+								'label' => $setting->typography_font_family,
+								'value' => $setting->typography_font_family,
+								'type'  => $setting->typography_typography ? 'google' : 'system',
+							),
+							'weight'     => $setting->typography_font_weight,
+							'style'      => $setting->typography_font_style,
+							'decoration' => $setting->typography_text_decoration,
+							'transform'  => $setting->typography_text_transform,
+							'size'       => array(
+								'Desktop' => array(
+									'unit'  => $setting->typography_font_size->unit,
+									'point' => $setting->typography_font_size->size,
+								),
+							),
+							'lineHeight' => array(
+								'Desktop' => array(
+									'unit'  => $setting->typography_line_height->unit,
+									'point' => $setting->typography_line_height->size,
+								),
+							),
+							'spacing'    => array(
+								'Desktop' => array(
+									'unit'  => $setting->typography_letter_spacing->unit,
+									'point' => $setting->typography_letter_spacing->size,
+								),
+							),
+						),
+					);
+				}
+			}
+		}
+
+		$globals->set_global_variable( $converted );
 
 		// TODO: process importing json.
 
@@ -496,10 +536,11 @@ class Backend_Api {
 	 * @return array
 	 */
 	public function update_globalstyle( $request ) {
-		$id        = $request->get_param( 'id' );
-		$title     = $request->get_param( 'title' );
-		$filedata  = $request->get_param( 'file' );
-		$imported  = $this->global_style_import( $filedata );
+		$id       = $request->get_param( 'id' );
+		$title    = $request->get_param( 'title' );
+		$filedata = $request->get_param( 'file' );
+		$imported = $this->global_style_import( $filedata );
+		return;
 		$global_db = Database::instance()->theme_globals;
 		$where     = array(
 			'id' => $id,
