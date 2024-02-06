@@ -44,25 +44,12 @@ class Themes_Asset_Db extends Database_Abstract {
 			enqueue			CHAR(20) NOT NULL,
             type			VARCHAR(20) NOT NULL,
 			preset			VARCHAR(20),
-			global_id		INT,
 			media_type		LONGTEXT,
 			content			LONGTEXT,
 			PRIMARY KEY 	(id)
 		) $charset;";
 
 		return $sql;
-	}
-
-	/**
-	 * Initialize Data
-	 *
-	 * @return array
-	 */
-	public function alter_table() {
-		$table = $this->get_table_name();
-		$query = $this->wpdb->prepare( "ALTER TABLE {$table} ADD global_id INT" ); // phpcs:ignore
-
-		return $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
 	}
 
 	/**

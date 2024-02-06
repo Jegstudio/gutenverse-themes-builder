@@ -167,12 +167,12 @@ class Gtb {
 	 * TODO : Remove this later!
 	 */
 	public function alter_table() {
-		$asset_db = Database::instance()->theme_assets;
+		$info_db = Database::instance()->theme_info;
 
-		$asset_altered = get_option( 'gtb_theme_asset_altered_3', false );
-		if ( ! $asset_altered ) {
-			$asset_db->alter_table();
-			update_option( 'gtb_theme_asset_altered_3', true );
+		$info_altered = get_option( 'gtb_theme_info_altered_3', false );
+		if ( ! $info_altered ) {
+			$info_db->alter_table();
+			update_option( 'gtb_theme_info_altered_3', true );
 		}
 	}
 
