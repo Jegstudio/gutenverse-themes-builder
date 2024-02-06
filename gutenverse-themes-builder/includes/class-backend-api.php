@@ -13,6 +13,7 @@ use GTB\Database\Database;
 use Gutenverse\Framework\Global_Variable;
 use Gutenverse\Framework\Init;
 use ZipArchive;
+use WP_Theme_Json_Resolver;
 
 /**
  * Class Api
@@ -428,7 +429,25 @@ class Backend_Api {
 		$globals   = new Global_Variable();
 		$converted = array();
 
+		$theme         = wp_get_theme();
+		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
+		$update_colors = json_decode( $themedata['post_content'] );
+
+		if ( isset( $update_colors->settings->color->palette->custom ) ) {
+			$update_colors->settings->color->palette->custom = array();
+		}
+
 		foreach ( $jsondata->page_settings as $key => $settings ) {
+			if ( 'system_colors' === $key || 'custom_colors' === $key ) {
+				foreach ( $settings as $setting ) {
+					$update_colors->settings->color->palette->custom[] = array(
+						'slug'  => $setting->_id,
+						'name'  => $setting->title,
+						'color' => $setting->color,
+					);
+				}
+			}
+
 			if ( 'system_typography' === $key || 'custom_typography' === $key ) {
 				if ( empty( $converted['fonts'] ) ) {
 					$converted['fonts'] = array();
@@ -468,6 +487,14 @@ class Backend_Api {
 				}
 			}
 		}
+
+		$update_colors = wp_json_encode( $update_colors );
+		$result        = wp_update_post(
+			array(
+				'ID'           => $themedata['ID'],
+				'post_content' => $update_colors,
+			)
+		);
 
 		// TODO: do some checking here, only update if current active theme using this global style.
 		$globals->set_global_variable( $converted );
