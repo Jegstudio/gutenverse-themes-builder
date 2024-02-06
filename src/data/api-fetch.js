@@ -394,6 +394,19 @@ export const deleteGlobal = (params, callback = def_callback) => {
     });
 };
 
+export const updateActiveGlobal = (id, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyle/active'),
+        data: {
+            global_id: id,
+        }
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 export const importGlobaStyle = (params, callback = def_callback) => {
     const file = params.get('file');
 

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ContentWrapper from './content-wrapper';
 import { useDropzone } from 'react-dropzone';
-import { createGlobal, deleteGlobal, getGlobalList, importGlobaStyle, updateGlobal } from '../../../data/api-fetch';
+import { createGlobal, deleteGlobal, getGlobalList, importGlobaStyle, updateActiveGlobal, updateGlobal } from '../../../data/api-fetch';
 import Table from './table';
 import isEmpty from 'lodash/isEmpty';
 import { WarningPopup } from './warning-popup';
@@ -94,7 +94,7 @@ const EditGlobal = ({ data, setMode, updateGlobalList }) => {
         // formData.append('name', 'name');
         // formData.append('title', 'Global Title');
         setLoading(true);
-        updateGlobal({...globalData}, updateCallback);
+        updateGlobal({ ...globalData }, updateCallback);
     };
 
     const updateDetails = (name, value) => {
@@ -135,7 +135,7 @@ const CreateGlobal = ({ setMode, updateGlobalList }) => {
         // formData.append('name', 'name');
         // formData.append('title', 'Global Title');
         setLoading(true);
-        createGlobal({...globalData}, updateCallback);
+        createGlobal({ ...globalData }, updateCallback);
     };
 
     const updateDetails = (name, value) => {
@@ -161,8 +161,10 @@ const CreateGlobal = ({ setMode, updateGlobalList }) => {
 const ManageGlobal = () => {
     const [mode, setMode] = useState();
     const [globalList, setGlobalList] = useState([]);
+    const [activeGlobal, setActiveGlobal] = useState(false);
     const [data, setData] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
+    const [switchPopup, setSwitchPopup] = useState(false);
 
     const setEditGlobal = (data) => {
         setData(data);
@@ -171,6 +173,7 @@ const ManageGlobal = () => {
 
     const updateGlobalList = (result) => {
         setGlobalList(result?.data);
+        setActiveGlobal(result?.active);
     };
 
     const removeGlobal = () => {
@@ -181,14 +184,18 @@ const ManageGlobal = () => {
         getGlobalList(updateGlobalList);
     }, []);
 
+    const updateActiveID = () => {
+        updateActiveGlobal(switchPopup, updateGlobalList);
+    };
+
     let Content = null;
 
     switch (mode) {
         case 'edit':
-            Content =  <EditGlobal data={data} setMode={setMode} updateGlobalList={updateGlobalList} />;
+            Content = <EditGlobal data={data} setMode={setMode} updateGlobalList={updateGlobalList} />;
             break;
         case 'create':
-            Content =  <CreateGlobal setMode={setMode} updateGlobalList={updateGlobalList} />;
+            Content = <CreateGlobal setMode={setMode} updateGlobalList={updateGlobalList} />;
             break;
         default:
             Content = <ContentWrapper
@@ -198,14 +205,16 @@ const ManageGlobal = () => {
                 headingButtonOnClick={() => setMode('create')}
             >
                 <>
-                    <Table heads={['ID', 'Global Title', 'Actions',]}>
+                    <Table heads={['ID', 'Global Title', 'Status', 'Actions',]}>
                         <>
                             {!isEmpty(globalList) && globalList.map((global, key) => {
                                 return <tr key={key}>
                                     <td>{global?.id}</td>
                                     <td>{global?.title}</td>
+                                    <td><span className={`status ${activeGlobal === global?.id? 'active' : ''}`}>{activeGlobal === global?.id ? __('Active', 'gtb') : __('Inactive', 'gtb')}</span></td>
                                     <td>
                                         <div className="actions">
+                                            {activeGlobal !== global?.id && <a className="edit" onClick={() => setSwitchPopup(global?.id)}>Set Active</a>}
                                             <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gtb')}</a>
                                             <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gtb')}</a>
                                         </div>
@@ -214,9 +223,16 @@ const ManageGlobal = () => {
                             })}
                         </>
                     </Table>
+                    {switchPopup && <WarningPopup
+                        title={__('Switch to this global style?', 'gtb')}
+                        detail={__('Your current theme is using this global style, changing it might have effects on your layout design and you might need to re-assign the global variable', 'gtb')}
+                        actionText={__('Switch', 'gtb')}
+                        onProceed={updateActiveID}
+                        onClose={() => setSwitchPopup(false)}
+                    />}
                     {deletePopup && <WarningPopup
                         title={__('Are you sure want to delete this global?', 'gtb')}
-                        detail={__('Please note, every element related to this global won\'t be working property after delete this aset.', 'gtb')}
+                        detail={__('This might affect your current element\'s styles.', 'gtb')}
                         onProceed={removeGlobal}
                         onClose={() => setDeletePopup(false)}
                     />}

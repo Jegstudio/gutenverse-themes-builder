@@ -403,6 +403,16 @@ class Backend_Api {
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyle/active',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'set_active_global' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
 	}
 
 	/**
@@ -532,6 +542,9 @@ class Backend_Api {
 	public function get_global_list() {
 		$global_db = Database::instance()->theme_globals;
 		$data      = $global_db->get_all_globals();
+		$theme_db  = Database::instance()->theme_info;
+		$theme_id  = get_option( 'gtb_active_theme_id' );
+		$theme     = $theme_db->get_theme_data( $theme_id );
 
 		foreach ( $data as &$global ) {
 			if ( ! empty( $global['file'] ) ) {
@@ -540,7 +553,8 @@ class Backend_Api {
 		}
 
 		return array(
-			'data' => $data,
+			'data'   => $data,
+			'active' => $theme[0]['global_id'],
 		);
 	}
 
@@ -607,6 +621,31 @@ class Backend_Api {
 
 		$global_db->delete_data(
 			array( 'id' => $id )
+		);
+
+		return $this->get_global_list();
+	}
+
+	/**
+	 * Set active global
+	 *
+	 * @param object $request .
+	 */
+	public function set_active_global( $request ) {
+		$global_id = $request->get_param( 'global_id' );
+		$theme_id  = get_option( 'gtb_active_theme_id' );
+		$global_db = Database::instance()->theme_globals;
+		$theme_db  = Database::instance()->theme_info;
+		$globals   = new Global_Variable();
+		$update    = $global_db->get_data( $global_id );
+
+		$globals->set_global_variable( $update[0] );
+
+		$theme_db->update_data(
+			array(
+				'global_id' => $global_id,
+			),
+			$theme_id
 		);
 
 		return $this->get_global_list();

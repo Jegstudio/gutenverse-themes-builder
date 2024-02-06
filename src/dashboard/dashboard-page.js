@@ -49,8 +49,6 @@ const DashboardPage = () => {
             );
         });
 
-        // console.log(promises, installed, checked)
-
         Promise.all(promises).then((values) => {
             let checked = true;
             const list = {};
