@@ -712,8 +712,11 @@ class Backend_Api {
 
 		$theme         = wp_get_theme();
 		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
-		$update_colors = maybe_unserialize( $update[0]['colors'] );
+		$update_colors = json_decode( $themedata['post_content'] );
 
+		$update_colors->settings->color->palette->custom = maybe_unserialize( $update[0]['colors'] );
+
+		$update_colors = wp_json_encode( $update_colors );
 		$result = wp_update_post(
 			array(
 				'ID'           => $themedata['ID'],
