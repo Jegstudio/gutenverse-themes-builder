@@ -450,11 +450,14 @@ class Backend_Api {
 		foreach ( $jsondata->page_settings as $key => $settings ) {
 			if ( 'system_colors' === $key || 'custom_colors' === $key ) {
 				foreach ( $settings as $setting ) {
-					$update_colors->settings->color->palette->custom[] = array(
+					$converted_color       = array(
 						'slug'  => $setting->_id,
 						'name'  => $setting->title,
 						'color' => $setting->color,
 					);
+					$converted['colors'][] = $converted_color;
+
+					$update_colors->settings->color->palette->custom[] = $converted_color;
 				}
 			}
 
@@ -464,36 +467,97 @@ class Backend_Api {
 				}
 
 				foreach ( $settings as $setting ) {
-					$converted['fonts'][] = array(
+					$converted_font = array(
 						'id'   => $setting->_id,
 						'name' => $setting->title,
-						'font' => array(
-							'font'       => array(
-								'label' => $setting->typography_font_family,
-								'value' => $setting->typography_font_family,
-								'type'  => $setting->typography_typography ? 'google' : 'system',
-							),
-							'weight'     => $setting->typography_font_weight,
-							'style'      => $setting->typography_font_style,
-							'decoration' => $setting->typography_text_decoration,
-							'transform'  => $setting->typography_text_transform,
-							'size'       => array(
-								'Desktop' => array(
-									'unit'  => $setting->typography_font_size->unit,
-									'point' => $setting->typography_font_size->size,
-								),
-							),
-							'lineHeight' => array(
-								'Desktop' => array(
-									'unit'  => $setting->typography_line_height->unit,
-									'point' => $setting->typography_line_height->size,
-								),
-							),
-							'spacing'    => array(
-								'Desktop' => $this->convert_spacing( $setting->typography_letter_spacing ),
-							),
-						),
+						'font' => array(),
 					);
+
+					if ( isset( $setting->typography_font_family ) ) {
+						$converted_font['font']['font'] = array(
+							'label' => $setting->typography_font_family,
+							'value' => $setting->typography_font_family,
+							'type'  => $setting->typography_typography ? 'google' : 'system',
+						);
+					}
+
+					if ( isset( $setting->typography_font_weight ) ) {
+						$converted_font['font']['weight'] = $setting->typography_font_weight;
+					}
+
+					if ( isset( $setting->typography_font_style ) ) {
+						$converted_font['font']['style'] = $setting->typography_font_style;
+					}
+
+					if ( isset( $setting->typography_text_decoration ) ) {
+						$converted_font['font']['decoration'] = $setting->typography_text_decoration;
+					}
+
+					if ( isset( $setting->typography_text_transform ) ) {
+						$converted_font['font']['transform'] = $setting->typography_text_transform;
+					}
+
+					$converted_font['font']['size'] = array();
+
+					if ( isset( $setting->typography_font_size ) ) {
+						$converted_font['font']['size']['Dekstop'] = array(
+							'unit'  => $setting->typography_font_size->unit,
+							'point' => $setting->typography_font_size->size,
+						);
+					}
+
+					if ( isset( $setting->typography_font_size_tablet ) ) {
+						$converted_font['font']['size']['Tablet'] = array(
+							'unit'  => $setting->typography_font_size_tablet->unit,
+							'point' => $setting->typography_font_size_tablet->size,
+						);
+					}
+
+					if ( isset( $setting->typography_font_size_mobile ) ) {
+						$converted_font['font']['size']['Mobile'] = array(
+							'unit'  => $setting->typography_font_size_mobile->unit,
+							'point' => $setting->typography_font_size_mobile->size,
+						);
+					}
+
+					$converted_font['font']['lineHeight'] = array();
+
+					if ( isset( $setting->typography_line_height ) ) {
+						$converted_font['font']['lineHeight']['Dekstop'] = array(
+							'unit'  => $setting->typography_line_height->unit,
+							'point' => $setting->typography_line_height->size,
+						);
+					}
+
+					if ( isset( $setting->typography_line_height_tablet ) ) {
+						$converted_font['font']['lineHeight']['Tablet'] = array(
+							'unit'  => $setting->typography_line_height_tablet->unit,
+							'point' => $setting->typography_line_height_tablet->size,
+						);
+					}
+
+					if ( isset( $setting->typography_line_height_mobile ) ) {
+						$converted_font['font']['lineHeight']['Mobile'] = array(
+							'unit'  => $setting->typography_line_height_mobile->unit,
+							'point' => $setting->typography_line_height_mobile->size,
+						);
+					}
+
+					$converted_font['font']['spacing'] = array();
+
+					if ( isset( $setting->typography_letter_spacing ) ) {
+						$converted_font['font']['spacing']['Dekstop'] = $this->convert_spacing( $setting->typography_letter_spacing );
+					}
+
+					if ( isset( $setting->typography_letter_spacing_tablet ) ) {
+						$converted_font['font']['spacing']['Tablet'] = $this->convert_spacing( $setting->typography_letter_spacing_tablet );
+					}
+
+					if ( isset( $setting->typography_letter_spacing_mobile ) ) {
+						$converted_font['font']['spacing']['Mobile'] = $this->convert_spacing( $setting->typography_letter_spacing_mobile );
+					}
+
+					$converted['fonts'][] = $converted_font;
 				}
 			}
 		}
@@ -639,7 +703,23 @@ class Backend_Api {
 		$globals   = new Global_Variable();
 		$update    = $global_db->get_data( $global_id );
 
-		$globals->set_global_variable( $update[0] );
+		$globals->set_global_variable(
+			array(
+				'fonts'  => maybe_unserialize( $update[0]['fonts'] ),
+				'colors' => maybe_unserialize( $update[0]['colors'] ),
+			)
+		);
+
+		$theme         = wp_get_theme();
+		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
+		$update_colors = maybe_unserialize( $update[0]['colors'] );
+
+		$result = wp_update_post(
+			array(
+				'ID'           => $themedata['ID'],
+				'post_content' => $update_colors,
+			)
+		);
 
 		$theme_db->update_data(
 			array(
