@@ -424,9 +424,12 @@ class Backend_Api {
 	/**
 	 * Import Global Style from Elementor Template kits Equivalent.
 	 *
-	 * @param array $filedata .
+	 * @param array   $filedata .
+	 * @param boolean $replace .
+	 *
+	 * @return array
 	 */
-	public function global_style_import( $filedata ) {
+	public function global_style_import( $filedata, $replace = false ) {
 		if ( empty( $filedata ) ) {
 			return array(
 				'fonts'  => '',
@@ -562,16 +565,18 @@ class Backend_Api {
 			}
 		}
 
-		$update_colors = wp_json_encode( $update_colors );
-		$result        = wp_update_post(
-			array(
-				'ID'           => $themedata['ID'],
-				'post_content' => $update_colors,
-			)
-		);
+		if ( $replace ) {
+			$update_colors = wp_json_encode( $update_colors );
 
-		// TODO: do some checking here, only update if current active theme using this global style.
-		$globals->set_global_variable( $converted );
+			wp_update_post(
+				array(
+					'ID'           => $themedata['ID'],
+					'post_content' => $update_colors,
+				)
+			);
+
+			$globals->set_global_variable( $converted );
+		}
 
 		return $converted;
 	}
@@ -606,9 +611,6 @@ class Backend_Api {
 	public function get_global_list() {
 		$global_db = Database::instance()->theme_globals;
 		$data      = $global_db->get_all_globals();
-		$theme_db  = Database::instance()->theme_info;
-		$theme_id  = get_option( 'gtb_active_theme_id' );
-		$theme     = $theme_db->get_theme_data( $theme_id );
 
 		foreach ( $data as &$global ) {
 			if ( ! empty( $global['file'] ) ) {
@@ -618,8 +620,25 @@ class Backend_Api {
 
 		return array(
 			'data'   => $data,
-			'active' => $theme[0]['global_id'],
+			'active' => $this->get_active_global_id(),
 		);
+	}
+
+	/**
+	 * Get Active Global ID
+	 *
+	 * @return int|false
+	 */
+	public function get_active_global_id() {
+		$theme_db = Database::instance()->theme_info;
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$theme    = $theme_db->get_theme_data( $theme_id );
+
+		if ( ! empty( $theme ) ) {
+			return $theme[0]['global_id'];
+		}
+
+		return false;
 	}
 
 	/**
@@ -657,17 +676,30 @@ class Backend_Api {
 		$id        = $request->get_param( 'id' );
 		$title     = $request->get_param( 'title' );
 		$filedata  = $request->get_param( 'file' );
-		$imported  = $this->global_style_import( $filedata );
 		$global_db = Database::instance()->theme_globals;
-		$where     = array(
+		$previous  = $global_db->get_data( $id );
+
+		if ( ! empty( $previous ) ) {
+			$decode = maybe_unserialize( $previous[0]['file'] );
+
+			if ( ! empty( $decode ) && (int) $decode['id'] !== (int) $filedata['id'] ) {
+				$replace  = (int) $this->get_active_global_id() === (int) $id;
+				$imported = $this->global_style_import( $filedata, $replace );
+			}
+		}
+
+		$where = array(
 			'id' => $id,
 		);
-		$data      = array(
-			'title'  => $title,
-			'file'   => maybe_serialize( $filedata ),
-			'fonts'  => maybe_serialize( $imported['fonts'] ),
-			'colors' => maybe_serialize( $imported['colors'] ),
+		$data  = array(
+			'title' => $title,
+			'file'  => maybe_serialize( $filedata ),
 		);
+
+		if ( ! empty( $imported ) ) {
+			$data['fonts']  = maybe_serialize( $imported['fonts'] );
+			$data['colors'] = maybe_serialize( $imported['colors'] );
+		}
 
 		$global_db->update_data( $data, $where );
 
@@ -703,6 +735,8 @@ class Backend_Api {
 		$globals   = new Global_Variable();
 		$update    = $global_db->get_data( $global_id );
 
+		// TODO: saving current global style into database before switching.
+
 		$globals->set_global_variable(
 			array(
 				'fonts'  => maybe_unserialize( $update[0]['fonts'] ),
@@ -717,7 +751,7 @@ class Backend_Api {
 		$update_colors->settings->color->palette->custom = maybe_unserialize( $update[0]['colors'] );
 
 		$update_colors = wp_json_encode( $update_colors );
-		$result = wp_update_post(
+		$result        = wp_update_post(
 			array(
 				'ID'           => $themedata['ID'],
 				'post_content' => $update_colors,
