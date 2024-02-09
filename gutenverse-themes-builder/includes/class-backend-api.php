@@ -733,9 +733,27 @@ class Backend_Api {
 		$global_db = Database::instance()->theme_globals;
 		$theme_db  = Database::instance()->theme_info;
 		$globals   = new Global_Variable();
-		$update    = $global_db->get_data( $global_id );
 
-		// TODO: saving current global style into database before switching.
+		// Saving current style.
+		$current_id    = $this->get_active_global_id();
+		$theme         = wp_get_theme();
+		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
+		$update_colors = json_decode( $themedata['post_content'] );
+		$global_colors = $update_colors->settings->color->palette->custom;
+		$global_fonts  = $globals->get_global_variable( 'font' );
+
+		$where = array(
+			'id' => $current_id,
+		);
+		$data  = array(
+			'fonts'  => maybe_serialize( $global_fonts ),
+			'colors' => maybe_serialize( $global_colors ),
+		);
+
+		$global_db->update_data( $data, $where );
+
+		// Switching to new one.
+		$update = $global_db->get_data( $global_id );
 
 		$globals->set_global_variable(
 			array(
