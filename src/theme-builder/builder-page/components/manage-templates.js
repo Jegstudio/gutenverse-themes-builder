@@ -19,6 +19,7 @@ const ManageTemplates = () => {
     const afterFetching = (response) => {
         setThemeMode(response?.mode);
         setTemplateList(response?.data);
+        setTemplateData(null);
         setFetching(false);
     };
 
@@ -85,6 +86,20 @@ const ManageTemplates = () => {
             <div className="template-page-wrapper">
                 {fetching ? <div className="loader"></div> : (
                     templateList ? CATEGORIES.map(item => {
+                        const filteredOptions = [...TEMPLATE_TYPES].filter(type => {
+                            let allowed = true;
+
+                            if (!NAMABLE_TEMPLATES.includes(type?.value)) {
+                                templateList.map(template => {
+                                    if (template?.category === item.id && type?.value === template?.template_type) {
+                                        allowed = false;
+                                    }
+                                });
+                            }
+
+                            return allowed;
+                        });
+
                         return checkThemeMode(item?.id, themeMode) && <div key={item.id} className="template-page-category">
                             <div className="heading">
                                 <h3 className="subtitle">{item.name}</h3>
@@ -94,7 +109,7 @@ const ManageTemplates = () => {
                                     id={'template_type'}
                                     title={__('Type')}
                                     value={templateData?.[item.id]?.template_type}
-                                    options={TEMPLATE_TYPES}
+                                    options={filteredOptions}
                                     onChange={onDataChange(item.id, 'template_type')}
                                 />
                                 {NAMABLE_TEMPLATES.includes(templateData?.[item.id]?.template_type) && <TextControl
