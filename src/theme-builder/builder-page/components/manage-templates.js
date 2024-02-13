@@ -8,6 +8,8 @@ import { checkThemeMode } from '../data/helper';
 import { DeleteAltIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
+import FileControl from '../controls/file-control';
+import { category } from 'gutenverse-core/components';
 
 const ManageTemplates = () => {
     const [themeMode, setThemeMode] = useState(null);
@@ -33,7 +35,9 @@ const ManageTemplates = () => {
                 template_data: {
                     category,
                     name: templateData?.[category]?.name,
-                    template_type: templateData?.[category]?.template_type
+                    template_type: templateData?.[category]?.template_type,
+                    content: templateData?.[category]?.content,
+                    file: templateData?.[category]?.file
                 }
             };
 
@@ -107,7 +111,7 @@ const ManageTemplates = () => {
                             <div className="body">
                                 <SelectControl
                                     id={'template_type'}
-                                    title={__('Type')}
+                                    title={__('Type', 'gtb')}
                                     value={templateData?.[item.id]?.template_type}
                                     options={filteredOptions}
                                     onChange={onDataChange(item.id, 'template_type')}
@@ -117,6 +121,28 @@ const ManageTemplates = () => {
                                     title={__('Name', 'gtb')}
                                     value={templateData?.[item.id]?.name}
                                     onChange={onDataChange(item.id, 'name')}
+                                />}
+                                <SelectControl
+                                    id={'content'}
+                                    title={__('Content', 'gtb')}
+                                    value={templateData?.[item.id]?.content}
+                                    options={[
+                                        {
+                                            value: 'none',
+                                            label: __('None', 'gtb')
+                                        },
+                                        {
+                                            value: 'template_kit',
+                                            label: __('Template Kit', 'gtb'),
+                                        }
+                                    ]}
+                                    onChange={onDataChange(item.id, 'content')}
+                                />
+                                {templateData?.[item.id]?.content === 'template_kit' && <FileControl
+                                    id={'file'}
+                                    title={__('Template JSON file', 'gtb')}
+                                    value={templateData?.[item.id]?.file}
+                                    onChange={onDataChange(item.id, 'file')}
                                 />}
                                 <div className="buttons">
                                     <div className="template-add" onClick={() => addTemplate(item.id)}>{__('Add New', 'gtb')}</div>

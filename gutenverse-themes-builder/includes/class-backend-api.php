@@ -437,8 +437,7 @@ class Backend_Api {
 			);
 		}
 
-		$filepath  = get_attached_file( $filedata['id'] );
-		$jsondata  = json_decode( file_get_contents( $filepath ) );
+		$jsondata  = $this->get_file_json_data( $filedata['id'] );
 		$globals   = new Global_Variable();
 		$converted = array();
 
@@ -1414,9 +1413,7 @@ class Backend_Api {
 			$folder = gtb_theme_folder_path() . '/assets/' . $type;
 			$file   = $folder . '/' . $handler . '.' . $type;
 
-			if ( ! is_dir( $folder ) ) {
-				wp_mkdir_p( $folder );
-			}
+			$this->check_directory( $folder );
 
 			if ( 'css' === $type ) {
 				$content = '.editor-styles-wrapper .wp-block.no-margin { margin-top: 0; margin-bottom: 0; } ' . $content;
@@ -1566,12 +1563,9 @@ class Backend_Api {
 		if ( ! empty( $family ) ) {
 			$slug   = strtolower( str_replace( ' ', '-', $family ) );
 			$folder = gtb_theme_folder_path() . '/assets/fonts/' . $slug;
-
-			if ( ! is_dir( $folder ) ) {
-				wp_mkdir_p( $folder );
-			}
-
 			$weight = $this->get_font_params( $style, $weights );
+
+			$this->check_directory( $folder );
 
 			$download_url = "https://gwfh.mranftl.com/api/fonts/{$slug}?download=zip&variants={$weight}&formats=woff2";
 			$get_file     = wp_remote_get( $download_url );
@@ -1744,6 +1738,32 @@ class Backend_Api {
 	}
 
 	/**
+	 * Loop Template Kit content
+	 *
+	 * @param object $content
+	 */
+	public function content_loop( $content ) {
+		foreach ( $content as $element ) {
+			$content = '';
+
+			if ( isset( $element->isInner ) ) {
+				$content = $this->content_loop( $element->elements );
+			}
+
+			if ( 'widget' === $element->elType ) {
+				switch ( $element->widgetType ) {
+					case 'heading':
+						// TODO: HOW TO CREATE BLOCK IN PHP?
+						// create_block();
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Create template
 	 *
 	 * @param object $request .
@@ -1753,28 +1773,27 @@ class Backend_Api {
 		$theme_id       = get_option( 'gtb_active_theme_id' );
 		$allow_template = gtb_check_theme_mode( $template_data['category'], $theme_id );
 
+		// if ( ! empty( $template_data['file'] ) ) {
+		// $jsondata = $this->get_file_json_data( $template_data['file']['id'] );
+		// $content  = $this->content_loop( $jsondata->content );
+		// }
+
+		// return;
+
 		if ( ! empty( $template_data ) && $theme_id && $allow_template ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			WP_Filesystem();
 			global $wp_filesystem;
 
-			$theme_dir        = gtb_theme_folder_path();
-			$category         = $template_data['category'];
-			$category_folder  = $theme_dir . '/' . $category;
-			$templates_folder = $category_folder . '/templates';
-			$parts_folder     = $category_folder . '/parts';
+			$theme_dir       = gtb_theme_folder_path();
+			$category        = $template_data['category'];
+			$category_folder = $theme_dir . '/' . $category;
+			$template_type   = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_name   = strtolower( str_replace( ' ', '-', $template_data['name'] ) );
+			$file_path       = $category_folder . '/' . $template_type . '/' . $template_name . '.html';
 
-			if ( ! is_dir( $templates_folder ) ) {
-				wp_mkdir_p( $templates_folder );
-			}
-
-			if ( ! is_dir( $parts_folder ) ) {
-				wp_mkdir_p( $parts_folder );
-			}
-
-			$template_type = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
-			$template_name = strtolower( str_replace( ' ', '-', $template_data['name'] ) );
-			$file_path     = $category_folder . '/' . $template_type . '/' . $template_name . '.html';
+			$this->check_directory( $category_folder . '/templates' );
+			$this->check_directory( $category_folder . '/parts' );
 
 			$wp_filesystem->put_contents(
 				$file_path,
@@ -2037,5 +2056,34 @@ class Backend_Api {
 			$placeholder,
 			FS_CHMOD_FILE
 		);
+	}
+
+	/**
+	 * Get JSON data from a file.
+	 *
+	 * @param int $id .
+	 *
+	 * @return object|array
+	 */
+	private function get_file_json_data( $id ) {
+		if ( ! isset( $id ) ) {
+			return array();
+		}
+
+		$filepath = get_attached_file( $id );
+		$content  = file_get_contents( $filepath );
+
+		return json_decode( $content );
+	}
+
+	/**
+	 * Check directory, if there is none, create.
+	 *
+	 * @param string $dir .
+	 */
+	private function check_directory( $dir ) {
+		if ( ! is_dir( $dir ) ) {
+			wp_mkdir_p( $dir );
+		}
 	}
 }
