@@ -821,12 +821,7 @@ class Backend_Api {
 
 		$result = $info_db->create_data( $data );
 
-		/**
-		 * Create theme folder & files
-		 */
-		if ( $result ) {
-			wp_mkdir_p( gtb_theme_folder_path( $theme_id ) );
-		}
+		$this->check_directory( gtb_theme_folder_path( $theme_id ), $result );
 
 		return array(
 			'status' => 'success',
@@ -2079,10 +2074,11 @@ class Backend_Api {
 	/**
 	 * Check directory, if there is none, create.
 	 *
-	 * @param string $dir .
+	 * @param string  $dir .
+	 * @param boolean $condition .
 	 */
-	private function check_directory( $dir ) {
-		if ( ! is_dir( $dir ) ) {
+	private function check_directory( $dir, $condition = true ) {
+		if ( ! is_dir( $dir ) && $condition ) {
 			wp_mkdir_p( $dir );
 		}
 	}
