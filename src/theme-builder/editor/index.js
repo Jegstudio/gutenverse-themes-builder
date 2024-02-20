@@ -6,7 +6,8 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
-import { getAttributes, getMargin } from './convertion/helper';
+import { getAttributes } from './convertion/helper';
+import { createHeadingBlock } from './convertion/blocks/heading';
 
 const contentLoop = (elements) => {
     let blocks = elements.map(element => {
@@ -21,12 +22,7 @@ const contentLoop = (elements) => {
         if ('widget' === element?.elType) {
             switch (element?.widgetType) {
                 case 'heading':
-                    return createBlock('gutenverse/heading', {
-                        content: attr?.title,
-                        margin: getMargin(attr),
-                        color: attr?.title_color,
-                        typography: attr?.typography_typography
-                    }, inner);
+                    return createHeadingBlock(attr, inner);
                 case 'accordion':
                     return createBlock('gutenverse/accordion', {}, inner);
                 case 'button':
