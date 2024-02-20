@@ -124,12 +124,22 @@ class Assets {
 	 */
 	public function register_script() {
 		// Register & Enqueue Style.
-		$include = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
+		$block_includes = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
 
 		wp_enqueue_script(
 			'gtb-block',
 			GTB_URL . '/assets/js/blocks.js',
-			$include['dependencies'],
+			$block_includes['dependencies'],
+			GTB_VERSION,
+			true
+		);
+
+		$editor_includes = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
+
+		wp_enqueue_script(
+			'gtb-editor',
+			GTB_URL . '/assets/js/editor.js',
+			$editor_includes['dependencies'],
 			GTB_VERSION,
 			true
 		);

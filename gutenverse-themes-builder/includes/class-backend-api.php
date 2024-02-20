@@ -353,16 +353,7 @@ class Backend_Api {
 			)
 		);
 
-		// Global Styles .
-		// register_rest_route(
-		// self::ENDPOINT,
-		// 'globalstyle/import',
-		// array(
-		// 'methods'             => 'POST',
-		// 'callback'            => array( $this, 'global_style_import' ),
-		// 'permission_callback' => 'gutenverse_permission_check_admin',
-		// )
-		// );
+		// Global Styles.
 
 		register_rest_route(
 			self::ENDPOINT,
@@ -1733,32 +1724,6 @@ class Backend_Api {
 	}
 
 	/**
-	 * Loop Template Kit content
-	 *
-	 * @param object $content
-	 */
-	public function content_loop( $content ) {
-		foreach ( $content as $element ) {
-			$content = '';
-
-			if ( isset( $element->isInner ) ) {
-				$content = $this->content_loop( $element->elements );
-			}
-
-			if ( 'widget' === $element->elType ) {
-				switch ( $element->widgetType ) {
-					case 'heading':
-						// TODO: HOW TO CREATE BLOCK IN PHP?
-						// create_block();
-						break;
-					default:
-						break;
-				}
-			}
-		}
-	}
-
-	/**
 	 * Create template
 	 *
 	 * @param object $request .
@@ -1767,13 +1732,6 @@ class Backend_Api {
 		$template_data  = $request->get_param( 'template_data' );
 		$theme_id       = get_option( 'gtb_active_theme_id' );
 		$allow_template = gtb_check_theme_mode( $template_data['category'], $theme_id );
-
-		// if ( ! empty( $template_data['file'] ) ) {
-		// $jsondata = $this->get_file_json_data( $template_data['file']['id'] );
-		// $content  = $this->content_loop( $jsondata->content );
-		// }
-
-		// return;
 
 		if ( ! empty( $template_data ) && $theme_id && $allow_template ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
