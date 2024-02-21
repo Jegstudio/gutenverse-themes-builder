@@ -2,18 +2,19 @@ import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
 import { getBackground, getBorder, getMargin, getPadding } from '../helper';
 
-const pairs = {
-    title: 'content',
-    title_color: 'color',
-    typography_typography: 'typography'
-};
+const pairs = {};
 
-export const createHeadingBlock = (attrs, inner) => {
+export const createSectionBlock = (attrs, inner, id) => {
     const attributes = {
         ...getBackground(attrs),
         ...getBorder(attrs),
-        ...getMargin(attrs),
-        ...getPadding(attrs),
+        ...getMargin(attrs, true),
+        ...getPadding(attrs, true),
+        layout: attrs?.layout === 'full_width' ? 'fullwidth' : 'boxed',
+        gap: attrs?.gap,
+        width: attrs?.content_width && {
+            Desktop: attrs?.content_width?.size
+        }
     };
 
     Object.keys(attrs).map(key => {
@@ -23,7 +24,7 @@ export const createHeadingBlock = (attrs, inner) => {
     });
 
     return createBlock(
-        'gutenverse/heading',
+        'gutenverse/section',
         attributes,
         inner
     );

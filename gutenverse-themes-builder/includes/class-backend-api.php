@@ -493,7 +493,7 @@ class Backend_Api {
 					$converted_font['font']['size'] = array();
 
 					if ( isset( $setting->typography_font_size ) ) {
-						$converted_font['font']['size']['Dekstop'] = array(
+						$converted_font['font']['size']['Desktop'] = array(
 							'unit'  => $setting->typography_font_size->unit,
 							'point' => $setting->typography_font_size->size,
 						);
@@ -516,7 +516,7 @@ class Backend_Api {
 					$converted_font['font']['lineHeight'] = array();
 
 					if ( isset( $setting->typography_line_height ) ) {
-						$converted_font['font']['lineHeight']['Dekstop'] = array(
+						$converted_font['font']['lineHeight']['Desktop'] = array(
 							'unit'  => $setting->typography_line_height->unit,
 							'point' => $setting->typography_line_height->size,
 						);
@@ -539,7 +539,7 @@ class Backend_Api {
 					$converted_font['font']['spacing'] = array();
 
 					if ( isset( $setting->typography_letter_spacing ) ) {
-						$converted_font['font']['spacing']['Dekstop'] = $this->convert_spacing( $setting->typography_letter_spacing );
+						$converted_font['font']['spacing']['Desktop'] = $this->convert_spacing( $setting->typography_letter_spacing );
 					}
 
 					if ( isset( $setting->typography_letter_spacing_tablet ) ) {

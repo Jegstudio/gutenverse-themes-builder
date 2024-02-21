@@ -1,17 +1,3 @@
-// Sort Fonts
-// arrayName.sort((a, b) => {
-//     let fa = a.value.toLowerCase(),
-//         fb = b.value.toLowerCase();
-
-//     if (fa < fb) {
-//         return -1;
-//     }
-//     if (fa > fb) {
-//         return 1;
-//     }
-//     return 0;
-// });
-
 export const GOOGLE_FONTS = [
     {
         value: "ABeeZee",

@@ -2,13 +2,9 @@ import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
 import { getBackground, getBorder, getMargin, getPadding } from '../helper';
 
-const pairs = {
-    title: 'content',
-    title_color: 'color',
-    typography_typography: 'typography'
-};
+const pairs = {};
 
-export const createHeadingBlock = (attrs, inner) => {
+export const createIconBlock = (attrs, inner) => {
     const attributes = {
         ...getBackground(attrs),
         ...getBorder(attrs),
@@ -23,7 +19,7 @@ export const createHeadingBlock = (attrs, inner) => {
     });
 
     return createBlock(
-        'gutenverse/heading',
+        'gutenverse/icon',
         attributes,
         inner
     );

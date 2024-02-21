@@ -89,10 +89,6 @@ const EditGlobal = ({ data, setMode, updateGlobalList }) => {
     };
 
     const updateGlobalData = () => {
-        // const formData = new FormData();
-        // formData.append('file', files[0]);
-        // formData.append('name', 'name');
-        // formData.append('title', 'Global Title');
         setLoading(true);
         updateGlobal({ ...globalData }, updateCallback);
     };
@@ -130,10 +126,6 @@ const CreateGlobal = ({ setMode, updateGlobalList }) => {
     };
 
     const createGlobalData = () => {
-        // const formData = new FormData();
-        // formData.append('file', files[0]);
-        // formData.append('name', 'name');
-        // formData.append('title', 'Global Title');
         setLoading(true);
         createGlobal({ ...globalData }, updateCallback);
     };

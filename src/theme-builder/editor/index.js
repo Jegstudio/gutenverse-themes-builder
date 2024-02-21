@@ -8,6 +8,12 @@ import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
 import { getAttributes } from './convertion/helper';
 import { createHeadingBlock } from './convertion/blocks/heading';
+import { createSectionBlock } from './convertion/blocks/section';
+import { createColumnBlock } from './convertion/blocks/column';
+import { createImageBlock } from './convertion/blocks/image';
+import { createButtonBlock } from './convertion/blocks/button';
+import { createIconBlock } from './convertion/blocks/icon';
+import { createFunFactBlock } from './convertion/blocks/fun-fact';
 
 const contentLoop = (elements) => {
     let blocks = elements.map(element => {
@@ -24,43 +30,46 @@ const contentLoop = (elements) => {
                 case 'heading':
                     return createHeadingBlock(attr, inner);
                 case 'accordion':
-                    return createBlock('gutenverse/accordion', {}, inner);
+                    return createBlock('gutenverse/accordions', {}, inner);
                 case 'button':
-                    return createBlock('gutenverse/accordion', {}, inner);
+                    return createButtonBlock(attr, inner);
                 case 'divider':
                     return createBlock('gutenverse/divider', {}, inner);
                 case 'icon':
-                    return createBlock('gutenverse/icon', {}, inner);
+                    return createIconBlock(attr, inner);
                 case 'icon-list':
                     return createBlock('gutenverse/icon-list', {}, inner);
                 case 'image':
-                    return createBlock('gutenverse/image', {
-                        imgSrc: {
-                            media: {
-                                imageId: attr?.image?.id,
-                                sizes: {
-                                    full: attr?.image
-                                }
-                            }
-                        }
-                    }, inner);
+                    return createImageBlock(attr, inner);
+                case 'rating':
+                    return createBlock('gutenverse/rating', {}, inner);
                 case 'spacer':
                     return createBlock('gutenverse/spacer', {}, inner);
                 case 'text-editor':
                     return createBlock('gutenverse/text-editor', {}, inner);
+                case 'jkit_dual_button':
+                    return createBlock('gutenverse/buttons', {}, inner);
                 case 'jkit_heading':
                     return createBlock('gutenverse/advanced-heading', {}, inner);
+                case 'jkit_gallery':
+                    return createBlock('gutenverse/gallery', {}, inner);
+                case 'icon-box':
+                case 'jkit_icon_box':
+                    return createBlock('gutenverse/icon-box', {}, inner);
+                case 'image-box':
+                case 'jkit_image_box':
+                    return createBlock('gutenverse/image-box', {}, inner);
+                case 'jkit_fun_fact':
+                    return createFunFactBlock(attr, inner);
+                case 'jkit_logo_slider':
+                    return createBlock('gutenverse/logo-slider', {}, inner);
                 default:
                     return createBlock('core/paragraph', {}, inner);
             }
         } else if ('section' === element?.elType) {
-            return createBlock('gutenverse/section', {}, inner);
+            return createSectionBlock(attr, inner);
         } else if ('column' === element?.elType) {
-            return createBlock('gutenverse/column', {
-                width: {
-                    Desktop: attr?._column_size
-                }
-            }, inner);
+            return createColumnBlock(attr, inner);
         } else {
             return createBlock('core/group', {}, inner);
         }
