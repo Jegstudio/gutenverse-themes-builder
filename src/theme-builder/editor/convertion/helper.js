@@ -396,5 +396,23 @@ export const getAttrPositioning = ({ attrs }) => {
         };
     }
 
+    if (attrs?._element_custom_width) {
+        result['positioningType'] = {
+            Desktop: 'custom',
+        };
+
+        result['positioningWidth'] = getValueResponsive(attrs, '_element_custom_width', getValueUnitPoint);
+    }
+
+    if (attrs?._position) {
+        result['positioningLocation'] = attrs?._position;
+    }
+
+    result['positioningTop'] = getValueResponsive(attrs, '_offset_y', getValueUnitPoint);
+    result['positioningRight'] = getValueResponsive(attrs, '_offset_x_end', getValueUnitPoint);
+    result['positioningBottom'] = getValueResponsive(attrs, '_offset_y_end', getValueUnitPoint);
+    result['positioningLeft'] = getValueResponsive(attrs, '_offset_x', getValueUnitPoint);
+
+
     return result;
 }

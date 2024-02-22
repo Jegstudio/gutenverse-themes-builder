@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueResponsive, getValueUnitPoint } from '../helper';
 
 const pairs = {};
 
@@ -24,7 +24,8 @@ export const createImageBlock = (attrs, inner) => {
                     full: attrs?.image
                 }
             }
-        }
+        },
+        width: getValueResponsive(attrs, 'width', getValueUnitPoint)
     };
 
     Object.keys(attrs).map(key => {
