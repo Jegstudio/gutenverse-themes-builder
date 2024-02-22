@@ -1,15 +1,22 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getBackground, getBorder, getMargin, getPadding } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex } from '../helper';
 
 const pairs = {};
 
 export const createButtonBlock = (attrs, inner) => {
+    const params = {
+        attrs,
+        prefix: '_'
+    };
     const attributes = {
-        ...getBackground(attrs),
-        ...getBorder(attrs),
-        ...getMargin(attrs),
-        ...getPadding(attrs),
+        ...getAttrBackground(params),
+        ...getAttrBorder(params),
+        ...getAttrBorderResponsive(params),
+        ...getAttrMargin(params),
+        ...getAttrPadding(params),
+        ...getAttrPositioning(params),
+        ...getAttrZIndex(params),
     };
 
     Object.keys(attrs).map(key => {

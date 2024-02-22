@@ -14,6 +14,7 @@ import { createImageBlock } from './convertion/blocks/image';
 import { createButtonBlock } from './convertion/blocks/button';
 import { createIconBlock } from './convertion/blocks/icon';
 import { createFunFactBlock } from './convertion/blocks/fun-fact';
+import { createIconBoxBlock } from './convertion/blocks/icon-box';
 
 const contentLoop = (elements) => {
     let blocks = elements.map(element => {
@@ -55,7 +56,7 @@ const contentLoop = (elements) => {
                     return createBlock('gutenverse/gallery', {}, inner);
                 case 'icon-box':
                 case 'jkit_icon_box':
-                    return createBlock('gutenverse/icon-box', {}, inner);
+                    return createIconBoxBlock(attr, inner);
                 case 'image-box':
                 case 'jkit_image_box':
                     return createBlock('gutenverse/image-box', {}, inner);

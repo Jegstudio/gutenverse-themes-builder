@@ -6,327 +6,336 @@ export const getAttributes = (data) => {
         return {};
     }
 
-    const attr = data?.settings;
+    const attrs = data?.settings;
 
-    if (!isEmpty(attr?.__globals__)) {
-        Object.keys(attr?.__globals__).map(key => {
-            if (attr?.__globals__[key].includes('globals\/colors?id=')) { // eslint-disable-line no-useless-escape
-                attr[key] = {
+    if (!isEmpty(attrs?.__globals__)) {
+        Object.keys(attrs?.__globals__).map(key => {
+            if (attrs?.__globals__[key].includes('globals\/colors?id=')) { // eslint-disable-line no-useless-escape
+                attrs[key] = {
                     type: 'variable',
-                    id: attr?.__globals__[key].replace('globals\/colors?id=', '') // eslint-disable-line no-useless-escape
+                    id: attrs?.__globals__[key].replace('globals\/colors?id=', '') // eslint-disable-line no-useless-escape
                 };
             }
 
-            if (attr?.__globals__[key].includes('globals\/typography?id=')) { // eslint-disable-line no-useless-escape
-                attr[key] = {
+            if (attrs?.__globals__[key].includes('globals\/typography?id=')) { // eslint-disable-line no-useless-escape
+                attrs[key] = {
                     type: 'variable',
-                    id: attr?.__globals__[key].replace('globals\/typography?id=', '') // eslint-disable-line no-useless-escape
+                    id: attrs?.__globals__[key].replace('globals\/typography?id=', '') // eslint-disable-line no-useless-escape
                 };
             }
         });
     }
 
-    return attr;
+    return attrs;
 };
 
-const getDeviceValue = (attr, key) => {
+export const getValueNormal = (attrs, key) => {
+    return attrs?.[key];
+}
+
+export const getValueUnitPoint = (attrs, key) => {
+    return {
+        unit: attrs?.[`${key}`]?.unit,
+        point: attrs?.[`${key}`]?.size
+    };
+}
+
+export const getDimensionValue = (attrs, key) => {
+    return {
+        unit: attrs?.[`${key}`]?.unit,
+        dimension: {
+            top: attrs?.[`${key}`]?.top,
+            right: attrs?.[`${key}`]?.right,
+            bottom: attrs?.[`${key}`]?.bottom,
+            left: attrs?.[`${key}`]?.left
+        }
+    };
+}
+
+export const getValueResponsive = (attrs, key, callback = () => { }) => {
     const result = {};
 
-    if (attr?.[`${key}`]) {
-        result['Desktop'] = {
-            unit: attr?.[`${key}`]?.unit,
-            dimension: {
-                top: attr?.[`${key}`]?.top,
-                right: attr?.[`${key}`]?.right,
-                bottom: attr?.[`${key}`]?.bottom,
-                left: attr?.[`${key}`]?.left
-            }
-        };
+    if (attrs?.[`${key}`]) {
+        result['Desktop'] = callback(attrs, `${key}`);
     }
 
-    if (attr?.[`${key}_tablet`]) {
-        result['Tablet'] = {
-            unit: attr?.[`${key}_tablet`].unit,
-            dimension: {
-                top: attr?.[`${key}_tablet`].top,
-                right: attr?.[`${key}_tablet`].right,
-                bottom: attr?.[`${key}_tablet`].bottom,
-                left: attr?.[`${key}_tablet`].left
-            }
-        };
+    if (attrs?.[`${key}_tablet`]) {
+        result['Tablet'] = callback(attrs, `${key}_tablet`);
     }
 
-    if (attr?.[`${key}_mobile`]) {
-        result['Mobile'] = {
-            unit: attr?.[`${key}_mobile`]?.unit,
-            dimension: {
-                top: attr?.[`${key}_mobile`]?.top,
-                right: attr?.[`${key}_mobile`]?.right,
-                bottom: attr?.[`${key}_mobile`]?.bottom,
-                left: attr?.[`${key}_mobile`]?.left
-            }
-        };
+    if (attrs?.[`${key}_mobile`]) {
+        result['Mobile'] = callback(attrs, `${key}_mobile`);
     }
 
     return result
 }
 
-export const getMargin = (attr, wrapper = false) => {
-    const key = wrapper ? 'margin' : '_margin';
-
+export const getAttrMargin = ({ attrs, name = 'margin', prefix = '' }) => {
     return {
-        margin: getDeviceValue(attr, key)
+        [name]: getValueResponsive(attrs, `${prefix}margin`, getDimensionValue)
     };
 };
 
-export const getPadding = (attr, wrapper = false) => {
-    const key = wrapper ? 'padding' : '_padding';
-
+export const getAttrPadding = ({ attrs, name = 'padding', prefix = '' }) => {
     return {
-        padding: getDeviceValue(attr, key)
+        [name]: getValueResponsive(attrs, `${prefix}padding`, getDimensionValue)
     };
 };
 
-export const getBorder = (attr) => {
+export const getAttrZIndex = ({ attrs, name = 'zIndex', prefix = '' }) => {
+    return {
+        [name]: getValueResponsive(attrs, `${prefix}z_index`, getValueNormal)
+    };
+};
+
+export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', prefix = '' }) => {
     const result = {
-        'border': {},
-        'borderResponsive': {}
+        [name]: {},
     };
 
-    if (attr?._border_border) {
-        if (attr?._border_width) {
-            if (isEmpty(attr?._border_width?.isLinked)) {
-                result['border'] = {
+    if (attrs?.[`${prefix}border_border`]) {
+
+        if (attrs?.[`${prefix}border_width_tablet`]) {
+            if (isEmpty(attrs?.[`${prefix}border_width_tablet`]?.isLinked)) {
+                result[name]['Tablet'] = {
                     top: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     right: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     bottom: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     left: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 }
 
-                if (attr?._border_color) {
-                    result['border']['top'] = {
-                        ...result['border']['top'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['Tablet']['top'] = {
+                        ...result[name]['Tablet']['top'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['border']['right'] = {
-                        ...result['border']['right'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Tablet']['right'] = {
+                        ...result[name]['Tablet']['right'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['border']['bottom'] = {
-                        ...result['border']['bottom'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Tablet']['bottom'] = {
+                        ...result[name]['Tablet']['bottom'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['border']['left'] = {
-                        ...result['border']['left'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Tablet']['left'] = {
+                        ...result[name]['Tablet']['left'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['border']['top'] = {
-                    ...result['border']['top'],
-                    width: attr?._border_width?.top
+                result[name]['Tablet']['top'] = {
+                    ...result[name]['Tablet']['top'],
+                    width: attrs?.[`${prefix}border_width_tablet`]?.top
                 }
 
-                result['border']['right'] = {
-                    ...result['border']['right'],
-                    width: attr?._border_width?.right
+                result[name]['Tablet']['right'] = {
+                    ...result[name]['Tablet']['right'],
+                    width: attrs?.[`${prefix}border_width_tablet`]?.right
                 }
 
-                result['border']['bottom'] = {
-                    ...result['border']['bottom'],
-                    width: attr?._border_width?.bottom
+                result[name]['Tablet']['bottom'] = {
+                    ...result[name]['Tablet']['bottom'],
+                    width: attrs?.[`${prefix}border_width_tablet`]?.bottom
                 }
 
-                result['border']['left'] = {
-                    ...result['border']['left'],
-                    width: attr?._border_width?.left
+                result[name]['Tablet']['left'] = {
+                    ...result[name]['Tablet']['left'],
+                    width: attrs?.[`${prefix}border_width_tablet`]?.left
                 }
             } else {
-                result['border'] = {
+                result[name]['Tablet'] = {
                     all: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
-                if (attr?._border_color) {
-                    result['border']['all'] = {
-                        ...result['border']['all'],
-                        color: hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['Tablet']['all'] = {
+                        ...result[name]['Tablet']['all'],
+                        color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['border']['all'] = {
-                    ...result['border']['all'],
-                    width: attr?._border_width?.top
+                result[name]['Tablet']['all'] = {
+                    ...result[name]['Tablet']['all'],
+                    width: attrs?.[`${prefix}border_width_tablet`]?.top
                 }
             }
         }
 
-        if (attr?._border_width_tablet) {
-            if (isEmpty(attr?._border_width_tablet?.isLinked)) {
-                result['borderResponsive']['Tablet'] = {
+        if (attrs?.[`${prefix}border_width_mobile`]) {
+            if (isEmpty(attrs?.[`${prefix}border_width_mobile`]?.isLinked)) {
+                result[name]['Mobile'] = {
                     top: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     right: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     bottom: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     left: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 }
 
-                if (attr?._border_color) {
-                    result['borderResponsive']['Tablet']['top'] = {
-                        ...result['borderResponsive']['Tablet']['top'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['Mobile']['top'] = {
+                        ...result[name]['Mobile']['top'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Tablet']['right'] = {
-                        ...result['borderResponsive']['Tablet']['right'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Mobile']['right'] = {
+                        ...result[name]['Mobile']['right'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Tablet']['bottom'] = {
-                        ...result['borderResponsive']['Tablet']['bottom'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Mobile']['bottom'] = {
+                        ...result[name]['Mobile']['bottom'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Tablet']['left'] = {
-                        ...result['borderResponsive']['Tablet']['left'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['Mobile']['left'] = {
+                        ...result[name]['Mobile']['left'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['borderResponsive']['Tablet']['top'] = {
-                    ...result['borderResponsive']['Tablet']['top'],
-                    width: attr?._border_width_tablet?.top
+                result[name]['Mobile']['top'] = {
+                    ...result[name]['Mobile']['top'],
+                    width: attrs?.[`${prefix}border_width_mobile`]?.top
                 }
 
-                result['borderResponsive']['Tablet']['right'] = {
-                    ...result['borderResponsive']['Tablet']['right'],
-                    width: attr?._border_width_tablet?.right
+                result[name]['Mobile']['right'] = {
+                    ...result[name]['Mobile']['right'],
+                    width: attrs?.[`${prefix}border_width_mobile`]?.right
                 }
 
-                result['borderResponsive']['Tablet']['bottom'] = {
-                    ...result['borderResponsive']['Tablet']['bottom'],
-                    width: attr?._border_width_tablet?.bottom
+                result[name]['Mobile']['bottom'] = {
+                    ...result[name]['Mobile']['bottom'],
+                    width: attrs?.[`${prefix}border_width_mobile`]?.bottom
                 }
 
-                result['borderResponsive']['Tablet']['left'] = {
-                    ...result['borderResponsive']['Tablet']['left'],
-                    width: attr?._border_width_tablet?.left
+                result[name]['Mobile']['left'] = {
+                    ...result[name]['Mobile']['left'],
+                    width: attrs?.[`${prefix}border_width_mobile`]?.left
                 }
             } else {
-                result['borderResponsive']['Tablet'] = {
+                result[name]['Mobile'] = {
                     all: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
-                if (attr?._border_color) {
-                    result['borderResponsive']['Tablet']['all'] = {
-                        ...result['borderResponsive']['Tablet']['all'],
-                        color: hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['Mobile']['all'] = {
+                        ...result[name]['Mobile']['all'],
+                        color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['borderResponsive']['Tablet']['all'] = {
-                    ...result['borderResponsive']['Tablet']['all'],
-                    width: attr?._border_width_tablet?.top
+                result[name]['Mobile']['all'] = {
+                    ...result[name]['Mobile']['all'],
+                    width: attrs?.[`${prefix}border_width_mobile`]?.top
                 }
             }
         }
+    }
+}
 
-        if (attr?._border_width_mobile) {
-            if (isEmpty(attr?._border_width_mobile?.isLinked)) {
-                result['borderResponsive']['Mobile'] = {
+export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
+    const result = {
+        [name]: {},
+    };
+
+    if (attrs?.[`${prefix}border_border`]) {
+        if (attrs?.[`${prefix}border_width`]) {
+            if (isEmpty(attrs?.[`${prefix}border_width`]?.isLinked)) {
+                result[name]['border'] = {
                     top: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     right: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     bottom: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     },
                     left: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 }
 
-                if (attr?._border_color) {
-                    result['borderResponsive']['Mobile']['top'] = {
-                        ...result['borderResponsive']['Mobile']['top'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['border']['top'] = {
+                        ...result[name]['border']['top'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Mobile']['right'] = {
-                        ...result['borderResponsive']['Mobile']['right'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['border']['right'] = {
+                        ...result[name]['border']['right'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Mobile']['bottom'] = {
-                        ...result['borderResponsive']['Mobile']['bottom'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['border']['bottom'] = {
+                        ...result[name]['border']['bottom'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result['borderResponsive']['Mobile']['left'] = {
-                        ...result['borderResponsive']['Mobile']['left'],
-                        color: attr?._border_color?.type === 'variable' ? attr?._border_color : hexToRgb(attr?._border_color)
+                    result[name]['border']['left'] = {
+                        ...result[name]['border']['left'],
+                        color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['borderResponsive']['Mobile']['top'] = {
-                    ...result['borderResponsive']['Mobile']['top'],
-                    width: attr?._border_width_mobile?.top
+                result[name]['border']['top'] = {
+                    ...result[name]['border']['top'],
+                    width: attrs?.[`${prefix}border_width`]?.top
                 }
 
-                result['borderResponsive']['Mobile']['right'] = {
-                    ...result['borderResponsive']['Mobile']['right'],
-                    width: attr?._border_width_mobile?.right
+                result[name]['border']['right'] = {
+                    ...result[name]['border']['right'],
+                    width: attrs?.[`${prefix}border_width`]?.right
                 }
 
-                result['borderResponsive']['Mobile']['bottom'] = {
-                    ...result['borderResponsive']['Mobile']['bottom'],
-                    width: attr?._border_width_mobile?.bottom
+                result[name]['border']['bottom'] = {
+                    ...result[name]['border']['bottom'],
+                    width: attrs?.[`${prefix}border_width`]?.bottom
                 }
 
-                result['borderResponsive']['Mobile']['left'] = {
-                    ...result['borderResponsive']['Mobile']['left'],
-                    width: attr?._border_width_mobile?.left
+                result[name]['border']['left'] = {
+                    ...result[name]['border']['left'],
+                    width: attrs?.[`${prefix}border_width`]?.left
                 }
             } else {
-                result['borderResponsive']['Mobile'] = {
+                result[name]['border'] = {
                     all: {
-                        type: attr?._border_border
+                        type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
-                if (attr?._border_color) {
-                    result['borderResponsive']['Mobile']['all'] = {
-                        ...result['borderResponsive']['Mobile']['all'],
-                        color: hexToRgb(attr?._border_color)
+                if (attrs?.[`${prefix}border_color`]) {
+                    result[name]['border']['all'] = {
+                        ...result[name]['border']['all'],
+                        color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result['borderResponsive']['Mobile']['all'] = {
-                    ...result['borderResponsive']['Mobile']['all'],
-                    width: attr?._border_width_mobile?.top
+                result[name]['border']['all'] = {
+                    ...result[name]['border']['all'],
+                    width: attrs?.[`${prefix}border_width`]?.top
                 }
             }
         }
@@ -335,44 +344,56 @@ export const getBorder = (attr) => {
     return result;
 }
 
-export const getBackground = (attr) => {
+export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) => {
     const result = {
-        background: {}
+        [name]: {}
     };
 
-    if (attr?.background_background === 'classic') {
-        result['background'] = {
+    if (attrs?.[`${prefix}background_background`] === 'classic') {
+        result[name] = {
             type: 'default',
-            color: attr?.background_color?.type === 'variable' ? attr?.background_color : hexToRgb(attr?.background_color),
+            color: attrs?.[`${prefix}background_color`]?.type === 'variable' ? attrs?.[`${prefix}background_color`] : hexToRgb(attrs?.[`${prefix}background_color`]),
             image: {}
         }
 
-        if (attr?.background_image) {
-            result['background']['image'] = {
+        if (attrs?.[`${prefix}background_image`]) {
+            result[name]['image'] = {
                 Desktop: {
-                    id: attr?.background_image?.id,
-                    image: attr?.background_image?.url,
+                    id: attrs?.[`${prefix}background_image`]?.id,
+                    image: attrs?.[`${prefix}background_image`]?.url,
                 }
             }
         }
 
-        if (attr?.background_image_tablet) {
-            result['background']['image'] = {
+        if (attrs?.[`${prefix}background_image_tablet`]) {
+            result[name]['image'] = {
                 Tablet: {
-                    id: attr?.background_image_tablet?.id,
-                    image: attr?.background_image_tablet?.url,
+                    id: attrs?.[`${prefix}background_image_tablet`]?.id,
+                    image: attrs?.[`${prefix}background_image_tablet`]?.url,
                 }
             }
         }
 
-        if (attr?.background_image_mobile) {
-            result['background']['image'] = {
+        if (attrs?.[`${prefix}background_image_mobile`]) {
+            result[name]['image'] = {
                 Mobile: {
-                    id: attr?.background_image_mobile?.id,
-                    image: attr?.background_image_mobile?.url,
+                    id: attrs?.[`${prefix}background_image_mobile`]?.id,
+                    image: attrs?.[`${prefix}background_image_mobile`]?.url,
                 }
             }
         }
+    }
+
+    return result;
+}
+
+export const getAttrPositioning = ({ attrs }) => {
+    const result = {};
+
+    if (attrs?._element_width) {
+        result['positioningType'] = {
+            Desktop: attrs?._element_width === 'auto' ? 'inline' : 'default',
+        };
     }
 
     return result;
