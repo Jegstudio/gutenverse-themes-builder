@@ -15,6 +15,8 @@ import { createButtonBlock } from './convertion/blocks/button';
 import { createIconBlock } from './convertion/blocks/icon';
 import { createFunFactBlock } from './convertion/blocks/fun-fact';
 import { createIconBoxBlock } from './convertion/blocks/icon-box';
+import { createIconListBlock } from './convertion/blocks/icon-list';
+import { createAdvancedHeadingBlock } from './convertion/blocks/advanced-heading';
 
 const contentLoop = (elements) => {
     let blocks = elements.map(element => {
@@ -29,7 +31,7 @@ const contentLoop = (elements) => {
         if ('widget' === element?.elType) {
             switch (element?.widgetType) {
                 case 'heading':
-                    return createHeadingBlock(attr, inner);
+                    return createHeadingBlock(attr);
                 case 'accordion':
                     return createBlock('gutenverse/accordions', {}, inner);
                 case 'button':
@@ -43,9 +45,9 @@ const contentLoop = (elements) => {
                 case 'jkit_icon_box':
                     return createIconBoxBlock(attr, inner);
                 case 'icon-list':
-                    return createBlock('gutenverse/icon-list', {}, inner);
+                    return createIconListBlock(attr);
                 case 'image':
-                    return createImageBlock(attr, inner);
+                    return createImageBlock(attr);
                 case 'image-box':
                 case 'jkit_image_box':
                     return createBlock('gutenverse/image-box', {}, inner);
@@ -58,11 +60,11 @@ const contentLoop = (elements) => {
                 case 'jkit_dual_button':
                     return createBlock('gutenverse/buttons', {}, inner);
                 case 'jkit_heading':
-                    return createBlock('gutenverse/advanced-heading', {}, inner);
+                    return createAdvancedHeadingBlock(attr);
                 case 'jkit_gallery':
                     return createBlock('gutenverse/gallery', {}, inner);
                 case 'jkit_fun_fact':
-                    return createFunFactBlock(attr, inner);
+                    return createFunFactBlock(attr);
                 case 'jkit_logo_slider':
                     return createBlock('gutenverse/logo-slider', {}, inner);
                 default:

@@ -4,7 +4,7 @@ import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargi
 
 const pairs = {};
 
-export const createImageBlock = (attrs, inner) => {
+export const createImageBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -46,7 +46,6 @@ export const createImageBlock = (attrs, inner) => {
 
     return createBlock(
         'gutenverse/image',
-        attributes,
-        inner
+        attributes
     );
 };

@@ -9,7 +9,7 @@ const pairs = {
     st_content_number_typography_content_typography_typography: 'numberTypography',
 };
 
-export const createFunFactBlock = (attrs, inner) => {
+export const createFunFactBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -62,7 +62,6 @@ export const createFunFactBlock = (attrs, inner) => {
 
     return createBlock(
         'gutenverse/fun-fact',
-        attributes,
-        inner
+        attributes
     );
 };

@@ -8,7 +8,7 @@ const pairs = {
     typography_typography: 'typography'
 };
 
-export const createHeadingBlock = (attrs, inner) => {
+export const createHeadingBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -31,7 +31,6 @@ export const createHeadingBlock = (attrs, inner) => {
 
     return createBlock(
         'gutenverse/heading',
-        attributes,
-        inner
+        attributes
     );
 };
