@@ -33,11 +33,8 @@ export const getValueNormal = (attrs, key) => {
     return attrs?.[key];
 }
 
-export const getValueSize = (attrs, key) => {
-    return {
-        unit: attrs?.[`${key}`]?.unit,
-        point: attrs?.[`${key}`]?.size
-    };
+export const getValueRange = (attrs, key) => {
+    return attrs?.[`${key}`]?.size;
 }
 
 export const getValueUnitPoint = (attrs, key) => {

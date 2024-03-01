@@ -22,6 +22,9 @@ import { createTextEditorBlock } from './convertion/blocks/text-editor';
 import { createTestimonialsBlock } from './convertion/blocks/testimonials';
 import { createTeamBlock } from './convertion/blocks/team';
 import { createDividerBlock } from './convertion/blocks/divider';
+import { createImageBoxBlock } from './convertion/blocks/image-box';
+import { createProgressBarBlock } from './convertion/blocks/progress-bar';
+import { cerateGoogleMapsBlock } from './convertion/blocks/google-maps';
 
 const wrapperElements = [
     'section',
@@ -41,7 +44,7 @@ const convertWidget = (type, attrs, inner) => {
         case 'jkit_gallery':
             return createBlock('gutenverse/gallery', {}, inner);
         case 'google_maps':
-            return createBlock('gutenverse/google-maps', {}, inner);
+            return cerateGoogleMapsBlock(attrs);
         case 'heading':
             return createHeadingBlock(attrs);
         case 'icon':
@@ -55,10 +58,10 @@ const convertWidget = (type, attrs, inner) => {
             return createImageBlock(attrs);
         case 'image-box':
         case 'jkit_image_box':
-            return createBlock('gutenverse/image-box', {}, inner);
+            return createImageBoxBlock(attrs);
         case 'progress-bar':
         case 'jkit_progress_bar':
-            return createBlock('gutenverse/progress-bar', {}, inner);
+            return createProgressBarBlock(attrs);
         case 'rating':
             return createBlock('gutenverse/rating', {}, inner);
         case 'social-icons':
