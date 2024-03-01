@@ -21,6 +21,7 @@ import { createSpacerBlock } from './convertion/blocks/spacer';
 import { createTextEditorBlock } from './convertion/blocks/text-editor';
 import { createTestimonialsBlock } from './convertion/blocks/testimonials';
 import { createTeamBlock } from './convertion/blocks/team';
+import { createDividerBlock } from './convertion/blocks/divider';
 
 const wrapperElements = [
     'section',
@@ -29,15 +30,20 @@ const wrapperElements = [
 
 const convertWidget = (type, attrs, inner) => {
     switch (type) {
-        case 'heading':
-            return createHeadingBlock(attrs);
         case 'accordion':
             return createBlock('gutenverse/accordions', {}, inner);
         case 'button':
         case 'jkit_video_button':
-            return createButtonBlock(attrs, inner);
+            return createButtonBlock(attrs);
         case 'divider':
-            return createBlock('gutenverse/divider', {}, inner);
+            return createDividerBlock(attrs);
+        case 'gallery':
+        case 'jkit_gallery':
+            return createBlock('gutenverse/gallery', {}, inner);
+        case 'google_maps':
+            return createBlock('gutenverse/google-maps', {}, inner);
+        case 'heading':
+            return createHeadingBlock(attrs);
         case 'icon':
             return createIconBlock(attrs, inner);
         case 'icon-box':
@@ -50,26 +56,58 @@ const convertWidget = (type, attrs, inner) => {
         case 'image-box':
         case 'jkit_image_box':
             return createBlock('gutenverse/image-box', {}, inner);
+        case 'progress-bar':
+        case 'jkit_progress_bar':
+            return createBlock('gutenverse/progress-bar', {}, inner);
         case 'rating':
             return createBlock('gutenverse/rating', {}, inner);
+        case 'social-icons':
+            return createBlock('gutenverse/social-icons', {}, inner);
         case 'spacer':
             return createSpacerBlock(attrs);
+        case 'tabs':
+        case 'jkit_tabs':
+            return createBlock('gutenverse/tabs', {}, inner);
         case 'text-editor':
             return createTextEditorBlock(attrs);
+        case 'video':
+            return createBlock('gutenverse/video', {}, inner);
+        case 'jkit_client_logo':
+            return createBlock('gutenverse/logo-slider', {}, inner);
         case 'jkit_dual_button':
             return createBlock('gutenverse/buttons', {}, inner);
         case 'jkit_heading':
             return createAdvancedHeadingBlock(attrs);
-        case 'jkit_gallery':
-            return createBlock('gutenverse/gallery', {}, inner);
         case 'jkit_fun_fact':
             return createFunFactBlock(attrs);
-        case 'jkit_logo_slider':
-            return createBlock('gutenverse/logo-slider', {}, inner);
+        case 'jkit_nav_menu':
+            return createBlock('gutenverse/nav-menu', {}, inner);
+        case 'jkit_social_share':
+            return createBlock('gutenverse/social-share', {}, inner);
         case 'jkit_team':
             return createTeamBlock(attrs);
         case 'jkit_testimonials':
             return createTestimonialsBlock(attrs);
+        case 'jkit_post_author':
+            return createBlock('gutenverse/post-author', {}, inner);
+        case 'jkit_post_block':
+            return createBlock('gutenverse/post-block', {}, inner);
+        case 'jkit_post_comment':
+            return createBlock('gutenverse/post-comment', {}, inner);
+        case 'jkit_post_content':
+            return createBlock('gutenverse/post-content', {}, inner);
+        case 'jkit_post_date':
+            return createBlock('gutenverse/post-date', {}, inner);
+        case 'jkit_post_excerpt':
+            return createBlock('gutenverse/post-excerpt', {}, inner);
+        case 'jkit_post_featured_image':
+            return createBlock('gutenverse/post-featured-image', {}, inner);
+        case 'jkit_post_list':
+            return createBlock('gutenverse/post-list', {}, inner);
+        case 'jkit_post_terms':
+            return createBlock('gutenverse/post-terms', {}, inner);
+        case 'jkit_post_title':
+            return createBlock('gutenverse/post-title', {}, inner);
         default:
             return createBlock('core/paragraph', {}, inner);
     }

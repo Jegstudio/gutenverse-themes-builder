@@ -30,6 +30,25 @@ export const createTeamBlock = (attrs) => {
         }
     };
 
+    const socialIconItems = attrs?.sg_social_icon?.map(social => {
+        return createBlock(
+            'gutenverse/social-icon',
+            {
+                url: social?.sg_social_link?.url,
+                icon: social?.sg_social_icon?.value,
+                text: social?.sg_social_label
+            }
+        );
+    });
+
+    const socialIcons = [
+        createBlock(
+            'gutenverse/social-icons',
+            {},
+            socialIconItems
+        )
+    ];
+
     Object.keys(attrs).map(key => {
         if (!isEmpty(pairs[key])) {
             attributes[pairs[key]] = attrs[key];
@@ -38,7 +57,8 @@ export const createTeamBlock = (attrs) => {
 
     return createBlock(
         'gutenverse/team',
-        attributes
+        attributes,
+        socialIcons
     );
 };
 

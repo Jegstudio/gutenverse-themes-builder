@@ -8,7 +8,7 @@ const pairs = {
     button_text_color: 'color'
 };
 
-export const createButtonBlock = (attrs, inner) => {
+export const createButtonBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -46,7 +46,6 @@ export const createButtonBlock = (attrs, inner) => {
 
     return createBlock(
         'gutenverse/button',
-        attributes,
-        inner
+        attributes
     );
 };

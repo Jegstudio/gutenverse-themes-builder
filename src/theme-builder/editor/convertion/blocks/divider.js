@@ -3,12 +3,12 @@ import isEmpty from 'lodash/isEmpty';
 import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex } from '../helper';
 
 const pairs = {
-    primary_color: 'iconColorOne',
-    secondary_color: 'iconColorTwo',
-    shape: 'iconShape',
+    style: 'type',
+    text: 'text',
+    color: 'dividerColor'
 };
 
-export const createIconBlock = (attrs) => {
+export const createDividerBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -21,8 +21,9 @@ export const createIconBlock = (attrs) => {
         ...getAttrPadding(params),
         ...getAttrPositioning(params),
         ...getAttrZIndex(params),
-        iconSize: getValueResponsive(attrs, 'size', getValueUnitPoint),
-        iconPadding: getValueResponsive(attrs, 'icon_padding', () => attrs?.icon_padding?.size)
+        content: !isEmpty(attrs?.text) ? 'text' : 'none',
+        width: getValueResponsive(attrs, 'weight', getValueUnitPoint),
+        gap: getValueResponsive(attrs, 'gap', getValueUnitPoint)
     };
 
     Object.keys(attrs).map(key => {
@@ -32,7 +33,7 @@ export const createIconBlock = (attrs) => {
     });
 
     return createBlock(
-        'gutenverse/icon',
-        attributes,
+        'gutenverse/divider',
+        attributes
     );
 };
