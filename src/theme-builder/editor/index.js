@@ -17,65 +17,90 @@ import { createFunFactBlock } from './convertion/blocks/fun-fact';
 import { createIconBoxBlock } from './convertion/blocks/icon-box';
 import { createIconListBlock } from './convertion/blocks/icon-list';
 import { createAdvancedHeadingBlock } from './convertion/blocks/advanced-heading';
+import { createSpacerBlock } from './convertion/blocks/spacer';
+import { createTextEditorBlock } from './convertion/blocks/text-editor';
+import { createTestimonialsBlock } from './convertion/blocks/testimonials';
+import { createTeamBlock } from './convertion/blocks/team';
+
+const wrapperElements = [
+    'section',
+    'column'
+];
+
+const convertWidget = (type, attrs, inner) => {
+    switch (type) {
+        case 'heading':
+            return createHeadingBlock(attrs);
+        case 'accordion':
+            return createBlock('gutenverse/accordions', {}, inner);
+        case 'button':
+        case 'jkit_video_button':
+            return createButtonBlock(attrs, inner);
+        case 'divider':
+            return createBlock('gutenverse/divider', {}, inner);
+        case 'icon':
+            return createIconBlock(attrs, inner);
+        case 'icon-box':
+        case 'jkit_icon_box':
+            return createIconBoxBlock(attrs, inner);
+        case 'icon-list':
+            return createIconListBlock(attrs);
+        case 'image':
+            return createImageBlock(attrs);
+        case 'image-box':
+        case 'jkit_image_box':
+            return createBlock('gutenverse/image-box', {}, inner);
+        case 'rating':
+            return createBlock('gutenverse/rating', {}, inner);
+        case 'spacer':
+            return createSpacerBlock(attrs);
+        case 'text-editor':
+            return createTextEditorBlock(attrs);
+        case 'jkit_dual_button':
+            return createBlock('gutenverse/buttons', {}, inner);
+        case 'jkit_heading':
+            return createAdvancedHeadingBlock(attrs);
+        case 'jkit_gallery':
+            return createBlock('gutenverse/gallery', {}, inner);
+        case 'jkit_fun_fact':
+            return createFunFactBlock(attrs);
+        case 'jkit_logo_slider':
+            return createBlock('gutenverse/logo-slider', {}, inner);
+        case 'jkit_team':
+            return createTeamBlock(attrs);
+        case 'jkit_testimonials':
+            return createTestimonialsBlock(attrs);
+        default:
+            return createBlock('core/paragraph', {}, inner);
+    }
+};
+
+const convertWrapper = (type, attrs, inner) => {
+    switch (type) {
+        case 'section':
+            return createSectionBlock(attrs, inner);
+        case 'column':
+            return createColumnBlock(attrs, inner);
+        default:
+            return createBlock('core/paragraph', {}, inner);
+    }
+};
 
 const contentLoop = (elements) => {
-    let blocks = elements.map(element => {
+    const blocks = elements.map(element => {
         let inner = [];
 
-        if (!isEmpty(element?.isInner) || '' === element?.isInner) {
+        if (!isEmpty(element?.isInner) || '' === element?.isInner || wrapperElements.includes(element?.elType)) {
             inner = contentLoop(element?.elements);
         }
 
-        const attr = getAttributes(element);
+        const attrs = getAttributes(element);
 
-        if ('widget' === element?.elType) {
-            switch (element?.widgetType) {
-                case 'heading':
-                    return createHeadingBlock(attr);
-                case 'accordion':
-                    return createBlock('gutenverse/accordions', {}, inner);
-                case 'button':
-                case 'jkit_video_button':
-                    return createButtonBlock(attr, inner);
-                case 'divider':
-                    return createBlock('gutenverse/divider', {}, inner);
-                case 'icon':
-                    return createIconBlock(attr, inner);
-                case 'icon-box':
-                case 'jkit_icon_box':
-                    return createIconBoxBlock(attr, inner);
-                case 'icon-list':
-                    return createIconListBlock(attr);
-                case 'image':
-                    return createImageBlock(attr);
-                case 'image-box':
-                case 'jkit_image_box':
-                    return createBlock('gutenverse/image-box', {}, inner);
-                case 'rating':
-                    return createBlock('gutenverse/rating', {}, inner);
-                case 'spacer':
-                    return createBlock('gutenverse/spacer', {}, inner);
-                case 'text-editor':
-                    return createBlock('gutenverse/text-editor', {}, inner);
-                case 'jkit_dual_button':
-                    return createBlock('gutenverse/buttons', {}, inner);
-                case 'jkit_heading':
-                    return createAdvancedHeadingBlock(attr);
-                case 'jkit_gallery':
-                    return createBlock('gutenverse/gallery', {}, inner);
-                case 'jkit_fun_fact':
-                    return createFunFactBlock(attr);
-                case 'jkit_logo_slider':
-                    return createBlock('gutenverse/logo-slider', {}, inner);
-                default:
-                    return createBlock('core/paragraph', {}, inner);
-            }
-        } else if ('section' === element?.elType) {
-            return createSectionBlock(attr, inner);
-        } else if ('column' === element?.elType) {
-            return createColumnBlock(attr, inner);
-        } else {
-            return createBlock('core/group', {}, inner);
+        switch (element?.elType) {
+            case 'widget':
+                return convertWidget(element?.widgetType, attrs, inner);
+            default:
+                return convertWrapper(element?.elType, attrs, inner);
         }
     });
 
