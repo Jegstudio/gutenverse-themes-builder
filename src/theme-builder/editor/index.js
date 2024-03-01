@@ -33,15 +33,22 @@ const contentLoop = (elements) => {
                 case 'accordion':
                     return createBlock('gutenverse/accordions', {}, inner);
                 case 'button':
+                case 'jkit_video_button':
                     return createButtonBlock(attr, inner);
                 case 'divider':
                     return createBlock('gutenverse/divider', {}, inner);
                 case 'icon':
                     return createIconBlock(attr, inner);
+                case 'icon-box':
+                case 'jkit_icon_box':
+                    return createIconBoxBlock(attr, inner);
                 case 'icon-list':
                     return createBlock('gutenverse/icon-list', {}, inner);
                 case 'image':
                     return createImageBlock(attr, inner);
+                case 'image-box':
+                case 'jkit_image_box':
+                    return createBlock('gutenverse/image-box', {}, inner);
                 case 'rating':
                     return createBlock('gutenverse/rating', {}, inner);
                 case 'spacer':
@@ -54,12 +61,6 @@ const contentLoop = (elements) => {
                     return createBlock('gutenverse/advanced-heading', {}, inner);
                 case 'jkit_gallery':
                     return createBlock('gutenverse/gallery', {}, inner);
-                case 'icon-box':
-                case 'jkit_icon_box':
-                    return createIconBoxBlock(attr, inner);
-                case 'image-box':
-                case 'jkit_image_box':
-                    return createBlock('gutenverse/image-box', {}, inner);
                 case 'jkit_fun_fact':
                     return createFunFactBlock(attr, inner);
                 case 'jkit_logo_slider':

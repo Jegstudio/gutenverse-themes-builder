@@ -17,6 +17,16 @@ export const createImageBlock = (attrs, inner) => {
         ...getAttrPadding(params),
         ...getAttrPositioning(params),
         ...getAttrZIndex(params),
+        ...getAttrBorder({
+            attrs,
+            name: 'imgBorder',
+            prefix: 'image_'
+        }),
+        ...getAttrBorderResponsive({
+            attrs,
+            name: 'imgBorderResponsive',
+            prefix: 'image_'
+        }),
         imgSrc: {
             media: {
                 imageId: attrs?.image?.id,

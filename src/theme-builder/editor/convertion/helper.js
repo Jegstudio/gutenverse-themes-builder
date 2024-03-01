@@ -33,6 +33,13 @@ export const getValueNormal = (attrs, key) => {
     return attrs?.[key];
 }
 
+export const getValueSize = (attrs, key) => {
+    return {
+        unit: attrs?.[`${key}`]?.unit,
+        point: attrs?.[`${key}`]?.size
+    };
+}
+
 export const getValueUnitPoint = (attrs, key) => {
     return {
         unit: attrs?.[`${key}`]?.unit,
@@ -40,7 +47,7 @@ export const getValueUnitPoint = (attrs, key) => {
     };
 }
 
-export const getDimensionValue = (attrs, key) => {
+export const getValueDimension = (attrs, key) => {
     return {
         unit: attrs?.[`${key}`]?.unit,
         dimension: {
@@ -72,13 +79,13 @@ export const getValueResponsive = (attrs, key, callback = () => { }) => {
 
 export const getAttrMargin = ({ attrs, name = 'margin', prefix = '' }) => {
     return {
-        [name]: getValueResponsive(attrs, `${prefix}margin`, getDimensionValue)
+        [name]: getValueResponsive(attrs, `${prefix}margin`, getValueDimension)
     };
 };
 
 export const getAttrPadding = ({ attrs, name = 'padding', prefix = '' }) => {
     return {
-        [name]: getValueResponsive(attrs, `${prefix}padding`, getDimensionValue)
+        [name]: getValueResponsive(attrs, `${prefix}padding`, getValueDimension)
     };
 };
 
@@ -90,14 +97,31 @@ export const getAttrZIndex = ({ attrs, name = 'zIndex', prefix = '' }) => {
 
 export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', prefix = '' }) => {
     const result = {
-        [name]: {},
+        [name]: {
+            Tablet: {},
+            Mobile: {}
+        },
     };
+
+    if (attrs?.[`${prefix}border_radius_tablet`]) {
+        result[name]['Tablet'] = {
+            radius: getValueDimension(attrs, `${prefix}border_radius_tablet`)
+        };
+    }
+
+    if (attrs?.[`${prefix}border_radius_mobile`]) {
+        result[name]['Mobile'] = {
+            radius: getValueDimension(attrs, `${prefix}border_radius_mobile`)
+        };
+    }
 
     if (attrs?.[`${prefix}border_border`]) {
 
         if (attrs?.[`${prefix}border_width_tablet`]) {
+
             if (isEmpty(attrs?.[`${prefix}border_width_tablet`]?.isLinked)) {
                 result[name]['Tablet'] = {
+                    ...result[name]['Tablet'],
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -175,8 +199,10 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
         }
 
         if (attrs?.[`${prefix}border_width_mobile`]) {
+
             if (isEmpty(attrs?.[`${prefix}border_width_mobile`]?.isLinked)) {
                 result[name]['Mobile'] = {
+                    ...result[name]['Mobile'],
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -260,10 +286,18 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
         [name]: {},
     };
 
+    if (attrs?.[`${prefix}border_radius`]) {
+        result[name] = {
+            radius: getValueResponsive(attrs, `${prefix}border_radius`, getValueDimension)
+        };
+    }
+
     if (attrs?.[`${prefix}border_border`]) {
+
         if (attrs?.[`${prefix}border_width`]) {
             if (isEmpty(attrs?.[`${prefix}border_width`]?.isLinked)) {
-                result[name]['border'] = {
+                result[name] = {
+                    ...result[name],
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -279,62 +313,62 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
                 }
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['border']['top'] = {
-                        ...result[name]['border']['top'],
+                    result[name]['top'] = {
+                        ...result[name]['top'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['border']['right'] = {
-                        ...result[name]['border']['right'],
+                    result[name]['right'] = {
+                        ...result[name]['right'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['border']['bottom'] = {
-                        ...result[name]['border']['bottom'],
+                    result[name]['bottom'] = {
+                        ...result[name]['bottom'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['border']['left'] = {
-                        ...result[name]['border']['left'],
+                    result[name]['left'] = {
+                        ...result[name]['left'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['border']['top'] = {
-                    ...result[name]['border']['top'],
+                result[name]['top'] = {
+                    ...result[name]['top'],
                     width: attrs?.[`${prefix}border_width`]?.top
                 }
 
-                result[name]['border']['right'] = {
-                    ...result[name]['border']['right'],
+                result[name]['right'] = {
+                    ...result[name]['right'],
                     width: attrs?.[`${prefix}border_width`]?.right
                 }
 
-                result[name]['border']['bottom'] = {
-                    ...result[name]['border']['bottom'],
+                result[name]['bottom'] = {
+                    ...result[name]['bottom'],
                     width: attrs?.[`${prefix}border_width`]?.bottom
                 }
 
-                result[name]['border']['left'] = {
-                    ...result[name]['border']['left'],
+                result[name]['left'] = {
+                    ...result[name]['left'],
                     width: attrs?.[`${prefix}border_width`]?.left
                 }
             } else {
-                result[name]['border'] = {
+                result[name] = {
                     all: {
                         type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['border']['all'] = {
-                        ...result[name]['border']['all'],
+                    result[name]['all'] = {
+                        ...result[name]['all'],
                         color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['border']['all'] = {
-                    ...result[name]['border']['all'],
+                result[name]['all'] = {
+                    ...result[name]['all'],
                     width: attrs?.[`${prefix}border_width`]?.top
                 }
             }
@@ -349,13 +383,13 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
         [name]: {}
     };
 
-    if (attrs?.[`${prefix}background_background`] === 'classic') {
-        result[name] = {
-            type: 'default',
-            color: attrs?.[`${prefix}background_color`]?.type === 'variable' ? attrs?.[`${prefix}background_color`] : hexToRgb(attrs?.[`${prefix}background_color`]),
-            image: {}
-        }
+    result[name] = {
+        type: 'default',
+        color: attrs?.[`${prefix}background_color`]?.type === 'variable' ? attrs?.[`${prefix}background_color`] : hexToRgb(attrs?.[`${prefix}background_color`]),
+        image: {}
+    }
 
+    if (attrs?.[`${prefix}background_background`] === 'classic') {
         if (attrs?.[`${prefix}background_image`]) {
             result[name]['image'] = {
                 Desktop: {
