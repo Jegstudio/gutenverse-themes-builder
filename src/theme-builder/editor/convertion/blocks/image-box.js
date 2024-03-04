@@ -1,11 +1,17 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueDimension, getValueNormal, getValueResponsive } from '../helper';
 
 const pairs = {
     sg_body_title: 'title',
     sg_body_description: 'description',
-    sg_body_title_tag: 'titleTag'
+    sg_body_title_tag: 'titleTag',
+    st_body_title_typography_content_typography_typography: 'titleTypography',
+    st_body_description_typography_content_typography_typography: 'descriptionTypography',
+    st_body_title_normal_color_responsive: 'titleNormalColor',
+    st_body_description_normal_color_responsive: 'descriptionNormalColor',
+    st_body_title_hover_color_responsive: 'titleHoverColor',
+    st_body_description_hover_color_responsive: 'descriptionHoverColor',
 };
 
 export const createImageBoxBlock = (attrs) => {
@@ -21,6 +27,11 @@ export const createImageBoxBlock = (attrs) => {
         ...getAttrPadding(params),
         ...getAttrPositioning(params),
         ...getAttrZIndex(params),
+        ...getAttrBackground({
+            attrs,
+            name: 'bodyBackground',
+            prefix: 'st_body_type_'
+        }),
         image: {
             media: {
                 imageId: attrs?.sg_image_choose?.id,
@@ -28,8 +39,20 @@ export const createImageBoxBlock = (attrs) => {
                     full: attrs?.sg_image_choose
                 }
             }
-        }
+        },
+        bodyAlignment: getValueResponsive(attrs, 'sg_body_alignment_responsive', getValueNormal),
+        imageBorderRadius: getValueDimension(attrs, 'st_image_border_radius_responsive'),
     };
+
+    const buttonContent = [
+        createBlock(
+            'gutenverse/button',
+            {
+                content: attrs?.sg_button_label,
+                alignButton: getValueResponsive(attrs, 'sg_body_alignment_responsive', getValueNormal)
+            }
+        )
+    ];
 
     Object.keys(attrs).map(key => {
         if (!isEmpty(pairs[key])) {
@@ -39,7 +62,8 @@ export const createImageBoxBlock = (attrs) => {
 
     return createBlock(
         'gutenverse/image-box',
-        attributes
+        attributes,
+        buttonContent
     );
 };
 
