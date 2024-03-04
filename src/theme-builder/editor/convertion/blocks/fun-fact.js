@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueDimension, getValueResponsive } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueDimension, getValueIcon, getValueResponsive } from '../helper';
 import { hexToRgb } from 'gutenverse-core/editor-helper';
 
 const pairs = {
@@ -52,6 +52,7 @@ export const createFunFactBlock = (attrs) => {
         superSpace: getValueResponsive(attrs, 'st_super_left_responsive', () => {
             return attrs?.st_super_left_responsive?.size;
         }),
+        icon: getValueIcon(attrs, 'sg_icon_choose')
     };
 
     Object.keys(attrs).map(key => {

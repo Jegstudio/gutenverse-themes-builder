@@ -56,6 +56,10 @@ export const getValueDimension = (attrs, key) => {
     };
 }
 
+export const getValueIcon = (attrs, key) => {
+    return attrs?.[key]?.value?.replace('jki jki', 'gtn gtn');
+}
+
 export const getValueResponsive = (attrs, key, callback = () => { }) => {
     const result = {};
 

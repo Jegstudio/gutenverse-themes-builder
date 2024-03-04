@@ -27,6 +27,7 @@ import { createProgressBarBlock } from './convertion/blocks/progress-bar';
 import { cerateGoogleMapsBlock } from './convertion/blocks/google-maps';
 import { createAccordionsBlock } from './convertion/blocks/accordions';
 import { createNavMenuBlock } from './convertion/blocks/nav-menu';
+import { createJkitIconBlock } from './convertion/blocks/jkit-icon-box';
 
 const wrapperElements = [
     'section',
@@ -52,7 +53,6 @@ const convertWidget = (type, attrs, inner) => {
         case 'icon':
             return createIconBlock(attrs, inner);
         case 'icon-box':
-        case 'jkit_icon_box':
             return createIconBoxBlock(attrs, inner);
         case 'icon-list':
             return createIconListBlock(attrs);
@@ -85,6 +85,8 @@ const convertWidget = (type, attrs, inner) => {
             return createAdvancedHeadingBlock(attrs);
         case 'jkit_fun_fact':
             return createFunFactBlock(attrs);
+        case 'jkit_icon_box':
+            return createJkitIconBlock(attrs, inner);
         case 'jkit_nav_menu':
             return createNavMenuBlock(attrs);
         case 'jkit_social_share':

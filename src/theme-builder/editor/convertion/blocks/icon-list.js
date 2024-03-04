@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon } from '../helper';
 
 const pairs = {
     icon_color: 'iconColor',
@@ -30,7 +30,7 @@ export const createIconListBlock = (attrs) => {
             'gutenverse/icon-list-item',
             {
                 text: item?.text,
-                icon: item?.icon ? item?.icon : 'fas fa-check'
+                icon: getValueIcon(item, 'selected_icon')
             }
         );
     });

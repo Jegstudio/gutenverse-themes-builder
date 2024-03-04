@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon } from '../helper';
 
 const pairs = {
     primary_color: 'iconColorOne',
@@ -22,7 +22,8 @@ export const createIconBlock = (attrs) => {
         ...getAttrPositioning(params),
         ...getAttrZIndex(params),
         iconSize: getValueResponsive(attrs, 'size', getValueUnitPoint),
-        iconPadding: getValueResponsive(attrs, 'icon_padding', () => attrs?.icon_padding?.size)
+        iconPadding: getValueResponsive(attrs, 'icon_padding', () => attrs?.icon_padding?.size),
+        icon: getValueIcon(attrs, 'selected_icon')
     };
 
     Object.keys(attrs).map(key => {
