@@ -25,6 +25,8 @@ import { createDividerBlock } from './convertion/blocks/divider';
 import { createImageBoxBlock } from './convertion/blocks/image-box';
 import { createProgressBarBlock } from './convertion/blocks/progress-bar';
 import { cerateGoogleMapsBlock } from './convertion/blocks/google-maps';
+import { createAccordionsBlock } from './convertion/blocks/accordions';
+import { createNavMenuBlock } from './convertion/blocks/nav-menu';
 
 const wrapperElements = [
     'section',
@@ -34,7 +36,7 @@ const wrapperElements = [
 const convertWidget = (type, attrs, inner) => {
     switch (type) {
         case 'accordion':
-            return createBlock('gutenverse/accordions', {}, inner);
+            return createAccordionsBlock(attrs);
         case 'button':
         case 'jkit_video_button':
             return createButtonBlock(attrs);
@@ -84,7 +86,7 @@ const convertWidget = (type, attrs, inner) => {
         case 'jkit_fun_fact':
             return createFunFactBlock(attrs);
         case 'jkit_nav_menu':
-            return createBlock('gutenverse/nav-menu', {}, inner);
+            return createNavMenuBlock(attrs);
         case 'jkit_social_share':
             return createBlock('gutenverse/social-share', {}, inner);
         case 'jkit_team':
