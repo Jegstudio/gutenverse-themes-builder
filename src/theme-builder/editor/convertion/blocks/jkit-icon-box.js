@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueDimension, getValueIcon, getValueNormal, getValueResponsive } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getValueDimension, getValueIcon, getValueNormal, getValueResponsive } from '../helper';
 
 const pairs = {
     sg_icon_type: 'iconType',
@@ -14,7 +14,7 @@ const pairs = {
     st_content_description_color_responsive: 'descColor'
 };
 
-export const createJkitIconBlock = (attrs, inner) => {
+export const createJkitIconBlock = (attrs) => {
     const params = {
         attrs,
         prefix: '_'
@@ -26,6 +26,16 @@ export const createJkitIconBlock = (attrs, inner) => {
         }),
         ...getAttrBorder(params),
         ...getAttrBorderResponsive(params),
+        ...getAttrBoxShadow({
+            attrs,
+            name: 'containerBoxShadow',
+            prefix: 'st_container_boxshadow_box_shadow_'
+        }),
+        ...getAttrBoxShadow({
+            attrs,
+            name: 'containerBoxShadowHover',
+            prefix: 'st_container_hover_boxshadow_box_shadow_'
+        }),
         ...getAttrMargin(params),
         ...getAttrPadding(params),
         ...getAttrPositioning(params),
@@ -55,7 +65,6 @@ export const createJkitIconBlock = (attrs, inner) => {
 
     return createBlock(
         'gutenverse/icon-box',
-        attributes,
-        inner
+        attributes
     );
 };

@@ -25,9 +25,11 @@ export const createTestimonialsBlock = (attrs) => {
                 src: {
                     id: data?.sg_testimonials_list_client_avatar?.id,
                     image: data?.sg_testimonials_list_client_avatar?.url
-                }
+                },
+                rating: 5,
             };
-        })
+        }),
+        contentType: parseInt(attrs?.sg_layout_testimonial_choose?.replace('style-', ''))
     };
 
     Object.keys(attrs).map(key => {

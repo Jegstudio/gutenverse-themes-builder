@@ -86,7 +86,7 @@ const convertWidget = (type, attrs, inner) => {
         case 'jkit_fun_fact':
             return createFunFactBlock(attrs);
         case 'jkit_icon_box':
-            return createJkitIconBlock(attrs, inner);
+            return createJkitIconBlock(attrs);
         case 'jkit_nav_menu':
             return createNavMenuBlock(attrs);
         case 'jkit_social_share':

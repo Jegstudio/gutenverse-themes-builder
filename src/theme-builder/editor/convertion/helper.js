@@ -422,6 +422,29 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
     return result;
 }
 
+export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => {
+    const result = {};
+
+    if (attrs?.[`${prefix}box_shadow_type`] === 'yes') {
+        const color = attrs?.[`${prefix}box_shadow`]?.color?.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
+
+        result[name] = {
+            color: {
+                r: color[0],
+                g: color[1],
+                b: color[2],
+                a: color[3]
+            },
+            horizontal: attrs?.[`${prefix}box_shadow`]?.horizontal,
+            vertical: attrs?.[`${prefix}box_shadow`]?.vertical,
+            blur: attrs?.[`${prefix}box_shadow`]?.blur,
+            spread: attrs?.[`${prefix}box_shadow`]?.spread,
+        }
+    }
+
+    return result;
+}
+
 export const getAttrPositioning = ({ attrs }) => {
     const result = {};
 
