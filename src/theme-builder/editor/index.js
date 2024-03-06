@@ -22,11 +22,11 @@ import { createTextEditorBlock } from './convertion/blocks/elementor/text-editor
 import { createTestimonialsBlock } from './convertion/blocks/testimonials';
 import { createJkitTeamBlock } from './convertion/blocks/jkit/jkit-team';
 import { createDividerBlock } from './convertion/blocks/elementor/divider';
-import { createImageBoxBlock } from './convertion/blocks/image-box';
+import { createJkitImageBoxBlock } from './convertion/blocks/jkit/jkit-image-box';
 import { createProgressBarBlock } from './convertion/blocks/progress-bar';
 import { createGoogleMapsBlock } from './convertion/blocks/elementor/google-maps';
 import { createAccordionsBlock } from './convertion/blocks/accordions';
-import { createNavMenuBlock } from './convertion/blocks/nav-menu';
+import { createJkitNavMenuBlock } from './convertion/blocks/jkit/jkit-nav-menu';
 import { createJkitIconBoxBlock } from './convertion/blocks/jkit/jkit-icon-box';
 
 const wrapperElements = [
@@ -66,6 +66,10 @@ const convertWidget = (type, attrs, inner) => {
             return createJkitHeadingBlock(attrs);
         case 'jkit_icon_box':
             return createJkitIconBoxBlock(attrs);
+        case 'jkit_image_box':
+            return createJkitImageBoxBlock(attrs);
+        case 'jkit_nav_menu':
+            return createJkitNavMenuBlock(attrs);
         case 'jkit_team':
             return createJkitTeamBlock(attrs);
 
@@ -74,14 +78,11 @@ const convertWidget = (type, attrs, inner) => {
             return createAccordionsBlock(attrs);
         // case 'jkit_video_button':
         //     return createButtonBlock(attrs);
-        case 'image-box':
-        case 'jkit_image_box':
-            return createImageBoxBlock(attrs);
+        // case 'image-box':
+        //     return createJkitImageBoxBlock(attrs);
         case 'progress-bar':
         case 'jkit_progress_bar':
             return createProgressBarBlock(attrs);
-        case 'jkit_nav_menu':
-            return createNavMenuBlock(attrs);
         case 'jkit_testimonials':
             return createTestimonialsBlock(attrs);
 
