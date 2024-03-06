@@ -7,27 +7,27 @@ import { __ } from '@wordpress/i18n';
 import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
 import { getAttributes } from './convertion/helper';
-import { createHeadingBlock } from './convertion/blocks/heading';
-import { createSectionBlock } from './convertion/blocks/section';
-import { createColumnBlock } from './convertion/blocks/column';
-import { createImageBlock } from './convertion/blocks/image';
-import { createButtonBlock } from './convertion/blocks/button';
-import { createIconBlock } from './convertion/blocks/icon';
-import { createFunFactBlock } from './convertion/blocks/fun-fact';
-import { createIconBoxBlock } from './convertion/blocks/icon-box';
-import { createIconListBlock } from './convertion/blocks/icon-list';
-import { createAdvancedHeadingBlock } from './convertion/blocks/advanced-heading';
-import { createSpacerBlock } from './convertion/blocks/spacer';
-import { createTextEditorBlock } from './convertion/blocks/text-editor';
+import { createHeadingBlock } from './convertion/blocks/elementor/heading';
+import { createSectionBlock } from './convertion/blocks/elementor/section';
+import { createColumnBlock } from './convertion/blocks/elementor/column';
+import { createImageBlock } from './convertion/blocks/elementor/image';
+import { createButtonBlock } from './convertion/blocks/elementor/button';
+import { createIconBlock } from './convertion/blocks/elementor/icon';
+import { createJkitFunFactBlock } from './convertion/blocks/jkit/jkit-fun-fact';
+import { createIconBoxBlock } from './convertion/blocks/elementor/icon-box';
+import { createIconListBlock } from './convertion/blocks/elementor/icon-list';
+import { createJkitHeadingBlock } from './convertion/blocks/jkit/jkit-heading';
+import { createSpacerBlock } from './convertion/blocks/elementor/spacer';
+import { createTextEditorBlock } from './convertion/blocks/elementor/text-editor';
 import { createTestimonialsBlock } from './convertion/blocks/testimonials';
-import { createTeamBlock } from './convertion/blocks/team';
-import { createDividerBlock } from './convertion/blocks/divider';
+import { createJkitTeamBlock } from './convertion/blocks/jkit/jkit-team';
+import { createDividerBlock } from './convertion/blocks/elementor/divider';
 import { createImageBoxBlock } from './convertion/blocks/image-box';
 import { createProgressBarBlock } from './convertion/blocks/progress-bar';
-import { cerateGoogleMapsBlock } from './convertion/blocks/google-maps';
+import { createGoogleMapsBlock } from './convertion/blocks/elementor/google-maps';
 import { createAccordionsBlock } from './convertion/blocks/accordions';
 import { createNavMenuBlock } from './convertion/blocks/nav-menu';
-import { createJkitIconBlock } from './convertion/blocks/jkit-icon-box';
+import { createJkitIconBoxBlock } from './convertion/blocks/jkit/jkit-icon-box';
 
 const wrapperElements = [
     'section',
@@ -36,18 +36,14 @@ const wrapperElements = [
 
 const convertWidget = (type, attrs, inner) => {
     switch (type) {
-        case 'accordion':
-            return createAccordionsBlock(attrs);
+        // Done
+        // normal
         case 'button':
-        case 'jkit_video_button':
             return createButtonBlock(attrs);
         case 'divider':
             return createDividerBlock(attrs);
-        case 'gallery':
-        case 'jkit_gallery':
-            return createBlock('gutenverse/gallery', {}, inner);
         case 'google_maps':
-            return cerateGoogleMapsBlock(attrs);
+            return createGoogleMapsBlock(attrs);
         case 'heading':
             return createHeadingBlock(attrs);
         case 'icon':
@@ -58,43 +54,56 @@ const convertWidget = (type, attrs, inner) => {
             return createIconListBlock(attrs);
         case 'image':
             return createImageBlock(attrs);
+        case 'spacer':
+            return createSpacerBlock(attrs);
+        case 'text-editor':
+            return createTextEditorBlock(attrs);
+
+        // jkit
+        case 'jkit_fun_fact':
+            return createJkitFunFactBlock(attrs);
+        case 'jkit_heading':
+            return createJkitHeadingBlock(attrs);
+        case 'jkit_icon_box':
+            return createJkitIconBoxBlock(attrs);
+        case 'jkit_team':
+            return createJkitTeamBlock(attrs);
+
+        //In Progress
+        case 'accordion':
+            return createAccordionsBlock(attrs);
+        // case 'jkit_video_button':
+        //     return createButtonBlock(attrs);
         case 'image-box':
         case 'jkit_image_box':
             return createImageBoxBlock(attrs);
         case 'progress-bar':
         case 'jkit_progress_bar':
             return createProgressBarBlock(attrs);
+        case 'jkit_nav_menu':
+            return createNavMenuBlock(attrs);
+        case 'jkit_testimonials':
+            return createTestimonialsBlock(attrs);
+
+        // Todo
+        case 'gallery':
+        case 'jkit_gallery':
+            return createBlock('gutenverse/gallery', {}, inner);
         case 'rating':
             return createBlock('gutenverse/rating', {}, inner);
         case 'social-icons':
             return createBlock('gutenverse/social-icons', {}, inner);
-        case 'spacer':
-            return createSpacerBlock(attrs);
         case 'tabs':
         case 'jkit_tabs':
             return createBlock('gutenverse/tabs', {}, inner);
-        case 'text-editor':
-            return createTextEditorBlock(attrs);
         case 'video':
             return createBlock('gutenverse/video', {}, inner);
         case 'jkit_client_logo':
             return createBlock('gutenverse/logo-slider', {}, inner);
         case 'jkit_dual_button':
             return createBlock('gutenverse/buttons', {}, inner);
-        case 'jkit_heading':
-            return createAdvancedHeadingBlock(attrs);
-        case 'jkit_fun_fact':
-            return createFunFactBlock(attrs);
-        case 'jkit_icon_box':
-            return createJkitIconBlock(attrs);
-        case 'jkit_nav_menu':
-            return createNavMenuBlock(attrs);
         case 'jkit_social_share':
             return createBlock('gutenverse/social-share', {}, inner);
-        case 'jkit_team':
-            return createTeamBlock(attrs);
-        case 'jkit_testimonials':
-            return createTestimonialsBlock(attrs);
         case 'jkit_post_author':
             return createBlock('gutenverse/post-author', {}, inner);
         case 'jkit_post_block':

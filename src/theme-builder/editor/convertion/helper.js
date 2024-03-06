@@ -61,7 +61,7 @@ export const getValueIcon = (attrs, key) => {
 }
 
 export const getValueResponsive = (attrs, key, callback = () => { }) => {
-    const result = {};
+    let result = {};
 
     if (attrs?.[`${key}`]) {
         result['Desktop'] = callback(attrs, `${key}`);
@@ -79,39 +79,31 @@ export const getValueResponsive = (attrs, key, callback = () => { }) => {
 }
 
 export const getAttrMargin = ({ attrs, name = 'margin', prefix = '' }) => {
-    return {
-        [name]: getValueResponsive(attrs, `${prefix}margin`, getValueDimension)
-    };
+    return getValueResponsive(attrs, `${prefix}margin`, getValueDimension);
 };
 
 export const getAttrPadding = ({ attrs, name = 'padding', prefix = '' }) => {
-    return {
-        [name]: getValueResponsive(attrs, `${prefix}padding`, getValueDimension)
-    };
+    return getValueResponsive(attrs, `${prefix}padding`, getValueDimension);
 };
 
 export const getAttrZIndex = ({ attrs, name = 'zIndex', prefix = '' }) => {
-    return {
-        [name]: getValueResponsive(attrs, `${prefix}z_index`, getValueNormal)
-    };
+    return getValueResponsive(attrs, `${prefix}z_index`, getValueNormal);
 };
 
 export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', prefix = '' }) => {
     const result = {
-        [name]: {
-            Tablet: {},
-            Mobile: {}
-        },
+        Tablet: {},
+        Mobile: {}
     };
 
     if (attrs?.[`${prefix}border_radius_tablet`]) {
-        result[name]['Tablet'] = {
+        result['Tablet'] = {
             radius: getValueDimension(attrs, `${prefix}border_radius_tablet`)
         };
     }
 
     if (attrs?.[`${prefix}border_radius_mobile`]) {
-        result[name]['Mobile'] = {
+        result['Mobile'] = {
             radius: getValueDimension(attrs, `${prefix}border_radius_mobile`)
         };
     }
@@ -121,8 +113,8 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
         if (attrs?.[`${prefix}border_width_tablet`]) {
 
             if (isEmpty(attrs?.[`${prefix}border_width_tablet`]?.isLinked)) {
-                result[name]['Tablet'] = {
-                    ...result[name]['Tablet'],
+                result['Tablet'] = {
+                    ...result['Tablet'],
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -138,62 +130,62 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
                 }
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['Tablet']['top'] = {
-                        ...result[name]['Tablet']['top'],
+                    result['Tablet']['top'] = {
+                        ...result['Tablet']['top'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Tablet']['right'] = {
-                        ...result[name]['Tablet']['right'],
+                    result['Tablet']['right'] = {
+                        ...result['Tablet']['right'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Tablet']['bottom'] = {
-                        ...result[name]['Tablet']['bottom'],
+                    result['Tablet']['bottom'] = {
+                        ...result['Tablet']['bottom'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Tablet']['left'] = {
-                        ...result[name]['Tablet']['left'],
+                    result['Tablet']['left'] = {
+                        ...result['Tablet']['left'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['Tablet']['top'] = {
-                    ...result[name]['Tablet']['top'],
+                result['Tablet']['top'] = {
+                    ...result['Tablet']['top'],
                     width: attrs?.[`${prefix}border_width_tablet`]?.top
                 }
 
-                result[name]['Tablet']['right'] = {
-                    ...result[name]['Tablet']['right'],
+                result['Tablet']['right'] = {
+                    ...result['Tablet']['right'],
                     width: attrs?.[`${prefix}border_width_tablet`]?.right
                 }
 
-                result[name]['Tablet']['bottom'] = {
-                    ...result[name]['Tablet']['bottom'],
+                result['Tablet']['bottom'] = {
+                    ...result['Tablet']['bottom'],
                     width: attrs?.[`${prefix}border_width_tablet`]?.bottom
                 }
 
-                result[name]['Tablet']['left'] = {
-                    ...result[name]['Tablet']['left'],
+                result['Tablet']['left'] = {
+                    ...result['Tablet']['left'],
                     width: attrs?.[`${prefix}border_width_tablet`]?.left
                 }
             } else {
-                result[name]['Tablet'] = {
+                result['Tablet'] = {
                     all: {
                         type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['Tablet']['all'] = {
-                        ...result[name]['Tablet']['all'],
+                    result['Tablet']['all'] = {
+                        ...result['Tablet']['all'],
                         color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['Tablet']['all'] = {
-                    ...result[name]['Tablet']['all'],
+                result['Tablet']['all'] = {
+                    ...result['Tablet']['all'],
                     width: attrs?.[`${prefix}border_width_tablet`]?.top
                 }
             }
@@ -202,8 +194,8 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
         if (attrs?.[`${prefix}border_width_mobile`]) {
 
             if (isEmpty(attrs?.[`${prefix}border_width_mobile`]?.isLinked)) {
-                result[name]['Mobile'] = {
-                    ...result[name]['Mobile'],
+                result['Mobile'] = {
+                    ...result['Mobile'],
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -219,62 +211,62 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
                 }
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['Mobile']['top'] = {
-                        ...result[name]['Mobile']['top'],
+                    result['Mobile']['top'] = {
+                        ...result['Mobile']['top'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Mobile']['right'] = {
-                        ...result[name]['Mobile']['right'],
+                    result['Mobile']['right'] = {
+                        ...result['Mobile']['right'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Mobile']['bottom'] = {
-                        ...result[name]['Mobile']['bottom'],
+                    result['Mobile']['bottom'] = {
+                        ...result['Mobile']['bottom'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['Mobile']['left'] = {
-                        ...result[name]['Mobile']['left'],
+                    result['Mobile']['left'] = {
+                        ...result['Mobile']['left'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['Mobile']['top'] = {
-                    ...result[name]['Mobile']['top'],
+                result['Mobile']['top'] = {
+                    ...result['Mobile']['top'],
                     width: attrs?.[`${prefix}border_width_mobile`]?.top
                 }
 
-                result[name]['Mobile']['right'] = {
-                    ...result[name]['Mobile']['right'],
+                result['Mobile']['right'] = {
+                    ...result['Mobile']['right'],
                     width: attrs?.[`${prefix}border_width_mobile`]?.right
                 }
 
-                result[name]['Mobile']['bottom'] = {
-                    ...result[name]['Mobile']['bottom'],
+                result['Mobile']['bottom'] = {
+                    ...result['Mobile']['bottom'],
                     width: attrs?.[`${prefix}border_width_mobile`]?.bottom
                 }
 
-                result[name]['Mobile']['left'] = {
-                    ...result[name]['Mobile']['left'],
+                result['Mobile']['left'] = {
+                    ...result['Mobile']['left'],
                     width: attrs?.[`${prefix}border_width_mobile`]?.left
                 }
             } else {
-                result[name]['Mobile'] = {
+                result['Mobile'] = {
                     all: {
                         type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['Mobile']['all'] = {
-                        ...result[name]['Mobile']['all'],
+                    result['Mobile']['all'] = {
+                        ...result['Mobile']['all'],
                         color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['Mobile']['all'] = {
-                    ...result[name]['Mobile']['all'],
+                result['Mobile']['all'] = {
+                    ...result['Mobile']['all'],
                     width: attrs?.[`${prefix}border_width_mobile`]?.top
                 }
             }
@@ -283,12 +275,10 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
 }
 
 export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
-    const result = {
-        [name]: {},
-    };
+    let result = {};
 
     if (attrs?.[`${prefix}border_radius`]) {
-        result[name] = {
+        result = {
             radius: getValueResponsive(attrs, `${prefix}border_radius`, getValueDimension)
         };
     }
@@ -297,8 +287,8 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
 
         if (attrs?.[`${prefix}border_width`]) {
             if (isEmpty(attrs?.[`${prefix}border_width`]?.isLinked)) {
-                result[name] = {
-                    ...result[name],
+                result = {
+                    ...result,
                     top: {
                         type: attrs?.[`${prefix}border_border`]
                     },
@@ -314,62 +304,62 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
                 }
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['top'] = {
-                        ...result[name]['top'],
+                    result['top'] = {
+                        ...result['top'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['right'] = {
-                        ...result[name]['right'],
+                    result['right'] = {
+                        ...result['right'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['bottom'] = {
-                        ...result[name]['bottom'],
+                    result['bottom'] = {
+                        ...result['bottom'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
 
-                    result[name]['left'] = {
-                        ...result[name]['left'],
+                    result['left'] = {
+                        ...result['left'],
                         color: attrs?.[`${prefix}border_color`]?.type === 'variable' ? attrs?.[`${prefix}border_color`] : hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['top'] = {
-                    ...result[name]['top'],
+                result['top'] = {
+                    ...result['top'],
                     width: attrs?.[`${prefix}border_width`]?.top
                 }
 
-                result[name]['right'] = {
-                    ...result[name]['right'],
+                result['right'] = {
+                    ...result['right'],
                     width: attrs?.[`${prefix}border_width`]?.right
                 }
 
-                result[name]['bottom'] = {
-                    ...result[name]['bottom'],
+                result['bottom'] = {
+                    ...result['bottom'],
                     width: attrs?.[`${prefix}border_width`]?.bottom
                 }
 
-                result[name]['left'] = {
-                    ...result[name]['left'],
+                result['left'] = {
+                    ...result['left'],
                     width: attrs?.[`${prefix}border_width`]?.left
                 }
             } else {
-                result[name] = {
+                result = {
                     all: {
                         type: attrs?.[`${prefix}border_border`]
                     }
                 };
 
                 if (attrs?.[`${prefix}border_color`]) {
-                    result[name]['all'] = {
-                        ...result[name]['all'],
+                    result['all'] = {
+                        ...result['all'],
                         color: hexToRgb(attrs?.[`${prefix}border_color`])
                     }
                 }
 
-                result[name]['all'] = {
-                    ...result[name]['all'],
+                result['all'] = {
+                    ...result['all'],
                     width: attrs?.[`${prefix}border_width`]?.top
                 }
             }
@@ -380,11 +370,9 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
 }
 
 export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) => {
-    const result = {
-        [name]: {}
-    };
+    let result = {};
 
-    result[name] = {
+    result = {
         type: 'default',
         color: attrs?.[`${prefix}background_color`]?.type === 'variable' ? attrs?.[`${prefix}background_color`] : hexToRgb(attrs?.[`${prefix}background_color`]),
         image: {}
@@ -392,7 +380,7 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
 
     if (attrs?.[`${prefix}background_background`] === 'classic') {
         if (attrs?.[`${prefix}background_image`]) {
-            result[name]['image'] = {
+            result['image'] = {
                 Desktop: {
                     id: attrs?.[`${prefix}background_image`]?.id,
                     image: attrs?.[`${prefix}background_image`]?.url,
@@ -401,7 +389,7 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
         }
 
         if (attrs?.[`${prefix}background_image_tablet`]) {
-            result[name]['image'] = {
+            result['image'] = {
                 Tablet: {
                     id: attrs?.[`${prefix}background_image_tablet`]?.id,
                     image: attrs?.[`${prefix}background_image_tablet`]?.url,
@@ -410,7 +398,7 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
         }
 
         if (attrs?.[`${prefix}background_image_mobile`]) {
-            result[name]['image'] = {
+            result['image'] = {
                 Mobile: {
                     id: attrs?.[`${prefix}background_image_mobile`]?.id,
                     image: attrs?.[`${prefix}background_image_mobile`]?.url,
@@ -423,12 +411,12 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
 }
 
 export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => {
-    const result = {};
+    let result = {};
 
     if (attrs?.[`${prefix}box_shadow_type`] === 'yes') {
         const color = attrs?.[`${prefix}box_shadow`]?.color?.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
 
-        result[name] = {
+        result = {
             color: {
                 r: color[0],
                 g: color[1],
@@ -446,7 +434,7 @@ export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => 
 }
 
 export const getAttrPositioning = ({ attrs }) => {
-    const result = {};
+    let result = {};
 
     if (attrs?._element_width) {
         result['positioningType'] = {
@@ -473,4 +461,22 @@ export const getAttrPositioning = ({ attrs }) => {
 
 
     return result;
+}
+
+
+export const getBlockAttributes = (list, attrs) => {
+    let attributes = {};
+
+    list.map(({ value, ...data }) => {
+        if (data?.multi) {
+            attributes = {
+                ...attributes,
+                ...value({ attrs, ...data })
+            };
+        } else {
+            attributes[data?.id] = value({ attrs, ...data });
+        }
+    });
+
+    return attributes;
 }
