@@ -135,6 +135,10 @@ export const createJkitIconBoxBlock = (attrs) => {
             id: 'descColor',
             value: ({ attrs }) => attrs?.st_content_description_color_responsive
         },
+        {
+            id: 'iconColor',
+            value: ({ attrs }) => attrs?.st_icon_color_responsive
+        },
     ];
 
     return createBlock(

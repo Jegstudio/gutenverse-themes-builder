@@ -89,6 +89,12 @@ export const createJkitFunFactBlock = (attrs) => {
             })
         },
         {
+            id: 'iconColor',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.st_icon_color_responsive?.type === 'variable' ? attrs?.st_icon_color_responsive : hexToRgb(attrs?.st_icon_color_responsive),
+            })
+        },
+        {
             id: 'iconPadding',
             value: ({ attrs }) => getValueResponsive(attrs, 'st_icon_padding_responsive', getValueDimension)
         },

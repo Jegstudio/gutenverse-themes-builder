@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon, getBlockAttributes } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon, getBlockAttributes, getValueRange } from '../../helper';
 
 export const createIconBlock = (attrs) => {
     const list = [
@@ -45,7 +45,7 @@ export const createIconBlock = (attrs) => {
         },
         {
             id: 'iconPadding',
-            value: ({ attrs }) => getValueResponsive(attrs, 'icon_padding', () => attrs?.icon_padding?.size)
+            value: ({ attrs }) => getValueResponsive(attrs, 'icon_padding', getValueRange)
         },
         {
             id: 'icon',
