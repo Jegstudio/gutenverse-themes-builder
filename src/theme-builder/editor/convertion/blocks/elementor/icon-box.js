@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueIcon } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueIcon } from '../../helper';
 
 export const createIconBoxBlock = (attrs) => {
     const list = [
@@ -17,6 +17,11 @@ export const createIconBoxBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueIcon, getValueResponsive, getValueUnitPoint } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueIcon, getValueResponsive, getValueUnitPoint } from '../../helper';
 
 export const createJkitTeamBlock = (attrs) => {
     const list = [
@@ -18,6 +18,11 @@ export const createJkitTeamBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

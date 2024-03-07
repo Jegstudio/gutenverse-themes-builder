@@ -1,6 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import isEmpty from 'lodash/isEmpty';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getBlockAttributes } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getBlockAttributes, getAttrBoxShadow } from '../../helper';
 
 export const createDividerBlock = (attrs) => {
     const list = [
@@ -18,6 +18,11 @@ export const createDividerBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

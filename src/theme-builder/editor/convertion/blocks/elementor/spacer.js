@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getBlockAttributes } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getBlockAttributes, getAttrBoxShadow } from '../../helper';
 
 
 export const createSpacerBlock = (attrs) => {
@@ -18,6 +18,11 @@ export const createSpacerBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

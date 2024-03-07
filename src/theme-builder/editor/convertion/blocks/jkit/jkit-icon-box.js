@@ -19,6 +19,11 @@ export const createJkitIconBoxBlock = (attrs) => {
             value: getAttrBorderResponsive
         },
         {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
+        },
+        {
             id: 'margin',
             prefix: '_',
             value: getAttrMargin
@@ -51,12 +56,12 @@ export const createJkitIconBoxBlock = (attrs) => {
         },
         {
             id: 'containerBoxShadow',
-            prefix: 'st_container_boxshadow_box_shadow_',
+            prefix: 'st_container_boxshadow_',
             value: getAttrBoxShadow
         },
         {
             id: 'containerBoxShadowHover',
-            prefix: 'st_container_hover_boxshadow_box_shadow_',
+            prefix: 'st_container_hover_boxshadow_',
             value: getAttrBoxShadow
         },
         {

@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes } from '../../helper';
 
 export const createColumnBlock = (attrs, innerBlocks) => {
     const list = [
@@ -14,6 +14,10 @@ export const createColumnBlock = (attrs, innerBlocks) => {
         {
             id: 'borderResponsive',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

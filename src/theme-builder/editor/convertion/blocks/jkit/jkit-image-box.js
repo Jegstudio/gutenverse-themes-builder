@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueDimension, getValueNormal, getValueResponsive } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueDimension, getValueNormal, getValueResponsive } from '../../helper';
 
 export const createJkitImageBoxBlock = (attrs) => {
     const list = [
@@ -17,6 +17,11 @@ export const createJkitImageBoxBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',

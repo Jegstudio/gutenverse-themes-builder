@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon, getBlockAttributes } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getValueResponsive, getAttrMargin, getAttrPadding, getAttrPositioning, getValueUnitPoint, getAttrZIndex, getValueIcon, getBlockAttributes, getAttrBoxShadow } from '../../helper';
 
 export const createIconListBlock = (attrs) => {
     const list = [
@@ -17,6 +17,11 @@ export const createIconListBlock = (attrs) => {
             id: 'borderResponsive',
             prefix: '_',
             value: getAttrBorderResponsive
+        },
+        {
+            id: 'boxShadow',
+            prefix: '_',
+            value: getAttrBoxShadow
         },
         {
             id: 'margin',
@@ -66,7 +71,7 @@ export const createIconListBlock = (attrs) => {
             'gutenverse/icon-list-item',
             {
                 text: item?.text,
-                icon: getValueIcon(item, 'selected_icon')
+                icon: item?.selected_icon ? getValueIcon(item, 'selected_icon') : 'fas fa-check'
             }
         );
     });

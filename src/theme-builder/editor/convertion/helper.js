@@ -413,8 +413,8 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
 export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => {
     let result = {};
 
-    if (attrs?.[`${prefix}box_shadow_type`] === 'yes') {
-        const color = attrs?.[`${prefix}box_shadow`]?.color?.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
+    if (attrs?.[`${prefix}box_shadow_box_shadow_type`] === 'yes') {
+        const color = attrs?.[`${prefix}box_shadow_box_shadow`]?.color?.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
 
         result = {
             color: {
@@ -423,10 +423,10 @@ export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => 
                 b: color[2],
                 a: color[3]
             },
-            horizontal: attrs?.[`${prefix}box_shadow`]?.horizontal,
-            vertical: attrs?.[`${prefix}box_shadow`]?.vertical,
-            blur: attrs?.[`${prefix}box_shadow`]?.blur,
-            spread: attrs?.[`${prefix}box_shadow`]?.spread,
+            horizontal: attrs?.[`${prefix}box_shadow_box_shadow`]?.horizontal,
+            vertical: attrs?.[`${prefix}box_shadow_box_shadow`]?.vertical,
+            blur: attrs?.[`${prefix}box_shadow_box_shadow`]?.blur,
+            spread: attrs?.[`${prefix}box_shadow_box_shadow`]?.spread,
         }
     }
 
