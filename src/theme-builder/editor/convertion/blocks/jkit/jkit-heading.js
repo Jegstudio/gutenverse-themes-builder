@@ -42,11 +42,15 @@ export const createJkitHeadingBlock = (attrs) => {
         },
         {
             id: 'showSub',
-            value: ({ attrs }) => !isEmpty(attrs?.sg_subtitle_heading) ? 'bottom' : 'none'
+            value: ({ attrs }) => attrs?.sg_description_enable === 'yes' ? 'bottom' : 'none'
         },
         {
             id: 'showLine',
-            value: ({ attrs }) => isEmpty(attrs?.sg_separator_enable) ? 'between' : 'none'
+            value: ({ attrs }) => attrs?.sg_separator_enable !== '' ? attrs?.sg_description_enable === 'yes' ? 'between' : 'bottom' : 'none'
+        },
+        {
+            id: 'lineColor',
+            value: ({ attrs }) => attrs?.st_separator_color_responsive
         },
         {
             id: 'titleTag',
@@ -57,20 +61,28 @@ export const createJkitHeadingBlock = (attrs) => {
             value: ({ attrs }) => attrs?.sg_title_before
         },
         {
-            id: 'focusText',
-            value: ({ attrs }) => attrs?.sg_title_focused
-        },
-        {
-            id: 'subText',
-            value: ({ attrs }) => attrs?.sg_subtitle_heading
-        },
-        {
             id: 'mainColor',
             value: ({ attrs }) => attrs?.st_title_color_responsive
         },
         {
             id: 'mainTypography',
             value: ({ attrs }) => attrs?.st_title_typography_content_typography_typography
+        },
+        {
+            id: 'subText',
+            value: ({ attrs }) => attrs?.sg_description
+        },
+        {
+            id: 'subColor',
+            value: ({ attrs }) => attrs?.st_description_color_responsive
+        },
+        {
+            id: 'subTypography',
+            value: ({ attrs }) => attrs?.st_description_typography_content_typography_typography
+        },
+        {
+            id: 'focusText',
+            value: ({ attrs }) => attrs?.sg_title_focused
         },
         {
             id: 'focusColor',
