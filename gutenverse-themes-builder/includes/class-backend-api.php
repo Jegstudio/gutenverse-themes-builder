@@ -495,21 +495,21 @@ class Backend_Api {
 					if ( isset( $setting->typography_font_size ) ) {
 						$converted_font['font']['size']['Desktop'] = array(
 							'unit'  => $setting->typography_font_size->unit,
-							'point' => $setting->typography_font_size->size,
+							'point' => (string) $setting->typography_font_size->size,
 						);
 					}
 
 					if ( isset( $setting->typography_font_size_tablet ) ) {
 						$converted_font['font']['size']['Tablet'] = array(
 							'unit'  => $setting->typography_font_size_tablet->unit,
-							'point' => $setting->typography_font_size_tablet->size,
+							'point' => (string) $setting->typography_font_size_tablet->size,
 						);
 					}
 
 					if ( isset( $setting->typography_font_size_mobile ) ) {
 						$converted_font['font']['size']['Mobile'] = array(
 							'unit'  => $setting->typography_font_size_mobile->unit,
-							'point' => $setting->typography_font_size_mobile->size,
+							'point' => (string) $setting->typography_font_size_mobile->size,
 						);
 					}
 
@@ -518,21 +518,21 @@ class Backend_Api {
 					if ( isset( $setting->typography_line_height ) ) {
 						$converted_font['font']['lineHeight']['Desktop'] = array(
 							'unit'  => $setting->typography_line_height->unit,
-							'point' => $setting->typography_line_height->size,
+							'point' => (string) $setting->typography_line_height->size,
 						);
 					}
 
 					if ( isset( $setting->typography_line_height_tablet ) ) {
 						$converted_font['font']['lineHeight']['Tablet'] = array(
 							'unit'  => $setting->typography_line_height_tablet->unit,
-							'point' => $setting->typography_line_height_tablet->size,
+							'point' => (string) $setting->typography_line_height_tablet->size,
 						);
 					}
 
 					if ( isset( $setting->typography_line_height_mobile ) ) {
 						$converted_font['font']['lineHeight']['Mobile'] = array(
 							'unit'  => $setting->typography_line_height_mobile->unit,
-							'point' => $setting->typography_line_height_mobile->size,
+							'point' => (string) $setting->typography_line_height_mobile->size,
 						);
 					}
 
