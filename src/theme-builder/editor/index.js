@@ -23,7 +23,7 @@ import { createTestimonialsBlock } from './convertion/blocks/testimonials';
 import { createJkitTeamBlock } from './convertion/blocks/jkit/jkit-team';
 import { createDividerBlock } from './convertion/blocks/elementor/divider';
 import { createJkitImageBoxBlock } from './convertion/blocks/jkit/jkit-image-box';
-import { createProgressBarBlock } from './convertion/blocks/progress-bar';
+import { createJkitProgressBarBlock } from './convertion/blocks/jkit/jkit-progress-bar';
 import { createGoogleMapsBlock } from './convertion/blocks/elementor/google-maps';
 import { createAccordionsBlock } from './convertion/blocks/accordions';
 import { createJkitNavMenuBlock } from './convertion/blocks/jkit/jkit-nav-menu';
@@ -70,6 +70,8 @@ const convertWidget = (type, attrs, inner) => {
             return createJkitImageBoxBlock(attrs);
         case 'jkit_nav_menu':
             return createJkitNavMenuBlock(attrs);
+        case 'jkit_progress_bar':
+            return createJkitProgressBarBlock(attrs);
         case 'jkit_team':
             return createJkitTeamBlock(attrs);
 
@@ -81,8 +83,7 @@ const convertWidget = (type, attrs, inner) => {
         // case 'image-box':
         //     return createJkitImageBoxBlock(attrs);
         case 'progress-bar':
-        case 'jkit_progress_bar':
-            return createProgressBarBlock(attrs);
+            return createJkitProgressBarBlock(attrs);
         case 'jkit_testimonials':
             return createTestimonialsBlock(attrs);
 
