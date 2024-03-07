@@ -41,6 +41,12 @@ export const createColumnBlock = (attrs, innerBlocks) => {
             value: ({ attrs }) => ({
                 Desktop: attrs?._inline_size ? attrs?._inline_size : attrs?._column_size
             })
+        },
+        {
+            id: 'horizontalAlign',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.align
+            })
         }
     ];
 

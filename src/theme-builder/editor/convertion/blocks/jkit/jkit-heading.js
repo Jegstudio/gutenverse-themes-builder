@@ -45,6 +45,12 @@ export const createJkitHeadingBlock = (attrs) => {
             value: getAttrPositioning
         },
         {
+            id: 'alignText',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.st_general_alignment_responsive
+            })
+        },
+        {
             id: 'showSub',
             value: ({ attrs }) => attrs?.sg_description_enable === 'yes' ? 'bottom' : 'none'
         },

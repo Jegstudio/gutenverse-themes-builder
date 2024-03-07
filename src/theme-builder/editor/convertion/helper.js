@@ -34,13 +34,13 @@ export const getValueNormal = (attrs, key) => {
 }
 
 export const getValueRange = (attrs, key) => {
-    return attrs?.[`${key}`]?.size;
+    return `${attrs?.[`${key}`]?.size}`;
 }
 
 export const getValueUnitPoint = (attrs, key) => {
     return {
         unit: attrs?.[`${key}`]?.unit,
-        point: attrs?.[`${key}`]?.size
+        point: `${attrs?.[`${key}`]?.size}`
     };
 }
 
@@ -48,10 +48,10 @@ export const getValueDimension = (attrs, key) => {
     return {
         unit: attrs?.[`${key}`]?.unit,
         dimension: {
-            top: attrs?.[`${key}`]?.top,
-            right: attrs?.[`${key}`]?.right,
-            bottom: attrs?.[`${key}`]?.bottom,
-            left: attrs?.[`${key}`]?.left
+            top: `${attrs?.[`${key}`]?.top}`,
+            right: `${attrs?.[`${key}`]?.right}`,
+            bottom: `${attrs?.[`${key}`]?.bottom}`,
+            left: `${attrs?.[`${key}`]?.left}`
         }
     };
 }
@@ -78,19 +78,19 @@ export const getValueResponsive = (attrs, key, callback = () => { }) => {
     return result
 }
 
-export const getAttrMargin = ({ attrs, name = 'margin', prefix = '' }) => {
+export const getAttrMargin = ({ attrs, prefix = '' }) => {
     return getValueResponsive(attrs, `${prefix}margin`, getValueDimension);
 };
 
-export const getAttrPadding = ({ attrs, name = 'padding', prefix = '' }) => {
+export const getAttrPadding = ({ attrs, prefix = '' }) => {
     return getValueResponsive(attrs, `${prefix}padding`, getValueDimension);
 };
 
-export const getAttrZIndex = ({ attrs, name = 'zIndex', prefix = '' }) => {
+export const getAttrZIndex = ({ attrs, prefix = '' }) => {
     return getValueResponsive(attrs, `${prefix}z_index`, getValueNormal);
 };
 
-export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', prefix = '' }) => {
+export const getAttrBorderResponsive = ({ attrs, prefix = '' }) => {
     const result = {
         Tablet: {},
         Mobile: {}
@@ -274,7 +274,7 @@ export const getAttrBorderResponsive = ({ attrs, name = 'borderResponsive', pref
     }
 }
 
-export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
+export const getAttrBorder = ({ attrs, prefix = '' }) => {
     let result = {};
 
     if (attrs?.[`${prefix}border_radius`]) {
@@ -369,7 +369,7 @@ export const getAttrBorder = ({ attrs, name = 'border', prefix = '' }) => {
     return result;
 }
 
-export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) => {
+export const getAttrBackground = ({ attrs, prefix = '' }) => {
     let result = {};
 
     result = {
@@ -410,7 +410,7 @@ export const getAttrBackground = ({ attrs, name = 'background', prefix = '' }) =
     return result;
 }
 
-export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => {
+export const getAttrBoxShadow = ({ attrs, prefix = '' }) => {
     let result = {};
 
     if (attrs?.[`${prefix}box_shadow_box_shadow_type`] === 'yes') {
@@ -423,10 +423,10 @@ export const getAttrBoxShadow = ({ attrs, name = 'boxShadow', prefix = '' }) => 
                 b: color[2],
                 a: color[3]
             },
-            horizontal: attrs?.[`${prefix}box_shadow_box_shadow`]?.horizontal,
-            vertical: attrs?.[`${prefix}box_shadow_box_shadow`]?.vertical,
-            blur: attrs?.[`${prefix}box_shadow_box_shadow`]?.blur,
-            spread: attrs?.[`${prefix}box_shadow_box_shadow`]?.spread,
+            horizontal: `${attrs?.[`${prefix}box_shadow_box_shadow`]?.horizontal}`,
+            vertical: `${attrs?.[`${prefix}box_shadow_box_shadow`]?.vertical}`,
+            blur: `${attrs?.[`${prefix}box_shadow_box_shadow`]?.blur}`,
+            spread: `${attrs?.[`${prefix}box_shadow_box_shadow`]?.spread}`,
         }
     }
 

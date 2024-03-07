@@ -55,7 +55,13 @@ export const createHeadingBlock = (attrs) => {
         {
             id: 'typography',
             value: ({ attrs }) => attrs?.typography_typography
-        }
+        },
+        {
+            id: 'textAlign',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.align
+            })
+        },
     ];
 
     return createBlock(

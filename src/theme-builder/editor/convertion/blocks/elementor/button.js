@@ -73,6 +73,12 @@ export const createButtonBlock = (attrs) => {
             id: 'typography',
             value: ({ attrs }) => attrs?.typography_typography
         },
+        {
+            id: 'alignButton',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.align
+            })
+        },
     ];
 
     return createBlock(

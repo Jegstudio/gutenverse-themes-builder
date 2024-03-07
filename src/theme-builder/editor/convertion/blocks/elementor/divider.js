@@ -47,7 +47,7 @@ export const createDividerBlock = (attrs) => {
         },
         {
             id: 'content',
-            value: ({ attrs }) => !isEmpty(attrs?.text) ? 'text' : 'none'
+            value: ({ attrs }) => !isEmpty(attrs?.show_text) ? 'text' : 'none'
         },
         {
             id: 'width',
