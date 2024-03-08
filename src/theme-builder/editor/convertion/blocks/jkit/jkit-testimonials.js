@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueRange, getValueResponsive } from '../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueRange, getValueResponsive } from '../../helper';
 
 
 export const createJkitTestimonialsBlock = (attrs) => {

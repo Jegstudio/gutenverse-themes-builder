@@ -19,7 +19,7 @@ import { createIconListBlock } from './convertion/blocks/elementor/icon-list';
 import { createJkitHeadingBlock } from './convertion/blocks/jkit/jkit-heading';
 import { createSpacerBlock } from './convertion/blocks/elementor/spacer';
 import { createTextEditorBlock } from './convertion/blocks/elementor/text-editor';
-import { createJkitTestimonialsBlock } from './convertion/blocks/jkit-testimonials';
+import { createJkitTestimonialsBlock } from './convertion/blocks/jkit/jkit-testimonials';
 import { createJkitTeamBlock } from './convertion/blocks/jkit/jkit-team';
 import { createDividerBlock } from './convertion/blocks/elementor/divider';
 import { createJkitImageBoxBlock } from './convertion/blocks/jkit/jkit-image-box';
@@ -28,6 +28,7 @@ import { createGoogleMapsBlock } from './convertion/blocks/elementor/google-maps
 import { createAccordionsBlock } from './convertion/blocks/accordions';
 import { createJkitNavMenuBlock } from './convertion/blocks/jkit/jkit-nav-menu';
 import { createJkitIconBoxBlock } from './convertion/blocks/jkit/jkit-icon-box';
+import { createJkitPostBlockBlock } from './convertion/blocks/jkit/jkit-post-block';
 
 const wrapperElements = [
     'section',
@@ -109,7 +110,7 @@ const convertWidget = (type, attrs, inner) => {
         case 'jkit_post_author':
             return createBlock('gutenverse/post-author', {}, inner);
         case 'jkit_post_block':
-            return createBlock('gutenverse/post-block', {}, inner);
+            return createJkitPostBlockBlock(attrs);
         case 'jkit_post_comment':
             return createBlock('gutenverse/post-comment', {}, inner);
         case 'jkit_post_content':
