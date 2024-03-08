@@ -379,32 +379,15 @@ export const getAttrBackground = ({ attrs, prefix = '' }) => {
     }
 
     if (attrs?.[`${prefix}background_background`] === 'classic') {
-        if (attrs?.[`${prefix}background_image`]) {
-            result['image'] = {
-                Desktop: {
-                    id: attrs?.[`${prefix}background_image`]?.id,
-                    image: attrs?.[`${prefix}background_image`]?.url,
-                }
+        result['image'] = getValueResponsive(attrs, `${prefix}background_image`, (attrs, key) => {
+            return {
+                id: attrs?.[key]?.id,
+                image: attrs?.[key]?.url,
             }
-        }
-
-        if (attrs?.[`${prefix}background_image_tablet`]) {
-            result['image'] = {
-                Tablet: {
-                    id: attrs?.[`${prefix}background_image_tablet`]?.id,
-                    image: attrs?.[`${prefix}background_image_tablet`]?.url,
-                }
-            }
-        }
-
-        if (attrs?.[`${prefix}background_image_mobile`]) {
-            result['image'] = {
-                Mobile: {
-                    id: attrs?.[`${prefix}background_image_mobile`]?.id,
-                    image: attrs?.[`${prefix}background_image_mobile`]?.url,
-                }
-            }
-        }
+        });
+        result['position'] = getValueResponsive(attrs, `${prefix}background_position`, getValueNormal);
+        result['repeat'] = getValueResponsive(attrs, `${prefix}background_repeat`, getValueNormal);
+        result['size'] = getValueResponsive(attrs, `${prefix}background_size`, getValueNormal);
     }
 
     return result;

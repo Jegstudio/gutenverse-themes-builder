@@ -47,6 +47,12 @@ export const createColumnBlock = (attrs, innerBlocks) => {
             value: ({ attrs }) => ({
                 Desktop: attrs?.align
             })
+        },
+        {
+            id: 'verticalAlign',
+            value: ({ attrs }) => ({
+                Desktop: attrs?.content_position
+            })
         }
     ];
 
