@@ -436,6 +436,16 @@ class Backend_Api {
 		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
 		$update_colors = json_decode( $themedata['post_content'] );
 
+		if ( ! isset( $update_colors->settings ) ) {
+			$update_colors->settings = (object) array(
+				'color' => (object) array(
+					'palette' => (object) array(
+						'custom' => (object) array(),
+					),
+				),
+			);
+		}
+
 		if ( isset( $update_colors->settings->color->palette->custom ) ) {
 			$update_colors->settings->color->palette->custom = array();
 		}
@@ -755,6 +765,20 @@ class Backend_Api {
 		$theme         = wp_get_theme();
 		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
 		$update_colors = json_decode( $themedata['post_content'] );
+
+		if ( ! isset( $update_colors->settings ) ) {
+			$update_colors->settings = (object) array(
+				'color' => (object) array(
+					'palette' => (object) array(
+						'custom' => (object) array(),
+					),
+				),
+			);
+		}
+
+		if ( isset( $update_colors->settings->color->palette->custom ) ) {
+			$update_colors->settings->color->palette->custom = array();
+		}
 
 		$update_colors->settings->color->palette->custom = maybe_unserialize( $update[0]['colors'] );
 
