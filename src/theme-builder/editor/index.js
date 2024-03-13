@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
 import { getAttributes } from './convertion/helper';
-import { createAccordionsBlock, createButtonBlock, createColumnBlock, createDividerBlock, createGoogleMapsBlock, createHeadingBlock, createIconBlock, createIconBoxBlock, createIconListBlock, createImageBlock, createJkitAccordionsBlock, createJkitFunFactBlock, createJkitHeadingBlock, createJkitIconBoxBlock, createJkitImageBoxBlock, createJkitNavMenuBlock, createJkitPostBlockBlock, createJkitProgressBarBlock, createJkitTeamBlock, createJkitTestimonialsBlock, createProgressBarBlock, createSectionBlock, createSpacerBlock, createTextEditorBlock } from './convertion/blocks';
+import { createAccordionsBlock, createButtonBlock, createColumnBlock, createDividerBlock, createGoogleMapsBlock, createHeadingBlock, createIconBlock, createIconBoxBlock, createIconListBlock, createImageBlock, createJkitAccordionsBlock, createJkitFunFactBlock, createJkitHeadingBlock, createJkitIconBoxBlock, createJkitImageBoxBlock, createJkitNavMenuBlock, createJkitPostBlockBlock, createJkitProgressBarBlock, createJkitTeamBlock, createJkitTestimonialsBlock, createJkitVideoButtonBlock, createProgressBarBlock, createSectionBlock, createSpacerBlock, createTextEditorBlock } from './convertion/blocks';
 
 const wrapperElements = [
     'section',
@@ -64,10 +64,10 @@ const convertWidget = (type, attrs, inner) => {
             return createJkitTeamBlock(attrs);
         case 'jkit_testimonials':
             return createJkitTestimonialsBlock(attrs);
+        case 'jkit_video_button':
+            return createJkitVideoButtonBlock(attrs);
 
             //In Progress
-            // case 'jkit_video_button':
-            //     return createButtonBlock(attrs);
             // case 'image-box':
             //     return createJkitImageBoxBlock(attrs);
 

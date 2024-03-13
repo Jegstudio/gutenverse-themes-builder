@@ -25,4 +25,5 @@ export { createJkitPostBlockBlock } from './jkit/jkit-post-block';
 export { createJkitProgressBarBlock } from './jkit/jkit-progress-bar';
 export { createJkitTeamBlock } from './jkit/jkit-team';
 export { createJkitTestimonialsBlock } from './jkit/jkit-testimonials';
+export { createJkitVideoButtonBlock } from './jkit/jkit-video-button';
 
