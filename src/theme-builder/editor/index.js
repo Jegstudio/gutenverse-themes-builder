@@ -7,28 +7,7 @@ import { __ } from '@wordpress/i18n';
 import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
 import { getAttributes } from './convertion/helper';
-import { createHeadingBlock } from './convertion/blocks/elementor/heading';
-import { createSectionBlock } from './convertion/blocks/elementor/section';
-import { createColumnBlock } from './convertion/blocks/elementor/column';
-import { createImageBlock } from './convertion/blocks/elementor/image';
-import { createButtonBlock } from './convertion/blocks/elementor/button';
-import { createIconBlock } from './convertion/blocks/elementor/icon';
-import { createJkitFunFactBlock } from './convertion/blocks/jkit/jkit-fun-fact';
-import { createIconBoxBlock } from './convertion/blocks/elementor/icon-box';
-import { createIconListBlock } from './convertion/blocks/elementor/icon-list';
-import { createJkitHeadingBlock } from './convertion/blocks/jkit/jkit-heading';
-import { createSpacerBlock } from './convertion/blocks/elementor/spacer';
-import { createTextEditorBlock } from './convertion/blocks/elementor/text-editor';
-import { createJkitTestimonialsBlock } from './convertion/blocks/jkit/jkit-testimonials';
-import { createJkitTeamBlock } from './convertion/blocks/jkit/jkit-team';
-import { createDividerBlock } from './convertion/blocks/elementor/divider';
-import { createJkitImageBoxBlock } from './convertion/blocks/jkit/jkit-image-box';
-import { createJkitProgressBarBlock } from './convertion/blocks/jkit/jkit-progress-bar';
-import { createGoogleMapsBlock } from './convertion/blocks/elementor/google-maps';
-import { createAccordionsBlock } from './convertion/blocks/accordions';
-import { createJkitNavMenuBlock } from './convertion/blocks/jkit/jkit-nav-menu';
-import { createJkitIconBoxBlock } from './convertion/blocks/jkit/jkit-icon-box';
-import { createJkitPostBlockBlock } from './convertion/blocks/jkit/jkit-post-block';
+import { createAccordionsBlock, createButtonBlock, createColumnBlock, createDividerBlock, createGoogleMapsBlock, createHeadingBlock, createIconBlock, createIconBoxBlock, createIconListBlock, createImageBlock, createJkitAccordionsBlock, createJkitFunFactBlock, createJkitHeadingBlock, createJkitIconBoxBlock, createJkitImageBoxBlock, createJkitNavMenuBlock, createJkitPostBlockBlock, createJkitProgressBarBlock, createJkitTeamBlock, createJkitTestimonialsBlock, createProgressBarBlock, createSectionBlock, createSpacerBlock, createTextEditorBlock } from './convertion/blocks';
 
 const wrapperElements = [
     'section',
@@ -39,6 +18,8 @@ const convertWidget = (type, attrs, inner) => {
     switch (type) {
         // Done
         // normal
+        case 'accordion':
+            return createAccordionsBlock(attrs);
         case 'button':
             return createButtonBlock(attrs);
         case 'divider':
@@ -55,12 +36,16 @@ const convertWidget = (type, attrs, inner) => {
             return createIconListBlock(attrs);
         case 'image':
             return createImageBlock(attrs);
+        case 'progress-bar':
+            return createProgressBarBlock(attrs);
         case 'spacer':
             return createSpacerBlock(attrs);
         case 'text-editor':
             return createTextEditorBlock(attrs);
 
         // jkit
+        case 'jkit_accordion':
+            return createJkitAccordionsBlock(attrs);
         case 'jkit_fun_fact':
             return createJkitFunFactBlock(attrs);
         case 'jkit_heading':
@@ -71,22 +56,20 @@ const convertWidget = (type, attrs, inner) => {
             return createJkitImageBoxBlock(attrs);
         case 'jkit_nav_menu':
             return createJkitNavMenuBlock(attrs);
+        case 'jkit_post_block':
+            return createJkitPostBlockBlock(attrs);
         case 'jkit_progress_bar':
             return createJkitProgressBarBlock(attrs);
         case 'jkit_team':
             return createJkitTeamBlock(attrs);
-
-        //In Progress
-        case 'accordion':
-            return createAccordionsBlock(attrs);
-        // case 'jkit_video_button':
-        //     return createButtonBlock(attrs);
-        // case 'image-box':
-        //     return createJkitImageBoxBlock(attrs);
-        case 'progress-bar':
-            return createJkitProgressBarBlock(attrs);
         case 'jkit_testimonials':
             return createJkitTestimonialsBlock(attrs);
+
+            //In Progress
+            // case 'jkit_video_button':
+            //     return createButtonBlock(attrs);
+            // case 'image-box':
+            //     return createJkitImageBoxBlock(attrs);
 
         // Todo
         case 'gallery':
@@ -109,8 +92,6 @@ const convertWidget = (type, attrs, inner) => {
             return createBlock('gutenverse/social-share', {}, inner);
         case 'jkit_post_author':
             return createBlock('gutenverse/post-author', {}, inner);
-        case 'jkit_post_block':
-            return createJkitPostBlockBlock(attrs);
         case 'jkit_post_comment':
             return createBlock('gutenverse/post-comment', {}, inner);
         case 'jkit_post_content':
