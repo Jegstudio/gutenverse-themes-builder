@@ -46,31 +46,39 @@ export const createJkitAccordionsBlock = (attrs) => {
         },
         {
             id: 'titleTextColor',
-            value: ({attrs}) => attrs?.st_title_close_color_responsive
+            value: ({ attrs }) => attrs?.st_title_close_color_responsive
         },
         {
             id: 'titleActiveColor',
-            value: ({attrs}) => attrs?.st_title_open_color_responsive
+            value: ({ attrs }) => attrs?.st_title_open_color_responsive
         },
         {
             id: 'titleTypography',
-            value: ({attrs}) => attrs?.st_title_typography_content_typography_typography
+            value: ({ attrs }) => attrs?.st_title_typography_content_typography_typography
         },
         {
             id: 'contentTextColor',
-            value: ({attrs}) => attrs?.st_description_color_responsive
+            value: ({ attrs }) => attrs?.st_description_color_responsive
         },
         {
             id: 'contentTypography',
-            value: ({attrs}) => attrs?.st_description_typography_content_typography_typography
+            value: ({ attrs }) => attrs?.st_description_typography_content_typography_typography
         },
         {
             id: 'iconClosed',
-            value: ({attrs}) => getValueIcon(attrs, 'sg_icon_right')
+            value: ({ attrs }) => getValueIcon(attrs, 'sg_icon_right')
         },
         {
             id: 'iconOpen',
-            value: ({attrs}) => getValueIcon(attrs, 'sg_icon_right_active')
+            value: ({ attrs }) => getValueIcon(attrs, 'sg_icon_right_active')
+        },
+        {
+            id: 'iconColor',
+            value: ({ attrs }) => attrs?.st_icon_close_color_responsive
+        },
+        {
+            id: 'iconActiveColor',
+            value: ({ attrs }) => attrs?.st_icon_open_color_responsive
         }
     ];
 
