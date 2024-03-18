@@ -1,1 +1,37 @@
 @import "pattern-wrapper/styles/editor.scss";
+
+.gutenverse-library-button.import-template-kit {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px 13px 10px;
+    object-fit: contain;
+    border-radius: 3px;
+    border: solid 1px #3b57f7;
+    background: white;
+
+    .rotating {
+        color: #3b57f7;
+    }
+
+    p {
+        flex-grow: 0;
+        font-family: Poppins, sans-serif;
+        font-size: 12px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3b57f7;
+
+        strong {
+            font-size: 12px;
+            padding: 0;
+            margin: 0;
+            color: #3b57f7;
+        }
+    }
+}

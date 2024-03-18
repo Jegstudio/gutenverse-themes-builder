@@ -1,3 +1,4 @@
+import apiFetch from "@wordpress/api-fetch";
 import { hexToRgb } from "gutenverse-core/editor-helper";
 import isEmpty from "lodash/isEmpty";
 
@@ -28,6 +29,8 @@ export const getAttributes = (data) => {
 
     return attrs;
 };
+
+// Get Values
 
 export const getValueNormal = (attrs, key) => {
     return attrs?.[key];
@@ -77,6 +80,19 @@ export const getValueResponsive = (attrs, key, callback = () => { }) => {
 
     return result
 }
+
+export const getValueImage = (attrs, key) => {
+    return {
+        media: {
+            imageId: attrs?.[key]?.id,
+            sizes: {
+                full: attrs?.[key]
+            }
+        }
+    }
+}
+
+// Get Attribute
 
 export const getAttrMargin = ({ attrs, prefix = '' }) => {
     return getValueResponsive(attrs, `${prefix}margin`, getValueDimension);
@@ -445,7 +461,6 @@ export const getAttrPositioning = ({ attrs }) => {
 
     return result;
 }
-
 
 export const getBlockAttributes = (list, attrs) => {
     let attributes = {};

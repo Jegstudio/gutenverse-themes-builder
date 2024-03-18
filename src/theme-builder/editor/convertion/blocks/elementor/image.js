@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueResponsive, getValueUnitPoint } from '../../helper';
+import { getAttrBackground, getAttrBorder, getAttrBorderResponsive, getAttrBoxShadow, getAttrMargin, getAttrPadding, getAttrPositioning, getAttrZIndex, getBlockAttributes, getValueImage, getValueResponsive, getValueUnitPoint } from '../../helper';
 
 export const createImageBlock = (attrs) => {
     const list = [
@@ -56,14 +56,7 @@ export const createImageBlock = (attrs) => {
         },
         {
             id: 'imgSrc',
-            value: ({ attrs }) => ({
-                media: {
-                    imageId: attrs?.image?.id,
-                    sizes: {
-                        full: attrs?.image
-                    }
-                }
-            })
+            value: ({ attrs }) => getValueImage(attrs, 'image')
         },
         {
             id: 'width',

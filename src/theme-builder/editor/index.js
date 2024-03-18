@@ -8,6 +8,8 @@ import isEmpty from 'lodash/isEmpty';
 import { getEditSiteHeader } from 'gutenverse-core/editor-helper';
 import { getAttributes } from './convertion/helper';
 import { createAccordionsBlock, createButtonBlock, createColumnBlock, createDividerBlock, createGoogleMapsBlock, createHeadingBlock, createIconBlock, createIconBoxBlock, createIconListBlock, createImageBlock, createJkitAccordionsBlock, createJkitFunFactBlock, createJkitHeadingBlock, createJkitIconBoxBlock, createJkitImageBoxBlock, createJkitNavMenuBlock, createJkitPostBlockBlock, createJkitProgressBarBlock, createJkitTeamBlock, createJkitTestimonialsBlock, createJkitVideoButtonBlock, createProgressBarBlock, createSectionBlock, createSpacerBlock, createTextEditorBlock } from './convertion/blocks';
+import apiFetch from '@wordpress/api-fetch';
+import { Loader } from 'react-feather';
 
 const wrapperElements = [
     'section',
@@ -67,9 +69,9 @@ const convertWidget = (type, attrs, inner) => {
         case 'jkit_video_button':
             return createJkitVideoButtonBlock(attrs);
 
-            //In Progress
-            // case 'image-box':
-            //     return createJkitImageBoxBlock(attrs);
+        //In Progress
+        case 'image-box':
+            return createJkitImageBoxBlock(attrs);
 
         // Todo
         case 'gallery':
@@ -145,7 +147,55 @@ const contentLoop = (elements) => {
     return blocks;
 };
 
+const imageLoop = (content, images) => {
+    content.map(element => {
+        if (!isEmpty(element?.isInner) || '' === element?.isInner || wrapperElements.includes(element?.elType)) {
+            imageLoop(element?.elements, images);
+        }
+
+        if (element?.elType === 'widget' && element?.widgetType === 'jkit_testimonials') {
+            element?.settings?.sg_testimonials_list?.map(list => {
+                const img = list?.sg_testimonials_list_client_avatar;
+
+                if (img?.url && img?.id) {
+                    images.push(img?.url);
+                }
+            });
+        } else {
+            Object.keys(element?.settings).map(key => {
+                const img = element?.settings?.[key];
+
+                if (img?.url && img?.id) {
+                    images.push(img?.url);
+                }
+            });
+        }
+    });
+};
+
+const convertContent = (content, setLoading) => {
+    let images = [];
+
+    imageLoop(content, images);
+    setLoading(true);
+
+    apiFetch({
+        path: 'gtb-backend/v1/import/images',
+        method: 'POST',
+        data: {
+            images,
+            content
+        }
+    }).then(response => {
+        if (response?.content) {
+            const blocks = contentLoop(response?.content);
+            dispatch('core/block-editor').insertBlocks(blocks, 0);
+        }
+    }).catch(() => { }).finally(() => setLoading(false));
+};
+
 const ExtraComponent = () => {
+    const [loading, setLoading] = useState(false);
     const [fileData, setFileData] = useState({});
     const [injectLocation, setInjectLocation] = useState(null);
 
@@ -156,9 +206,9 @@ const ExtraComponent = () => {
     }, []);
 
     const convertElements = (jsonData) => {
+
         if (!isEmpty(jsonData?.content)) {
-            const blocks = contentLoop(jsonData?.content);
-            dispatch('core/block-editor').insertBlocks(blocks, 0);
+            convertContent(jsonData?.content, setLoading);
         }
     };
 
@@ -190,8 +240,16 @@ const ExtraComponent = () => {
                 value={null}
                 render={({ open }) => {
                     return <div className="gutenverse-top-button">
-                        <div className="gutenverse-library-button" id={'gutenverse-library-button'} onClick={open}>
-                            {__('Import from Template Kit', '--gctd--')}
+                        <div className="gutenverse-library-button import-template-kit" id={'gutenverse-library-button'} onClick={open}>
+                            {loading && open && <div style={{ marginRight: '4px' }}>
+                                <div className="rotating" style={{ display: 'flex' }}>
+                                    <Loader size={20} />
+                                </div>
+                            </div>}
+                            <p>
+                                <strong>{__('Import ', '--gctd--')}</strong>
+                                {__('Template', '--gctd--')}
+                            </p>
                         </div>
                     </div>;
                 }} />
