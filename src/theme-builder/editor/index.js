@@ -158,7 +158,7 @@ const imageLoop = (content, images) => {
                 const img = list?.sg_testimonials_list_client_avatar;
 
                 if (img?.url && img?.id) {
-                    images.push(img?.url);
+                    images.push(img);
                 }
             });
         } else {
@@ -166,7 +166,7 @@ const imageLoop = (content, images) => {
                 const img = element?.settings?.[key];
 
                 if (img?.url && img?.id) {
-                    images.push(img?.url);
+                    images.push(img);
                 }
             });
         }

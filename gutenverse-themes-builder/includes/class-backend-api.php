@@ -2093,16 +2093,21 @@ class Backend_Api {
 		set_time_limit( 300 );
 
 		foreach ( $images as $image ) {
-			$data = $this->check_image_exist( $image );
+			$data = $this->check_image_exist( $image['url'] );
 
 			if ( ! $data ) {
-				$data = $this->handle_file( $image );
+				$data = $this->handle_file( $image['url'] );
 			}
 
-			$search  = str_replace( '/', '\/', $image );
-			$replace = str_replace( '/', '\/', $data['url'] );
+			// replace id.
+			$search_id  = '"id":"' . $image['id'] . '"';
+			$replace_id = '"id":"' . $data['id'] . '"';
+			$strings    = str_replace( $search_id, $replace_id, $strings );
 
-			$strings = str_replace( $search, $replace, $strings );
+			// replace url.
+			$search_url  = str_replace( '/', '\/', $image['url'] );
+			$replace_url = str_replace( '/', '\/', $data['url'] );
+			$strings     = str_replace( $search_url, $replace_url, $strings );
 		}
 
 		return array(
