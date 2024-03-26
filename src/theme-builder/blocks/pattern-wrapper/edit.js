@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
-import { withCustomStyle } from 'gutenverse-core/hoc';
+import { withCopyElementToolbar, withCustomStyle } from 'gutenverse-core/hoc';
 import { panelList } from './panels/panel-list';
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { dispatch } from '@wordpress/data';
@@ -341,6 +341,7 @@ const EmptyMode = ({ mode, setMode, setAttributes, clientId }) => {
 
 const PatternWrapperBlock = compose(
     withCustomStyle(panelList),
+    withCopyElementToolbar(),
 )(props => {
     const {
         clientId,
