@@ -74,6 +74,7 @@ class Block_Patterns {
 
 		if ( defined( 'GUTENVERSE' ) ) {
             {{gutenverse_patterns}}
+            {{pro_patterns}}
 		}
 
 		$block_patterns = apply_filters( '{{theme_slug}}_block_patterns', $block_patterns );

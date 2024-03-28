@@ -523,11 +523,16 @@ class Export_Theme {
 	 * @param string $theme_id .
 	 */
 	public function create_init_php( $system, $data, $theme_id ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init.txt' );
-
 		$theme_data     = maybe_unserialize( $data['theme_data'] );
 		$templates_db   = Database::instance()->theme_templates;
 		$templates_data = $templates_db->get_data( $theme_id );
+
+		// Take which placeholder.
+		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
+			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-core-gutenverse.txt' );
+		} else {
+			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-default.txt' );
+		}
 
 		$placeholder = str_replace( '{{theme_slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
@@ -597,25 +602,27 @@ class Export_Theme {
 		$placeholder = str_replace( '{{page_list}}', join( ",\n\t\t\t\t", $pages ), $placeholder );
 
 		// Load Gutenverse templates.
-		$template_names = array();
-		$template_cases = array();
+		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
+			$template_names = array();
+			$template_cases = array();
 
-		foreach ( $templates_data as $template ) {
-			if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
-				$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
-				$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			foreach ( $templates_data as $template ) {
+				if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
+					$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
+					$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
 
-				if ( 'templates' === $template_type ) {
-					$template_names[] = "'{$template_name}'";
+					if ( 'templates' === $template_type ) {
+						$template_names[] = "'{$template_name}'";
+					}
+
+					$template_cases[] = 'case \'' . $template_name . '\':
+					return $directory . \'/gutenverse-templates/' . $template_type . '/' . $template_name . '.html\';';
 				}
-
-				$template_cases[] = 'case \'' . $template_name . '\':
-				return $directory . \'/gutenverse-templates/' . $template_type . '/' . $template_name . '.html\';';
 			}
-		}
 
-		$placeholder = str_replace( '{{template_names}}', join( ",\r\n\t\t\t\t", $template_names ), $placeholder );
-		$placeholder = str_replace( '{{template_cases}}', join( "\r\n\t\t\t", $template_cases ), $placeholder );
+			$placeholder = str_replace( '{{template_names}}', join( ",\r\n\t\t\t\t", $template_names ), $placeholder );
+			$placeholder = str_replace( '{{template_cases}}', join( "\r\n\t\t\t", $template_cases ), $placeholder );
+		}
 
 		// Generate Init Fonts.
 		$global_fonts = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
@@ -858,7 +865,7 @@ class Export_Theme {
 
 						switch ( $pattern_category ) {
 							case 'pro':
-								$this->pro_patterns[] = "'{$pattern_name}'";
+								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
 								break;
 							case 'gutenverse':
 								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
@@ -950,6 +957,7 @@ class Export_Theme {
 
 		$core_pattern_list       = '';
 		$gutenverse_pattern_list = '';
+		$pro_pattern_list        = '';
 
 		if ( ! empty( $this->core_patterns ) ) {
 			$core_pattern_list = join( ",\r\t\t\t", $this->core_patterns );
@@ -964,6 +972,13 @@ class Export_Theme {
 		}
 
 		$placeholder = str_replace( '{{gutenverse_patterns}}', $gutenverse_pattern_list, $placeholder );
+
+		if ( ! empty( $this->pro_patterns ) ) {
+			$pro_pattern_list = join( ";\r\t\t\t", $this->pro_patterns );
+			$pro_pattern_list = "$pro_pattern_list;";
+		}
+
+		$placeholder = str_replace( '{{pro_patterns}}', $pro_pattern_list, $placeholder );
 
 		$system->put_contents(
 			gtb_theme_built_path() . '/inc/class/class-block-patterns.php',
