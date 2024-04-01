@@ -2086,12 +2086,6 @@ class Backend_Api {
 		$images  = $request->get_param( 'images' );
 		$strings = wp_json_encode( $content );
 
-		/**
-		 * Temporarily increase time limit for import.
-		 * Default 30s is not enough for importing long content.
-		 */
-		set_time_limit( 300 );
-
 		foreach ( $images as $image ) {
 			$data = $this->check_image_exist( $image['url'] );
 
