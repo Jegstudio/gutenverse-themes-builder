@@ -89,7 +89,7 @@ class Gtb {
 	 */
 	public function register_framework() {
 		require_once GTB_DIR . 'lib/framework/init.php';
-		$init = \Initialize_Gutenverse_Framework::instance();
+		$init = \Gutenverse_Initialize_Framework::instance();
 
 		$framework_file    = GTB_DIR . 'lib/framework/bootstrap.php';
 		$framework_version = $init->get_framework_version( $framework_file );
@@ -103,7 +103,7 @@ class Gtb {
 	 */
 	public function can_load_framework() {
 		require_once GTB_DIR . 'lib/framework/init.php';
-		$init = \Initialize_Gutenverse_Framework::instance();
+		$init = \Gutenverse_Initialize_Framework::instance();
 
 		return $init->can_load_version( GTB );
 	}
@@ -229,10 +229,8 @@ class Gtb {
 				$block['innerBlocks']  = array();
 				$block['innerHTML']    = '';
 				$block['innerContent'] = '';
-			} else {
-				if ( ! empty( $block['innerBlocks'] ) ) {
+			} elseif ( ! empty( $block['innerBlocks'] ) ) {
 					$block['innerBlocks'] = $this->filter_pattern( $block['innerBlocks'], $flag );
-				}
 			}
 		}
 
