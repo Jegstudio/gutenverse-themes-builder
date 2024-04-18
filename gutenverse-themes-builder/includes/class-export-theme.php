@@ -625,7 +625,7 @@ class Export_Theme {
 		}
 
 		// Generate Init Fonts.
-		$global_fonts = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
+		$global_fonts = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
 		$fonts        = '';
 
 		if ( $global_fonts ) {
@@ -711,13 +711,13 @@ class Export_Theme {
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 
 					foreach ( $headers as $header ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $header . '","theme":"gutenverse-basic",';
+						$search  = '<!-- wp:template-part {"slug":"' . $header . '","theme":"' . get_stylesheet() . '",';
 						$replace = '<!-- wp:template-part {"slug":"header","theme":"' . $theme_slug . '",';
 						$content = str_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $footer . '","theme":"gutenverse-basic",';
+						$search  = '<!-- wp:template-part {"slug":"' . $footer . '","theme":"' . get_stylesheet() . '",';
 						$replace = '<!-- wp:template-part {"slug":"footer","theme":"' . $theme_slug . '",';
 						$content = str_replace( $search, $replace, $content );
 					}
