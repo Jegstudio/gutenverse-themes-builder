@@ -436,7 +436,7 @@ class Export_Theme {
 			}
 		}
 
-		$placeholder = str_replace( '{{font_sizes}}', ",\n\t\t\t\t" . join( ",\n\t\t\t\t", $sizes ), $placeholder );
+		$placeholder = ! empty( $sizes ) ? str_replace( '{{font_sizes}}', ",\n\t\t\t\t" . join( ",\n\t\t\t\t", $sizes ), $placeholder ) : str_replace( '{{font_sizes}}', '', $placeholder );
 
 		/**
 		 * Update Layout Size
@@ -585,7 +585,7 @@ class Export_Theme {
 			}
 
 			foreach ( $other['screenshots']['dashboard'] as $key => $dashboard ) {
-				$image_data = wp_remote_get( $dashboard['url'], array( 'sslverify' => false ) );
+				$image_data = wp_remote_get( $dashboard['url'], array( 'sslverify' => true ) );
 
 				if ( ! is_wp_error( $image_data ) ) {
 					$system->put_contents(
@@ -1013,7 +1013,7 @@ class Export_Theme {
 			$destination = $img_dir . '/' . $image_name;
 
 			if ( ! file_exists( $destination ) ) {
-				$image_data = wp_remote_get( $image_target, array( 'sslverify' => false ) );
+				$image_data = wp_remote_get( $image_target, array( 'sslverify' => true ) );
 
 				if ( ! is_wp_error( $image_data ) ) {
 					$system->put_contents(
@@ -1040,7 +1040,7 @@ class Export_Theme {
 		}
 
 		$image      = $other['screenshots']['thumbnail']['url'];
-		$image_data = wp_remote_get( $image, array( 'sslverify' => false ) );
+		$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
 
 		if ( ! is_wp_error( $image_data ) ) {
 			$system->put_contents(
