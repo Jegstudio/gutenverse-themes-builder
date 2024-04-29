@@ -711,14 +711,14 @@ class Export_Theme {
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 
 					foreach ( $headers as $header ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $header . '","theme":"' . get_stylesheet() . '",';
-						$replace = '<!-- wp:template-part {"slug":"header","theme":"' . $theme_slug . '",';
+						$search  = '<!-- wp:template-part {"slug":"' . $header . '","theme":"' . get_stylesheet() . '"';
+						$replace = '<!-- wp:template-part {"slug":"header","theme":"' . $theme_slug . '"';
 						$content = str_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $footer . '","theme":"' . get_stylesheet() . '",';
-						$replace = '<!-- wp:template-part {"slug":"footer","theme":"' . $theme_slug . '",';
+						$search  = '<!-- wp:template-part {"slug":"' . $footer . '","theme":"' . get_stylesheet() . '"';
+						$replace = '<!-- wp:template-part {"slug":"footer","theme":"' . $theme_slug . '"';
 						$content = str_replace( $search, $replace, $content );
 					}
 
