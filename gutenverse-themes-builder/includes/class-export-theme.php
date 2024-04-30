@@ -677,11 +677,21 @@ class Export_Theme {
 			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
 
 			if ( 'header' === $template['template_type'] ) {
-				$headers[ $template['category'] ] = $template['category'] . '-' . $template_name;
+				$header = array(
+					'from' => $template['category'] . '-' . $template_name,
+					'to'   => $template_name,
+				);
+
+				array_push( $headers, $header );
 			}
 
 			if ( 'footer' === $template['template_type'] ) {
-				$footers[ $template['category'] ] = $template['category'] . '-' . $template_name;
+				$footer = array(
+					'from' => $template['category'] . '-' . $template_name,
+					'to'   => $template_name,
+				);
+
+				array_push( $footers, $footer );
 			}
 		}
 
@@ -711,14 +721,14 @@ class Export_Theme {
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 
 					foreach ( $headers as $header ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $header . '","theme":"' . get_stylesheet() . '"';
-						$replace = '<!-- wp:template-part {"slug":"header","theme":"' . $theme_slug . '"';
+						$search  = '<!-- wp:template-part {"slug":"' . $header['from'] . '","theme":"' . get_stylesheet() . '"';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '"';
 						$content = str_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $footer . '","theme":"' . get_stylesheet() . '"';
-						$replace = '<!-- wp:template-part {"slug":"footer","theme":"' . $theme_slug . '"';
+						$search  = '<!-- wp:template-part {"slug":"' . $footer['from'] . '","theme":"' . get_stylesheet() . '"';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '"';
 						$content = str_replace( $search, $replace, $content );
 					}
 
