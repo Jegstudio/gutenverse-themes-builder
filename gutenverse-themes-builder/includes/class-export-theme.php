@@ -721,15 +721,15 @@ class Export_Theme {
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 
 					foreach ( $headers as $header ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $header['from'] . '","theme":"' . get_stylesheet() . '"';
-						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '"';
-						$content = str_replace( $search, $replace, $content );
+						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"uncategorized")?\s*} \/-->/';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header" /-->';
+						$content = preg_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
-						$search  = '<!-- wp:template-part {"slug":"' . $footer['from'] . '","theme":"' . get_stylesheet() . '"';
-						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '"';
-						$content = str_replace( $search, $replace, $content );
+						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"uncategorized")?\s*} \/-->/';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer" /-->';
+						$content = preg_replace( $search, $replace, $content );
 					}
 
 					$system->put_contents(
