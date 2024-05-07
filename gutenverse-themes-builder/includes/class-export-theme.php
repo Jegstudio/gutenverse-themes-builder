@@ -722,13 +722,13 @@ class Export_Theme {
 
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"uncategorized")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header" /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"uncategorized")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer" /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 
