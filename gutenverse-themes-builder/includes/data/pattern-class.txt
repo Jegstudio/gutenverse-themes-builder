@@ -58,6 +58,7 @@ class Block_Patterns {
 
 		if ( defined( 'GUTENVERSE' ) ) {
 			$block_pattern_categories['{{theme_slug}}-gutenverse'] = array( 'label' => __( '{{theme_slug_cap}} Gutenverse Patterns', '{{theme_slug}}' ) );
+			$block_pattern_categories['{{theme_slug}}-pro'] = array( 'label' => __( '{{theme_slug_cap}} Gutenverse PRO Patterns', '{{theme_slug}}' ) );
 		}
 
 		$block_pattern_categories = apply_filters( '{{theme_slug}}_block_pattern_categories', $block_pattern_categories );
