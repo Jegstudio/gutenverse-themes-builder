@@ -53,6 +53,31 @@ class Gtb {
 		add_filter( 'wp_check_filetype_and_ext', array( $this, 'update_mime_types' ), 10, 3 );
 		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ) );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
+		add_action( 'after_setup_theme', array( $this, 'load_custom_theme_json' ) );
+	}
+
+	/**
+	 * Load custom theme Json
+	 */
+	public function load_custom_theme_json() {
+		$theme_dir = gtb_theme_folder_path();
+		$json_path = $theme_dir . 'theme.json';
+
+		if ( file_exists( $json_path ) ) {
+			add_filter(
+				'wp_theme_json_data_theme',
+				function ( $theme_json ) use ( $json_path ) {
+					$custom_theme_json = json_decode( file_get_contents( $json_path ), true );
+
+					if ( $custom_theme_json ) {
+						$theme_json->update_with( $custom_theme_json );
+					}
+
+					return $theme_json;
+				},
+				9999
+			);
+		}
 	}
 
 	/**

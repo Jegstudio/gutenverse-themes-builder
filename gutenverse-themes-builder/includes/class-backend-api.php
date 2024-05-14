@@ -1923,10 +1923,6 @@ class Backend_Api {
 	 * Update THEME JSON simultaneously
 	 */
 	private function update_theme_json() {
-		if ( 'gutenverse-basic' !== get_stylesheet() ) {
-			return;
-		}
-
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
 		global $wp_filesystem;
@@ -2008,18 +2004,18 @@ class Backend_Api {
 		$placeholder = str_replace( '{{font_families}}', join( ',', $families ), $placeholder );
 
 		$font_list = $this->get_fontsize_list();
-		$sizes     = array();
+		$sizes     = '';
 
 		if ( ! empty( $font_list['data'] ) ) {
 			foreach ( $font_list['data'] as $font ) {
-				$sizes[] = '{
+				$sizes .= ",\n\t\t\t\t" . '{
 					"size": "' . $font['size'] . '",
 					"slug": "' . $font['slug'] . '"
 				}';
 			}
 		}
 
-		$placeholder = str_replace( '{{font_sizes}}', ",\n\t\t\t\t" . join( ",\n\t\t\t\t", $sizes ), $placeholder );
+		$placeholder = str_replace( '{{font_sizes}}', $sizes, $placeholder );
 
 		$theme_id = get_option( 'gtb_active_theme_id' );
 		$layout   = array();
@@ -2038,9 +2034,10 @@ class Backend_Api {
 		}
 
 		$placeholder = str_replace( '{{layout_sizes}}', wp_json_encode( $layout ), $placeholder );
+		$theme_json_path = gtb_theme_folder_path() . '/theme.json';
 
 		$wp_filesystem->put_contents(
-			get_template_directory() . '/theme.json',
+			$theme_json_path,
 			$placeholder,
 			FS_CHMOD_FILE
 		);

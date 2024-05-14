@@ -1,5 +1,4 @@
 {
-	"$schema": "https://schemas.wp.org/wp/6.2/theme.json",
 	"customTemplates": [],
 	"settings": {
 		"appearanceTools": true,
