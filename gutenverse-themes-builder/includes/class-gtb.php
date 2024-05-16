@@ -63,7 +63,7 @@ class Gtb {
 		$theme_dir = gtb_theme_folder_path();
 		$json_path = $theme_dir . 'theme.json';
 
-		if ( file_exists( $json_path ) ) {
+		if ( file_exists( $json_path ) && strpos( get_stylesheet(), 'gutenverse-basic' ) !== false ) {
 			add_filter(
 				'wp_theme_json_data_theme',
 				function ( $theme_json ) use ( $json_path ) {
