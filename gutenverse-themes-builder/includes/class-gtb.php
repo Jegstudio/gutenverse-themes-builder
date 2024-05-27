@@ -183,6 +183,12 @@ class Gtb {
 		add_action( 'rest_after_insert_wp_template_part', array( $this, 'after_insert_wp_template' ), null, 2 );
 		add_action( 'rest_after_insert_page', array( $this, 'after_insert_page' ), null, 2 );
 		add_action( 'gutenverse_loop_blocks', array( $this, 'pattern_loop' ), null, 3 );
+		if ( ! defined( 'GUTENVERSE' ) && current_user_can( 'manage_options' ) && get_option( 'gtb_plugin_notice_flag', 1 ) ) {
+			add_action( 'admin_notices', array( $this, 'dashboard_notice' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'dashboard_enqueue_scripts' ) );
+			add_action( 'wp_ajax_gtb_install_plugin', array( $this, 'gtb_plugin_manager_ajax' ) );
+			add_action( 'wp_ajax_gtb_plugin_notice_close', array( $this, 'plugin_notice_close' ) );
+		}
 
 		/* TODO : Remove this later! */
 		add_action( 'init', array( $this, 'alter_table' ) );
@@ -364,5 +370,178 @@ class Gtb {
 	public function plugin_activation() {
 		$this->deployment = new Deploy();
 		$this->deployment->start();
+	}
+
+	/**
+	 * Dashboard Notice .
+	 */
+	public function dashboard_notice() {
+		?>
+			<style>
+				.gtb-notice-action .install-action {
+					color: #fff;
+					background: #1B67A5;
+					border-radius: 3px;
+					cursor: pointer;
+					padding: 7px 15px;
+					text-decoration: none;
+					box-shadow: none;
+				}
+
+				.gtb-notice-action .install-action.process {
+					background: #ccc;
+					color: #666;
+					pointer-events: none;
+				}
+
+				.gtb-notice-action .install-action.success {
+					background: #4CAF50;
+				}
+			</style>
+			<div class="notice gutenverse-upgrade-notice page-content-upgrade plugin-notice">
+				<div class="notice-logo">
+					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M10 0C4.47754 0 0 4.47915 0 10C0 15.5241 4.47754 20 10 20C15.5225 20 20 15.5241 20 10C20 4.47915 15.5225 0 10 0ZM10 4.43548C10.9353 4.43548 11.6935 5.19371 11.6935 6.12903C11.6935 7.06435 10.9353 7.82258 10 7.82258C9.06468 7.82258 8.30645 7.06435 8.30645 6.12903C8.30645 5.19371 9.06468 4.43548 10 4.43548ZM12.2581 14.6774C12.2581 14.9446 12.0414 15.1613 11.7742 15.1613H8.22581C7.95859 15.1613 7.74194 14.9446 7.74194 14.6774V13.7097C7.74194 13.4425 7.95859 13.2258 8.22581 13.2258H8.70968V10.6452H8.22581C7.95859 10.6452 7.74194 10.4285 7.74194 10.1613V9.19355C7.74194 8.92633 7.95859 8.70968 8.22581 8.70968H10.8065C11.0737 8.70968 11.2903 8.92633 11.2903 9.19355V13.2258H11.7742C12.0414 13.2258 12.2581 13.4425 12.2581 13.7097V14.6774Z" fill="#ffc908"/>
+					</svg>
+				</div>
+				<div class="notice-content">
+					<h2><?php echo esc_html__( 'Install Gutenverse Plugin!', 'gtb' ); ?></h2>
+					<p>
+					<?php echo esc_html__( 'You have to install Gutenverse plugin first if you want to use Gutenverse theme builder.', 'gtb' ); ?>
+					</p>
+					<div class="gutenverse-upgrade-action">
+						<span class="gtb-notice-action">
+							<a class='install-action' href=""><?php echo esc_html__( 'Install Gutenverse', 'gtb' ); ?></a>
+						</span>
+						<a class='close-notif' href="#"><?php esc_html_e( 'Close notification', 'gtb' ); ?></a>
+					</div>
+				</div>
+			</div>
+			<script>
+					(function($) {
+						$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice .close-notif').on('click', function() {
+							$.post( ajaxurl, {
+								action: 'gtb_plugin_notice_close'
+							} );
+
+							$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice').fadeOut();
+						});
+					})(jQuery);
+				</script>
+			<script>
+				jQuery(document).ready(function($) {
+					$('.gtb-notice-action a').on('click', function(e) {
+						e.preventDefault();
+						$(this).prop('disabled', true);
+						$(this).off('click');
+						$(this).text('Loading').addClass('process');
+						$.ajax({
+							url: gtb_ajax_obj.ajax_url,
+							type: 'post',
+							data: {
+								action: 'gtb_install_plugin',
+								nonce: gtb_ajax_obj.nonce
+							},
+							success: function(response) {
+								if (response.success) {
+									$('.gtb-notice-action a').text('Activated').removeClass('process').addClass('success');
+									location.reload();
+								} else {
+									$('.gtb-notice-action a').text('Install Gutenverse').removeClass('process');
+									location.reload();
+								}
+							}
+						});
+					});
+				});
+			</script>
+		<?php
+	}
+
+	/**
+	 * Dashboard Notice .
+	 */
+	public function dashboard_enqueue_scripts() {
+		wp_enqueue_script( 'jquery' );
+		$dashboard_notice = sprintf(
+			'var gtb_ajax_obj = {
+				ajax_url: "%s",
+				nonce: "%s"
+			};',
+			admin_url( 'admin-ajax.php' ),
+			wp_create_nonce( 'gtb_ajax_nonce' )
+		);
+
+		wp_add_inline_script( 'jquery', $dashboard_notice );
+	}
+
+	/**
+	 * Dashboard Notice plugin manager.
+	 */
+	public function gtb_plugin_manager_ajax() {
+		check_ajax_referer( 'gtb_ajax_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( array( 'message' => 'You do not have permission to install plugins.' ) );
+		}
+
+		$plugin_slug = 'gutenverse';
+		$plugin_file = sprintf( '%s/%s.php', $plugin_slug, $plugin_slug );
+
+		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
+			return $this->notice_plugin_manager( 'activate', $plugin_slug );
+		} else {
+			return $this->notice_plugin_manager( 'install', $plugin_slug );
+		}
+	}
+
+	/**
+	 * Install Plugin.
+	 *
+	 * @param string $type installation type.
+	 * @param string $plugin_slug plugin slug.
+	 */
+	public function notice_plugin_manager( $type, $plugin_slug ) {
+		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		$plugin_file = sprintf( '%s/%s.php', $plugin_slug, $plugin_slug );
+		switch ( $type ) {
+			case 'activate':
+				activate_plugin( $plugin_file, '', false, true );
+				return wp_send_json_success( array( 'message' => 'Plugin Activated Successfully.' ) );
+			case 'install':
+				$api = plugins_api(
+					'plugin_information',
+					array(
+						'slug'   => $plugin_slug,
+						'fields' => array(
+							'sections' => false,
+						),
+					)
+				);
+
+				if ( is_wp_error( $api ) ) {
+					return wp_send_json_error( array( 'message' => 'Failed to retrieve plugin information.' ) );
+				}
+
+				$upgrader       = new \Plugin_Upgrader( new \WP_Ajax_Upgrader_Skin() );
+				$install_result = $upgrader->install( $api->download_link );
+
+				if ( is_wp_error( $install_result ) ) {
+					return wp_send_json_error( array( 'message' => 'Failed to install plugin.' ) );
+				}
+
+				return $this->notice_plugin_manager( 'activate', $plugin_slug );
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Change option page content to false.
+	 */
+	public function plugin_notice_close() {
+		update_option( 'gtb_plugin_notice_flag', 0 );
 	}
 }
