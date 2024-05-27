@@ -405,29 +405,29 @@ class Gtb {
 					</svg>
 				</div>
 				<div class="notice-content">
-					<h2><?php echo esc_html__( 'Install Gutenverse Plugin!', 'gtb' ); ?></h2>
+					<h2><?php echo esc_html__( 'Install Gutenverse Plugin!', 'gutenverse-themes-builder' ); ?></h2>
 					<p>
-					<?php echo esc_html__( 'You have to install Gutenverse plugin first if you want to use Gutenverse theme builder.', 'gtb' ); ?>
+					<?php echo esc_html__( 'To access the Gutenverse Themes Builder, we kindly ask you to install the Gutenverse plugin first.', 'gutenverse-themes-builder' ); ?>
 					</p>
 					<div class="gutenverse-upgrade-action">
 						<span class="gtb-notice-action">
-							<a class='install-action' href=""><?php echo esc_html__( 'Install Gutenverse', 'gtb' ); ?></a>
+							<a class='install-action' href=""><?php echo esc_html__( 'Install Gutenverse', 'gutenverse-themes-builder' ); ?></a>
 						</span>
-						<a class='close-notif' href="#"><?php esc_html_e( 'Close notification', 'gtb' ); ?></a>
+						<a class='close-notif' href="#"><?php esc_html_e( 'Close notification', 'gutenverse-themes-builder' ); ?></a>
 					</div>
 				</div>
 			</div>
 			<script>
-					(function($) {
-						$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice .close-notif').on('click', function() {
-							$.post( ajaxurl, {
-								action: 'gtb_plugin_notice_close'
-							} );
+				(function($) {
+					$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice .close-notif').on('click', function() {
+						$.post( ajaxurl, {
+							action: 'gtb_plugin_notice_close'
+						} );
 
-							$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice').fadeOut();
-						});
-					})(jQuery);
-				</script>
+						$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice').fadeOut();
+					});
+				})(jQuery);
+			</script>
 			<script>
 				jQuery(document).ready(function($) {
 					$('.gtb-notice-action a').on('click', function(e) {
