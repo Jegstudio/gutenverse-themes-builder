@@ -250,7 +250,7 @@ class Gtb {
 				// Todo: save to database.
 				$post = get_page_by_path( $attrs['value'], OBJECT, 'gutenverse-pattern' );
 				wp_update_post(
-					array(
+					(object) array(
 						'ID'           => $post->ID,
 						'post_content' => $data,
 					)
@@ -304,7 +304,7 @@ class Gtb {
 		if ( $flag ) {
 			$serialize = serialize_blocks( $blocks );
 			wp_update_post(
-				array(
+				(object) array(
 					'ID'           => $id,
 					'post_content' => $serialize,
 				)
