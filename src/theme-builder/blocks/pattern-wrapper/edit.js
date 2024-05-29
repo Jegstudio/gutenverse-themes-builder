@@ -299,9 +299,9 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
     }
 };
 
-const EmptyMode = ({ mode, setMode, setAttributes, clientId }) => {
+const EmptyMode = ({ mode, setMode, setAttributes, clientId, blockProps }) => {
     if ('use' === mode) {
-        return <div className="pattern-wrapper">
+        return <div className="pattern-wrapper" {...blockProps}>
             <UsePattern
                 mode={mode}
                 setMode={setMode}
@@ -310,7 +310,7 @@ const EmptyMode = ({ mode, setMode, setAttributes, clientId }) => {
             />
         </div>;
     } else if ('create' === mode) {
-        return <div className="pattern-wrapper">
+        return <div className="pattern-wrapper" {...blockProps}>
             <CreatePattern
                 mode={mode}
                 setMode={setMode}
@@ -319,7 +319,7 @@ const EmptyMode = ({ mode, setMode, setAttributes, clientId }) => {
             />
         </div>;
     } else {
-        return <div className="pattern-wrapper">
+        return <div className="pattern-wrapper" {...blockProps}>
             <div className="pattern-container">
                 <h2>{__('Pattern Creation Mode', 'gtb')}</h2>
                 <div className="pattern-content choose-mode">
