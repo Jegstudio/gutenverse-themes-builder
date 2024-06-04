@@ -41,8 +41,8 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
     };
 
     return (
-        <div className="popup-container">
-            <div className="popup-content">
+        <div className="popup-container" onClick={onClose}>
+            <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Create Pattern')}</span>
                 </div>
@@ -99,13 +99,13 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                 id
             })
         }).then(result => {
-            if ( ! isEmpty( result ) ) {
+            if (!isEmpty(result)) {
                 setPatternSlug(result?.slug);
                 setPatternName(result?.name);
                 setPatternCategory(result?.category);
                 setFetching(false);
             }
-        }).catch(() => {});
+        }).catch(() => { });
     }, []);
 
     const patternSubmit = () => {

@@ -8,8 +8,8 @@ export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', o
     };
 
     return (
-        <div className="popup-container">
-            <div className="popup-content">
+        <div className="popup-container" onClick={onClose}>
+            <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <div className="title">
                         <WarningIcon />
