@@ -63,6 +63,18 @@ class Init {
 		add_filter( 'gutenverse_block_config', array( $this, 'default_font' ), 10 );
 		add_filter( 'gutenverse_font_header', array( $this, 'default_header_font' ) );
 		add_filter( 'gutenverse_global_css', array( $this, 'global_header_style' ) );
+
+		add_filter( 'gutenverse_stylesheet_directory', array( $this, 'change_stylesheet_directory' ) );
+		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+	}
+
+	/**
+	 * Change Stylesheet Directory.
+	 *
+	 * @return string
+	 */
+	public function change_stylesheet_directory() {
+		return SOCIATIC_DIR . 'gutenverse-files';
 	}
 
 	public function init_instance() {
