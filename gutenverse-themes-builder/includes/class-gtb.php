@@ -54,6 +54,7 @@ class Gtb {
 		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ) );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_custom_theme_json' ) );
+		add_filter( 'big_image_size_threshold', '__return_false' );
 	}
 
 	/**
