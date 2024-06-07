@@ -74,7 +74,7 @@ class Init {
 	 * @return string
 	 */
 	public function change_stylesheet_directory() {
-		return SOCIATIC_DIR . 'gutenverse-files';
+		return {{slug_upper}}_DIR . 'gutenverse-files';
 	}
 
 	public function init_instance() {
