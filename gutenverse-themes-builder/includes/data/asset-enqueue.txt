@@ -29,7 +29,7 @@ class Asset_Enqueue {
 	 * Enqueue scripts and styles.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_style( '{{theme_slug}}-style', get_stylesheet_uri(), array(), {{title_upper}}_VERSION );
+		wp_enqueue_style( '{{theme_slug}}-style', get_stylesheet_uri(), array(), {{constant}}_VERSION );
 
 {{style_script_enqueue}}
 

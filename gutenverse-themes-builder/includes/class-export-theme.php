@@ -174,7 +174,7 @@ class Export_Theme {
 		$assets     = $assets_db->get_all_assets( $active );
 		$queue      = '';
 		$theme_data = maybe_unserialize( $data['theme_data'] );
-		$theme_slug = str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) );
+		$theme_slug = $this->get_constant_name( $theme_data['slug'] );
 
 		foreach ( $assets as $asset ) {
 			if ( 'content' === $asset['media_type'] ) {
@@ -215,8 +215,9 @@ class Export_Theme {
 		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/asset-enqueue.txt' );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
-		$placeholder = str_replace( '{{title_upper}}', str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ), $placeholder );
+		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{style_script_enqueue}}', $queue, $placeholder );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
 			gtb_theme_built_path() . '/inc/class/class-asset-enqueue.php',
@@ -234,7 +235,7 @@ class Export_Theme {
 	 * @param string $theme_data theme data.
 	 */
 	public function create_enqueue_string( $handler, $type, $media = null, $theme_data ) {
-		$theme_version = str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ) . '_VERSION';
+		$theme_version = $this->get_constant_name( $theme_data['slug'] ) . '_VERSION';
 
 		if ( 'null' === $media ) {
 			if ( 'css' === $type ) {
@@ -534,6 +535,7 @@ class Export_Theme {
 			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-default.txt' );
 		}
 
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 		$placeholder = str_replace( '{{description}}', str_replace( "'", "\'", $theme_data['description'] ), $placeholder );
@@ -576,7 +578,7 @@ class Export_Theme {
 		$placeholder = str_replace( '{{plugins_variable}}', $variable, $placeholder );
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
 
-		$uri   = str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ) . '_URI';
+		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
 		if ( ! empty( $other['screenshots'] ) && ! empty( $other['screenshots']['dashboard'] ) ) {
 			if ( ! is_dir( gtb_theme_built_path() . 'assets/img' ) ) {
@@ -961,6 +963,7 @@ class Export_Theme {
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 
