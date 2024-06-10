@@ -6,7 +6,7 @@
  * @package {{theme_slug}}
  */
 
-namespace {{theme_slug_cap}};
+namespace {{namespace}};
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,12 +53,12 @@ class Block_Patterns {
 	 */
 	private function register_block_patterns() {
 		$block_pattern_categories = array(
-			'{{theme_slug}}-basic' => array( 'label' => __( '{{theme_slug_cap}} Basic Patterns', '{{theme_slug}}' ) ),
+			'{{theme_slug}}-basic' => array( 'label' => __( '{{title}} Basic Patterns', '{{theme_slug}}' ) ),
 		);
 
 		if ( defined( 'GUTENVERSE' ) ) {
-			$block_pattern_categories['{{theme_slug}}-gutenverse'] = array( 'label' => __( '{{theme_slug_cap}} Gutenverse Patterns', '{{theme_slug}}' ) );
-			$block_pattern_categories['{{theme_slug}}-pro'] = array( 'label' => __( '{{theme_slug_cap}} Gutenverse PRO Patterns', '{{theme_slug}}' ) );
+			$block_pattern_categories['{{theme_slug}}-gutenverse'] = array( 'label' => __( '{{title}} Gutenverse Patterns', '{{theme_slug}}' ) );
+			$block_pattern_categories['{{theme_slug}}-pro'] = array( 'label' => __( '{{title}} Gutenverse PRO Patterns', '{{theme_slug}}' ) );
 		}
 
 		$block_pattern_categories = apply_filters( '{{theme_slug}}_block_pattern_categories', $block_pattern_categories );

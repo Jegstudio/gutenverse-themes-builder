@@ -6,7 +6,7 @@
  * @package {{slug}}
  */
 
-namespace {{theme_slug_cap}};
+namespace {{namespace}};
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -134,7 +134,7 @@ class Init {
 				overflow: hidden;
 				padding: 0 !important;
 				margin-bottom: 30px !important;
-				background: url( <?php echo esc_url( {{slug_upper}}_URI . '/assets/img/background-banner.png' ); ?> );
+				background: url( <?php echo esc_url( {{constant}}_URI . '/assets/img/background-banner.png' ); ?> );
 				background-size: cover;
 				background-position: center;
 			}
@@ -372,7 +372,7 @@ class Init {
 				<div class="gutenverse-notice-content">
 					<div class="gutenverse-notice-text">
 						<h3><?php esc_html_e( 'Take Your Website To New Height with', '{{slug}}' ); ?> <span>Gutenverse!</span></h3> 
-						<p><?php esc_html_e( '{{theme_slug_cap}} theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access {{theme_slug_cap}} templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.', '{{slug}}' ); ?></p>
+						<p><?php esc_html_e( '{{title}} theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access {{title}} templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.', '{{slug}}' ); ?></p>
 						<div class="gutenverse-bottom">
 							<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( $button_link ); ?>">
 								<?php echo esc_html( $button_text ); ?>
@@ -380,7 +380,7 @@ class Init {
 						</div>
 					</div>
 					<div class="gutenverse-notice-image">
-						<img src="<?php echo esc_url( {{slug_upper}}_URI . '/assets/img/banner-install-gutenverse-2.png' ); ?>"/>
+						<img src="<?php echo esc_url( {{constant}}_URI . '/assets/img/banner-install-gutenverse-2.png' ); ?>"/>
 					</div>
 				</div>
 			</div>
@@ -484,17 +484,17 @@ class Init {
 			// enqueue css.
 			wp_enqueue_style(
 				'{{slug}}-dashboard',
-				{{slug_upper}}_URI . '/assets/css/theme-dashboard.css',
+				{{constant}}_URI . '/assets/css/theme-dashboard.css',
 				array(),
-				{{slug_upper}}_VERSION
+				{{constant}}_VERSION
 			);
 
 			// enqueue js.
 			wp_enqueue_script(
 				'{{slug}}-dashboard',
-				{{slug_upper}}_URI . '/assets/js/theme-dashboard.js',
+				{{constant}}_URI . '/assets/js/theme-dashboard.js',
 				array( 'wp-api-fetch' ),
-				{{slug_upper}}_VERSION,
+				{{constant}}_VERSION,
 				true
 			);
 
@@ -509,7 +509,7 @@ class Init {
 		{{plugins_variable}}
 
 		return array(
-			'images'       => {{slug_upper}}_URI . '/assets/img/',
+			'images'       => {{constant}}_URI . '/assets/img/',
 			'title'        => esc_html__( '{{title}}', '{{slug}}' ),
 			'description'  => esc_html__( '{{description}}', '{{slug}}' ),
 			'pluginTitle'  => esc_html__( 'Plugin Requirement', '{{slug}}' ),

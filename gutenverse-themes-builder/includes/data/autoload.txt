@@ -8,8 +8,8 @@
 
 spl_autoload_register(
 	function( $class ) {
-		$prefix   = '{{slug_cap}}';
-		$base_dir = {{slug_upper}}_DIR . 'inc/class/';
+		$prefix   = '{{namespace}}';
+		$base_dir = {{constant}}_DIR . 'inc/class/';
 		$len      = strlen( $prefix );
 
 		if ( strncmp( $prefix, $class, $len ) !== 0 ) {

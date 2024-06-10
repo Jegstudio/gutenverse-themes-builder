@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-defined( '{{slug_upper}}_VERSION' ) || define( '{{slug_upper}}_VERSION', '{{theme_version}}' );
-defined( '{{slug_upper}}_DIR' ) || define( '{{slug_upper}}_DIR', trailingslashit( get_template_directory() ) );
-defined( '{{slug_upper}}_URI' ) || define( '{{slug_upper}}_URI', trailingslashit( get_template_directory_uri() ) );
+defined( '{{constant}}_VERSION' ) || define( '{{constant}}_VERSION', '{{theme_version}}' );
+defined( '{{constant}}_DIR' ) || define( '{{constant}}_DIR', trailingslashit( get_template_directory() ) );
+defined( '{{constant}}_URI' ) || define( '{{constant}}_URI', trailingslashit( get_template_directory_uri() ) );
 
 require get_parent_theme_file_path( 'inc/autoload.php' );
 
-{{slug_cap}}\Init::instance();
+{{namespace}}\Init::instance();

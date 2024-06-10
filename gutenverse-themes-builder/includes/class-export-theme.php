@@ -213,7 +213,7 @@ class Export_Theme {
 		}
 
 		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/asset-enqueue.txt' );
-		$placeholder = str_replace( '{{theme_slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{title_upper}}', str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ), $placeholder );
 		$placeholder = str_replace( '{{style_script_enqueue}}', $queue, $placeholder );
@@ -473,8 +473,8 @@ class Export_Theme {
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
-		$placeholder = str_replace( '{{slug_upper}}', str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ), $placeholder );
-		$placeholder = str_replace( '{{slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{theme_version}}', $theme_data['theme_version'], $placeholder );
@@ -497,8 +497,8 @@ class Export_Theme {
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
-		$placeholder = str_replace( '{{slug_upper}}', str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ), $placeholder );
-		$placeholder = str_replace( '{{slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 
@@ -534,12 +534,11 @@ class Export_Theme {
 			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-default.txt' );
 		}
 
-		$placeholder = str_replace( '{{theme_slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 		$placeholder = str_replace( '{{description}}', str_replace( "'", "\'", $theme_data['description'] ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
-		$placeholder = str_replace( '{{slug_upper}}', str_replace( ' ', '_', strtoupper( $theme_data['slug'] ) ), $placeholder );
+		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 
 		// Build dashboard.
 
@@ -963,7 +962,7 @@ class Export_Theme {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
-		$placeholder = str_replace( '{{theme_slug_cap}}', ucfirst( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 
 		$core_pattern_list       = '';
 		$gutenverse_pattern_list = '';
@@ -1102,5 +1101,53 @@ class Export_Theme {
 			'filepath' => $zip_path,
 			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '.zip',
 		);
+	}
+
+	/**
+	 * Get Namespace
+	 *
+	 * @param string $data .
+	 *
+	 * @return string
+	 */
+	public function get_namespace( $data ) {
+		if ( ! is_string( $data ) ) {
+			return 'Convert_Failed';
+		}
+
+		$namespace = preg_replace( '/[^a-zA-Z0-9\s]/', '_', $data );
+		$parts     = explode( '_', $namespace );
+
+		foreach ( $parts as &$part ) {
+			$part = ucfirst( $part );
+		}
+
+		$namespace = implode( '_', $parts );
+
+		return $namespace;
+	}
+
+	/**
+	 * Get Constant Name
+	 *
+	 * @param string $data .
+	 *
+	 * @return string
+	 */
+	public function get_constant_name( $data ) {
+		if ( ! is_string( $data ) ) {
+			return 'CONVERT_FAILED';
+		}
+
+		$namespace = preg_replace( '/[^a-zA-Z0-9\s]/', '_', $data );
+		$parts     = explode( '_', $namespace );
+
+		foreach ( $parts as &$part ) {
+			$part = strtoupper( $part );
+		}
+
+		$namespace = implode( '_', $parts );
+
+		return $namespace;
 	}
 }
