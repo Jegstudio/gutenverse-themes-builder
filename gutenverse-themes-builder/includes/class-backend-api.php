@@ -1783,9 +1783,11 @@ class Backend_Api {
 			$this->check_directory( $category_folder . '/templates' );
 			$this->check_directory( $category_folder . '/parts' );
 
+			$empty_content = '<!-- wp:paragraph --><p></p><!-- /wp:paragraph -->';
+
 			$wp_filesystem->put_contents(
 				$file_path,
-				null,
+				$empty_content,
 				FS_CHMOD_FILE
 			);
 
@@ -2033,7 +2035,7 @@ class Backend_Api {
 			}
 		}
 
-		$placeholder = str_replace( '{{layout_sizes}}', wp_json_encode( $layout ), $placeholder );
+		$placeholder     = str_replace( '{{layout_sizes}}', wp_json_encode( $layout ), $placeholder );
 		$theme_json_path = gtb_theme_folder_path() . '/theme.json';
 
 		$wp_filesystem->put_contents(
