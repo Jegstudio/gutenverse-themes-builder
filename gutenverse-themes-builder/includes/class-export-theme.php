@@ -933,7 +933,7 @@ class Export_Theme {
 
 				$image_arr  = explode( '/', $image );
 				$image_name = $image_arr[ count( $image_arr ) - 1 ];
-				$image_uri  = strtoupper( $slug ) . '_URI';
+				$image_uri  = $this->get_constant_name( $slug ) . '_URI';
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
 
 				$content = str_replace( $image, $image_code, $content );
