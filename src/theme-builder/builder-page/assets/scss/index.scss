@@ -27,7 +27,7 @@ body {
     }
 
     .title {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', serif;
         font-weight: 600;
         font-size: 28px;
         line-height: 50px;
@@ -37,7 +37,7 @@ body {
     }
 
     .subtitle {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', serif;
         font-size: 20px;
         font-weight: 600;
         line-height: 17px;
@@ -47,7 +47,7 @@ body {
     }
 
     .text {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', serif;
         font-weight: 400;
         font-size: 14px;
         line-height: 20px;
@@ -112,7 +112,7 @@ body {
         }
 
         th {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Roboto', serif;
             font-style: normal;
             font-weight: 500;
             font-size: 16px;
@@ -120,7 +120,7 @@ body {
         }
 
         td {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Roboto', serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
@@ -992,7 +992,7 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    font-family: sans-serif;
+    font-family: serif;
 
     p {
         font-size: 1rem;
