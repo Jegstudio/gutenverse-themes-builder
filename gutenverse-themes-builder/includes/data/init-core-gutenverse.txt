@@ -59,13 +59,14 @@ class Init {
 		add_action( 'admin_notices', array( $this, 'notice_install_plugin' ) );
 
 		add_filter( 'gutenverse_template_path', array( $this, 'template_path' ), null, 3 );
-		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 2 );
+		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 3 );
 		add_filter( 'gutenverse_block_config', array( $this, 'default_font' ), 10 );
 		add_filter( 'gutenverse_font_header', array( $this, 'default_header_font' ) );
 		add_filter( 'gutenverse_global_css', array( $this, 'global_header_style' ) );
 
 		add_filter( 'gutenverse_stylesheet_directory', array( $this, 'change_stylesheet_directory' ) );
 		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+		add_filter( 'validate_current_theme', '__return_false' );
 	}
 
 	/**
@@ -77,6 +78,9 @@ class Init {
 		return {{constant}}_DIR . 'gutenverse-files';
 	}
 
+	/**
+	 * Initialize Instance.
+	 */
 	public function init_instance() {
 		new Asset_Enqueue();
 	}
@@ -486,13 +490,15 @@ class Init {
 	/**
 	 * Add Template to Editor.
 	 *
-	 * @param array $template_files Path to Template File.
-	 * @param array $template_type Template Type.
+	 * @param array   $template_files Path to Template File.
+	 * @param array   $template_type Template Type.
+	 * @param boolean $append_gutenverse_folder Append Gutenverse Folder.
 	 *
 	 * @return array
 	 */
-	public function add_template( $template_files, $template_type ) {
-		$directory = get_template_directory();
+	public function add_template( $template_files, $template_type, $append_gutenverse_folder = true ) {
+		$directory         = get_template_directory();
+		$gutenverse_folder = $append_gutenverse_folder ? '/gutenverse-files' : '';
 
 		if ( 'wp_template' === $template_type ) {
 			$new_templates = array(
@@ -502,7 +508,7 @@ class Init {
 			foreach ( $new_templates as $template ) {
 				$template_files[] = array(
 					'slug'  => $template,
-					'path'  => $directory . "/gutenverse-templates/templates/{$template}.html",
+					'path'  => $directory . $gutenverse_folder . "/templates/{$template}.html",
 					'theme' => get_template(),
 					'type'  => 'wp_template',
 				);
