@@ -754,22 +754,60 @@ class Export_Theme {
 
 			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
 			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-				$system->put_contents(
-					$canvas_target_dir . '/blank-canvas.html',
-					'<!-- wp:post-content /-->',
-					FS_CHMOD_FILE
-				);
+				if ( 'core' === $template['category'] ) {
+					$system->put_contents(
+						$canvas_target_dir . '/blank-canvas.html',
+						'<!-- wp:post-content /-->',
+						FS_CHMOD_FILE
+					);
+				} else {
+					$system->put_contents(
+						$canvas_target_dir . '/blank-canvas.html',
+						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+<div class="guten-element guten-post-content guten-gwZ6H6"></div>
+<!-- /wp:gutenverse/post-content -->',
+						FS_CHMOD_FILE
+					);
+				}
 			}
 			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-				$system->put_contents(
-					$canvas_target_dir . '/template-basic.html',
-					'<!-- wp:template-part {"slug":"header"} /-->
+				if ( 'core' === $template['category'] ) {
+					$system->put_contents(
+						$canvas_target_dir . '/template-basic.html',
+						'<!-- wp:template-part {"slug":"header"} /-->
 
 <!-- wp:post-content /-->
 
 <!-- wp:template-part {"slug":"footer"} /-->',
-					FS_CHMOD_FILE
-				);
+						FS_CHMOD_FILE
+					);
+				} else {
+					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+
+<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+<div class="guten-element guten-post-content guten-ReyA1K"></div>
+<!-- /wp:gutenverse/post-content -->
+
+<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+
+					$content = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+					foreach ( $headers as $header ) {
+						$content = preg_replace( "'--header_slug--'", $header['to'], $content );
+						break;
+					}
+					foreach ( $footers as $footer ) {
+						$content = preg_replace( "'--footer_slug--'", $footer['to'], $content );
+						break;
+					}
+					$content = preg_replace( "'--header_slug--'", 'header', $content );
+					$content = preg_replace( "'--footer_slug--'", 'footer', $content );
+
+					$system->put_contents(
+						$canvas_target_dir . '/template-basic.html',
+						$content,
+						FS_CHMOD_FILE
+					);
+				}
 			}
 		}
 	}
