@@ -61,8 +61,41 @@ class Init {
 		add_filter( 'gutenverse_block_config', array( $this, 'default_font' ), 10 );
 		add_filter( 'gutenverse_font_header', array( $this, 'default_header_font' ) );
 		add_filter( 'gutenverse_global_css', array( $this, 'global_header_style' ) );
+
+		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 2 );
+		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
 	}
 
+	/**
+	 * Add Template to Editor.
+	 *
+	 * @param array $template_files Path to Template File.
+	 * @param array $template_type Template Type.
+	 *
+	 * @return array
+	 */
+	public function add_template( $template_files, $template_type ) {
+		if ( 'wp_template' === $template_type ) {
+			$new_templates = array(
+				{{custom_template_list}}
+			);
+
+			foreach ( $new_templates as $template ) {
+				$template_files[] = array(
+					'slug'  => $template,
+					'path'  => {{constant}}_DIR . "templates/{$template}.html",
+					'theme' => get_template(),
+					'type'  => 'wp_template',
+				);
+			}
+		}
+
+		return $template_files;
+	}
+
+	/**
+	 * Initialize Instance.
+	 */
 	public function init_instance() {
 		new Asset_Enqueue();
 	}

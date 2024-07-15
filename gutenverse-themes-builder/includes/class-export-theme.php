@@ -624,6 +624,17 @@ class Export_Theme {
 			$placeholder = str_replace( '{{template_names}}', join( ",\r\n\t\t\t\t", $template_names ), $placeholder );
 			$placeholder = str_replace( '{{template_cases}}', join( "\r\n\t\t\t", $template_cases ), $placeholder );
 		}
+		// Add Custom Templates. {{custom_template_list}}.
+		$custom_template = '';
+		foreach ( $templates_data as $template ) {
+			if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
+				if ( 'custom_template' === $template['template_type'] ) {
+					$template_name    = strtolower( str_replace( ' ', '-', $template['name'] ) );
+					$custom_template .= var_export( $template_name, true ) . ','; //phpcs:ignore
+				}
+			}
+		}
+		$placeholder = str_replace( '{{custom_template_list}}', $custom_template, $placeholder );
 
 		// Generate Init Fonts.
 		$global_fonts = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
