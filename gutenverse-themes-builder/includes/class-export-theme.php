@@ -751,6 +751,26 @@ class Export_Theme {
 					);
 				}
 			}
+
+			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+				$system->put_contents(
+					$canvas_target_dir . '/blank-canvas.html',
+					'<!-- wp:post-content /-->',
+					FS_CHMOD_FILE
+				);
+			}
+			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+				$system->put_contents(
+					$canvas_target_dir . '/template-basic.html',
+					'<!-- wp:template-part {"slug":"header"} /-->
+
+<!-- wp:post-content /-->
+
+<!-- wp:template-part {"slug":"footer"} /-->',
+					FS_CHMOD_FILE
+				);
+			}
 		}
 	}
 
