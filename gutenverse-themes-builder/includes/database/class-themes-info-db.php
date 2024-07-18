@@ -53,14 +53,8 @@ class Themes_Info_Db extends Database_Abstract {
 
 	/**
 	 * Initialize Data
-	 *
-	 * @return array
 	 */
 	public function alter_table() {
-		$table = $this->get_table_name();
-		$query = $this->wpdb->prepare( "ALTER TABLE {$table} ADD global_id INT" ); // phpcs:ignore
-
-		return $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
 	}
 
 	/**
