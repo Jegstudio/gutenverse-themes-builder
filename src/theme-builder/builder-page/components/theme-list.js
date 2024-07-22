@@ -3,7 +3,7 @@ import { deleteTheme, getThemeList, updateActiveTheme } from '../../../data/api-
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
-import { DeleteIcon, EditIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import Details from './details';
@@ -165,7 +165,13 @@ const ThemeList = () => {
                 title={__('Theme List', 'gtb')}
                 description={__('This is a place to manage all your current themes project and it’s details information. Only one theme can be active at a time.', 'gtb')}
                 headingButton={true}
-                headingButtonOnClick={() => setMode('create')}
+                headingButtons={[
+                    {
+                        buttonText : __('Add New', 'gtb'),
+                        buttonEvent : () => setMode('create'),
+                        buttonIcon : <PlusIcon />
+                    }
+                ]}
             >
                 <>
                     <Table

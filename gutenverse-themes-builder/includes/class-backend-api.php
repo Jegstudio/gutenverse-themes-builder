@@ -346,6 +346,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'pattern/import',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'import_pattern' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'pattern/delete',
 			array(
 				'methods'             => 'POST',
@@ -1311,6 +1321,154 @@ class Backend_Api {
 		);
 
 		return $patterns->posts;
+	}
+
+	/**
+	 * Import Pattern
+	 *
+	 * @return boolean
+	 */
+	public function import_pattern() {
+		$active_theme = wp_get_theme();
+		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$files        = glob( $theme_dir . '/inc/patterns/*' );
+		if ( $files ) {
+			foreach ( $files as $file ) {
+				$file_name     = basename( $file );
+				$file_name_arr = explode( '-', str_replace( '.php', '', $file_name ) );
+				$category      = $file_name_arr[0];
+				$slug          = implode( '-', array_slice( $file_name_arr, 1 ) );
+				$file_data     = include $file;
+				$name          = $file_data['title'];
+				$content       = $file_data['content'];
+				preg_match_all( '/https?:\/\/[^\s"]+/', $content, $matches );
+				$urls = $matches[0];
+				/** Filter image URLs */
+				$image_urls   = array_filter( $urls, 'is_image_url' );
+				$replacements = array();
+				/** Replace Image Url Content */
+				if ( ! empty( $image_urls ) ) {
+					foreach ( $image_urls as $url ) {
+						$attachment_id        = $this->download_and_save_image( $url, $theme_dir . '/assets/img' );
+						$new_image_url        = wp_get_attachment_url( $attachment_id );
+						$replacements[ $url ] = $new_image_url;
+					}
+					$updated_content = str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
+				}
+				$theme_id = get_option( 'gtb_active_theme_id' );
+				if ( $theme_id ) {
+
+					$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
+
+					if ( null === $post_exists ) {
+						$post_id = wp_insert_post(
+							array(
+								'post_title'   => $name,
+								'post_name'    => $slug,
+								'post_content' => $updated_content,
+								'post_status'  => 'publish',
+								'post_type'    => 'gutenverse-pattern',
+
+							)
+						);
+
+						add_post_meta( $post_id, '_pattern_category', $category );
+						add_post_meta( $post_id, '_pattern_theme_id', $theme_id );
+					}
+				}
+			}
+		}
+		return array(
+			'status' => 'success'
+		);
+	}
+	/**
+	 * Function to check if an image already exists in the media library
+	 *
+	 * @return boolean
+	 */
+	public function image_exists_in_media_library( $url ) {
+		$args  = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'meta_query'  => array(
+				array(
+					'key'     => '_wp_attachment_url',
+					'value'   => $url,
+					'compare' => '=',
+				),
+			),
+		);
+		$query = new WP_Query( $args );
+		return $query->have_posts();
+	}
+
+	/**
+	 * Function to download and save image to WordPress media library
+	 *
+	 * @return integer
+	 */
+	public function download_and_save_image( $url, $dir = '' ) {
+		/** Check if the image already exists */
+		if ( $this->image_exists_in_media_library( $url ) ) {
+			$args  = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'meta_query'  => array(
+					array(
+						'key'     => '_wp_attachment_url',
+						'value'   => $url,
+						'compare' => '=',
+					),
+				),
+			);
+			$query = new WP_Query( $args );
+			if ( $query->have_posts() ) {
+				$query->the_post();
+				return get_the_ID();
+			}
+		}
+
+		$temp_file = download_url( $url );
+		if ( is_wp_error( $temp_file ) ) {
+			$file_name  = basename( parse_url( $url, PHP_URL_PATH ) );
+			$local_file = $dir . '/' . $file_name;
+			if ( file_exists( $local_file ) ) {
+				$temp_file = $local_file;
+			} else {
+				return false;
+			}
+		}
+
+		/** Get the file name and extension  */
+		$file_name = basename( parse_url( $url, PHP_URL_PATH ) );
+
+		/** Prepare the file array  */
+		$file = array(
+			'name'     => $file_name,
+			'type'     => mime_content_type( $temp_file ),
+			'tmp_name' => $temp_file,
+			'error'    => 0,
+			'size'     => filesize( $temp_file ),
+		);
+
+		/** Include the WordPress file handling functions  */
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		/** Upload the image  */
+		$attachment_id = media_handle_sideload( $file, 0 );
+
+		/** Check for errors  */
+		if ( is_wp_error( $attachment_id ) ) {
+			@unlink( $temp_file );
+			return false;
+		}
+
+		/** Save the original URL as a meta field  */
+		update_post_meta( $attachment_id, '_wp_attachment_url', $url );
+		return $attachment_id;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { DeleteIcon, EditIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import Table from './table';
 import { isEmpty } from 'lodash';
 import { createAsset, deleteAsset, getAssetList, updateAsset } from '../../../data/api-fetch';
@@ -280,8 +280,14 @@ const ManageAssets = () => {
             Content = <ContentWrapper
                 title={__('Manage Assets', 'gtb')}
                 description={__('This is a place to manage all your theme JS and CSS assets of your current active theme.', 'gtb')}
+                headingButtons={[
+                    {
+                        buttonText : __('Add New', 'gtb'),
+                        buttonEvent : () => setMode('create'),
+                        buttonIcon : <PlusIcon />
+                    }
+                ]}
                 headingButton={true}
-                headingButtonOnClick={() => setMode('create')}
             >
                 <>
                     <Table heads={['Handler Name', 'Type', 'Media Type', 'Action',]}>

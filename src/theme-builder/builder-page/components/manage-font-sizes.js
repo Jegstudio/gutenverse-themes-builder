@@ -1,6 +1,6 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { DeleteIcon, EditIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import Table from './table';
 import { isEmpty } from 'lodash';
 import { createFontsize, deleteFontsize, getFontsizeList, updateFontsize } from '../../../data/api-fetch';
@@ -172,7 +172,13 @@ const ManageFontSizes = () => {
                 title={__('Manage Core Fonts Size', 'gtb')}
                 description={__('This is a place to manage all fonts for ONLY core blocks of your current active theme. For Gutenverse fonts, you can set it up directly in global styles extended.', 'gtb')}
                 headingButton={true}
-                headingButtonOnClick={() => setMode('create')}
+                headingButtons={[
+                    {
+                        buttonText : __('Add New', 'gtb'),
+                        buttonEvent : () => setMode('create'),
+                        buttonIcon : <PlusIcon />
+                    }
+                ]}
             >
                 <>
                     <Table heads={['ID', 'Slug', 'Title', 'Size', 'Actions',]}>
