@@ -9,6 +9,28 @@
 
 use GTB\Database\Database;
 
+if ( ! function_exists( 'get_image_without_resolution' ) ) {
+	/**
+	 * Get Image Without Resolution
+	 *
+	 * @param string $image .
+	 *
+	 * @return array
+	 */
+	function get_image_without_resolution( $image ) {
+		// Capture image url that has resolution inside double quotes.
+		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image, $matches );
+
+		if ( empty( $matches ) ) {
+			return false;
+		}
+
+		return array(
+			'original' => $matches[0],
+			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
+		);
+	}
+}
 if ( ! function_exists( 'gtb_parts' ) ) {
 	/**
 	 * Template Parts categories.

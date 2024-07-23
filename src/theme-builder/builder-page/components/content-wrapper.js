@@ -10,7 +10,8 @@ const ContentWrapper = (props) => {
             {
                 buttonText : __('Add New', 'gtb'),
                 buttonEvent : null,
-                buttonIcon : <PlusIcon />
+                buttonIcon : <PlusIcon />,
+                buttonLoading : false
             }
         ],
         children
@@ -18,7 +19,8 @@ const ContentWrapper = (props) => {
 
     const ButtonElement = () => {
         return headingButtons.map(button => {
-            return <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> : 
+            <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
         })
     }
     return (

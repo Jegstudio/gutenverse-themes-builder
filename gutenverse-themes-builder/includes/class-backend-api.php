@@ -1332,15 +1332,32 @@ class Backend_Api {
 		$active_theme = wp_get_theme();
 		$theme_dir    = $active_theme->get_stylesheet_directory();
 		$files        = glob( $theme_dir . '/inc/patterns/*' );
+		$theme_id     = get_option( 'gtb_active_theme_id' );
+		$theme_db     = Database::instance()->theme_info;
+		$theme_info   = $theme_db->get_theme_data( $theme_id );
+		$theme_slug   = $theme_info[0]['slug'];
 		if ( $files ) {
 			foreach ( $files as $file ) {
 				$file_name     = basename( $file );
 				$file_name_arr = explode( '-', str_replace( '.php', '', $file_name ) );
-				$category      = $file_name_arr[0];
-				$slug          = implode( '-', array_slice( $file_name_arr, 1 ) );
-				$file_data     = include $file;
-				$name          = $file_data['title'];
-				$content       = $file_data['content'];
+				switch ( $file_name_arr[0] ) {
+					case 'gutenverse':
+						$category = 'gutenverse';
+						break;
+					case 'pro':
+						$category = 'pro';
+						break;
+					case 'core':
+						$category = 'core';
+						break;
+					default:
+						$category = 'core';
+						break;
+				}
+				$slug      = $theme_slug . '-' . implode( '-', $file_name_arr );
+				$file_data = include $file;
+				$name      = $file_data['title'];
+				$content   = $file_data['content'];
 				preg_match_all( '/https?:\/\/[^\s"]+/', $content, $matches );
 				$urls = $matches[0];
 				/** Filter image URLs */
@@ -1349,29 +1366,32 @@ class Backend_Api {
 				/** Replace Image Url Content */
 				if ( ! empty( $image_urls ) ) {
 					foreach ( $image_urls as $url ) {
-						$attachment_id        = $this->download_and_save_image( $url, $theme_dir . '/assets/img' );
+						$image_without_res = get_image_without_resolution( $url );
+						if ( $image_without_res ) {
+							$url = $image_without_res['nores'];
+						}
+						$attachment_id = $this->download_and_save_image( $url, $theme_dir . '/assets/img' );
+						if ( ! $attachment_id ) {
+							continue;
+						}
 						$new_image_url        = wp_get_attachment_url( $attachment_id );
 						$replacements[ $url ] = $new_image_url;
 					}
-					$updated_content = str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
+					$content = str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
 				}
 				$theme_id = get_option( 'gtb_active_theme_id' );
 				if ( $theme_id ) {
-
 					$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
-
 					if ( null === $post_exists ) {
 						$post_id = wp_insert_post(
 							array(
 								'post_title'   => $name,
 								'post_name'    => $slug,
-								'post_content' => $updated_content,
+								'post_content' => $content,
 								'post_status'  => 'publish',
 								'post_type'    => 'gutenverse-pattern',
-
 							)
 						);
-
 						add_post_meta( $post_id, '_pattern_category', $category );
 						add_post_meta( $post_id, '_pattern_theme_id', $theme_id );
 					}
@@ -1379,7 +1399,7 @@ class Backend_Api {
 			}
 		}
 		return array(
-			'status' => 'success'
+			'status' => 'success',
 		);
 	}
 	/**
@@ -1410,6 +1430,7 @@ class Backend_Api {
 	 */
 	public function download_and_save_image( $url, $dir = '' ) {
 		/** Check if the image already exists */
+
 		if ( $this->image_exists_in_media_library( $url ) ) {
 			$args  = array(
 				'post_type'   => 'attachment',
@@ -1431,6 +1452,7 @@ class Backend_Api {
 
 		$temp_file = download_url( $url );
 		if ( is_wp_error( $temp_file ) ) {
+			gutenverse_rlog( $url );
 			$file_name  = basename( parse_url( $url, PHP_URL_PATH ) );
 			$local_file = $dir . '/' . $file_name;
 			if ( file_exists( $local_file ) ) {

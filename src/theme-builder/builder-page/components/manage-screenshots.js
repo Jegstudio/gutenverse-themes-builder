@@ -96,7 +96,8 @@ const ManageScreenshots = () => {
             {
                 buttonText : __('Save', 'gtb'),
                 buttonEvent : updateScreenshotData,
-                buttonIcon : false
+                buttonIcon : false,
+                buttonLoading : false
             }
         ]}
     >

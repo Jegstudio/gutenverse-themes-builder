@@ -111,7 +111,8 @@ const ManagePlugins = () => {
                 {
                     buttonText : __('Save', 'gtb'),
                     buttonEvent : () => updatePluginData(true),
-                    buttonIcon : false
+                    buttonIcon : false,
+                    buttonLoading : false
                 }
             ]}
         >

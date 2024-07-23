@@ -284,7 +284,8 @@ const ManageAssets = () => {
                     {
                         buttonText : __('Add New', 'gtb'),
                         buttonEvent : () => setMode('create'),
-                        buttonIcon : <PlusIcon />
+                        buttonIcon : <PlusIcon />,
+                        buttonLoading : false
                     }
                 ]}
                 headingButton={true}
