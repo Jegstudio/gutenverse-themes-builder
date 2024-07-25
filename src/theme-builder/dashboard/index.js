@@ -1,4 +1,4 @@
-import { render } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import DashboardPage from './dashboard-page';
 import './dashboard.scss';
 
