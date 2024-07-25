@@ -185,9 +185,8 @@ class Builder_Page {
 
 		if ( 'toplevel_page_gutenverse-theme-builder' === $current_screen->id ) {
 			$include   = ( include GTB_DIR . '/lib/dependencies/builder.asset.php' ) ['dependencies'];
-
+			
 			wp_enqueue_media();
-
 			wp_enqueue_script(
 				'gtb-page',
 				GTB_URL . '/assets/js/builder.js',

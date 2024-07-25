@@ -2206,17 +2206,16 @@ class Backend_Api {
 					}
 				}
 				$create_template = $this->create_template_import( $file['category'], $theme_id, $file['type'], $doc_name['filename'], $doc_content );
-				if ( $create_template ) {
-					return array(
-						'status' => 'success',
-					);
-				} else {
+				if ( ! $create_template ) {
 					return array(
 						'status' => 'failed',
 					);
 				}
 			}
 		}
+		return array(
+			'status' => 'success',
+		);
 	}
 	/**
 	 * Delete template

@@ -9,7 +9,6 @@ const DashboardPage = () => {
         domain,
         plugins,
     } = window['GutenverseThemeConfig'];
-
     const [installed, setInstalled] = useState(true);
     const [actions, setActions] = useState({});
     const [loading, setLoading] = useState(true);
