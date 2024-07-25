@@ -85,7 +85,6 @@ class Export_Theme {
 		}
 
 		wp_mkdir_p( $theme_dir );
-
 		$this->create_readme( $wp_filesystem, $data );
 		$this->create_style_css( $wp_filesystem, $data );
 		$this->create_theme_json( $wp_filesystem, $data );
@@ -676,7 +675,6 @@ class Export_Theme {
 		$headers           = array();
 		$footers           = array();
 		$template_parts    = array();
-
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
 		}
@@ -706,7 +704,6 @@ class Export_Theme {
 				array_push( $footers, $footer );
 			}
 		}
-
 		foreach ( $templates_data as $template ) {
 			if ( ! gtb_check_theme_mode( $template['category'], $theme_id ) ) {
 				continue;
@@ -731,7 +728,6 @@ class Export_Theme {
 					$content = $this->fix_colors( $html_content[ $slug_key ] );
 					$content = $this->fix_core_navigation( $content );
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
-
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -831,7 +827,7 @@ class Export_Theme {
 	 */
 	private function get_target_dir( $theme_id, $category ) {
 		$theme_mode  = gtb_get_theme_mode( $theme_id );
-		$custom_dir  = gtb_theme_built_path() . '/' . $category . '-templates/';
+		$custom_dir  = gtb_theme_built_path() . '/' . $category . '-files/';
 		$default_dir = gtb_theme_built_path();
 
 		switch ( $theme_mode ) {

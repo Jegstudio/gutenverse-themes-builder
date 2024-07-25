@@ -2165,6 +2165,26 @@ class Backend_Api {
 			foreach ( $file['files'] as $doc ) {
 				$doc_content = file_get_contents( $doc );
 				$doc_name    = pathinfo( $doc );
+				/**Change Template parts header & footer slug */
+				// Define the regex pattern to match slugs within wp:template-part tags
+				$pattern = '/<!-- wp:template-part \{"slug":"([^"]+)"\} \/\-->/';
+
+				// Perform the replacement
+				preg_match_all( $pattern, $doc_content, $matches_parts );
+				if ( ! empty( $matches_parts[0] ) ) {
+					foreach ( $matches_parts[0] as $index => $parts ) {
+						$category = $file['category'];
+						if ( 'header' === $matches_parts[1][ $index ] ) {
+							$new_part    = '<!-- wp:template-part {"slug":"' . $category . '-header"} /-->';
+							$doc_content = str_replace( $parts, $new_part, $doc_content );
+						}
+						if ( 'footer' === $matches_parts[1][ $index ] ) {
+							$new_part    = '<!-- wp:template-part {"slug":"' . $category . '-footer"} /-->';
+							$doc_content = str_replace( $parts, $new_part, $doc_content );
+						}
+					}
+				}
+				/**Change Pattern to Pattern Wrapper */
 				preg_match_all( '/<!-- wp:pattern {"slug":"([^"]+)"[^}]*} \/\-->/', $doc_content, $matches_pattern );
 				if ( ! empty( $matches_pattern[0] ) ) {
 					foreach ( $matches_pattern[1] as $index => $value ) {
@@ -2187,77 +2207,16 @@ class Backend_Api {
 				}
 				$create_template = $this->create_template_import( $file['category'], $theme_id, $file['type'], $doc_name['filename'], $doc_content );
 				if ( $create_template ) {
-					gutenverse_rlog( 'sukses' );
+					return array(
+						'status' => 'success',
+					);
 				} else {
-					gutenverse_rlog( 'gagal' );
+					return array(
+						'status' => 'failed',
+					);
 				}
 			}
 		}
-		// if ( $files ) {
-		// foreach ( $files as $file ) {
-		// $file_name     = basename( $file );
-		// $file_name_arr = explode( '-', str_replace( '.php', '', $file_name ) );
-		// switch ( $file_name_arr[0] ) {
-		// case 'gutenverse':
-		// $category = 'gutenverse';
-		// break;
-		// case 'pro':
-		// $category = 'pro';
-		// break;
-		// case 'core':
-		// $category = 'core';
-		// break;
-		// default:
-		// $category = 'core';
-		// break;
-		// }
-		// $slug      = $theme_slug . '-' . implode( '-', $file_name_arr );
-		// $file_data = include $file;
-		// $name      = $file_data['title'];
-		// $content   = $file_data['content'];
-		// preg_match_all( '/https?:\/\/[^\s"]+/', $content, $matches );
-		// $urls = $matches[0];
-		// ** Filter image URLs */
-		// $image_urls   = array_filter( $urls, 'is_image_url' );
-		// $replacements = array();
-		// ** Replace Image Url Content */
-		// if ( ! empty( $image_urls ) ) {
-		// foreach ( $image_urls as $url ) {
-		// $image_without_res = get_image_without_resolution( $url );
-		// if ( $image_without_res ) {
-		// $url = $image_without_res['nores'];
-		// }
-		// $attachment_id = $this->download_and_save_image( $url, $theme_dir . '/assets/img' );
-		// if ( ! $attachment_id ) {
-		// continue;
-		// }
-		// $new_image_url        = wp_get_attachment_url( $attachment_id );
-		// $replacements[ $url ] = $new_image_url;
-		// }
-		// $content = str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
-		// }
-		// $theme_id = get_option( 'gtb_active_theme_id' );
-		// if ( $theme_id ) {
-		// $post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
-		// if ( null === $post_exists ) {
-		// $post_id = wp_insert_post(
-		// array(
-		// 'post_title'   => $name,
-		// 'post_name'    => $slug,
-		// 'post_content' => $content,
-		// 'post_status'  => 'publish',
-		// 'post_type'    => 'gutenverse-pattern',
-		// )
-		// );
-		// add_post_meta( $post_id, '_pattern_category', $category );
-		// add_post_meta( $post_id, '_pattern_theme_id', $theme_id );
-		// }
-		// }
-		// }
-		// }
-		return array(
-			'status' => 'success',
-		);
 	}
 	/**
 	 * Delete template
