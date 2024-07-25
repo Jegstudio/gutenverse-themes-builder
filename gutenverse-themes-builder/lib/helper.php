@@ -9,6 +9,26 @@
 
 use GTB\Database\Database;
 
+if ( ! function_exists( 'gtb_to_unicode_escape' ) ) {
+	/**
+	 * escape to unicode
+	 *
+	 * @param string str .
+	 *
+	 * @return string
+	 */
+	function gtb_to_unicode_escape( $str ) {
+		$unicode_escape = '';
+		$length         = mb_strlen( $str, 'UTF-8' );
+
+		for ( $i = 0; $i < $length; $i++ ) {
+			$char            = mb_substr( $str, $i, 1, 'UTF-8' );
+			$unicode_escape .= sprintf( "\\u%04x", mb_ord( $char, 'UTF-8' ) );
+		}
+
+		return $unicode_escape;
+	}
+}
 if ( ! function_exists( 'get_image_without_resolution' ) ) {
 	/**
 	 * Get Image Without Resolution
