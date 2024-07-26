@@ -92,7 +92,7 @@ gulp.task("clean", function () {
  */
 gulp.task("copy-plugin-folder", function () {
     return gulp
-        .src(['./gutenverse-themes-builder/**/*','!./gutenverse-themes-builder/lib/framework/**'])
+        .src(['./gutenverse-themes-builder/**/*','!./gutenverse-themes-builder/lib/framework/**'], { encoding: false })
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
@@ -125,7 +125,7 @@ gulp.task("zip", async function () {
     const zip = await getZip();
 
     return gulp
-        .src('./release/gutenverse-themes-builder/**', {base: './release'})
+        .src('./release/gutenverse-themes-builder/**', {base: './release', encoding: false })
         .pipe(zip('gutenverse-themes-builder.zip'))
         .pipe(gulp.dest('./release'));
 });
