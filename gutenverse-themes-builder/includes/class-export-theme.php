@@ -636,8 +636,8 @@ class Export_Theme {
 		$placeholder = str_replace( '{{custom_template_list}}', $custom_template, $placeholder );
 
 		// Generate Init Fonts.
-		$global_fonts = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
-		$fonts        = '';
+		$global_fonts              = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
+		$fonts = '';
 
 		if ( $global_fonts ) {
 			foreach ( $global_fonts as $font ) {
@@ -1000,7 +1000,6 @@ class Export_Theme {
 	private function extract_images( $content, $system, $slug ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $content, $matches );
-
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[0] as $image ) {
 				$this->add_image( $image );

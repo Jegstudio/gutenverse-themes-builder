@@ -184,7 +184,6 @@ const PatternList = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [createPatternPopup, setCreatePatternPopup] = useState(false);
     const [editPatternPopup, setEditPatternPopup] = useState(false);
-    const [loading, setLoading] = useState(false);
     const {
         editPath,
     } = window['GutenverseThemeBuilder'];
@@ -198,17 +197,6 @@ const PatternList = () => {
     }, []);
 
     const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: 1 }, updateList);
-
-    const importPattern = () => {
-        setLoading(true);
-        apiFetch({
-            path: '/gtb-backend/v1/pattern/import',
-            method: 'GET',
-        }).then(() => {
-            getPatternList({ paged: 1 }, updateList);
-            setLoading(false);
-        })
-    }
     return (
         <ContentWrapper
             title={__('Pattern List', 'gtb')}
@@ -220,12 +208,6 @@ const PatternList = () => {
                     buttonEvent : () => setCreatePatternPopup(true),
                     buttonIcon : <PlusIcon />,
                     buttonLoading : false
-                },
-                {
-                    buttonText : __('Import Active Theme Pattern', 'gtb'),
-                    buttonEvent : importPattern,
-                    buttonIcon : false,
-                    buttonLoading : loading,
                 }
             ]}
         >

@@ -11,7 +11,6 @@ namespace GTB;
 
 use GTB\Database\Database;
 use Gutenverse\Framework\Global_Variable;
-use Gutenverse\Framework\Init;
 use WP_Query;
 use ZipArchive;
 use WP_Theme_Json_Resolver;
@@ -346,20 +345,10 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
-			'pattern/import',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'import_pattern' ),
-				'permission_callback' => 'gutenverse_permission_check_admin',
-			)
-		);
-
-		register_rest_route(
-			self::ENDPOINT,
 			'template/import',
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'import_template' ),
+				'callback'            => array( $this, 'import_active_theme' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -1332,11 +1321,25 @@ class Backend_Api {
 
 		return $patterns->posts;
 	}
-
+	/**
+	 * Import Global Font
+	 */
+	public function import_global_font() {
+		$active_theme              = wp_get_theme();
+		$active_theme_name         = str_replace( ' ', '_', $active_theme->get( 'Name' ) );
+		$class_name                = $active_theme_name . '\\Init';
+		$class_instance            = $class_name::instance();
+		$active_theme_global_fonts = $class_instance->default_font_variable();
+		$global_fonts_now          = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
+		if ( $active_theme_global_fonts && $global_fonts_now ) {
+			$active_theme_global_fonts = array_merge( $active_theme_global_fonts, $global_fonts_now );
+		} elseif ( ! $active_theme_global_fonts && $global_fonts_now ) {
+			$active_theme_global_fonts = $global_fonts_now;
+		}
+		update_option( 'gutenverse-global-variable-font-gutenverse-basic', $active_theme_global_fonts );
+	}
 	/**
 	 * Import Pattern
-	 *
-	 * @return boolean
 	 */
 	public function import_pattern() {
 		$active_theme = wp_get_theme();
@@ -1408,9 +1411,6 @@ class Backend_Api {
 				}
 			}
 		}
-		return array(
-			'status' => 'success',
-		);
 	}
 	/**
 	 * Function to check if an image already exists in the media library
@@ -2124,6 +2124,18 @@ class Backend_Api {
 		return false;
 	}
 	/**
+	 * Import Active Theme
+	 */
+	public function import_active_theme() {
+		$this->import_pattern();
+		$this->import_global_font();
+		$this->import_template();
+
+		return array(
+			'status' => 'success',
+		);
+	}
+	/**
 	 * Import Template
 	 */
 	public function import_template() {
@@ -2205,17 +2217,9 @@ class Backend_Api {
 						}
 					}
 				}
-				$create_template = $this->create_template_import( $file['category'], $theme_id, $file['type'], $doc_name['filename'], $doc_content );
-				if ( ! $create_template ) {
-					return array(
-						'status' => 'failed',
-					);
-				}
+				$this->create_template_import( $file['category'], $theme_id, $file['type'], $doc_name['filename'], $doc_content );
 			}
 		}
-		return array(
-			'status' => 'success',
-		);
 	}
 	/**
 	 * Delete template
