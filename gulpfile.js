@@ -92,13 +92,13 @@ gulp.task("clean", function () {
  */
 gulp.task("copy-plugin-folder", function () {
     return gulp
-        .src(['./gutenverse-themes-builder/**/*','!./gutenverse-themes-builder/lib/framework'])
+        .src(['./gutenverse-themes-builder/**/*','!./gutenverse-themes-builder/lib/framework/**'])
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
 gulp.task("copy-framework", function () {
     return gulp
-        .src('./gutenverse-core/framework/**/*')
+        .src('./gutenverse-core/framework/**/*', { encoding: false })
         .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
 });
 
