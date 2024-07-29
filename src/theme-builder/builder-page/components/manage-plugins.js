@@ -107,9 +107,14 @@ const ManagePlugins = () => {
             title={__('Manage Plugins', 'gtb')}
             description={__('This is place to manage which plugins are used in your current theme.', 'gtb')}
             headingButton={true}
-            headingButtonIcon={false}
-            headingButtonText={__('Save', 'gtb')}
-            headingButtonOnClick={() => updatePluginData(true)}
+            headingButtons={[
+                {
+                    buttonText : __('Save', 'gtb'),
+                    buttonEvent : () => updatePluginData(true),
+                    buttonIcon : false,
+                    buttonLoading : false
+                }
+            ]}
         >
             {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> : <>
                 <SelectSearchControl

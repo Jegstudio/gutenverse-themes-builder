@@ -8,6 +8,7 @@ import { checkThemeMode } from '../data/helper';
 import { DeleteAltIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
+import apiFetch from '@wordpress/api-fetch';
 
 const ManageTemplates = () => {
     const [themeMode, setThemeMode] = useState(null);
@@ -15,6 +16,7 @@ const ManageTemplates = () => {
     const [templateList, setTemplateList] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const afterFetching = (response) => {
         setThemeMode(response?.mode);
@@ -79,11 +81,27 @@ const ManageTemplates = () => {
             template_data: deletePopup
         }, afterFetching);
     };
-
+    const importTemplate = () => {
+        setLoading(true);
+        apiFetch({
+            path: '/gtb-backend/v1/template/import',
+            method: 'GET',
+        }).then(() => {
+            getTemplateList(afterFetching);
+            setLoading(false);
+        })
+    }
     return (
         <ContentWrapper
             title={__('Template List', 'gtb')}
             description={__('This is a place to manage all your templates of your current active theme. Template categories is loaded based on what your current theme mode is. If you don’t have any active theme, please set one at the Theme List tab.', 'gtb')}
+            headingButton={true}
+            headingButtons={[{
+                buttonText : __('Import Active Theme Template', 'gtb'),
+                buttonEvent : importTemplate,
+                buttonIcon : false,
+                buttonLoading : loading,
+            }]}
         >
             <div className="template-page-wrapper">
                 {fetching ? <div className="loader"></div> : (

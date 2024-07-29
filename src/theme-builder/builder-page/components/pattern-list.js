@@ -3,7 +3,7 @@ import { deletePattern, getPatternList } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
-import { DeleteIcon, EditIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
@@ -197,13 +197,19 @@ const PatternList = () => {
     }, []);
 
     const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: 1 }, updateList);
-
     return (
         <ContentWrapper
             title={__('Pattern List', 'gtb')}
             description={__('This is a place to manage all your block patterns of your current active theme. Please make sure each pattern on each of your theme projects have different slug names.', 'gtb')}
             headingButton={true}
-            headingButtonOnClick={() => setCreatePatternPopup(true)}
+            headingButtons={[
+                {
+                    buttonText : __('Add New', 'gtb'),
+                    buttonEvent : () => setCreatePatternPopup(true),
+                    buttonIcon : <PlusIcon />,
+                    buttonLoading : false
+                }
+            ]}
         >
             <>
                 <Table

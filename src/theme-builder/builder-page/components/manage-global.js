@@ -6,7 +6,7 @@ import { createGlobal, deleteGlobal, getGlobalList, importGlobaStyle, updateActi
 import Table from './table';
 import isEmpty from 'lodash/isEmpty';
 import { WarningPopup } from './warning-popup';
-import { DeleteIcon, EditIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import TextControl from '../controls/text-control';
 import { ArrowLeft } from 'react-feather';
 import FileControl from '../controls/file-control';
@@ -194,7 +194,14 @@ const ManageGlobal = () => {
                 title={__('Manage Global Styles', 'gtb')}
                 description={__('Select which global styles you want to use in your current theme. You might need to reapply some of the styling.', 'gtb')}
                 headingButton={true}
-                headingButtonOnClick={() => setMode('create')}
+                headingButtons={[
+                    {
+                        buttonText : __('Add New', 'gtb'),
+                        buttonEvent : () => setMode('create'),
+                        buttonIcon : <PlusIcon />,
+                        buttonLoading : false
+                    }
+                ]}
             >
                 <>
                     <Table heads={['ID', 'Global Title', 'Status', 'Actions',]}>

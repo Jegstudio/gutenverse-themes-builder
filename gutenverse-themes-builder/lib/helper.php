@@ -9,6 +9,59 @@
 
 use GTB\Database\Database;
 
+if ( ! function_exists( 'is_image_url' ) ) {
+	/**
+	 * Check if the url is an image url
+	 */
+	function is_image_url( $url ) {
+		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
+		$path             = parse_url( $url, PHP_URL_PATH );
+		$extension        = pathinfo( $path, PATHINFO_EXTENSION );
+		return in_array( strtolower( $extension ), $image_extensions );
+	}
+}
+if ( ! function_exists( 'gtb_to_unicode_escape' ) ) {
+	/**
+	 * escape to unicode
+	 *
+	 * @param string str .
+	 *
+	 * @return string
+	 */
+	function gtb_to_unicode_escape( $str ) {
+		$unicode_escape = '';
+		$length         = mb_strlen( $str, 'UTF-8' );
+
+		for ( $i = 0; $i < $length; $i++ ) {
+			$char            = mb_substr( $str, $i, 1, 'UTF-8' );
+			$unicode_escape .= sprintf( "\\u%04x", mb_ord( $char, 'UTF-8' ) );
+		}
+
+		return $unicode_escape;
+	}
+}
+if ( ! function_exists( 'get_image_without_resolution' ) ) {
+	/**
+	 * Get Image Without Resolution
+	 *
+	 * @param string $image .
+	 *
+	 * @return array
+	 */
+	function get_image_without_resolution( $image ) {
+		// Capture image url that has resolution inside double quotes.
+		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image, $matches );
+
+		if ( empty( $matches ) ) {
+			return false;
+		}
+
+		return array(
+			'original' => $matches[0],
+			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
+		);
+	}
+}
 if ( ! function_exists( 'gtb_parts' ) ) {
 	/**
 	 * Template Parts categories.

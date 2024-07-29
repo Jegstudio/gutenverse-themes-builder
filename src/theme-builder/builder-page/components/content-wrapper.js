@@ -6,12 +6,23 @@ const ContentWrapper = (props) => {
         title = __('Title', 'gtb'),
         description = '',
         headingButton = false,
-        headingButtonIcon = true,
-        headingButtonOnClick,
-        headingButtonText = __('Add New', 'gtb'),
+        headingButtons = [
+            {
+                buttonText : __('Add New', 'gtb'),
+                buttonEvent : null,
+                buttonIcon : <PlusIcon />,
+                buttonLoading : false
+            }
+        ],
         children
     } = props;
 
+    const ButtonElement = () => {
+        return headingButtons.map(button => {
+            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> : 
+            <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+        })
+    }
     return (
         <div className="content-wrapper">
             <div className="content-heading">
@@ -19,7 +30,7 @@ const ContentWrapper = (props) => {
                     <h3 className="subtitle">{title}</h3>
                     <p className="description text">{description}</p>
                 </div>
-                {headingButton && <div className="button" onClick={headingButtonOnClick}>{headingButtonIcon && <PlusIcon />}{headingButtonText}</div>}
+                {headingButton && <div className="button-wrapper"><ButtonElement/></div>}
             </div>
             {children}
         </div>

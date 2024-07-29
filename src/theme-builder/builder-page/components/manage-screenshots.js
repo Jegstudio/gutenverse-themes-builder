@@ -92,9 +92,14 @@ const ManageScreenshots = () => {
         title={__('Manage Screenshots', 'gtb')}
         description={__('This is the place to manage all screenshots that represent your themes. From theme thumbnail to theme dashboard.', 'gtb')}
         headingButton={true}
-        headingButtonIcon={false}
-        headingButtonText={__('Save', 'gtb')}
-        headingButtonOnClick={updateScreenshotData}
+        headingButtons={[
+            {
+                buttonText : __('Save', 'gtb'),
+                buttonEvent : updateScreenshotData,
+                buttonIcon : false,
+                buttonLoading : false
+            }
+        ]}
     >
         <>
             <div>
