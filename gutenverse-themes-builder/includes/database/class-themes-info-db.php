@@ -47,7 +47,6 @@ class Themes_Info_Db extends Database_Abstract {
 			global_id		INT,
 			PRIMARY KEY		(theme_id)
 		) $charset;";
-
 		return $sql;
 	}
 

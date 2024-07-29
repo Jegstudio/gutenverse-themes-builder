@@ -93,8 +93,16 @@ class Themes_Global_Db extends Database_Abstract {
 	 */
 	public function create_data( $data ) {
 		$table = $this->get_table_name();
-
 		return $this->wpdb->insert( $table, $data );
+	}
+
+	/**
+	 * Get Inserted Id
+	 *
+	 * @return int
+	 */
+	public function get_inserted_id() {
+		return $this->wpdb->insert_id;
 	}
 
 	/**

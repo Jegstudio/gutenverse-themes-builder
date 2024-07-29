@@ -1331,12 +1331,32 @@ class Backend_Api {
 		$class_instance            = $class_name::instance();
 		$active_theme_global_fonts = $class_instance->default_font_variable();
 		$global_fonts_now          = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
-		if ( $active_theme_global_fonts && $global_fonts_now ) {
-			$active_theme_global_fonts = array_merge( $active_theme_global_fonts, $global_fonts_now );
-		} elseif ( ! $active_theme_global_fonts && $global_fonts_now ) {
-			$active_theme_global_fonts = $global_fonts_now;
+		$global_color_now          = get_option( 'gutenverse-global-variable-color-gutenverse-basic', false );
+		$title                     = 'global-import-' . $active_theme_name . '-' . substr( uniqid(), -5 );
+		$global_db                 = Database::instance()->theme_globals;
+		try {
+			$data = array(
+				'title'  => $title,
+				'file'   => '',
+				'fonts'  => maybe_serialize( $active_theme_global_fonts ),
+				'colors' => maybe_serialize( '' ),
+			);
+			$global_db->create_data( $data );
+			$data = array(
+				'title'  => 'global-' . substr( uniqid(), -5 ),
+				'file'   => '',
+				'fonts'  => $global_fonts_now ? maybe_serialize( $global_fonts_now ) : '',
+				'colors' => $global_color_now ? maybe_serialize( $global_color_now ) : '',
+			);
+			$global_db->create_data( $data );
+			$active_id  = $global_db->get_inserted_id();
+			$theme_info = Database::instance()->theme_info;
+			$theme_id   = get_option( 'gtb_active_theme_id' );
+			$theme_info->update_data( array( 'global_id' => $active_id ), $theme_id );
+		} catch ( \Throwable $th ) {
+			gutenverse_rlog( 'Import Global Data Failed!' );
+			gutenverse_rlog( $th->getMessage() );
 		}
-		update_option( 'gutenverse-global-variable-font-gutenverse-basic', $active_theme_global_fonts );
 	}
 	/**
 	 * Import Pattern
