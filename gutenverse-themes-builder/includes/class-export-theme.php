@@ -636,8 +636,8 @@ class Export_Theme {
 		$placeholder = str_replace( '{{custom_template_list}}', $custom_template, $placeholder );
 
 		// Generate Init Fonts.
-		$global_fonts              = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
-		$fonts = '';
+		$global_fonts = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), false );
+		$fonts        = '';
 
 		if ( $global_fonts ) {
 			foreach ( $global_fonts as $font ) {
@@ -1003,16 +1003,22 @@ class Export_Theme {
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[0] as $image ) {
 				$this->add_image( $image );
-
-				$image_arr  = explode( '/', $image );
-				$image_name = $image_arr[ count( $image_arr ) - 1 ];
-				$image_uri  = $this->get_constant_name( $slug ) . '_URI';
-				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-
+				$image_arr                = explode( '/', $image );
+				$image_name               = $image_arr[ count( $image_arr ) - 1 ];
+				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
+				$image_without_resolution = get_image_without_resolution( $image );
+				if ( $image_without_resolution ) {
+					$image_name  = $image_without_resolution['nores'];
+					$width       = $image_without_resolution['width'];
+					$height      = $image_without_resolution['height'];
+					$image_code  = "' . esc_url( $image_uri ) . 'assets/img/$image_name'";
+					$image_code .= '" width="' . $width . '" height="' . $height;
+				} else {
+					$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name'";
+				}
 				$content = str_replace( $image, $image_code, $content );
 			}
 		}
-
 		return $content;
 	}
 

@@ -55,10 +55,12 @@ if ( ! function_exists( 'get_image_without_resolution' ) ) {
 		if ( empty( $matches ) ) {
 			return false;
 		}
-
+		$res = explode( 'x', explode( '-', $matches[1] )[1] );
 		return array(
 			'original' => $matches[0],
 			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
+			'width'    => $res[0],
+			'height'   => explode( '.', $res[1] )[0],
 		);
 	}
 }
