@@ -1003,22 +1003,19 @@ class Export_Theme {
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[0] as $image ) {
 				$this->add_image( $image );
-				$image_arr                = explode( '/', $image );
-				$image_name               = $image_arr[ count( $image_arr ) - 1 ];
 				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
 				$image_without_resolution = get_image_without_resolution( $image );
 				if ( $image_without_resolution ) {
-					$image_name  = $image_without_resolution['nores'];
-					$width       = $image_without_resolution['width'];
-					$height      = $image_without_resolution['height'];
-					$image_code  = "' . esc_url( $image_uri ) . 'assets/img/$image_name'";
-					$image_code .= '" width="' . $width . '" height="' . $height;
+					$image_arr   = explode( '/', $image_without_resolution['nores'] );
 				} else {
-					$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name'";
+					$image_arr  = explode( '/', $image );
 				}
+				$image_name = $image_arr[ count( $image_arr ) - 1 ];
+				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
 				$content = str_replace( $image, $image_code, $content );
 			}
 		}
+		gutenverse_rlog( $content );
 		return $content;
 	}
 
@@ -1095,7 +1092,7 @@ class Export_Theme {
 			$image_res    = $this->image_with_resolution( $image );
 			$image_target = $image;
 
-			if ( in_array( $image_res['nores'], $image_list, true ) ) {
+			if ( $image_res ) {
 				$image_target = $image_res['nores'];
 			}
 
