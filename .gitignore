@@ -8,7 +8,10 @@ gutenverse-themes-builder/assets/js/*
 gutenverse-themes-builder/assets/css/*
 gutenverse-themes-builder/block
 gutenverse-themes-builder/lib/dependencies
+gutenverse-themes-builder/includes/data/assets/js/*
+gutenverse-themes-builder/includes/data/assets/css/*
 
 # Files to ignore
 package-lock.json
 gutenverse-themes-builder.pot
+

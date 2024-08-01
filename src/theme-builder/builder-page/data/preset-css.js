@@ -62,7 +62,8 @@ img {
 --{{theme_slug}}-transition: cubic-bezier(0.165, 0.84, 0.44, 1)
 }
 
-body .{{theme_slug}}-animate-init {
+body .{{theme_slug}}-animate-init,
+body.editor-styles-wrapper .{{theme_slug}}-animate {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) translateX(0) scale(1) rotate(0)
