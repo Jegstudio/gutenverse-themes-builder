@@ -1015,7 +1015,6 @@ class Export_Theme {
 				$content = str_replace( $image, $image_code, $content );
 			}
 		}
-		gutenverse_rlog( $content );
 		return $content;
 	}
 
