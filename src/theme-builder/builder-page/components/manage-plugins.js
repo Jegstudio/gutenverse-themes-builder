@@ -25,7 +25,7 @@ const ManagePlugins = () => {
                         setPlugins([
                             {
                                 value: 'gutenverse',
-                                version: '1.8.5',
+                                version: '2.0.0',
                                 type: 'wporg',
                                 label: 'Gutenverse'
                             },
@@ -42,7 +42,7 @@ const ManagePlugins = () => {
                         setPlugins([
                             {
                                 value: 'gutenverse',
-                                version: '1.8.5',
+                                version: '2.0.0',
                                 type: 'wporg',
                                 label: 'Gutenverse'
                             }

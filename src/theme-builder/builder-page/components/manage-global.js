@@ -45,7 +45,7 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
                     />
                     <FileControl
                         id={'file'}
-                        title={__('Template kit global.json file', 'gtb')}
+                        title={__('Template kit global.json file (Optional).', 'gtb')}
                         value={globalData?.file}
                         onChange={value => updateDetails('file', value)}
                     />

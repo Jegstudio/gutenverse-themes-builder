@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export const DEFAULT_DATA = {
     info_details: {
         theme_version: '1.0.0',
-        wp_min_version: '6.2',
-        wp_tested_version: '6.2',
-        php_version: '7.4.21',
+        wp_min_version: '6.5',
+        wp_tested_version: '6.5',
+        php_version: '7.0',
         core_content_width: '1140px',
         core_wide_width: '1200px',
     }
