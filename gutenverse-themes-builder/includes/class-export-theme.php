@@ -551,8 +551,14 @@ class Export_Theme {
 			wp_mkdir_p( gtb_theme_built_path() . 'assets/css' );
 		}
 
+		if ( ! is_dir( gtb_theme_built_path() . 'assets/img' ) ) {
+			wp_mkdir_p( gtb_theme_built_path() . 'assets/img' );
+		}
+
 		copy( GTB_DIR . '/includes/data/assets/js/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
 		copy( GTB_DIR . '/includes/data/assets/css/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+		copy( GTB_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
+		copy( GTB_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
 
 		$other    = maybe_unserialize( $data['other'] );
 		$required = array();
