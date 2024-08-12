@@ -562,19 +562,12 @@ class Export_Theme {
 				$required[] = "array(
 					'slug'      => '{$plugin['value']}',
 					'title'     => '{$plugin['label']}',
-					'installed' => in_array( '{$plugin['value']}', \$plugins, true ),
+					'active'    => in_array( '{$plugin['value']}', \$plugins, true ),
+					'installed' => \$this->is_installed( '{$plugin['value']}' ),
 				)";
-				// $required[] = "'{$plugin['value']}' => in_array( '{$plugin['value']}', \$plugins, true )";
 			}
 		}
 
-		$variable = "\$active_plugins = get_option( 'active_plugins' );
-				\$plugins = array();
-				foreach( \$active_plugins as \$active ) {
-					\$plugins[] = explode( '/', \$active)[0];
-				}";
-
-		$placeholder = str_replace( '{{plugins_variable}}', $variable, $placeholder );
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
