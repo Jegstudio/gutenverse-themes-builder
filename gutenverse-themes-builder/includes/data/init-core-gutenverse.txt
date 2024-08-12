@@ -302,29 +302,33 @@ class Init {
 						break;
 					case 'inactive':
 						var path = plugin?.slug + '/' + plugin?.slug;
-						wp.apiFetch({
-							path: 'wp/v2/plugins/plugin?plugin=' + path,									
-							method: 'POST',
-							data: {
-								status: 'active'
-							}
-						}).then(() => {
-							sequenceInstall(plugins, index + 1);
-						}).catch((error) => {
-						});
+						promises.push(
+							wp.apiFetch({
+								path: 'wp/v2/plugins/plugin?plugin=' + path,									
+								method: 'POST',
+								data: {
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
+							})
+						);
 						break;
 					default:
-						wp.apiFetch({
-							path: 'wp/v2/plugins',
-							method: 'POST',
-							data: {
-								slug: plugin?.slug,
-								status: 'active'
-							}
-						}).then(() => {
-							sequenceInstall(plugins, index + 1);
-						}).catch((error) => {
-						});
+						promises.push(
+							wp.apiFetch({
+								path: 'wp/v2/plugins',
+								method: 'POST',
+								data: {
+									slug: plugin?.slug,
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
+							})
+						);
 						break;
 				}
 			}
@@ -520,6 +524,7 @@ class Init {
 	 */
 	public function dashboard_scripts() {
 		$screen = get_current_screen();
+		wp_enqueue_script('wp-api-fetch');
 
 		if ( $screen->id === 'appearance_page_{{slug}}-dashboard' ) {
 			// enqueue css.
