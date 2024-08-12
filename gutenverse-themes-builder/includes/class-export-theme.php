@@ -935,6 +935,7 @@ class Export_Theme {
 						$content     = $this->extract_images( $content, $system, $theme_slug );
 						$content     = $this->fix_colors( $content );
 						$content     = $this->fix_core_navigation( $content );
+						$content     = $this->replace_template_part( $content, $theme_slug );
 						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
 						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
@@ -967,6 +968,38 @@ class Export_Theme {
 		}
 
 		return $html_content;
+	}
+
+	/**
+	 * Replace Template Part
+	 *
+	 * @param string $content .
+	 * @param string $theme_slug .
+	 *
+	 * @return string
+	 */
+	public function replace_template_part( $content, $theme_slug ) {
+		preg_match_all( '/<!-- wp:template-part {[^}]+} \\/-->/', $content, $matches );
+		if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
+			foreach ( $matches as $match ) {
+				preg_match( '/"slug":"([^"]+)"/', $match[0], $slug );
+				if ( isset( $slug[0] ) ) {
+					$arr_slug = explode( '-', $slug[1] );
+					if ( isset( $arr_slug[1] ) ) {
+						$part_name = $arr_slug[1];
+						if ( 'core' === $arr_slug[0] || 'gutenverse' === $arr_slug[0] || 'pro' === $arr_slug[0] ) {
+							if ( 'header' === $part_name ) {
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+							} elseif ( 'footer' === $part_name ) {
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+							}
+							$content = preg_replace( $match[0], $replace, $content );
+						}
+					}
+				}
+			}
+		}
+		return $content;
 	}
 
 	/**
@@ -1006,13 +1039,13 @@ class Export_Theme {
 				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
 				$image_without_resolution = get_image_without_resolution( $image );
 				if ( $image_without_resolution ) {
-					$image_arr   = explode( '/', $image_without_resolution['nores'] );
+					$image_arr = explode( '/', $image_without_resolution['nores'] );
 				} else {
-					$image_arr  = explode( '/', $image );
+					$image_arr = explode( '/', $image );
 				}
 				$image_name = $image_arr[ count( $image_arr ) - 1 ];
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-				$content = str_replace( $image, $image_code, $content );
+				$content    = str_replace( $image, $image_code, $content );
 			}
 		}
 		return $content;
