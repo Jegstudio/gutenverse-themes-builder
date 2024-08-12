@@ -302,51 +302,29 @@ class Init {
 						break;
 					case 'inactive':
 						var path = plugin?.slug + '/' + plugin?.slug;
-						promises.push(
-							new Promise((resolve) => {
-								fetch(wpApiSettings.root + 'wp/v2/plugins/' + path, {									
-									method: 'POST',
-									headers: {
-										"X-WP-Nonce": wpApiSettings.nonce,
-										'Content-Type': 'application/json',
-									},
-									body: JSON.stringify(
-										{
-											status: 'active'
-										}
-									)
-								}).then(() => {
-									sequenceInstall(plugins, index + 1);
-									resolve(plugin);
-								}).catch((error) => {
-									alert('Plugin Install Failed')	
-								});
-							})
-						);
+						wp.apiFetch({
+							path: 'wp/v2/plugins/plugin?plugin=' + path,									
+							method: 'POST',
+							data: {
+								status: 'active'
+							}
+						}).then(() => {
+							sequenceInstall(plugins, index + 1);
+						}).catch((error) => {
+						});
 						break;
 					default:
-						promises.push(
-							new Promise((resolve) => {
-								fetch(wpApiSettings.root + 'wp/v2/plugins', {									
-									method: 'POST',
-									headers: {
-										"X-WP-Nonce": wpApiSettings.nonce,
-										'Content-Type': 'application/json',
-									},
-									body: JSON.stringify(
-										{
-											slug: plugin?.slug,
-											status: 'active'
-										}
-									)
-								}).then(() => {
-									sequenceInstall(plugins, index + 1);
-									resolve(plugin);
-								}).catch((error) => {
-									alert('Plugin Install Failed')	
-								});
-							})
-						);
+						wp.apiFetch({
+							path: 'wp/v2/plugins',
+							method: 'POST',
+							data: {
+								slug: plugin?.slug,
+								status: 'active'
+							}
+						}).then(() => {
+							sequenceInstall(plugins, index + 1);
+						}).catch((error) => {
+						});
 						break;
 				}
 			}
