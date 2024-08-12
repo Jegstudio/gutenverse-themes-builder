@@ -593,8 +593,8 @@ class Init {
 	 */
 	public function admin_menu() {
 		add_theme_page(
-			'Theme Dashboard',
-			'Theme Dashboard',
+			'{{title}} Dashboard',
+			'{{title}} Dashboard',
 			'manage_options',
 			'{{slug}}-dashboard',
 			array( $this, 'load_dashboard' ),

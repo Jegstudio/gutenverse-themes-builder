@@ -102,6 +102,16 @@ const ManagePlugins = () => {
         }
     };
 
+    const updatePluginValue = (value, index) => {
+        let arrCopy = [...plugins];
+
+        arrCopy[index] = value;
+
+        setPlugins([
+            ...arrCopy
+        ]);
+    };
+
     return (
         <ContentWrapper
             title={__('Manage Plugins', 'gtb')}
@@ -131,10 +141,10 @@ const ManagePlugins = () => {
                         return <li className="plugin-req" key={key}>
                             <p className="name">{plugin?.label}</p>
                             <p className="type">{plugin?.type}</p>
-                            <input type="text" value={plugin?.version} onChange={e => updatePluginList({
+                            <input type="text" value={plugin?.version} onChange={e => updatePluginValue({
                                 ...plugin,
                                 version: e.target.value
-                            })} />
+                            }, key)} />
                             {!defaultPlugins.includes(plugin?.value) && <div className="icon" onClick={() => deletePlugin(plugin?.value)}><CloseIcon /></div>}
                         </li>;
                     })}
