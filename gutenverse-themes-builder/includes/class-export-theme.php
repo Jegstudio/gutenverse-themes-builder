@@ -619,8 +619,8 @@ class Export_Theme {
 				}
 			}
 
-			$placeholder = str_replace( '{{template_names}}', join( ",\r\n\t\t\t\t", $template_names ), $placeholder );
-			$placeholder = str_replace( '{{template_cases}}', join( "\r\n\t\t\t", $template_cases ), $placeholder );
+			$placeholder = str_replace( '{{template_names}}', join( ",\n\t\t\t\t", $template_names ), $placeholder );
+			$placeholder = str_replace( '{{template_cases}}', join( "\n\t\t\t", $template_cases ), $placeholder );
 		}
 		// Add Custom Templates. {{custom_template_list}}.
 		$custom_template = '';
