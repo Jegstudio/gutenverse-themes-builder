@@ -1484,7 +1484,7 @@ class Backend_Api {
 
 		$temp_file = download_url( $url );
 		if ( is_wp_error( $temp_file ) ) {
-			$file_name  = basename( parse_url( $url, PHP_URL_PATH ) );
+			$file_name  = basename( wp_parse_url( $url, PHP_URL_PATH ) );
 			$local_file = $dir . '/' . $file_name;
 			if ( file_exists( $local_file ) ) {
 				$temp_file = $local_file;
@@ -1494,7 +1494,7 @@ class Backend_Api {
 		}
 
 		/** Get the file name and extension  */
-		$file_name = basename( parse_url( $url, PHP_URL_PATH ) );
+		$file_name = basename( wp_parse_url( $url, PHP_URL_PATH ) );
 
 		/** Prepare the file array  */
 		$file = array(

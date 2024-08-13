@@ -15,7 +15,7 @@ if ( ! function_exists( 'is_image_url' ) ) {
 	 */
 	function is_image_url( $url ) {
 		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
-		$path             = parse_url( $url, PHP_URL_PATH );
+		$path             = wp_parse_url( $url, PHP_URL_PATH );
 		$extension        = pathinfo( $path, PATHINFO_EXTENSION );
 		return in_array( strtolower( $extension ), $image_extensions );
 	}

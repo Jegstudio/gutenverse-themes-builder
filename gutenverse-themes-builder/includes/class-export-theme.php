@@ -877,7 +877,7 @@ class Export_Theme {
 
 				unset( $attributes['ref'] );
 
-				$attributes  = json_encode( $attributes );
+				$attributes  = wp_json_encode( $attributes );
 				$content     = $navigation->post_content;
 				$block_after = "<!-- wp:navigation {$attributes} -->{$content}<!-- /wp:navigation -->";
 
