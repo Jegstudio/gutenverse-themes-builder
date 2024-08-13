@@ -376,6 +376,7 @@ class Init {
 
 					sequenceInstall(plugins);
 					Promise.all(promises).then(() => {						
+						window.location.reload();
 						$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
 					});
 				}
