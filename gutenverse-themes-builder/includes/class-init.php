@@ -51,7 +51,8 @@ class Init {
 		$this->register_framework();
 		add_filter( 'upload_mimes', array( $this, 'add_to_allowed_mimes' ) );
 		add_filter( 'wp_check_filetype_and_ext', array( $this, 'update_mime_types' ), 10, 3 );
-		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ) );
+		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ), 9 );
+		add_action( 'plugins_loaded', array( $this, 'framework_loaded' ), 99 );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_custom_theme_json' ) );
 		add_filter( 'big_image_size_threshold', '__return_false' );
@@ -139,6 +140,12 @@ class Init {
 	 */
 	public function plugin_loaded() {
 		$this->load_framework();
+	}
+
+	/**
+	 * Framework Loaded
+	 */
+	public function framework_loaded() {
 		$this->load_helper();
 		$this->init_hook();
 		$this->init_instance();
