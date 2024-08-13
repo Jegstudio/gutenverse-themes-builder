@@ -4,10 +4,10 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 
 if ( ! function_exists( 'is_image_url' ) ) {
 	/**

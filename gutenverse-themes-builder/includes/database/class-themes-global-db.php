@@ -4,10 +4,10 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB\Database;
+namespace Gutenverse_Themes_Builder\Database;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Themes_Global_Db
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Themes_Global_Db extends Database_Abstract {
 	/**

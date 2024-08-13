@@ -4,17 +4,17 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 
 /**
  * Class Deploy
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Deploy {
 	/**

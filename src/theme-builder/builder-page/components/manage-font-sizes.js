@@ -27,18 +27,18 @@ const ManageFontOption = ({ title, fontData, setMode, updateDetails, loading, ac
             {notice}
         </div>
         <div className="data-body">
-            {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> :
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> :
                 <>
                     <TextControl
                         id={'title'}
-                        title={__('Title', 'gtb')}
+                        title={__('Title', 'gutenverse-themes-builder')}
                         value={fontData?.title}
                         onChange={value => updateDetails('title', value)}
                         important={true}
                     />
                     <TextControl
                         id={'size'}
-                        title={__('Size', 'gtb')}
+                        title={__('Size', 'gutenverse-themes-builder')}
                         value={fontData?.size}
                         onChange={value => updateDetails('size', value)}
                         important={true}
@@ -91,7 +91,7 @@ const EditFont = ({ data, setMode, updateFontList }) => {
     const params = { notice, fontData, setMode, updateDetails, loading, actionFontData: updateFontData };
     return <ManageFontOption
         {...params}
-        title={__('Edit Font Detail', 'gtb')}
+        title={__('Edit Font Detail', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -131,7 +131,7 @@ const CreateFont = ({ setMode, updateFontList }) => {
     const params = { notice, fontData, setMode, updateDetails, loading, actionFontData: createFontData };
     return <ManageFontOption
         {...params}
-        title={__('Create Font', 'gtb')}
+        title={__('Create Font', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -169,15 +169,15 @@ const ManageFontSizes = () => {
             break;
         default:
             Content = <ContentWrapper
-                title={__('Manage Core Fonts Size', 'gtb')}
-                description={__('This is a place to manage all fonts for ONLY core blocks of your current active theme. For Gutenverse fonts, you can set it up directly in global styles extended.', 'gtb')}
+                title={__('Manage Core Fonts Size', 'gutenverse-themes-builder')}
+                description={__('This is a place to manage all fonts for ONLY core blocks of your current active theme. For Gutenverse fonts, you can set it up directly in global styles extended.', 'gutenverse-themes-builder')}
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText : __('Add New', 'gtb'),
-                        buttonEvent : () => setMode('create'),
-                        buttonIcon : <PlusIcon />,
-                        buttonLoading : false
+                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonEvent: () => setMode('create'),
+                        buttonIcon: <PlusIcon />,
+                        buttonLoading: false
                     }
                 ]}
             >
@@ -192,8 +192,8 @@ const ManageFontSizes = () => {
                                     <td>{font?.size}</td>
                                     <td>
                                         <div className="actions">
-                                            <a className="edit" onClick={() => setEditFont(font)}><EditIcon />{__('Edit', 'gtb')}</a>
-                                            <a className="delete" onClick={() => setDeletePopup(font?.id)}><DeleteIcon />{__('Delete', 'gtb')}</a>
+                                            <a className="edit" onClick={() => setEditFont(font)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
+                                            <a className="delete" onClick={() => setDeletePopup(font?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                         </div>
                                     </td>
                                 </tr>;
@@ -201,8 +201,8 @@ const ManageFontSizes = () => {
                         </>
                     </Table>
                     {deletePopup && <WarningPopup
-                        title={__('Are you sure want to delete this font?', 'gtb')}
-                        detail={__('Please note, every element related to this font won\'t be working property after delete this aset.', 'gtb')}
+                        title={__('Are you sure want to delete this font?', 'gutenverse-themes-builder')}
+                        detail={__('Please note, every element related to this font won\'t be working property after delete this aset.', 'gutenverse-themes-builder')}
                         onProceed={removeFont}
                         onClose={() => setDeletePopup(false)}
                     />}

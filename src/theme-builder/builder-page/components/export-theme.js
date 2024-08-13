@@ -11,12 +11,12 @@ const ExportTheme = () => {
 
     return (
         <ContentWrapper
-            title={__('Export Theme', 'gtb')}
-            description={__('Export your current active theme as zip file.', 'gtb')}
+            title={__('Export Theme', 'gutenverse-themes-builder')}
+            description={__('Export your current active theme as zip file.', 'gutenverse-themes-builder')}
         >
             <>
                 <div className="buttons">
-                    <div className="button" onClick={startExport}>{__('Export', 'gtb')}</div>
+                    <div className="button" onClick={startExport}>{__('Export', 'gutenverse-themes-builder')}</div>
                 </div>
             </>
         </ContentWrapper>

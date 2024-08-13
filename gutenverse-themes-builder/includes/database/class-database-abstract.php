@@ -4,15 +4,15 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB\Database;
+namespace Gutenverse_Themes_Builder\Database;
 
 /**
  * Class Database Abstract
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 abstract class Database_Abstract {
 	/**

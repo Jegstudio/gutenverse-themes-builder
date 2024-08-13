@@ -4,15 +4,15 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB\Block;
+namespace Gutenverse_Themes_Builder\Block;
 
 /**
  * Class Pattern Wrapper
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Pattern_Wrapper extends Block_Abstract {
 	/**

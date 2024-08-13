@@ -23,11 +23,11 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
             <h3 className="subtitle">{title}</h3>
         </div>
         <div className="data-body">
-            {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> :
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> :
                 <>
                     <TextControl
                         id={'handler'}
-                        title={__('Handler', 'gtb')}
+                        title={__('Handler', 'gutenverse-themes-builder')}
                         value={assetData?.handler}
                         onChange={value => { updateDetails('handler', value); }}
                     />
@@ -38,15 +38,15 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                         options={[
                             {
                                 value: 'both',
-                                label: __('Backend & Frontend', 'gtb')
+                                label: __('Backend & Frontend', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'backend',
-                                label: __('Backend Only', 'gtb')
+                                label: __('Backend Only', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'frontend',
-                                label: __('Frontend Only', 'gtb')
+                                label: __('Frontend Only', 'gutenverse-themes-builder')
                             },
                         ]}
                         onChange={value => updateDetails('enqueue', value)}
@@ -58,31 +58,31 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                         options={[
                             {
                                 value: 'js',
-                                label: __('Javascript', 'gtb')
+                                label: __('Javascript', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'css',
-                                label: __('Stylesheet', 'gtb')
+                                label: __('Stylesheet', 'gutenverse-themes-builder')
                             },
                         ]}
                         onChange={value => updateDetails('type', value)}
                     />
                     <SelectControl
                         id={'media_type'}
-                        title={__('Media Type', 'gtb')}
+                        title={__('Media Type', 'gutenverse-themes-builder')}
                         value={assetData.media_type}
                         options={[
                             {
                                 value: 'media',
-                                label: __('Media URL', 'gtb')
+                                label: __('Media URL', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'content',
-                                label: __('Content', 'gtb')
+                                label: __('Content', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'wordpress',
-                                label: __('WordPress Registered Script', 'gtb')
+                                label: __('WordPress Registered Script', 'gutenverse-themes-builder')
                             },
                         ]}
                         onChange={value => {
@@ -92,20 +92,20 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                     />
                     {assetData?.media_type === 'content' && <SelectControl
                         id={'preset'}
-                        title={__('Use Preset', 'gtb')}
+                        title={__('Use Preset', 'gutenverse-themes-builder')}
                         value={assetData?.preset ? assetData?.preset : 'none'}
                         options={[
                             {
                                 value: 'none',
-                                label: __('None', 'gtb')
+                                label: __('None', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'core_css',
-                                label: __('Core CSS Preset', 'gtb')
+                                label: __('Core CSS Preset', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'core_js',
-                                label: __('Core Javascript Preset', 'gtb')
+                                label: __('Core Javascript Preset', 'gutenverse-themes-builder')
                             },
                         ]}
                         onChange={value => {
@@ -123,13 +123,13 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                     />}
                     {assetData.media_type === 'media' && <TextControl
                         id={'media'}
-                        title={__('Media URL', 'gtb')}
+                        title={__('Media URL', 'gutenverse-themes-builder')}
                         value={assetData?.media}
-                        description={__('URL must be accesible publicly. You can use CDN or host it on your server.', 'gtb')}
+                        description={__('URL must be accesible publicly. You can use CDN or host it on your server.', 'gutenverse-themes-builder')}
                         onChange={value => updateDetails('media', value)}
                     />}
                     {assetData.media_type === 'content' && <div className="input-wrapper code-editor">
-                        <label>{__('Asset Content', 'gtb')}</label>
+                        <label>{__('Asset Content', 'gutenverse-themes-builder')}</label>
                         <div style={{
                             overflow: 'auto',
                             height: '400px',
@@ -140,7 +140,7 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                             <CodeEditor
                                 value={assetData?.content}
                                 language={assetData?.type}
-                                placeholder={assetData.type === 'css' ? __('Write your sytle right here', 'gtb') : __('Write your script right here', 'gtb')}
+                                placeholder={assetData.type === 'css' ? __('Write your sytle right here', 'gutenverse-themes-builder') : __('Write your script right here', 'gutenverse-themes-builder')}
                                 onChange={(evn) => updateDetails('content', evn.target.value)}
                                 minHeight={400}
                                 data-color-mode="dark"
@@ -191,7 +191,7 @@ const EditAsset = ({ data, setMode, updateAssetList, presetStyles }) => {
     const params = { assetData, setMode, updateDetails, loading, actionAssetData: updateAssetData, presetStyles };
     return <ManageAssetOption
         {...params}
-        title={__('Edit Asset Detail', 'gtb')}
+        title={__('Edit Asset Detail', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -222,7 +222,7 @@ const CreateAsset = ({ setMode, updateAssetList, presetStyles }) => {
     const params = { assetData, setMode, updateDetails, loading, actionAssetData: createAssetData, presetStyles };
     return <ManageAssetOption
         {...params}
-        title={__('Create Asset', 'gtb')}
+        title={__('Create Asset', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -259,11 +259,11 @@ const ManageAssets = () => {
     const getMediaType = type => {
         switch (type) {
             case 'media':
-                return __('Media', 'gtb');
+                return __('Media', 'gutenverse-themes-builder');
             case 'content':
-                return __('Script / Style', 'gtb');
+                return __('Script / Style', 'gutenverse-themes-builder');
             case 'wordpress':
-                return __('WordPress', 'gtb');
+                return __('WordPress', 'gutenverse-themes-builder');
             default:
                 return null;
         }
@@ -278,14 +278,14 @@ const ManageAssets = () => {
             break;
         default:
             Content = <ContentWrapper
-                title={__('Manage Assets', 'gtb')}
-                description={__('This is a place to manage all your theme JS and CSS assets of your current active theme.', 'gtb')}
+                title={__('Manage Assets', 'gutenverse-themes-builder')}
+                description={__('This is a place to manage all your theme JS and CSS assets of your current active theme.', 'gutenverse-themes-builder')}
                 headingButtons={[
                     {
-                        buttonText : __('Add New', 'gtb'),
-                        buttonEvent : () => setMode('create'),
-                        buttonIcon : <PlusIcon />,
-                        buttonLoading : false
+                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonEvent: () => setMode('create'),
+                        buttonIcon: <PlusIcon />,
+                        buttonLoading: false
                     }
                 ]}
                 headingButton={true}
@@ -300,8 +300,8 @@ const ManageAssets = () => {
                                     <td>{getMediaType(asset?.media_type)}</td>
                                     <td>
                                         <div className="actions">
-                                            <a className="edit" onClick={() => setEditAsset(asset)}><EditIcon />{__('Edit', 'gtb')}</a>
-                                            <a className="delete" onClick={() => setDeletePopup(asset?.id)}><DeleteIcon />{__('Delete', 'gtb')}</a>
+                                            <a className="edit" onClick={() => setEditAsset(asset)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
+                                            <a className="delete" onClick={() => setDeletePopup(asset?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                         </div>
                                     </td>
                                 </tr>;
@@ -309,8 +309,8 @@ const ManageAssets = () => {
                         </>
                     </Table>
                     {deletePopup && <WarningPopup
-                        title={__('Are you sure want to delete this asset?', 'gtb')}
-                        detail={__('Please note, every element related to this asset won\'t be working property after delete this aset.', 'gtb')}
+                        title={__('Are you sure want to delete this asset?', 'gutenverse-themes-builder')}
+                        detail={__('Please note, every element related to this asset won\'t be working property after delete this aset.', 'gutenverse-themes-builder')}
                         onProceed={removeAsset}
                         onClose={() => setDeletePopup(false)}
                     />}

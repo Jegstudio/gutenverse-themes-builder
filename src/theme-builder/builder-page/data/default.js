@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export const DEFAULT_DATA = {
     info_details: {
         theme_version: '1.0.0',
-        wp_min_version: '6.2',
-        wp_tested_version: '6.2',
-        php_version: '7.4.21',
+        wp_min_version: '6.5',
+        wp_tested_version: '6.5',
+        php_version: '7.0',
         core_content_width: '1140px',
         core_wide_width: '1200px',
     }
@@ -14,86 +14,86 @@ export const DEFAULT_DATA = {
 export const CATEGORIES = [
     {
         id: 'core',
-        name: __('Core Templates', 'gtb')
+        name: __('Core Templates', 'gutenverse-themes-builder')
     },
     {
         id: 'gutenverse',
-        name: __('Gutenverse Templates', 'gtb')
+        name: __('Gutenverse Templates', 'gutenverse-themes-builder')
     },
     {
         id: 'pro',
-        name: __('Gutenverse PRO Templates', 'gtb')
+        name: __('Gutenverse PRO Templates', 'gutenverse-themes-builder')
     }
 ];
 
 export const TEMPLATE_TYPES = [
     {
         value: 'index',
-        label: __('Index', 'gtb')
+        label: __('Index', 'gutenverse-themes-builder')
     },
     {
         value: 'front-page',
-        label: __('Front Page', 'gtb')
+        label: __('Front Page', 'gutenverse-themes-builder')
     },
     {
         value: 'home',
-        label: __('Home', 'gtb')
+        label: __('Home', 'gutenverse-themes-builder')
     },
     {
         value: 'page',
-        label: __('Page', 'gtb')
+        label: __('Page', 'gutenverse-themes-builder')
     },
     {
         value: 'single',
-        label: __('Single', 'gtb')
+        label: __('Single', 'gutenverse-themes-builder')
     },
     {
         value: 'archive',
-        label: __('Archive', 'gtb')
+        label: __('Archive', 'gutenverse-themes-builder')
     },
     {
         value: 'author',
-        label: __('Author', 'gtb')
+        label: __('Author', 'gutenverse-themes-builder')
     },
     {
         value: 'category',
-        label: __('Category', 'gtb')
+        label: __('Category', 'gutenverse-themes-builder')
     },
     {
         value: 'date',
-        label: __('Date', 'gtb')
+        label: __('Date', 'gutenverse-themes-builder')
     },
     {
         value: 'tag',
-        label: __('Tag', 'gtb')
+        label: __('Tag', 'gutenverse-themes-builder')
     },
     {
         value: 'taxonomy',
-        label: __('Taxonomy', 'gtb')
+        label: __('Taxonomy', 'gutenverse-themes-builder')
     },
     {
         value: 'search',
-        label: __('Search', 'gtb')
+        label: __('Search', 'gutenverse-themes-builder')
     },
     {
         value: '404',
-        label: __('404', 'gtb')
+        label: __('404', 'gutenverse-themes-builder')
     },
     {
         value: 'custom_template',
-        label: __('Custom Template', 'gtb')
+        label: __('Custom Template', 'gutenverse-themes-builder')
     },
     {
         value: 'header',
-        label: __('Header', 'gtb')
+        label: __('Header', 'gutenverse-themes-builder')
     },
     {
         value: 'footer',
-        label: __('Footer', 'gtb')
+        label: __('Footer', 'gutenverse-themes-builder')
     },
     {
         value: 'template_part',
-        label: __('Template Part', 'gtb')
+        label: __('Template Part', 'gutenverse-themes-builder')
     }
 ];
 

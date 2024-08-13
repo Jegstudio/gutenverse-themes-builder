@@ -25,7 +25,7 @@ const ManagePlugins = () => {
                         setPlugins([
                             {
                                 value: 'gutenverse',
-                                version: '1.8.5',
+                                version: '2.0.0',
                                 type: 'wporg',
                                 label: 'Gutenverse'
                             },
@@ -42,7 +42,7 @@ const ManagePlugins = () => {
                         setPlugins([
                             {
                                 value: 'gutenverse',
-                                version: '1.8.5',
+                                version: '2.0.0',
                                 type: 'wporg',
                                 label: 'Gutenverse'
                             }
@@ -102,39 +102,49 @@ const ManagePlugins = () => {
         }
     };
 
+    const updatePluginValue = (value, index) => {
+        let arrCopy = [...plugins];
+
+        arrCopy[index] = value;
+
+        setPlugins([
+            ...arrCopy
+        ]);
+    };
+
     return (
         <ContentWrapper
-            title={__('Manage Plugins', 'gtb')}
-            description={__('This is place to manage which plugins are used in your current theme.', 'gtb')}
+            title={__('Manage Plugins', 'gutenverse-themes-builder')}
+            description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText : __('Save', 'gtb'),
-                    buttonEvent : () => updatePluginData(true),
-                    buttonIcon : false,
-                    buttonLoading : false
+                    buttonText: __('Save', 'gutenverse-themes-builder'),
+                    buttonEvent: () => updatePluginData(true),
+                    buttonIcon: false,
+                    buttonLoading: false
                 }
             ]}
         >
-            {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> : <>
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> : <>
                 <SelectSearchControl
                     id={'search'}
-                    title={__('WP.org Plugins', 'gtb')}
-                    description={__('Search for WP.org plugins you used for building your current active theme.', 'gtb')}
+                    title={__('WP.org Plugins', 'gutenverse-themes-builder')}
+                    description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
                     value={''}
                     onChange={updatePluginList}
                     onSearch={searchPlugin}
                 />
-                <h3>{__('List plugins used for current theme', 'gtb')}</h3>
+                <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
                 <ul>
                     {plugins.map((plugin, key) => {
                         return <li className="plugin-req" key={key}>
                             <p className="name">{plugin?.label}</p>
                             <p className="type">{plugin?.type}</p>
-                            <input type="text" value={plugin?.version} onChange={e => updatePluginList({
+                            <input type="text" value={plugin?.version} onChange={e => updatePluginValue({
                                 ...plugin,
                                 version: e.target.value
-                            })} />
+                            }, key)} />
                             {!defaultPlugins.includes(plugin?.value) && <div className="icon" onClick={() => deletePlugin(plugin?.value)}><CloseIcon /></div>}
                         </li>;
                     })}

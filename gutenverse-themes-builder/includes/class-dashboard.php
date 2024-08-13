@@ -7,7 +7,7 @@
  * @package gutenverse
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
 /**
  * Class Dashboard
@@ -27,13 +27,23 @@ class Dashboard {
 	 * Dashboard scripts.
 	 */
 	public function enqueue_scripts() {
-		$include = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
+		$include = include GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/blocks.asset.php';
 
 		wp_enqueue_script(
 			'gtb-block',
-			GTB_URL . '/assets/js/blocks.js',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/blocks.js',
 			$include['dependencies'],
-			GTB_VERSION,
+			GUTENVERSE_THEMES_BUILDER_VERSION,
+			true
+		);
+
+		$include = ( include GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/dashboard.asset.php' )['dependencies'];
+
+		wp_enqueue_script(
+			'gtb-dashboard',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/dashboard.js',
+			$include,
+			GUTENVERSE_THEMES_BUILDER_VERSION,
 			true
 		);
 	}
@@ -44,13 +54,14 @@ class Dashboard {
 	 * @param array $config Config.
 	 */
 	public function dashboard_config( $config ) {
-		$config['pluginVersions'][ GTB ] = array(
-			'name'           => GTB_NAME,
-			'version'        => GTB_VERSION,
-			'currentNotice'  => GTB_NOTICE_VERSION,
+		$config['pluginVersions'][ GUTENVERSE_THEMES_BUILDER ] = array(
+			'name'           => GUTENVERSE_THEMES_BUILDER_NAME,
+			'version'        => GUTENVERSE_THEMES_BUILDER_VERSION,
+			'currentNotice'  => GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION,
 			'noticeVersions' => array( '1.0.0' ),
 		);
-		$config['gtbImgDir']             = GTB_URL . '/assets/img';
+
+		$config['gtbAssetURL'] = GUTENVERSE_THEMES_BUILDER_URL . '/assets/';
 
 		return $config;
 	}

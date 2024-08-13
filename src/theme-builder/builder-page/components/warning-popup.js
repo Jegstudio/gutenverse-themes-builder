@@ -13,7 +13,7 @@ export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', o
                 <div className="popup-header">
                     <div className="title">
                         <WarningIcon />
-                        <span>{__('Warning', 'gtb')}</span>
+                        <span>{__('Warning', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="close-button" onClick={onClose}>
                         <CloseIcon />
@@ -26,7 +26,7 @@ export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', o
                 <div className="popup-footer">
                     <div className="buttons end">
                         <div className="button proceed" onClick={proceedAction}>{actionText}</div>
-                        <div className="button cancel" onClick={onClose}>{__('Cancel', 'gtb')}</div>
+                        <div className="button cancel" onClick={onClose}>{__('Cancel', 'gutenverse-themes-builder')}</div>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@
     "build:css": "cross-env NODE_ENV=production gulp build",
     "development": "gulp clean && npm run development --prefix gutenverse-core && npm run dev && gulp release && npm run pot && gulp zip",
     "production": "gulp clean && npm run production --prefix gutenverse-core && npm run build && gulp release && npm run pot && gulp zip",
-    "pot": "wp i18n make-pot ./release/gutenverse-themes-builder ./release/gutenverse-themes-builder/languages/gutenverse-themes-builder.pot --domain=gtb"
+    "pot": "wp i18n make-pot ./release/gutenverse-themes-builder ./release/gutenverse-themes-builder/languages/gutenverse-themes-builder.pot --domain=gutenverse-themes-builder"
   },
   "repository": {
     "type": "git",

@@ -29,16 +29,16 @@ const ReadmeEditor = () => {
 
     return (
         <ContentWrapper
-            title={__('Readme Editor', 'gtb')}
-            description={__('Edit your current active theme readme content here. This will be built as readme.txt file in your exported theme.', 'gtb')}
+            title={__('Readme Editor', 'gutenverse-themes-builder')}
+            description={__('Edit your current active theme readme content here. This will be built as readme.txt file in your exported theme.', 'gutenverse-themes-builder')}
         >
-            <p>{__('You can keep or replace the text wrapped by "{{" and "}}" (e.g: {{title}} ).', 'gtb')}</p>
-            <p>{__('If you want to replace it, please make sure you replace the whole text including the curly brackets. (example: from "{{title}}" into "My Amazing Theme"', 'gtb')}</p>
-            <p>{__('If you keep it, it will be automatically converted into the data you\'ve provide in theme\'s details.', 'gtb')}</p>
+            <p>{__('You can keep or replace the text wrapped by "{{" and "}}" (e.g: {{title}} ).', 'gutenverse-themes-builder')}</p>
+            <p>{__('If you want to replace it, please make sure you replace the whole text including the curly brackets. (example: from "{{title}}" into "My Amazing Theme"', 'gutenverse-themes-builder')}</p>
+            <p>{__('If you keep it, it will be automatically converted into the data you\'ve provide in theme\'s details.', 'gutenverse-themes-builder')}</p>
             <CodeEditor
                 value={readmeContent}
                 language={'text'}
-                placeholder={__('Write your readme.txt details right here', 'gtb')}
+                placeholder={__('Write your readme.txt details right here', 'gutenverse-themes-builder')}
                 onChange={(evn) => setReadmeContent(evn.target.value)}
                 minHeight={400}
                 data-color-mode="dark"
@@ -49,7 +49,7 @@ const ReadmeEditor = () => {
             />
             {!loading && <div className="data-footer">
                 <div className="buttons inline">
-                    <button className="button create" onClick={saveReadme}>{__('Save Readme', 'gtb')}</button>
+                    <button className="button create" onClick={saveReadme}>{__('Save Readme', 'gutenverse-themes-builder')}</button>
                 </div>
             </div>}
         </ContentWrapper>

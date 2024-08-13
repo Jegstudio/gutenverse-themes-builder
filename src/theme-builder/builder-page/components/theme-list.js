@@ -49,7 +49,7 @@ const CreateTheme = ({ setMode, updateThemeList }) => {
     </div>;
 
     const actionButton = <div className="buttons end">
-        <button className="button data create" onClick={onCreateTheme}>{__('Create Now', 'gtb')}</button>
+        <button className="button data create" onClick={onCreateTheme}>{__('Create Now', 'gutenverse-themes-builder')}</button>
     </div>;
 
     const notice = !isEmpty(noticeMessage) && <div className="gtb-notice">
@@ -100,7 +100,7 @@ const EditTheme = ({ themeId, setMode, updateThemeList }) => {
     </div>;
 
     const actionButton = <div className="buttons end">
-        <button className="button data create" onClick={updateThemeData}>{__('Save Changes', 'gtb')}</button>
+        <button className="button data create" onClick={updateThemeData}>{__('Save Changes', 'gutenverse-themes-builder')}</button>
     </div>;
 
     const notice = !isEmpty(noticeMessage) && <div className="gtb-notice">
@@ -162,15 +162,15 @@ const ThemeList = () => {
             break;
         default:
             Content = <ContentWrapper
-                title={__('Theme List', 'gtb')}
-                description={__('This is a place to manage all your current themes project and it’s details information. Only one theme can be active at a time.', 'gtb')}
+                title={__('Theme List', 'gutenverse-themes-builder')}
+                description={__('This is a place to manage all your current themes project and it’s details information. Only one theme can be active at a time.', 'gutenverse-themes-builder')}
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText : __('Add New', 'gtb'),
-                        buttonEvent : () => setMode('create'),
-                        buttonIcon : <PlusIcon />,
-                        buttonLoading : false
+                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonEvent: () => setMode('create'),
+                        buttonIcon: <PlusIcon />,
+                        buttonLoading: false
                     }
                 ]}
             >
@@ -186,7 +186,7 @@ const ThemeList = () => {
                                     <td>{theme?.theme_id}</td>
                                     <td>{theme?.slug}</td>
                                     <td>{theme?.theme_data?.title}</td>
-                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('Active', 'gtb') : __('Inactive', 'gtb')}</span></td>
+                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('Active', 'gutenverse-themes-builder') : __('Inactive', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {!active && <a className="edit" onClick={() => setSwitchPopup(theme?.theme_id)}>Set Active</a>}
@@ -199,15 +199,15 @@ const ThemeList = () => {
                         </>
                     </Table>
                     {switchPopup && <WarningPopup
-                        title={__('Switch to this theme?', 'gtb')}
-                        detail={__('Your current theme templates data will be saved into files, your data won\'t be lost when you switch back BUT any saved changes will be made PERMANENT.', 'gtb')}
-                        actionText={__('Switch', 'gtb')}
+                        title={__('Switch to this theme?', 'gutenverse-themes-builder')}
+                        detail={__('Your current theme templates data will be saved into files, your data won\'t be lost when you switch back BUT any saved changes will be made PERMANENT.', 'gutenverse-themes-builder')}
+                        actionText={__('Switch', 'gutenverse-themes-builder')}
                         onProceed={updateActiveID}
                         onClose={() => setSwitchPopup(false)}
                     />}
                     {deletePopup && <WarningPopup
-                        title={__('Are you sure want to delete this theme?', 'gtb')}
-                        detail={__('This is PERMANENT and you would not be able to restore this later.', 'gtb')}
+                        title={__('Are you sure want to delete this theme?', 'gutenverse-themes-builder')}
+                        detail={__('This is PERMANENT and you would not be able to restore this later.', 'gutenverse-themes-builder')}
                         onProceed={removeTheme}
                         onClose={() => setDeletePopup(false)}
                     />}

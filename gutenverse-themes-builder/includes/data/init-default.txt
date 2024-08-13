@@ -319,48 +319,30 @@ class Init {
 					case 'inactive':
 						var path = plugin?.slug + '/' + plugin?.slug;
 						promises.push(
-							new Promise((resolve) => {
-								fetch(wpApiSettings.root + 'wp/v2/plugins/' + path, {									
-									method: 'POST',
-									headers: {
-										"X-WP-Nonce": wpApiSettings.nonce,
-										'Content-Type': 'application/json',
-									},
-									body: JSON.stringify(
-										{
-											status: 'active'
-										}
-									)
-								}).then(() => {
-									sequenceInstall(plugins, index + 1);
-									resolve(plugin);
-								}).catch((error) => {
-									alert('Plugin Install Failed')	
-								});
+							wp.apiFetch({
+								path: 'wp/v2/plugins/plugin?plugin=' + path,									
+								method: 'POST',
+								data: {
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
 							})
 						);
 						break;
 					default:
 						promises.push(
-							new Promise((resolve) => {
-								fetch(wpApiSettings.root + 'wp/v2/plugins', {									
-									method: 'POST',
-									headers: {
-										"X-WP-Nonce": wpApiSettings.nonce,
-										'Content-Type': 'application/json',
-									},
-									body: JSON.stringify(
-										{
-											slug: plugin?.slug,
-											status: 'active'
-										}
-									)
-								}).then(() => {
-									sequenceInstall(plugins, index + 1);
-									resolve(plugin);
-								}).catch((error) => {
-									alert('Plugin Install Failed')	
-								});
+							wp.apiFetch({
+								path: 'wp/v2/plugins',
+								method: 'POST',
+								data: {
+									slug: plugin?.slug,
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
 							})
 						);
 						break;
@@ -394,6 +376,7 @@ class Init {
 
 					sequenceInstall(plugins);
 					Promise.all(promises).then(() => {						
+						window.location.reload();
 						$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
 					});
 				}
@@ -521,6 +504,7 @@ class Init {
 	 */
 	public function dashboard_scripts() {
 		$screen = get_current_screen();
+		wp_enqueue_script('wp-api-fetch');
 
 		if ( $screen->id === 'appearance_page_{{slug}}-dashboard' ) {
 			// enqueue css.
@@ -545,10 +529,34 @@ class Init {
 	}
 
 	/**
+	 * Check if plugin is installed.
+	 *
+	 * @param string $plugin_slug plugin slug.
+	 * 
+	 * @return boolean
+	 */
+	public function is_installed( $plugin_slug ) {
+		$all_plugins = get_plugins();
+		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
+			$plugin_dir = dirname($plugin_file);
+
+			if ($plugin_dir === $plugin_slug) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Register static data to be used in theme's js file
 	 */
 	public function theme_config() {
-		{{plugins_variable}}
+		$active_plugins = get_option( 'active_plugins' );
+		$plugins = array();
+		foreach( $active_plugins as $active ) {
+			$plugins[] = explode( '/', $active)[0];
+		}
 
 		return array(
 			'images'       => {{constant}}_URI . '/assets/img/',
@@ -578,8 +586,8 @@ class Init {
 	 */
 	public function admin_menu() {
 		add_theme_page(
-			'Theme Dashboard',
-			'Theme Dashboard',
+			'{{title}} Dashboard',
+			'{{title}} Dashboard',
 			'manage_options',
 			'{{slug}}-dashboard',
 			array( $this, 'load_dashboard' ),

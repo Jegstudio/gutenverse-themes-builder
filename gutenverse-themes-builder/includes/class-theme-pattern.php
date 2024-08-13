@@ -4,15 +4,15 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
 /**
  * Class Theme Helper
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Theme_Pattern {
 	/**
@@ -88,7 +88,7 @@ class Theme_Pattern {
 				<fieldset class="inline-edit-col-right" id="#edit-">
 					<div class="inline-edit-col">
 						<label>
-							<span class="title"><?php esc_html_e( 'Type', 'gutenverse' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Type', 'gutenverse-themes-builder' ); ?></span>
 							<select name="pattern_type">
 								<option <?php echo $selected === 'basic' ? 'selected=selected' : ''; ?> value="basic">Core</option>
 								<option <?php echo $selected === 'gutenverse' ? 'selected=selected' : ''; ?> value="gutenverse">Gutenverse</option>
@@ -110,9 +110,9 @@ class Theme_Pattern {
 	public function add_custom_columns_title() {
 		$columns                 = array();
 		$columns['cb']           = '';
-		$columns['title']        = esc_html__( 'Title', 'gutenverse' );
-		$columns['pattern_type'] = esc_html__( 'Pattern Type', 'gutenverse' );
-		$columns['date']         = esc_html__( 'Date', 'gutenverse' );
+		$columns['title']        = esc_html__( 'Title', 'gutenverse-themes-builder' );
+		$columns['pattern_type'] = esc_html__( 'Pattern Type', 'gutenverse-themes-builder' );
+		$columns['date']         = esc_html__( 'Date', 'gutenverse-themes-builder' );
 
 		return $columns;
 	}
@@ -130,13 +130,13 @@ class Theme_Pattern {
 
 				switch ( $category ) {
 					case 'basic':
-						esc_html_e( 'Core', 'gutenverse' );
+						esc_html_e( 'Core', 'gutenverse-themes-builder' );
 						break;
 					case 'pro':
-						esc_html_e( 'Gutenverse Pro', 'gutenverse' );
+						esc_html_e( 'Gutenverse Pro', 'gutenverse-themes-builder' );
 						break;
 					case 'gutenverse':
-						esc_html_e( 'Gutenverse', 'gutenverse' );
+						esc_html_e( 'Gutenverse', 'gutenverse-themes-builder' );
 						break;
 				}
 				break;
@@ -155,8 +155,8 @@ class Theme_Pattern {
 			array(
 				'labels'       =>
 					array(
-						'name'          => esc_html__( 'Theme Pattern', 'gutenverse' ),
-						'singular_name' => esc_html__( 'Theme Pattern', 'gutenverse' ),
+						'name'          => esc_html__( 'Theme Pattern', 'gutenverse-themes-builder' ),
+						'singular_name' => esc_html__( 'Theme Pattern', 'gutenverse-themes-builder' ),
 					),
 				'show_in_rest' => true,
 				'public'       => true,

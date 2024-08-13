@@ -92,7 +92,7 @@ gulp.task("clean", function () {
  */
 gulp.task("copy-plugin-folder", function () {
     return gulp
-        .src(['./gutenverse-themes-builder/**/*','!./gutenverse-themes-builder/lib/framework/**'], { encoding: false })
+        .src(['./gutenverse-themes-builder/**/*', '!./gutenverse-themes-builder/lib/framework/**'], { encoding: false })
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
@@ -105,7 +105,7 @@ gulp.task("copy-framework", function () {
 gulp.task('replace-text-domain', function () {
     return gulp
         .src('./release/gutenverse-themes-builder/lib/framework/**/*')
-        .pipe(replace('--gctd--', 'gtb'))
+        .pipe(replace('--gctd--', 'gutenverse-themes-builder'))
         .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
 });
 
@@ -125,7 +125,7 @@ gulp.task("zip", async function () {
     const zip = await getZip();
 
     return gulp
-        .src('./release/gutenverse-themes-builder/**', {base: './release', encoding: false })
+        .src('./release/gutenverse-themes-builder/**', { base: './release', encoding: false })
         .pipe(zip('gutenverse-themes-builder.zip'))
         .pipe(gulp.dest('./release'));
 });

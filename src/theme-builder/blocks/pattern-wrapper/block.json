@@ -1,7 +1,7 @@
 {
   "apiVersion": 2,
   "name": "gutenverse-themes-builder/pattern-wrapper",
-  "class_callback": "\\GTB\\Block\\Pattern_Wrapper",
+  "class_callback": "\\Gutenverse_Themes_Builder\\Block\\Pattern_Wrapper",
   "title": "Pattern Wrapper",
   "description": "Pattern Wrapper for Gutenverse Themes Builder.",
   "category": "gutenverse-theme-builder",

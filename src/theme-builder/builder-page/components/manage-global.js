@@ -34,18 +34,18 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
             {notice}
         </div>
         <div className="data-body">
-            {loading ? <div className="saving-indicator">{__('Saving...', 'gtb')}</div> :
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> :
                 <>
                     <TextControl
                         id={'title'}
-                        title={__('Title', 'gtb')}
+                        title={__('Title', 'gutenverse-themes-builder')}
                         value={globalData?.title}
                         onChange={value => updateDetails('title', value)}
                         important={true}
                     />
                     <FileControl
                         id={'file'}
-                        title={__('Template kit global.json file', 'gtb')}
+                        title={__('Template kit global.json file (Optional).', 'gutenverse-themes-builder')}
                         value={globalData?.file}
                         onChange={value => updateDetails('file', value)}
                     />
@@ -109,7 +109,7 @@ const EditGlobal = ({ data, setMode, updateGlobalList }) => {
     const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: updateGlobalData };
     return <ManageGlobalOption
         {...params}
-        title={__('Edit Global Detail', 'gtb')}
+        title={__('Edit Global Detail', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -146,7 +146,7 @@ const CreateGlobal = ({ setMode, updateGlobalList }) => {
     const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: createGlobalData };
     return <ManageGlobalOption
         {...params}
-        title={__('Create Global', 'gtb')}
+        title={__('Create Global', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -191,15 +191,15 @@ const ManageGlobal = () => {
             break;
         default:
             Content = <ContentWrapper
-                title={__('Manage Global Styles', 'gtb')}
-                description={__('Select which global styles you want to use in your current theme. You might need to reapply some of the styling.', 'gtb')}
+                title={__('Manage Global Styles', 'gutenverse-themes-builder')}
+                description={__('Select which global styles you want to use in your current theme. You might need to reapply some of the styling.', 'gutenverse-themes-builder')}
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText : __('Add New', 'gtb'),
-                        buttonEvent : () => setMode('create'),
-                        buttonIcon : <PlusIcon />,
-                        buttonLoading : false
+                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonEvent: () => setMode('create'),
+                        buttonIcon: <PlusIcon />,
+                        buttonLoading: false
                     }
                 ]}
             >
@@ -210,12 +210,12 @@ const ManageGlobal = () => {
                                 return <tr key={key}>
                                     <td>{global?.id}</td>
                                     <td>{global?.title}</td>
-                                    <td><span className={`status ${activeGlobal === global?.id? 'active' : ''}`}>{activeGlobal === global?.id ? __('Active', 'gtb') : __('Inactive', 'gtb')}</span></td>
+                                    <td><span className={`status ${activeGlobal === global?.id ? 'active' : ''}`}>{activeGlobal === global?.id ? __('Active', 'gutenverse-themes-builder') : __('Inactive', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {activeGlobal !== global?.id && <a className="edit" onClick={() => setSwitchPopup(global?.id)}>Set Active</a>}
-                                            <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gtb')}</a>
-                                            <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gtb')}</a>
+                                            <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
+                                            <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                         </div>
                                     </td>
                                 </tr>;
@@ -223,15 +223,15 @@ const ManageGlobal = () => {
                         </>
                     </Table>
                     {switchPopup && <WarningPopup
-                        title={__('Switch to this global style?', 'gtb')}
-                        detail={__('Your current theme is using this global style, changing it might have effects on your layout design and you might need to re-assign the global variable', 'gtb')}
-                        actionText={__('Switch', 'gtb')}
+                        title={__('Switch to this global style?', 'gutenverse-themes-builder')}
+                        detail={__('Your current theme is using this global style, changing it might have effects on your layout design and you might need to re-assign the global variable', 'gutenverse-themes-builder')}
+                        actionText={__('Switch', 'gutenverse-themes-builder')}
                         onProceed={updateActiveID}
                         onClose={() => setSwitchPopup(false)}
                     />}
                     {deletePopup && <WarningPopup
-                        title={__('Are you sure want to delete this global?', 'gtb')}
-                        detail={__('This might affect your current element\'s styles.', 'gtb')}
+                        title={__('Are you sure want to delete this global?', 'gutenverse-themes-builder')}
+                        detail={__('This might affect your current element\'s styles.', 'gutenverse-themes-builder')}
                         onProceed={removeGlobal}
                         onClose={() => setDeletePopup(false)}
                     />}
