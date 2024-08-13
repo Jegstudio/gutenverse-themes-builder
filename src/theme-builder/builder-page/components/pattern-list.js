@@ -51,33 +51,33 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                         {noticeMessage}
                     </div>}
                     <div className="input-wrap pattern-slug">
-                        <label>{__('Pattern Slug', 'gtb')}</label>
+                        <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
-                        <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gtb')}</span>
+                        <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-name">
-                        <label>{__('Pattern Name', 'gtb')}</label>
+                        <label>{__('Pattern Name', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
-                        <span className="description">{__('The name for your pattern', 'gtb')}</span>
+                        <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-category">
-                        <label>{__('Pattern Category', 'gtb')}</label>
+                        <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
                         <select onChange={e => { setPatternCategory(e.target.value); }}>
-                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gtb')}</option>
-                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gtb')}</option>
-                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gtb')}</option>
+                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
+                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
+                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                         </select>
-                        <span className="description">{__('Select your pattern category.', 'gtb')}</span>
+                        <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
                     </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons spaced">
                         <div className="back-button" onClick={onClose}>
                             <ArrowLeft size={14} />
-                            {__('Back', 'gtb')}
+                            {__('Back', 'gutenverse-themes-builder')}
                         </div>
                         <div className="button" onClick={patternSubmit}>
-                            {__('Submit', 'gtb')}
+                            {__('Submit', 'gutenverse-themes-builder')}
                         </div>
                     </div>
                 </div>
@@ -144,33 +144,33 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                         {noticeMessage}
                     </div>}
                     <div className="input-wrap pattern-slug">
-                        <label>{__('Pattern Slug', 'gtb')}</label>
+                        <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
-                        <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gtb')}</span>
+                        <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-name">
-                        <label>{__('Pattern Name', 'gtb')}</label>
+                        <label>{__('Pattern Name', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
-                        <span className="description">{__('The name for your pattern', 'gtb')}</span>
+                        <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-category">
-                        <label>{__('Pattern Category', 'gtb')}</label>
+                        <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
                         <select onChange={e => { setPatternCategory(e.target.value); }}>
-                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gtb')}</option>
-                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gtb')}</option>
-                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gtb')}</option>
+                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
+                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
+                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                         </select>
-                        <span className="description">{__('Select your pattern category.', 'gtb')}</span>
+                        <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
                     </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons spaced">
                         <div className="back-button" onClick={onClose}>
                             <ArrowLeft size={14} />
-                            {__('Back', 'gtb')}
+                            {__('Back', 'gutenverse-themes-builder')}
                         </div>
                         <div className="button" onClick={patternSubmit}>
-                            {__('Save', 'gtb')}
+                            {__('Save', 'gutenverse-themes-builder')}
                         </div>
                     </div>
                 </div>
@@ -199,15 +199,15 @@ const PatternList = () => {
     const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: 1 }, updateList);
     return (
         <ContentWrapper
-            title={__('Pattern List', 'gtb')}
-            description={__('This is a place to manage all your block patterns of your current active theme. Please make sure each pattern on each of your theme projects have different slug names.', 'gtb')}
+            title={__('Pattern List', 'gutenverse-themes-builder')}
+            description={__('This is a place to manage all your block patterns of your current active theme. Please make sure each pattern on each of your theme projects have different slug names.', 'gutenverse-themes-builder')}
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText : __('Add New', 'gtb'),
-                    buttonEvent : () => setCreatePatternPopup(true),
-                    buttonIcon : <PlusIcon />,
-                    buttonLoading : false
+                    buttonText: __('Add New', 'gutenverse-themes-builder'),
+                    buttonEvent: () => setCreatePatternPopup(true),
+                    buttonIcon: <PlusIcon />,
+                    buttonLoading: false
                 }
             ]}
         >
@@ -233,8 +233,8 @@ const PatternList = () => {
                     </>
                 </Table>
                 {deletePopup && <WarningPopup
-                    title={__('Are you sure want to delete this pattern?', 'gtb')}
-                    detail={__('Any templates that use this pattern will NOT be able to render and use this pattern again.', 'gtb')}
+                    title={__('Are you sure want to delete this pattern?', 'gutenverse-themes-builder')}
+                    detail={__('Any templates that use this pattern will NOT be able to render and use this pattern again.', 'gutenverse-themes-builder')}
                     onProceed={removePattern}
                     onClose={() => setDeletePopup(false)}
                 />}

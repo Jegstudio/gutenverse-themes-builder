@@ -17,7 +17,7 @@ const ManageScreenshots = () => {
                 text: 'Select as Thumbnail'
             },
             library: {
-                type: [ 'image/jpg', 'image/jpeg' ]
+                type: ['image/jpg', 'image/jpeg']
             },
             multiple: false
         });
@@ -30,7 +30,7 @@ const ManageScreenshots = () => {
                 text: 'Select for Screenshots'
             },
             library: {
-                type: [ 'image' ]
+                type: ['image']
             },
             multiple: true
         });
@@ -89,34 +89,34 @@ const ManageScreenshots = () => {
     };
 
     return <ContentWrapper
-        title={__('Manage Screenshots', 'gtb')}
-        description={__('This is the place to manage all screenshots that represent your themes. From theme thumbnail to theme dashboard.', 'gtb')}
+        title={__('Manage Screenshots', 'gutenverse-themes-builder')}
+        description={__('This is the place to manage all screenshots that represent your themes. From theme thumbnail to theme dashboard.', 'gutenverse-themes-builder')}
         headingButton={true}
         headingButtons={[
             {
-                buttonText : __('Save', 'gtb'),
-                buttonEvent : updateScreenshotData,
-                buttonIcon : false,
-                buttonLoading : false
+                buttonText: __('Save', 'gutenverse-themes-builder'),
+                buttonEvent: updateScreenshotData,
+                buttonIcon: false,
+                buttonLoading: false
             }
         ]}
     >
         <>
             <div>
-                <h3>{__('Screenshot for Thumbnail', 'gtb')}</h3>
-                <p>{__('Make sure the thumbnail is a representation of your theme layout.', 'gtb')}</p>
+                <h3>{__('Screenshot for Thumbnail', 'gutenverse-themes-builder')}</h3>
+                <p>{__('Make sure the thumbnail is a representation of your theme layout.', 'gutenverse-themes-builder')}</p>
                 <div>
                     {thumbnail && <img className="image-preview" src={thumbnail?.url} />}
                 </div>
-                <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gtb')}</button>
-                <h3>{__('Screenshots for Dashboard', 'gtb')}</h3>
-                <p>{__('Make sure each screenshot size is smaller than 500KB to reduce the theme file size', 'gtb')}</p>
+                <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>
+                <h3>{__('Screenshots for Dashboard', 'gutenverse-themes-builder')}</h3>
+                <p>{__('Make sure each screenshot size is smaller than 500KB to reduce the theme file size', 'gutenverse-themes-builder')}</p>
                 <div>
                     {dashboard && dashboard.map(screenshot => {
                         return <img className="image-preview" key={screenshot?.id} src={screenshot?.url} />;
                     })}
                 </div>
-                <button onClick={() => selectItem(screenshotFrame)}>{__('Choose Images', 'gtb')}</button>
+                <button onClick={() => selectItem(screenshotFrame)}>{__('Choose Images', 'gutenverse-themes-builder')}</button>
             </div>
         </>
     </ContentWrapper>;

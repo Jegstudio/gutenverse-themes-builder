@@ -4,17 +4,17 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 
 /**
  * Class Editor Script
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Assets {
 	/**
@@ -33,8 +33,8 @@ class Assets {
 	 * @param array $config Config.
 	 */
 	public function block_config( $config ) {
-		$config['pluginVersion'] = GTB_VERSION;
-		$config['gtbImgDir']     = GTB_URL . '/assets/img';
+		$config['pluginVersion'] = GUTENVERSE_THEMES_BUILDER_VERSION;
+		$config['gtbImgDir']     = GUTENVERSE_THEMES_BUILDER_URL . '/assets/img';
 
 		return $config;
 	}
@@ -69,7 +69,7 @@ class Assets {
 				}
 
 				$parameter[2] = array();
-				$parameter[3] = GTB_VERSION;
+				$parameter[3] = GUTENVERSE_THEMES_BUILDER_VERSION;
 			}
 
 			call_user_func_array(
@@ -109,7 +109,7 @@ class Assets {
 				}
 
 				$parameter[2] = array();
-				$parameter[3] = GTB_VERSION;
+				$parameter[3] = GUTENVERSE_THEMES_BUILDER_VERSION;
 			}
 
 			call_user_func_array(
@@ -124,34 +124,34 @@ class Assets {
 	 */
 	public function register_script() {
 		// Register & Enqueue Style.
-		$block_includes = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
+		$block_includes = include GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/blocks.asset.php';
 
 		wp_enqueue_script(
 			'gtb-block',
-			GTB_URL . '/assets/js/blocks.js',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/blocks.js',
 			$block_includes['dependencies'],
-			GTB_VERSION,
+			GUTENVERSE_THEMES_BUILDER_VERSION,
 			true
 		);
 
-		$editor_includes = include GTB_DIR . '/lib/dependencies/blocks.asset.php';
+		$editor_includes = include GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/blocks.asset.php';
 
 		wp_enqueue_script(
 			'gtb-editor',
-			GTB_URL . '/assets/js/editor.js',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/editor.js',
 			$editor_includes['dependencies'],
-			GTB_VERSION,
+			GUTENVERSE_THEMES_BUILDER_VERSION,
 			true
 		);
 
-		defined( 'GTB_LANG_DIR' ) ? wp_set_script_translations( 'gtb', 'gtb', GTB_LANG_DIR ) : null;
+		defined( 'GUTENVERSE_THEMES_BUILDER_LANG_DIR' ) ? wp_set_script_translations( 'gutenverse-thGUTENVERSE_THEMES_BUILDER_-builder', 'gutenverse-themes-builder', GUTENVERSE_THEMES_BUILDER_LANG_DIR ) : null;
 		wp_localize_script( 'gutenverse-theme-builder-block', 'GutenverseThemeBuilder', $this->js_config() );
 
 		wp_enqueue_style(
 			'gtb-editor',
-			GTB_URL . '/assets/css/editor.css',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/css/editor.css',
 			array( 'wp-edit-blocks' ),
-			GTB_VERSION
+			GUTENVERSE_THEMES_BUILDER_VERSION
 		);
 	}
 

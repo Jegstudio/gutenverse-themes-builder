@@ -4,13 +4,13 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
 spl_autoload_register(
-	function( $class ) {
-		$prefix   = 'GTB\\';
-		$base_dir = GTB_CLASS_DIR;
+	function ( $class ) {
+		$prefix   = 'Gutenverse_Themes_Builder\\';
+		$base_dir = GUTENVERSE_THEMES_BUILDER_CLASS_DIR;
 		$len      = strlen( $prefix );
 
 		if ( strncmp( $prefix, $class, $len ) !== 0 ) {

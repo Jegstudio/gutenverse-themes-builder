@@ -107,7 +107,7 @@ const searchForms = (params, callback) => {
         }
     }).then(response => {
         callback(response);
-    }).catch(() => {});
+    }).catch(() => { });
 };
 
 const PatternInput = ({ search, setSearch, paged, setMode, setPatterns, setTotal }) => {
@@ -130,26 +130,26 @@ const PatternInput = ({ search, setSearch, paged, setMode, setPatterns, setTotal
 
     return <>
         <div className="buttons bottom">
-            <div onClick={() => setMode('')} className="back-button"><ArrowLeft size={14} />{__('Back', 'gtb')}</div>
+            <div onClick={() => setMode('')} className="back-button"><ArrowLeft size={14} />{__('Back', 'gutenverse-themes-builder')}</div>
         </div>
-        <input type="text" placeholder={__('Search pattern', 'gtb')} className="pattern-input" value={search.search} onChange={e => {
+        <input type="text" placeholder={__('Search pattern', 'gutenverse-themes-builder')} className="pattern-input" value={search.search} onChange={e => {
             setSearch({
                 ...search,
                 search: e.target.value
             });
         }} />
         <div className="categories">
-            <div className={`category ${search?.category === '' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: '' })}>{__('All Patterns', 'gtb')}</div>
-            <div className={`category ${search?.category === 'core' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'core' })}>{__('Core Patterns', 'gtb')}</div>
-            <div className={`category ${search?.category === 'gutenverse' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'gutenverse' })}>{__('Gutenverse Patterns', 'gtb')}</div>
-            <div className={`category ${search?.category === 'pro' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'pro' })}>{__('Gutenverse PRO Patterns', 'gtb')}</div>
+            <div className={`category ${search?.category === '' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: '' })}>{__('All Patterns', 'gutenverse-themes-builder')}</div>
+            <div className={`category ${search?.category === 'core' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'core' })}>{__('Core Patterns', 'gutenverse-themes-builder')}</div>
+            <div className={`category ${search?.category === 'gutenverse' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'gutenverse' })}>{__('Gutenverse Patterns', 'gutenverse-themes-builder')}</div>
+            <div className={`category ${search?.category === 'pro' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'pro' })}>{__('Gutenverse PRO Patterns', 'gutenverse-themes-builder')}</div>
         </div>
     </>;
 };
 
-const Pagination = ({total, paged, setPaged}) => {
+const Pagination = ({ total, paged, setPaged }) => {
     return total > 1 && <ul className="pagination">
-        {paged > 1 && <li key={'prev'} className="nav prev" onClick={() => setPaged(paged-1)}>{__('Prev', 'gtb')}</li>}
+        {paged > 1 && <li key={'prev'} className="nav prev" onClick={() => setPaged(paged - 1)}>{__('Prev', 'gutenverse-themes-builder')}</li>}
         <li className={`${1 === paged ? 'active' : ''}`} onClick={() => setPaged(1)}>{1}</li>
         {paged > 3 && total > 5 && <div className="space">...</div>}
         {[...Array(total).keys()].map(key => {
@@ -182,7 +182,7 @@ const Pagination = ({total, paged, setPaged}) => {
         })}
         {paged < total - 2 && total > 5 && <div className="space">...</div>}
         {total > 1 && <li className={`${total === paged ? 'active' : ''}`} onClick={() => setPaged(total)}>{total}</li>}
-        {paged < total && <li key={'next'} className="nav next" onClick={() => setPaged(paged+1)}>{__('Next', 'gtb')}</li>}
+        {paged < total && <li key={'next'} className="nav next" onClick={() => setPaged(paged + 1)}>{__('Next', 'gutenverse-themes-builder')}</li>}
     </ul>;
 };
 
@@ -207,11 +207,11 @@ const UsePattern = ({ setAttributes, setMode, clientId }) => {
     }, [paged]);
 
     return <div className="pattern-container">
-        <h2>{__('Use Pattern', 'gtb')}</h2>
+        <h2>{__('Use Pattern', 'gutenverse-themes-builder')}</h2>
         <div className="pattern-content searcher">
             <PatternInput paged={paged} search={search} setSearch={setSearch} setMode={setMode} setPatterns={setPatterns} setTotal={setTotal} />
             {patternPreview}
-            <Pagination total={total} paged={paged} setPaged={setPaged}/>
+            <Pagination total={total} paged={paged} setPaged={setPaged} />
         </div>
     </div>;
 };
@@ -260,7 +260,7 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
 
     if (loading) {
         return <div className="pattern-container">
-            {__('Loading', 'gtb')}
+            {__('Loading', 'gutenverse-themes-builder')}
         </div>;
     } else {
         return <div className="pattern-container">
@@ -270,25 +270,25 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
             </div>}
             <div className="pattern-content create">
                 <div className="input-wrap pattern-slug">
-                    <label>{__('Pattern Slug', 'gtb')}</label>
+                    <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
                     <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
                 </div>
                 <div className="input-wrap pattern-name">
-                    <label>{__('Pattern Name', 'gtb')}</label>
+                    <label>{__('Pattern Name', 'gutenverse-themes-builder')}</label>
                     <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
                 </div>
                 <div className="input-wrap pattern-category">
-                    <label>{__('Pattern Category', 'gtb')}</label>
+                    <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
                     <select onChange={e => setPatternCategory(e.target.value)}>
-                        <option value="core">{__('Core', 'gtb')}</option>
-                        <option value="gutenverse">{__('Gutenverse', 'gtb')}</option>
-                        <option value="pro">{__('Pro', 'gtb')}</option>
+                        <option value="core">{__('Core', 'gutenverse-themes-builder')}</option>
+                        <option value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
+                        <option value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                     </select>
                 </div>
                 <div className="buttons end top">
                     <div className="back-button" onClick={() => setMode('')}>
                         <ArrowLeft size={14} />
-                        {__('Back', 'gtb')}
+                        {__('Back', 'gutenverse-themes-builder')}
                     </div>
                     <div className="pattern-button">
                         <input type="submit" onClick={patternSubmit} />
@@ -321,17 +321,17 @@ const EmptyMode = ({ mode, setMode, setAttributes, clientId, blockProps }) => {
     } else {
         return <div className="pattern-wrapper" {...blockProps}>
             <div className="pattern-container">
-                <h2>{__('Pattern Creation Mode', 'gtb')}</h2>
+                <h2>{__('Pattern Creation Mode', 'gutenverse-themes-builder')}</h2>
                 <div className="pattern-content choose-mode">
                     <div className="selection" onClick={() => setMode('use')}>
                         <div className="icon"><UsePatternIcon /></div>
-                        <h3>{__('Use Saved Pattern', 'gtb')}</h3>
-                        <span>{__('Choose an existing pattern', 'gtb')}</span>
+                        <h3>{__('Use Saved Pattern', 'gutenverse-themes-builder')}</h3>
+                        <span>{__('Choose an existing pattern', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="selection" onClick={() => setMode('create')}>
                         <div className="icon"><CreatePatternIcon /></div>
-                        <h3>{__('Create Pattern', 'gtb')}</h3>
-                        <span>{__('Create a new pattern', 'gtb')}</span>
+                        <h3>{__('Create Pattern', 'gutenverse-themes-builder')}</h3>
+                        <span>{__('Create a new pattern', 'gutenverse-themes-builder')}</span>
                     </div>
                 </div>
             </div>

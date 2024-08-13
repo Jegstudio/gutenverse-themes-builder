@@ -1,22 +1,22 @@
 <?php
 /**
- * GTB Main class
+ * Main class
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 
 /**
- * Class Gtb
+ * Class Init
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
-class Gtb {
+class Init {
 	/**
 	 * Instance of Deploy.
 	 *
@@ -25,16 +25,16 @@ class Gtb {
 	public $deployment;
 
 	/**
-	 * Instance of Gtb.
+	 * Instance of Init.
 	 *
-	 * @var Gtb
+	 * @var Init
 	 */
 	private static $instance;
 
 	/**
-	 * Singleton page for Gtb Class
+	 * Singleton page for Init Class
 	 *
-	 * @return Gtb
+	 * @return Init
 	 */
 	public static function instance() {
 		if ( null === static::$instance ) {
@@ -114,12 +114,12 @@ class Gtb {
 	 * Register Framework.
 	 */
 	public function register_framework() {
-		require_once GTB_DIR . 'lib/framework/init.php';
+		require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/init.php';
 		$init = \Gutenverse_Initialize_Framework::instance();
 
-		$framework_file    = GTB_DIR . 'lib/framework/bootstrap.php';
+		$framework_file    = GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
 		$framework_version = $init->get_framework_version( $framework_file );
-		$init->register_version( GTB, $framework_version );
+		$init->register_version( GUTENVERSE_THEMES_BUILDER, $framework_version );
 	}
 
 	/**
@@ -128,10 +128,10 @@ class Gtb {
 	 * @return boolean
 	 */
 	public function can_load_framework() {
-		require_once GTB_DIR . 'lib/framework/init.php';
+		require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/init.php';
 		$init = \Gutenverse_Initialize_Framework::instance();
 
-		return $init->can_load_version( GTB );
+		return $init->can_load_version( GUTENVERSE_THEMES_BUILDER );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Gtb {
 	 */
 	public function load_framework() {
 		if ( $this->can_load_framework() ) {
-			require_once GTB_DIR . 'lib/framework/bootstrap.php';
+			require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
 		}
 	}
 
@@ -172,7 +172,7 @@ class Gtb {
 	 * Load Helper
 	 */
 	public function load_helper() {
-		require_once GTB_DIR . 'lib/helper.php';
+		require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/helper.php';
 	}
 
 	/**

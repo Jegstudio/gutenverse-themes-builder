@@ -4,12 +4,12 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 use Gutenverse\Framework\Global_Variable;
 use WP_Query;
 use ZipArchive;
@@ -18,7 +18,7 @@ use WP_Theme_Json_Resolver;
 /**
  * Class Api
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Backend_Api {
 	/**
@@ -36,7 +36,7 @@ class Backend_Api {
 	}
 
 	/**
-	 * Register GTB APIs
+	 * Register APIs
 	 */
 	public function register_routes() {
 		if ( ! is_admin() && ! current_user_can( 'manage_options' ) ) {
@@ -839,7 +839,7 @@ class Backend_Api {
 			return array(
 				'status' => 'failed',
 				'data'   => array(
-					'message' => esc_html__( 'Please input Theme Slug and Title', 'gtb' ),
+					'message' => esc_html__( 'Please input Theme Slug and Title', 'gutenverse-themes-builder' ),
 				),
 			);
 		}
@@ -928,7 +928,7 @@ class Backend_Api {
 			return array(
 				'status' => 'failed',
 				'data'   => array(
-					'message' => esc_html__( 'Please input Theme Slug and Title', 'gtb' ),
+					'message' => esc_html__( 'Please input Theme Slug and Title', 'gutenverse-themes-builder' ),
 				),
 			);
 		}
@@ -1122,7 +1122,7 @@ class Backend_Api {
 				return array(
 					'status' => 'failed',
 					'data'   => array(
-						'message' => esc_html__( 'Slug Already Exist', 'gtb' ),
+						'message' => esc_html__( 'Slug Already Exist', 'gutenverse-themes-builder' ),
 					),
 				);
 			}
@@ -1130,7 +1130,7 @@ class Backend_Api {
 			return array(
 				'status' => 'failed',
 				'data'   => array(
-					'message' => esc_html__( 'Theme not defined', 'gtb' ),
+					'message' => esc_html__( 'Theme not defined', 'gutenverse-themes-builder' ),
 				),
 			);
 		}
@@ -1176,7 +1176,7 @@ class Backend_Api {
 				return array(
 					'status' => 'failed',
 					'data'   => array(
-						'message' => esc_html__( 'Slug Already Exist', 'gtb' ),
+						'message' => esc_html__( 'Slug Already Exist', 'gutenverse-themes-builder' ),
 					),
 				);
 			}
@@ -1184,7 +1184,7 @@ class Backend_Api {
 			return array(
 				'status' => 'failed',
 				'data'   => array(
-					'message' => esc_html__( 'Theme not defined', 'gtb' ),
+					'message' => esc_html__( 'Theme not defined', 'gutenverse-themes-builder' ),
 				),
 			);
 		}
@@ -1432,7 +1432,7 @@ class Backend_Api {
 			}
 		}
 	}
-	
+
 	/**
 	 * Function to check if an image already exists in the media library
 	 *
@@ -2388,7 +2388,7 @@ class Backend_Api {
 			}
 		}
 
-		$placeholder = $wp_filesystem->get_contents( GTB_DIR . '/includes/data/active-json.txt' );
+		$placeholder = $wp_filesystem->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/active-json.txt' );
 		$placeholder = str_replace( '{{font_families}}', join( ',', $families ), $placeholder );
 
 		$font_list = $this->get_fontsize_list();

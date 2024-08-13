@@ -48,7 +48,7 @@ const FileControl = (props) => {
         <label name={id}>{title}{important && <span>&nbsp;*</span>}</label>
         <div className="input-inner">
             <input type="text" className="input-file-text" value={value?.filename} disabled />
-            <button onClick={() => selectItem(fileFrame)} className="input-file-button" >{__('Choose File', 'gtb')}</button>
+            <button onClick={() => selectItem(fileFrame)} className="input-file-button" >{__('Choose File', 'gutenverse-themes-builder')}</button>
             {description && <span>{description}</span>}
         </div>
     </div>;

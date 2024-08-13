@@ -1,20 +1,20 @@
 <?php
 /**
- * GTB Main class
+ * Main class
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 
 /**
  * Class Builder Page
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Builder_Page {
 	/**
@@ -45,12 +45,12 @@ class Builder_Page {
 	public function register_builder_menu() {
 		// Main Menu.
 		add_menu_page(
-			esc_html__( 'Themes Builder', 'gtb' ),
-			esc_html__( 'Themes Builder', 'gtb' ),
+			esc_html__( 'Themes Builder', 'gutenverse-themes-builder' ),
+			esc_html__( 'Themes Builder', 'gutenverse-themes-builder' ),
 			'manage_options',
 			self::TYPE,
 			array( $this, 'theme_builder_page' ),
-			GTB_URL . '/assets/icons/theme-builder-dashboard.svg',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/icons/theme-builder-dashboard.svg',
 			40
 		);
 
@@ -59,8 +59,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Theme List', 'gutenverse' ),
-			esc_html__( 'Theme List', 'gutenverse' ),
+			esc_html__( 'Theme List', 'gutenverse-themes-builder' ),
+			esc_html__( 'Theme List', 'gutenverse-themes-builder' ),
 			'manage_options',
 			self::TYPE,
 			array( $this, 'theme_builder_page' ),
@@ -69,8 +69,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Templates', 'gutenverse' ),
-			esc_html__( 'Templates', 'gutenverse' ),
+			esc_html__( 'Templates', 'gutenverse-themes-builder' ),
+			esc_html__( 'Templates', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-templates',
 			array( $this, 'theme_builder_page' ),
@@ -79,8 +79,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Patterns', 'gutenverse' ),
-			esc_html__( 'Patterns', 'gutenverse' ),
+			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
+			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-patterns',
 			array( $this, 'theme_builder_page' ),
@@ -89,8 +89,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Assets', 'gutenverse' ),
-			esc_html__( 'Assets', 'gutenverse' ),
+			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
+			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-assets',
 			array( $this, 'theme_builder_page' ),
@@ -99,8 +99,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Global Style', 'gutenverse' ),
-			esc_html__( 'Global Style', 'gutenverse' ),
+			esc_html__( 'Global Style', 'gutenverse-themes-builder' ),
+			esc_html__( 'Global Style', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-global',
 			array( $this, 'theme_builder_page' ),
@@ -109,8 +109,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Core Fonts', 'gutenverse' ),
-			esc_html__( 'Core Fonts', 'gutenverse' ),
+			esc_html__( 'Core Fonts', 'gutenverse-themes-builder' ),
+			esc_html__( 'Core Fonts', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-fonts',
 			array( $this, 'theme_builder_page' ),
@@ -119,8 +119,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Core Font Size', 'gutenverse' ),
-			esc_html__( 'Core Font Size', 'gutenverse' ),
+			esc_html__( 'Core Font Size', 'gutenverse-themes-builder' ),
+			esc_html__( 'Core Font Size', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-font-sizes',
 			array( $this, 'theme_builder_page' ),
@@ -129,8 +129,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Plugins', 'gutenverse' ),
-			esc_html__( 'Plugins', 'gutenverse' ),
+			esc_html__( 'Plugins', 'gutenverse-themes-builder' ),
+			esc_html__( 'Plugins', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-plugins',
 			array( $this, 'theme_builder_page' ),
@@ -139,8 +139,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Screenshots', 'gutenverse' ),
-			esc_html__( 'Screenshots', 'gutenverse' ),
+			esc_html__( 'Screenshots', 'gutenverse-themes-builder' ),
+			esc_html__( 'Screenshots', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-screenshots',
 			array( $this, 'theme_builder_page' ),
@@ -149,8 +149,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Readme Editor', 'gutenverse' ),
-			esc_html__( 'Readme Editor', 'gutenverse' ),
+			esc_html__( 'Readme Editor', 'gutenverse-themes-builder' ),
+			esc_html__( 'Readme Editor', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'readme-editor',
 			array( $this, 'theme_builder_page' ),
@@ -159,8 +159,8 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Export Theme', 'gutenverse' ),
-			esc_html__( 'Export Theme', 'gutenverse' ),
+			esc_html__( 'Export Theme', 'gutenverse-themes-builder' ),
+			esc_html__( 'Export Theme', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'export-theme',
 			array( $this, 'theme_builder_page' ),
@@ -184,14 +184,14 @@ class Builder_Page {
 		global $current_screen;
 
 		if ( 'toplevel_page_gutenverse-theme-builder' === $current_screen->id ) {
-			$include   = ( include GTB_DIR . '/lib/dependencies/builder.asset.php' ) ['dependencies'];
+			$include = ( include GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/builder.asset.php' ) ['dependencies'];
 
 			wp_enqueue_media();
 			wp_enqueue_script(
 				'gtb-page',
-				GTB_URL . '/assets/js/builder.js',
+				GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/builder.js',
 				$include,
-				GTB_VERSION,
+				GUTENVERSE_THEMES_BUILDER_VERSION,
 				true
 			);
 
@@ -201,15 +201,15 @@ class Builder_Page {
 				'gtb-google-font',
 				'//fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap',
 				array(),
-				GTB_VERSION
+				GUTENVERSE_THEMES_BUILDER_VERSION
 			);
 			wp_enqueue_style( 'gtb-google-font' );
 
 			wp_enqueue_style(
 				'gtb-page-style',
-				GTB_URL . '/assets/css/builder.css',
+				GUTENVERSE_THEMES_BUILDER_URL . '/assets/css/builder.css',
 				null,
-				GTB_VERSION
+				GUTENVERSE_THEMES_BUILDER_VERSION
 			);
 		}
 	}

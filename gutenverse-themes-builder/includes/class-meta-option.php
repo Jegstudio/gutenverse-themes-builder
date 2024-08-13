@@ -7,7 +7,7 @@
  * @package gutenverse
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
 use Gutenverse\Framework\Meta_Option as Meta;
 
@@ -31,7 +31,7 @@ class Meta_Option {
 	 * @param array $options Options.
 	 */
 	public function initial_option( $options ) {
-		$options['tracker'][ GTB ] = array(
+		$options['tracker'][ GUTENVERSE_THEMES_BUILDER ] = array(
 			'install_time'    => time(),
 			'current_version' => '0.0.0',
 			'version_history' => array(),
@@ -48,14 +48,14 @@ class Meta_Option {
 		$meta    = Meta::instance();
 		$tracker = $meta->get_option( 'tracker', array() );
 
-		if ( ! isset( $tracker[ GTB ] ) ) {
+		if ( ! isset( $tracker[ GUTENVERSE_THEMES_BUILDER ] ) ) {
 			$tracker = $this->set_tracker( $meta, $tracker );
 		}
 
-		$version = $tracker[ GTB ]['current_version'];
+		$version = $tracker[ GUTENVERSE_THEMES_BUILDER ]['current_version'];
 
-		if ( version_compare( $version, GTB_VERSION, '<' ) ) {
-			$meta->upgrade_plugin( $version, GTB_VERSION, GTB );
+		if ( version_compare( $version, GUTENVERSE_THEMES_BUILDER_VERSION, '<' ) ) {
+			$meta->upgrade_plugin( $version, GUTENVERSE_THEMES_BUILDER_VERSION, GUTENVERSE_THEMES_BUILDER );
 		}
 	}
 
@@ -76,14 +76,14 @@ class Meta_Option {
 		}
 
 		if ( null === $current_version ) {
-			$current_version = GTB_VERSION;
+			$current_version = GUTENVERSE_THEMES_BUILDER_VERSION;
 		}
 
 		if ( null === $version_history ) {
 			$version_history = array();
 		}
 
-		$tracker[ GTB ] = array(
+		$tracker[ GUTENVERSE_THEMES_BUILDER ] = array(
 			'install_time'    => $install_time,
 			'current_version' => $current_version,
 			'version_history' => $version_history,

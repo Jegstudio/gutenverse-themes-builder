@@ -3,15 +3,15 @@ import { PlusIcon } from '../data/icons';
 
 const ContentWrapper = (props) => {
     const {
-        title = __('Title', 'gtb'),
+        title = __('Title', 'gutenverse-themes-builder'),
         description = '',
         headingButton = false,
         headingButtons = [
             {
-                buttonText : __('Add New', 'gtb'),
-                buttonEvent : null,
-                buttonIcon : <PlusIcon />,
-                buttonLoading : false
+                buttonText: __('Add New', 'gutenverse-themes-builder'),
+                buttonEvent: null,
+                buttonIcon: <PlusIcon />,
+                buttonLoading: false
             }
         ],
         children
@@ -19,8 +19,8 @@ const ContentWrapper = (props) => {
 
     const ButtonElement = () => {
         return headingButtons.map(button => {
-            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> : 
-            <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
+                <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
         })
     }
     return (
@@ -30,7 +30,7 @@ const ContentWrapper = (props) => {
                     <h3 className="subtitle">{title}</h3>
                     <p className="description text">{description}</p>
                 </div>
-                {headingButton && <div className="button-wrapper"><ButtonElement/></div>}
+                {headingButton && <div className="button-wrapper"><ButtonElement /></div>}
             </div>
             {children}
         </div>

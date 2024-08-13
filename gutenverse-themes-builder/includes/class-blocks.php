@@ -4,15 +4,15 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
 /**
  * Class Init
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Blocks {
 	/**
@@ -31,7 +31,7 @@ class Blocks {
 	 * @return array
 	 */
 	public function block_category( $categories ) {
-		$categories['gutenverse-theme-builder'] = __( 'Gutenverse Themes Builder', 'gutenverse' );
+		$categories['gutenverse-theme-builder'] = __( 'Gutenverse Themes Builder', 'gutenverse-themes-builder' );
 		return $categories;
 	}
 
@@ -40,7 +40,7 @@ class Blocks {
 	 */
 	public function register_blocks() {
 		// Static block.
-		$this->register_dynamic_block( GTB_DIR . './block/pattern-wrapper/block.json' );
+		$this->register_dynamic_block( GUTENVERSE_THEMES_BUILDER_DIR . './block/pattern-wrapper/block.json' );
 	}
 
 	/**

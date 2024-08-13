@@ -4,12 +4,12 @@
  *
  * @author Jegstudio
  * @since 1.0.0
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-namespace GTB;
+namespace Gutenverse_Themes_Builder;
 
-use GTB\Database\Database;
+use Gutenverse_Themes_Builder\Database\Database;
 use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -18,7 +18,7 @@ use RecursiveDirectoryIterator;
 /**
  * Export Theme Class
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 class Export_Theme {
 
@@ -107,7 +107,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_readme( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/readme.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/readme.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
@@ -137,7 +137,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_style_css( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/style.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/style.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$theme_tags = ! empty( $theme_data['tags'] ) ? join( ',', $theme_data['tags'] ) : '';
@@ -211,7 +211,7 @@ class Export_Theme {
 			$queue .= "\t\t{$string}\n";
 		}
 
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/asset-enqueue.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/asset-enqueue.txt' );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
@@ -288,7 +288,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_theme_json( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/theme-json.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/theme-json.txt' );
 
 		/**
 		 * Generate Color Settings.
@@ -469,7 +469,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_function_php( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/functions.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/functions.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
@@ -493,7 +493,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_autoload_php( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/autoload.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/autoload.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 
@@ -529,9 +529,9 @@ class Export_Theme {
 
 		// Take which placeholder.
 		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
-			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-core-gutenverse.txt' );
+			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/init-core-gutenverse.txt' );
 		} else {
-			$placeholder = $system->get_contents( GTB_DIR . '/includes/data/init-default.txt' );
+			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/init-default.txt' );
 		}
 
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
@@ -555,10 +555,10 @@ class Export_Theme {
 			wp_mkdir_p( gtb_theme_built_path() . 'assets/img' );
 		}
 
-		copy( GTB_DIR . '/includes/data/assets/js/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
-		copy( GTB_DIR . '/includes/data/assets/css/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
-		copy( GTB_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
-		copy( GTB_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
 
 		$other    = maybe_unserialize( $data['other'] );
 		$required = array();
@@ -928,7 +928,7 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						$placeholder = $system->get_contents( GTB_DIR . '/includes/data/pattern.txt' );
+						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
 						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
 						$content     = str_replace( "'", "\'", $posts[0]->post_content );
 						$content     = $this->extract_images( $content, $system, $theme_slug );
@@ -1005,13 +1005,13 @@ class Export_Theme {
 				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
 				$image_without_resolution = get_image_without_resolution( $image );
 				if ( $image_without_resolution ) {
-					$image_arr   = explode( '/', $image_without_resolution['nores'] );
+					$image_arr = explode( '/', $image_without_resolution['nores'] );
 				} else {
-					$image_arr  = explode( '/', $image );
+					$image_arr = explode( '/', $image );
 				}
 				$image_name = $image_arr[ count( $image_arr ) - 1 ];
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-				$content = str_replace( $image, $image_code, $content );
+				$content    = str_replace( $image, $image_code, $content );
 			}
 		}
 		return $content;
@@ -1033,7 +1033,7 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	private function register_patterns( $system, $data ) {
-		$placeholder = $system->get_contents( GTB_DIR . '/includes/data/pattern-class.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern-class.txt' );
 
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 

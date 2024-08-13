@@ -93,14 +93,14 @@ const ManageTemplates = () => {
     }
     return (
         <ContentWrapper
-            title={__('Template List', 'gtb')}
-            description={__('This is a place to manage all your templates of your current active theme. Template categories is loaded based on what your current theme mode is. If you don’t have any active theme, please set one at the Theme List tab.', 'gtb')}
+            title={__('Template List', 'gutenverse-themes-builder')}
+            description={__('This is a place to manage all your templates of your current active theme. Template categories is loaded based on what your current theme mode is. If you don’t have any active theme, please set one at the Theme List tab.', 'gutenverse-themes-builder')}
             headingButton={true}
             headingButtons={[{
-                buttonText : __('Import Active Theme Template', 'gtb'),
-                buttonEvent : importTemplate,
-                buttonIcon : false,
-                buttonLoading : loading,
+                buttonText: __('Import Active Theme Template', 'gutenverse-themes-builder'),
+                buttonEvent: importTemplate,
+                buttonIcon: false,
+                buttonLoading: loading,
             }]}
         >
             <div className="template-page-wrapper">
@@ -127,27 +127,27 @@ const ManageTemplates = () => {
                             <div className="body">
                                 <SelectControl
                                     id={'template_type'}
-                                    title={__('Type', 'gtb')}
+                                    title={__('Type', 'gutenverse-themes-builder')}
                                     value={templateData?.[item.id]?.template_type}
                                     options={filteredOptions}
                                     onChange={onDataChange(item.id, 'template_type')}
                                 />
                                 {NAMABLE_TEMPLATES.includes(templateData?.[item.id]?.template_type) && <TextControl
                                     id={'template_name'}
-                                    title={__('Name', 'gtb')}
+                                    title={__('Name', 'gutenverse-themes-builder')}
                                     value={templateData?.[item.id]?.name}
                                     onChange={onDataChange(item.id, 'name')}
                                 />}
                                 <div className="buttons">
-                                    <div className="template-add" onClick={() => addTemplate(item.id)}>{__('Add New', 'gtb')}</div>
+                                    <div className="template-add" onClick={() => addTemplate(item.id)}>{__('Add New', 'gutenverse-themes-builder')}</div>
                                 </div>
                                 <div className="template-list">
-                                    <h3>{__('Template List', 'gtb')}</h3>
+                                    <h3>{__('Template List', 'gutenverse-themes-builder')}</h3>
                                     <table style={{ width: '100%' }}>
                                         <tr className="template-item">
-                                            <th><span><strong>{__('Name', 'gtb')}</strong></span></th>
-                                            <th><span><strong>{__('Type', 'gtb')}</strong></span></th>
-                                            <th><span><strong>{__('Delete', 'gtb')}</strong></span></th>
+                                            <th><span><strong>{__('Name', 'gutenverse-themes-builder')}</strong></span></th>
+                                            <th><span><strong>{__('Type', 'gutenverse-themes-builder')}</strong></span></th>
+                                            <th><span><strong>{__('Delete', 'gutenverse-themes-builder')}</strong></span></th>
                                         </tr>
                                         {templateList.map((template, index) => {
                                             return template && template?.category === item.id && <tr key={index} className="template-item">
@@ -160,11 +160,11 @@ const ManageTemplates = () => {
                                 </div>
                             </div>
                         </div>;
-                    }) : <h3>{__('You don\'t have active theme', 'gtb')}</h3>
+                    }) : <h3>{__('You don\'t have active theme', 'gutenverse-themes-builder')}</h3>
                 )}
                 {deletePopup && <WarningPopup
-                    title={__('Are you sure want to delete this template?', 'gtb')}
-                    detail={__('This will delete ALL content saved for this template.', 'gtb')}
+                    title={__('Are you sure want to delete this template?', 'gutenverse-themes-builder')}
+                    detail={__('This will delete ALL content saved for this template.', 'gutenverse-themes-builder')}
                     onProceed={removeTemplate}
                     onClose={() => setDeletePopup(false)}
                 />}

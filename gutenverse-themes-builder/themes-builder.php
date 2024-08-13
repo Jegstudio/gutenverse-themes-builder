@@ -9,20 +9,20 @@
  * License: GPLv3
  * Text Domain: gutenverse-themes-builder
  *
- * @package gtb
+ * @package gutenverse-themes-builder
  */
 
-defined( 'GTB' ) || define( 'GTB', 'gutenverse-themes-builder' );
-defined( 'GTB_VERSION' ) || define( 'GTB_VERSION', '1.0.0' );
-defined( 'GTB_NOTICE_VERSION' ) || define( 'GTB_NOTICE_VERSION', '1.0.0' );
-defined( 'GTB_NAME' ) || define( 'GTB_NAME', 'Gutenverse Themes Builder' );
-defined( 'GTB_URL' ) || define( 'GTB_URL', plugins_url( GTB ) );
-defined( 'GTB_FILE' ) || define( 'GTB_FILE', __FILE__ );
-defined( 'GTB_DIR' ) || define( 'GTB_DIR', plugin_dir_path( __FILE__ ) );
-defined( 'GTB_CLASS_DIR' ) || define( 'GTB_CLASS_DIR', GTB_DIR . 'includes/' );
-defined( 'GTB_LANG_DIR' ) || define( 'GTB_LANG_DIR', GTB_DIR . 'languages' );
-defined( 'GTB_PATH' ) || define( 'GTB_PATH', plugin_basename( __FILE__ ) );
-defined( 'GUTENVERSE_FRAMEWORK_URL' ) || define( 'GUTENVERSE_FRAMEWORK_URL', plugins_url( GTB ) . '/lib/framework' );
+defined( 'GUTENVERSE_THEMES_BUILDER' ) || define( 'GUTENVERSE_THEMES_BUILDER', 'gutenverse-themes-builder' );
+defined( 'GUTENVERSE_THEMES_BUILDER_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_VERSION', '1.0.0' );
+defined( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION', '1.0.0' );
+defined( 'GUTENVERSE_THEMES_BUILDER_NAME' ) || define( 'GUTENVERSE_THEMES_BUILDER_NAME', 'Gutenverse Themes Builder' );
+defined( 'GUTENVERSE_THEMES_BUILDER_URL' ) || define( 'GUTENVERSE_THEMES_BUILDER_URL', plugins_url( GUTENVERSE_THEMES_BUILDER ) );
+defined( 'GUTENVERSE_THEMES_BUILDER_FILE' ) || define( 'GUTENVERSE_THEMES_BUILDER_FILE', __FILE__ );
+defined( 'GUTENVERSE_THEMES_BUILDER_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER_DIR', plugin_dir_path( __FILE__ ) );
+defined( 'GUTENVERSE_THEMES_BUILDER_CLASS_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER_CLASS_DIR', GUTENVERSE_THEMES_BUILDER_DIR . 'includes/' );
+defined( 'GUTENVERSE_THEMES_BUILDER_LANG_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER_LANG_DIR', GUTENVERSE_THEMES_BUILDER_DIR . 'languages' );
+defined( 'GUTENVERSE_THEMES_BUILDER_PATH' ) || define( 'GUTENVERSE_THEMES_BUILDER_PATH', plugin_basename( __FILE__ ) );
+defined( 'GUTENVERSE_FRAMEWORK_URL' ) || define( 'GUTENVERSE_FRAMEWORK_URL', plugins_url( GUTENVERSE_THEMES_BUILDER ) . '/lib/framework' );
 
-require_once GTB_DIR . 'lib/autoload.php';
-$instance = \GTB\Gtb::instance();
+require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/autoload.php';
+$instance = \Gutenverse_Themes_Builder\Init::instance();
