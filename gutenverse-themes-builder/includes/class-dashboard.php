@@ -46,13 +46,6 @@ class Dashboard {
 			GUTENVERSE_THEMES_BUILDER_VERSION,
 			true
 		);
-
-		wp_enqueue_style(
-			'gtb-dashboard',
-			GUTENVERSE_THEMES_BUILDER_URL . '/assets/css/update-notice.css',
-			array(),
-			GUTENVERSE_THEMES_BUILDER_VERSION
-		);
 	}
 
 	/**
