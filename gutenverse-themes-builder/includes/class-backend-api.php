@@ -1432,10 +1432,11 @@ class Backend_Api {
 			}
 		}
 	}
-	
+
 	/**
 	 * Function to check if an image already exists in the media library
 	 *
+	 * @param string $url .
 	 * @return boolean
 	 */
 	public function image_exists_in_media_library( $url ) {

@@ -1032,7 +1032,7 @@ class Export_Theme {
 	 */
 	private function extract_images( $content, $system, $slug ) {
 		// Capture image url inside double quotes.
-		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $content, $matches );
+		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[0] as $image ) {
 				$this->add_image( $image );
@@ -1114,7 +1114,7 @@ class Export_Theme {
 	 */
 	private function export_all_images( $system ) {
 		$image_list = array_unique( $this->image_list );
-		$img_dir    = gtb_theme_built_path() . '/assets/img';
+		$img_dir = gtb_theme_built_path() . '/assets/img';
 
 		if ( ! is_dir( $img_dir ) ) {
 			wp_mkdir_p( $img_dir );
