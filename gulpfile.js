@@ -90,13 +90,13 @@ gulp.task("clean", function () {
 /**
  * Gulp package release
  */
-gulp.task("copy-plugin-folder", function () {
+gulp.task('copy-plugin-folder', function () {
     return gulp
         .src(['./gutenverse-themes-builder/**/*', '!./gutenverse-themes-builder/lib/framework/**'], { encoding: false })
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
-gulp.task("copy-framework", function () {
+gulp.task('copy-framework', function () {
     return gulp
         .src('./gutenverse-core/framework/**/*', { encoding: false })
         .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
@@ -104,16 +104,16 @@ gulp.task("copy-framework", function () {
 
 gulp.task('replace-text-domain', function () {
     return gulp
-        .src('./release/gutenverse-themes-builder/lib/framework/**/*')
+        .src(['./release/gutenverse-themes-builder/lib/framework/**/*.js', './release/gutenverse-themes-builder/lib/framework/**/*.php'])
         .pipe(replace('--gctd--', 'gutenverse-themes-builder'))
         .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
 });
 
 
-gulp.task("release", gulp.series(
-    "copy-plugin-folder",
-    "copy-framework",
-    "replace-text-domain"
+gulp.task('release', gulp.series(
+    'copy-plugin-folder',
+    'copy-framework',
+    'replace-text-domain'
 ));
 
 async function getZip() {
