@@ -4,10 +4,10 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
-        ['theme-dashboard']: './src/theme-builder/dashboard/index.js',
+        ['theme-dashboard']: './src/theme-builder/theme-data/themeforest-dashboard/index.js',
     },
     output: {
-        path: path.resolve(process.cwd(), 'build/theme-dashboard'),
+        path: path.resolve(process.cwd(), 'build/themeforest-dashboard'),
     },
     module: {
         rules: [
@@ -53,12 +53,12 @@ module.exports = {
                 onEnd: {
                     copy: [
                         {
-                            source: process.env.NODE_ENV === 'development' ? './build/theme-dashboard/theme-dashboard.js*' : './build/theme-dashboard/theme-dashboard.js',                            
-                            destination: './gutenverse-themes-builder/includes/data/assets/js/',
+                            source: process.env.NODE_ENV === 'development' ? './build/themeforest-dashboard/theme-dashboard.js*' : './build/themeforest-dashboard/theme-dashboard.js',                            
+                            destination: './gutenverse-themes-builder/includes/data/assets/js/themeforest/',
                         },
                         {
-                            source: './build/theme-dashboard/theme-dashboard.css',
-                            destination: './gutenverse-themes-builder/includes/data/assets/css/theme-dashboard.css',
+                            source: './build/themeforest-dashboard/theme-dashboard.css',
+                            destination: './gutenverse-themes-builder/includes/data/assets/css/themeforest/theme-dashboard.css',
                         },
                     ],
                 },

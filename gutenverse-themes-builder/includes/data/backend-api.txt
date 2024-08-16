@@ -1,0 +1,117 @@
+<?php
+/**
+ * REST APIs class
+ *
+ * @author {{author_name}}
+ * @package {{slug}}
+ */
+
+namespace {{namespace}};
+
+/**
+ * Class Api
+ *
+ * @package gutenverse-themes-builder
+ */
+class Backend_Api {
+	/**
+	 * Endpoint Path
+	 *
+	 * @var string
+	 */
+	const ENDPOINT = 'gtb-themes-backend/v1';
+
+	/**
+	 * Blocks constructor.
+	 */
+	public function __construct() {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+	}
+
+	/**
+	 * Register APIs
+	 */
+	public function register_routes() {
+		if ( ! is_admin() && ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		/**
+		 * Backend routes.
+		 */
+
+		// Themes.
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/assign',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_pages' ),
+				'permission_callback' => function () {
+					if ( ! current_user_can( 'manage_options' ) ) {
+						return new WP_Error(
+							'forbidden_permission',
+							esc_html__( 'Forbidden Access', '--gctd--' ),
+							array( 'status' => 403 )
+						);
+					}
+
+					return true;
+				},
+			)
+		);
+	}
+
+	/**
+	 * Create pages and assign templates.
+	 *
+	 * @param object $request .
+	 *
+	 * @return int|string
+	 */
+	public function handle_pages( $request ) {
+		$templates = array(
+			{{assign_templates}}
+		);
+
+		foreach ( $templates as $value ) {
+			if ( ! empty( $value->is_custom ) ) {
+				$query = new WP_Query(
+					array(
+						'post_type'      => 'page',
+						'post_status'    => 'publish',
+						'title'          => $value->title,
+						'posts_per_page' => 1,
+					)
+				);
+
+				if ( ! $query->have_posts() ) {
+					$new_page = array(
+						'post_title'    => $value->title,
+						'post_content'  => '',
+						'post_status'   => 'publish',
+						'post_type'     => 'page',
+						'page_template' => $value->slug,
+					);
+
+					$page_id = wp_insert_post( $new_page );
+				} else {
+					$post_id  = $query->post->ID;
+					$template = 'template-' . $value->slug;
+
+					if ( isset( $_POST[ $template ] ) ) {
+						$page_data = array(
+							'ID'            => $post_id,
+							'page_template' => $value->slug,
+						);
+						wp_update_post( $page_data );
+					} else {
+						//reassign
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+}

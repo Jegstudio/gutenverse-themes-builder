@@ -608,6 +608,9 @@ class Init {
 			'plugins'      => array(
 				{{plugins_required}}
 			),
+			'assign'       => array(
+				{{assign_templates}}
+			),
 		);
 	}
 

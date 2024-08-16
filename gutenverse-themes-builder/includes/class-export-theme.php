@@ -92,6 +92,7 @@ class Export_Theme {
 		$this->create_autoload_php( $wp_filesystem, $data );
 		$this->create_init_php( $wp_filesystem, $data, $theme_id );
 		$this->create_assets( $wp_filesystem, $data );
+		$this->create_backend_api( $wp_filesystem, $data );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
@@ -220,6 +221,47 @@ class Export_Theme {
 
 		$system->put_contents(
 			gtb_theme_built_path() . '/inc/class/class-asset-enqueue.php',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
+	}
+
+	/**
+	 * Create Backend Api
+	 *
+	 * @param object $system .
+	 * @param array  $data .
+	 */
+	public function create_backend_api( $system, $data ) {
+		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+
+		if ( empty( $other['dashboard'] ) || 'default' === $other['dashboard']['mode'] ) {
+			return;
+		}
+
+		if ( ! empty( $other['dashboard']['templates'] ) ) {
+			foreach ( $other['dashboard']['templates'] as $template ) {
+				if ( $template['exclude'] ) {
+					continue;
+				}
+
+				$assigns[] = "array(
+					'title' => '{$template['name']}',
+					'page'  => '{$template['page_name']}',
+					'thumb' => '{$template['thumbnail']['url']}',
+				)";
+			}
+		}
+
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/backend-api.txt' );
+		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
+		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
+		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
+
+		$system->put_contents(
+			gtb_theme_built_path() . '/inc/class/class-backend-api.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -555,26 +597,70 @@ class Export_Theme {
 			wp_mkdir_p( gtb_theme_built_path() . 'assets/img' );
 		}
 
-		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
-		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+		$other = maybe_unserialize( $data['other'] );
+
+		if ( ! empty( $other['dashboard'] ) ) {
+			if ( isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/themeforest/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+			} else {
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+			}
+		} else {
+			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+		}
 		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
 		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
 
-		$other    = maybe_unserialize( $data['other'] );
 		$required = array();
 
 		if ( ! empty( $other['plugins'] ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
+				$result = plugins_api(
+					'plugin_information',
+					array(
+						'slug'   => $plugin['value'],
+						'locale' => 'en_US',
+						'fields' => array(
+							'icons' => true,
+						),
+					)
+				);
+				$icons  = var_export( $result->icons, true );
+
 				$required[] = "array(
 					'slug'      => '{$plugin['value']}',
 					'title'     => '{$plugin['label']}',
 					'active'    => in_array( '{$plugin['value']}', \$plugins, true ),
 					'installed' => \$this->is_installed( '{$plugin['value']}' ),
+					'icons'     => {$icons},
 				)";
 			}
 		}
 
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
+
+		$assigns = array();
+		if ( ! empty( $other['dashboard'] ) ) {
+			if ( ! empty( $other['dashboard']['templates'] ) ) {
+				foreach ( $other['dashboard']['templates'] as $template ) {
+					if ( $template['exclude'] ) {
+						continue;
+					}
+
+					$assigns[] = "array(
+						'title' => '{$template['name']}',
+						'page'  => '{$template['page_name']}',
+						'thumb' => '{$template['thumbnail']['url']}',
+					)";
+				}
+			}
+		}
+
+		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
@@ -1113,7 +1199,7 @@ class Export_Theme {
 	 */
 	private function export_all_images( $system ) {
 		$image_list = array_unique( $this->image_list );
-		$img_dir = gtb_theme_built_path() . '/assets/img';
+		$img_dir    = gtb_theme_built_path() . '/assets/img';
 
 		if ( ! is_dir( $img_dir ) ) {
 			wp_mkdir_p( $img_dir );
