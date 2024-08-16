@@ -129,12 +129,22 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Plugins', 'gutenverse-themes-builder' ),
-			esc_html__( 'Plugins', 'gutenverse-themes-builder' ),
+			esc_html__( 'Required Plugins', 'gutenverse-themes-builder' ),
+			esc_html__( 'Required Plugins', 'gutenverse-themes-builder' ),
 			'manage_options',
 			$path . 'manage-plugins',
 			array( $this, 'theme_builder_page' ),
 			6
+		);
+
+		add_submenu_page(
+			self::TYPE,
+			esc_html__( 'Manage Dashboard', 'gutenverse-themes-builder' ),
+			esc_html__( 'Manage Dashboard', 'gutenverse-themes-builder' ),
+			'manage_options',
+			$path . 'manage-dashboard',
+			array( $this, 'theme_builder_page' ),
+			7
 		);
 
 		add_submenu_page(
@@ -144,7 +154,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-screenshots',
 			array( $this, 'theme_builder_page' ),
-			7
+			8
 		);
 
 		add_submenu_page(
@@ -154,7 +164,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'readme-editor',
 			array( $this, 'theme_builder_page' ),
-			8
+			9
 		);
 
 		add_submenu_page(
@@ -164,7 +174,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'export-theme',
 			array( $this, 'theme_builder_page' ),
-			9
+			10
 		);
 	}
 

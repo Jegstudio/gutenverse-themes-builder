@@ -49,9 +49,14 @@ const Navigation = ({ location }) => {
             path: 'manage-font-sizes',
         },
         {
-            name: __('Plugins', 'gutenverse'),
+            name: __('Required Plugins', 'gutenverse'),
             slug: pageSlug,
             path: 'manage-plugins',
+        },
+        {
+            name: __('Manage Dashboard', 'gutenverse'),
+            slug: pageSlug,
+            path: 'manage-dashboard',
         },
         {
             name: __('Screenshots', 'gutenverse'),
