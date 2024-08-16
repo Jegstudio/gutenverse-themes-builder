@@ -1458,6 +1458,9 @@ class Backend_Api {
 	/**
 	 * Function to download and save image to WordPress media library
 	 *
+	 * @param string $url .
+	 * @param string $dir .
+	 *
 	 * @return integer
 	 */
 	public function download_and_save_image( $url, $dir = '' ) {
@@ -1515,7 +1518,7 @@ class Backend_Api {
 
 		/** Check for errors  */
 		if ( is_wp_error( $attachment_id ) ) {
-			@unlink( $temp_file );
+			wp_delete_file( $temp_file );
 			return false;
 		}
 
@@ -2073,6 +2076,7 @@ class Backend_Api {
 	 * @param mixed  $theme_id .
 	 * @param string $template_type .
 	 * @param string $template_name .
+	 * @param string $template_content .
 	 */
 	public function create_template_import( $category, $theme_id, $template_type, $template_name, $template_content ) {
 		$allow_template = gtb_check_theme_mode( $category, $theme_id );
@@ -2162,7 +2166,7 @@ class Backend_Api {
 	 */
 	public function import_template() {
 		$active_theme = wp_get_theme();
-		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$theme_dir    = $active_theme->get_stylesheet_directory_uri();
 		$files        = array();
 		/**Get Files in Gutenverse Files Parts */
 		$files[] = array(
@@ -2197,13 +2201,19 @@ class Backend_Api {
 				continue;
 			}
 			foreach ( $file['files'] as $doc ) {
-				$doc_content = file_get_contents( $doc );
+				$doc_file    = wp_remote_get( $doc );
 				$doc_name    = pathinfo( $doc );
+				$doc_content = '';
+
+				if ( ! is_wp_error( $doc_content ) ) {
+					$doc_content = wp_remote_retrieve_body( $doc_file );
+				}
+
 				/**Change Template parts header & footer slug */
-				// Define the regex pattern to match slugs within wp:template-part tags
+				// Define the regex pattern to match slugs within wp:template-part tags.
 				$pattern = '/<!-- wp:template-part \{"slug":"([^"]+)"\} \/\-->/';
 
-				// Perform the replacement
+				// Perform the replacement.
 				preg_match_all( $pattern, $doc_content, $matches_parts );
 				if ( ! empty( $matches_parts[0] ) ) {
 					foreach ( $matches_parts[0] as $index => $parts ) {
@@ -2444,8 +2454,13 @@ class Backend_Api {
 			return array();
 		}
 
-		$filepath = get_attached_file( $id );
-		$content  = file_get_contents( $filepath );
+		$filepath = wp_get_attachment_url( $id );
+		$file     = wp_remote_get( $filepath );
+		$content  = '';
+
+		if ( ! is_wp_error( $file ) ) {
+			$content = wp_remote_retrieve_body( $file );
+		}
 
 		return json_decode( $content );
 	}
@@ -2572,6 +2587,15 @@ class Backend_Api {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Handle error
+	 *
+	 * @param \Exception $e .
+	 */
+	private function handle_exception( \Exception $e ) {
+		error_log( $e->getMessage() );
 	}
 
 	/**
