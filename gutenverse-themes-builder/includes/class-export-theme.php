@@ -92,7 +92,7 @@ class Export_Theme {
 		$this->create_autoload_php( $wp_filesystem, $data );
 		$this->create_init_php( $wp_filesystem, $data, $theme_id );
 		$this->create_assets( $wp_filesystem, $data );
-		$this->create_backend_api( $wp_filesystem, $data );
+		$this->create_themeforest_data( $wp_filesystem, $data );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
@@ -232,7 +232,7 @@ class Export_Theme {
 	 * @param object $system .
 	 * @param array  $data .
 	 */
-	public function create_backend_api( $system, $data ) {
+	public function create_themeforest_data( $system, $data ) {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
 
@@ -254,14 +254,14 @@ class Export_Theme {
 			}
 		}
 
-		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/backend-api.txt' );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/themeforest-data.txt' );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
-			gtb_theme_built_path() . '/inc/class/class-backend-api.php',
+			gtb_theme_built_path() . '/inc/class/class-themeforest-data.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -643,6 +643,16 @@ class Export_Theme {
 
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
 
+		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+		$add_class  = array();
+
+		if ( ! empty( $other['dashboard'] ) || 'themeforest' === $other['dashboard']['mode'] ) {
+			$add_class[] = 'new Themeforest_Data();';
+		}
+
+		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
+
 		$assigns = array();
 		if ( ! empty( $other['dashboard'] ) ) {
 			if ( ! empty( $other['dashboard']['templates'] ) ) {
@@ -654,8 +664,6 @@ class Export_Theme {
 					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
 					$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
 					$thumb_url  = gtb_theme_built_path( null, true ) . 'assets/img/' . $template['thumbnail']['filename'];
-
-					gutenverse_rlog( $thumbnail, $template['thumbnail']['url'], $image_data );
 
 					if ( ! is_wp_error( $image_data ) ) {
 						$system->put_contents(

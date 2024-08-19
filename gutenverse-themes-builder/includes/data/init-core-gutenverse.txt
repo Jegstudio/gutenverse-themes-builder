@@ -82,6 +82,7 @@ class Init {
 	 */
 	public function init_instance() {
 		new Asset_Enqueue();
+		{{additional_class}}
 	}
 
 	/**
@@ -536,7 +537,7 @@ class Init {
 		$screen = get_current_screen();
 		wp_enqueue_script('wp-api-fetch');
 
-		if ( $screen->id === 'appearance_page_{{slug}}-dashboard' ) {
+		if ( is_admin() ) {
 			// enqueue css.
 			wp_enqueue_style(
 				'{{slug}}-dashboard',
@@ -602,6 +603,7 @@ class Init {
 			'installText'  => esc_html__( 'Install Gutenverse Plugin', '{{slug}}' ),
 			'activateText' => esc_html__( 'Activate Gutenverse Plugin', '{{slug}}' ),
 			'doneText'     => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
+			'dashboardPage' => admin_url( 'themes.php?page={{slug}}-dashboard' ),
 			'pages'        => array(
 				{{page_list}}
 			),

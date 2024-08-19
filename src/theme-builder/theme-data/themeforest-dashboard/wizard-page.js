@@ -198,7 +198,7 @@ const ImportTemplates = ({ updateProgress }) => {
     </div>
 }
 
-const DashboardPage = () => {
+const WizardPage = () => {
     const [progress, setProgress] = useState('installPlugin');
     const [themeData, setThemeData] = useState(null);
     const [templateList, setTemplateList] = useState(null);
@@ -247,25 +247,27 @@ const DashboardPage = () => {
         }
     }
 
-    return <div className='theme-dashboard'>
-        <div className='dashboard-header'>
-            <div className={`progress ${progress === 'installPlugin' ? 'active' : ''} ${progressCount >= 0 ? 'done' : ''}`}>
-                <p className='number'>1</p>
-                <h3 className='progress-title'>Plugin Requirements</h3>
+    return <div className='theme-wizard-wrapper'>
+        <div className='theme-wizard'>
+            <div className='wizard-header'>
+                <div className={`progress ${progress === 'installPlugin' ? 'active' : ''} ${progressCount >= 0 ? 'done' : ''}`}>
+                    <p className='number'>1</p>
+                    <h3 className='progress-title'>Plugin Requirements</h3>
+                </div>
+                <div className={`progress ${progress === 'importTemplate' ? 'active' : ''} ${progressCount >= 1 ? 'done' : ''}`}>
+                    <p className='number'>2</p>
+                    <h3 className='progress-title'>Assign Templates</h3>
+                </div>
+                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
+                    <p className='number'>3</p>
+                    <h3 className='progress-title'>Finalizing</h3>
+                </div>
             </div>
-            <div className={`progress ${progress === 'importTemplate' ? 'active' : ''} ${progressCount >= 1 ? 'done' : ''}`}>
-                <p className='number'>2</p>
-                <h3 className='progress-title'>Assign Templates</h3>
+            <div className='wizard-body'>
+                {content()}
             </div>
-            <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
-                <p className='number'>3</p>
-                <h3 className='progress-title'>Finalizing</h3>
-            </div>
-        </div>
-        <div className='dashboard-body'>
-            {content()}
         </div>
     </div>;
 }
 
-export default DashboardPage;
+export default WizardPage;

@@ -13,7 +13,7 @@ namespace {{namespace}};
  *
  * @package gutenverse-themes-builder
  */
-class Backend_Api {
+class Themeforest_Data {
 	/**
 	 * Endpoint Path
 	 *
@@ -26,6 +26,45 @@ class Backend_Api {
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'admin_menu', array( $this, 'theme_wizard' ) );
+		add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
+	}
+
+	/**
+	 * Wizard Menu.
+	 */
+	public function theme_wizard() {
+		if ( get_option( '{{slug}}_done' ) !== 'yes' ) {
+			add_theme_page(
+				'Wizard Setup',
+				'Wizard Setup',
+				'manage_options',
+				'{{slug}}-wizard',
+				array( $this, 'theme_wizard_page' ),
+				99
+			);
+		}
+	}
+	
+	/**
+	 * Wizard Page.
+	 */
+	public function theme_wizard_page() {
+		?>
+		<div id="gutenverse-theme-wizard"></div>
+		<?php
+		if ( isset( $_POST['my_theme_wizard_done'] ) ) {
+			update_option( '{{slug}}_done', 'yes' );
+			wp_safe_redirect( admin_url() );
+			exit;
+		}
+	}
+
+	public function theme_redirect() {
+		if ( get_option( '{{slug}}_done' ) !== 'yes' && ( ! isset( $_GET['page'] ) || $_GET['page'] !== '{{slug}}-wizard' ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page={{slug}}-wizard' ) );
+			exit;
+		}
 	}
 
 	/**
