@@ -1,16 +1,58 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 
+const CloseIcon = ({ fill = 'inherit' }) => <svg width="12" height="12" viewBox="0 0 12 12" fill={fill} xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.17593 6.00048L10.7593 2.42548C10.9162 2.26856 11.0043 2.05573 11.0043 1.83381C11.0043 1.6119 10.9162 1.39907 10.7593 1.24215C10.6023 1.08523 10.3895 0.99707 10.1676 0.99707C9.94567 0.99707 9.73285 1.08523 9.57593 1.24215L6.00093 4.82548L2.42593 1.24215C2.26901 1.08523 2.05618 0.99707 1.83426 0.99707C1.61234 0.99707 1.39951 1.08523 1.24259 1.24215C1.08567 1.39907 0.997516 1.6119 0.997516 1.83381C0.997516 2.05573 1.08567 2.26856 1.24259 2.42548L4.82593 6.00048L1.24259 9.57548C1.16449 9.65295 1.10249 9.74512 1.06018 9.84667C1.01788 9.94822 0.996094 10.0571 0.996094 10.1671C0.996094 10.2772 1.01788 10.3861 1.06018 10.4876C1.10249 10.5892 1.16449 10.6813 1.24259 10.7588C1.32006 10.8369 1.41223 10.8989 1.51378 10.9412C1.61533 10.9835 1.72425 11.0053 1.83426 11.0053C1.94427 11.0053 2.05319 10.9835 2.15474 10.9412C2.25629 10.8989 2.34846 10.8369 2.42593 10.7588L6.00093 7.17548L9.57593 10.7588C9.6534 10.8369 9.74556 10.8989 9.84711 10.9412C9.94866 10.9835 10.0576 11.0053 10.1676 11.0053C10.2776 11.0053 10.3865 10.9835 10.4881 10.9412C10.5896 10.8989 10.6818 10.8369 10.7593 10.7588C10.8374 10.6813 10.8994 10.5892 10.9417 10.4876C10.984 10.3861 11.0058 10.2772 11.0058 10.1671C11.0058 10.0571 10.984 9.94822 10.9417 9.84667C10.8994 9.74512 10.8374 9.65295 10.7593 9.57548L7.17593 6.00048Z" fill={fill} />
+</svg>;
+
+const ImportLoading = (props) => {
+    let progress = '0%';
+    const width = () => {
+        switch (props?.progress) {
+            case '1/4':
+                progress = '25%';
+                return 'twenty-five';
+            case '2/4':
+                progress = '50%';
+                return 'fifty';
+            case '3/4':
+                progress = '75%';
+                return 'seventy-five';
+            case '4/4':
+                progress = '100%';
+                return 'hundred';
+            default:
+                progress = '0%';
+                return 'zero';
+        }
+    };
+
+    width();
+
+    return <div className="installing-notice">
+        <div className="installing-notice-container">
+            <div className="importing-notice">
+                <div className="notice-inner">
+                    <span>{props?.message}</span>
+                    <span>{progress}</span>
+                </div>
+                <div className="bar-progress-container">
+                    <div className={'notice-bar-progress ' + `${width()}-percent`} />
+                </div>
+            </div>
+        </div>
+    </div>;
+};
+
 const InstallPlugin = ({action, setAction, updateProgress}) => {
     const { plugins } = window['GutenThemeConfig'];
+    const [installing, setInstalling] = useState({show: true, message: 'Preparing...', progress: '1/4'})
     
     useEffect(() => {
         let allActive = true;
         plugins?.map(plugin => {
             allActive = allActive && plugin?.active;
         });
-
-        console.log(allActive)
 
         if (allActive) {
             setAction('done');
@@ -32,7 +74,7 @@ const InstallPlugin = ({action, setAction, updateProgress}) => {
     };
 
     const installPlugins = (index = 0) => {
-        console.log(plugins, index < plugins.length)
+        setInstalling({show: true, message: 'Installing Plugins...', progress: '2/4'});
         if (plugins && index < plugins.length) {
             const plugin = plugins[index];
             console.log(plugin, 'asd')
@@ -66,6 +108,7 @@ const InstallPlugin = ({action, setAction, updateProgress}) => {
             }
         } else {
             setAction('done');
+            setInstalling({show: true, message: 'Installing Complete', progress: '4/4'});
         }
     }
 
@@ -83,7 +126,7 @@ const InstallPlugin = ({action, setAction, updateProgress}) => {
                 </Fragment>;
             case 'loading':
                 return <Fragment>
-                    <div>Loading...</div>
+                    <ImportLoading message={installing?.message} progress={installing?.progress} />
                 </Fragment>;
             case 'install':
             default:

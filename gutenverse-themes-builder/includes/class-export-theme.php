@@ -647,14 +647,28 @@ class Export_Theme {
 		if ( ! empty( $other['dashboard'] ) ) {
 			if ( ! empty( $other['dashboard']['templates'] ) ) {
 				foreach ( $other['dashboard']['templates'] as $template ) {
-					if ( $template['exclude'] ) {
+					if ( isset( $template['exclude'] ) ) {
 						continue;
+					}
+
+					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
+					$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
+					$thumb_url  = gtb_theme_built_path( null, true ) . 'assets/img/' . $template['thumbnail']['filename'];
+
+					gutenverse_rlog( $thumbnail, $template['thumbnail']['url'], $image_data );
+
+					if ( ! is_wp_error( $image_data ) ) {
+						$system->put_contents(
+							$thumbnail,
+							$image_data['body'],
+							FS_CHMOD_FILE
+						);
 					}
 
 					$assigns[] = "array(
 						'title' => '{$template['name']}',
 						'page'  => '{$template['page_name']}',
-						'thumb' => '{$template['thumbnail']['url']}',
+						'thumb' => '{$thumb_url}',
 					)";
 				}
 			}

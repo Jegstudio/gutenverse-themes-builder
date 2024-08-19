@@ -1454,6 +1454,45 @@ body {
                     color: #3b57f7;
                 }
             }
+
+            .install-popup-wrapper {
+                position: fixed;
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+                background-color: #000c;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 99999;
+
+                .install-popup {
+                    width: 420px;
+                    background-color: white;
+                    border-radius: 10px;
+                    margin: 30% auto 0;
+
+                    .popup-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 20px;
+                        border-bottom: 1px solid #e6e8eb;
+
+                        h3 {
+                            margin: 0;
+                        }
+
+                        svg {
+                            cursor: pointer;
+                        }
+                    }
+
+                    .popup-footer {
+                        border-top: 1px solid #e6e8eb;
+                    }
+                }
+            }
         }
 
         .finalizing {
@@ -1510,6 +1549,103 @@ body {
                     text-align: center;
                     color: #fff;
                     margin-top: 24px;
+                }
+            }
+        }
+    }
+}
+
+.installing-notice {
+    width: 100%;
+    height: 66px;
+
+    .installing-notice-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: inherit;
+
+        > svg {
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .importing-notice {
+            width: 100%;
+            height: inherit;
+            display: flex;
+            justify-content: center;
+
+            .notice-inner {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                padding: 0 22px 0 22px;
+                justify-content: space-between;
+                width: 100%;
+
+                span {
+                    font-family: Roboto, serif;
+                    font-size: 12px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.33;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #99a2a9;
+                }
+            }
+
+            .bar-progress-container {
+                width: 100%;
+                height: 10px;
+                display: flex !important;
+                position: absolute;
+                bottom: 0;
+                border-radius: 0 0 20px 20px;
+                background-color: #e3e4e6;
+                overflow: hidden;
+
+                .notice-bar-progress {    
+                    width: 0%;
+                    height: inherit;           
+                    background-image: linear-gradient(to right, #3b57f7 0%, #5cd0da 100%);
+                    transition: width 1s cubic-bezier(0,.81,.75,1);
+                    overflow: hidden;
+                    position: relative;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        width: 25%;
+                        left: -100%; // Start off-screen
+                        height: 100%;
+                        background: linear-gradient(
+                          120deg,
+                          rgba(255, 255, 255, 0.2) 0%,
+                          rgba(255, 255, 255, 0.8) 50%,
+                          rgba(255, 255, 255, 0.2) 100%
+                        );
+                        animation: shine 1.5s cubic-bezier(0,.81,.75,1) infinite;
+                    }
+                    
+                    &.twenty-five-percent {
+                        width: 25%;
+                    }
+                    &.fifty-percent {
+                        width: 50%;
+                    }
+                    &.seventy-five-percent {
+                        width: 75%;
+                    }
+                    &.hundred-percent{
+                        width: 100%;
+                    }
+                    &.zero-percent {
+                        width: 0%;
+                    }
                 }
             }
         }
