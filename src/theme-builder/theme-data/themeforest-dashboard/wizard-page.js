@@ -77,7 +77,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
         setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
         if (plugins && index < plugins.length) {
             const plugin = plugins[index];
-            console.log(plugin, 'asd')
 
             if (!plugin?.installed) {
                 wp?.apiFetch({

@@ -2,6 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
+import { Loader } from 'react-feather';
 
 const CloseIcon = ({ fill = 'inherit' }) => <svg width="12" height="12" viewBox="0 0 12 12" fill={fill} xmlns="http://www.w3.org/2000/svg">
     <path d="M7.17593 6.00048L10.7593 2.42548C10.9162 2.26856 11.0043 2.05573 11.0043 1.83381C11.0043 1.6119 10.9162 1.39907 10.7593 1.24215C10.6023 1.08523 10.3895 0.99707 10.1676 0.99707C9.94567 0.99707 9.73285 1.08523 9.57593 1.24215L6.00093 4.82548L2.42593 1.24215C2.26901 1.08523 2.05618 0.99707 1.83426 0.99707C1.61234 0.99707 1.39951 1.08523 1.24259 1.24215C1.08567 1.39907 0.997516 1.6119 0.997516 1.83381C0.997516 2.05573 1.08567 2.26856 1.24259 2.42548L4.82593 6.00048L1.24259 9.57548C1.16449 9.65295 1.10249 9.74512 1.06018 9.84667C1.01788 9.94822 0.996094 10.0571 0.996094 10.1671C0.996094 10.2772 1.01788 10.3861 1.06018 10.4876C1.10249 10.5892 1.16449 10.6813 1.24259 10.7588C1.32006 10.8369 1.41223 10.8989 1.51378 10.9412C1.61533 10.9835 1.72425 11.0053 1.83426 11.0053C1.94427 11.0053 2.05319 10.9835 2.15474 10.9412C2.25629 10.8989 2.34846 10.8369 2.42593 10.7588L6.00093 7.17548L9.57593 10.7588C9.6534 10.8369 9.74556 10.8989 9.84711 10.9412C9.94866 10.9835 10.0576 11.0053 10.1676 11.0053C10.2776 11.0053 10.3865 10.9835 10.4881 10.9412C10.5896 10.8989 10.6818 10.8369 10.7593 10.7588C10.8374 10.6813 10.8994 10.5892 10.9417 10.4876C10.984 10.3861 11.0058 10.2772 11.0058 10.1671C11.0058 10.0571 10.984 9.94822 10.9417 9.84667C10.8994 9.74512 10.8374 9.65295 10.7593 9.57548L7.17593 6.00048Z" fill={fill} />
@@ -24,7 +25,7 @@ const ImportTemplates = () => {
     const importingTemplate = () => {
         setInstalling({ show: true, message: 'Installing Templates...', progress: '2/4' });
         setTimeout(() => {
-            setAction('done');
+            setPluginState('done');
             setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
         }, 4000);
     };
@@ -291,9 +292,10 @@ const SupportIcon = () => {
 }
 
 const DashboardPage = () => {
-    const [menu, setMenu] = useState('dashboard');
-    const { home_url, version, logo, title, upgradePro = 'https://gutenverse.com/pro', subscribed = false } = window['GutenThemeConfig'];
+    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', subscribed = false } = window['GutenThemeConfig'];
     const [email, setEmail] = useState('');
+    const [menu, setMenu] = useState('dashboard');
+    const [pluginState, setPluginState] = useState('install');
     const [loading, setLoading] = useState(false);
     const [invalid, setInvalid] = useState(false);
     const [done, setDone] = useState(subscribed);
@@ -346,12 +348,73 @@ const DashboardPage = () => {
         }
     };
 
+    const installPlugins = (index = 0) => {
+        if (plugins && index < plugins.length) {
+            const plugin = plugins[index];
+
+            if (!plugin?.installed) {
+                wp?.apiFetch({
+                    path: 'wp/v2/plugins',
+                    method: 'POST',
+                    data: {
+                        slug: plugin?.slug,
+                        status: 'active'
+                    },
+                }).then(() => {
+                    installPlugins(index + 1);
+                }).catch(() => {
+                    alert('Error during installing plugin');
+                })
+            } else if (!plugin?.active) {
+                wp?.apiFetch({
+                    path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
+                    method: 'POST',
+                    data: {
+                        status: 'active'
+                    }
+                }).then(() => {
+                    installPlugins(index + 1);
+                }).catch(() => {
+                })
+            } else {
+                installPlugins(index + 1);
+            }
+        } else {
+            setPluginState('done');
+        }
+    }
+
+    const onInstall = () => {
+        setPluginState('loading');
+        installPlugins(0);
+    }
+
     useEffect(() => {
-        // getTemplateList(response => {
-        //     const templates = response?.data?.filter(template => template?.template_type === 'custom_template');
-        //     setTemplateList(templates)
-        // });
+        let allActive = true;
+        plugins?.map(plugin => {
+            allActive = allActive && plugin?.active;
+        });
+
+        if (allActive) {
+            setPluginState('done');
+        }
     }, []);
+
+    const pluginButton = () => {
+        switch (pluginState) {
+            case 'done':
+                return <div className='action-button plugin-done'>{__('Plugin Installed', 'gutenverse-temes-builder')}</div>;
+            case 'loading':
+                return <div className='action-button plugin-loading'>
+                    <div className="rotating" style={{ display: 'flex' }}>
+                        <Loader size={20} />
+                    </div>
+                </div>;
+            case 'install':
+            default:
+                return <div className='action-button plugin-install' onClick={onInstall}>{__('Install Plugins', 'gutenverse-themes-builder')}</div>;
+        }
+    }
 
     const content = () => {
         switch (menu) {
@@ -386,7 +449,7 @@ const DashboardPage = () => {
                                 </div>
                                 <p className='content-title'>{__('Plugin Requirements', 'gutenverse-themes-builder')}</p>
                                 <p className='content-description'>{__('Install and activate the required plugins to unlock all theme features.', 'gutenverse-themes-builder')}</p>
-                                <div className='action-button'>{__('Install Plugins', 'gutenverse-themes-builder')}</div>
+                                {pluginButton()}
                             </div>
                             <div className='content-2'>
                                 <Wave />
@@ -414,7 +477,7 @@ const DashboardPage = () => {
                             <img className='image' src={images + '/mockup-upgrade-pro.png'} />
                             <p className='content-title'>{__('Upgrade To', 'gutenverse-themes-builder')}<span className='gradient-text'>{__('Gutenverse PRO', 'gutenverse-themes-builder')}</span></p>
                             <p className='content-description'>{__('Unlock the WordPress Editor\'s potential with Gutenverse PRO.', 'gutenverse-themes-builder')}</p>
-                            <div className='action-button' onClick={() => {window.open(upgradePro, '_blank');}}>
+                            <div className='action-button' onClick={() => { window.open(upgradePro, '_blank'); }}>
                                 {__('Upgrade To PRO', 'gutenverse-themes-builder')}
                                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 11L0.5 2.75L4.625 6.5L7.25 2L9.875 6.5L14 2.75L12.5 11H2ZM12.5 13.25C12.5 13.7 12.2 14 11.75 14H2.75C2.3 14 2 13.7 2 13.25V12.5H12.5V13.25Z" fill="white" />
