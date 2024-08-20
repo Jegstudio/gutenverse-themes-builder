@@ -28,6 +28,7 @@ class Themeforest_Data {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'theme_wizard' ) );
 		add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_backend' ) );
 	}
 
 	/**
@@ -150,5 +151,31 @@ class Themeforest_Data {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Enqueue Backend Font
+	 */
+	public function enqueue_backend() {
+		wp_enqueue_style(
+			'{{slug}}-inter-font',
+			{{constant}}_URI . '/assets/dashboard-fonts/inter/inter.css',
+			array(),
+			{{constant}}_VERSION
+		);
+
+		wp_enqueue_style(
+			'{{slug}}-roboto-font',
+			{{constant}}_URI . '/assets/dashboard-fonts/roboto/roboto.css',
+			array(),
+			{{constant}}_VERSION
+		);
+
+		wp_enqueue_style(
+			'{{slug}}-jakarta-sans-font',
+			{{constant}}_URI . '/assets/dashboard-fonts/plus-jakarta-sans/plus-jakarta-sans.css',
+			array(),
+			{{constant}}_VERSION
+		);
 	}
 }

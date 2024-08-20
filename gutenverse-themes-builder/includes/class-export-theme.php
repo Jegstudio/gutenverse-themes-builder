@@ -10,6 +10,7 @@
 namespace Gutenverse_Themes_Builder;
 
 use Gutenverse_Themes_Builder\Database\Database;
+use InvalidArgumentException;
 use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -256,11 +257,14 @@ class Export_Theme {
 			}
 		}
 
+		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gtb_theme_built_path() . 'assets/dashboard-fonts' );
+
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/themeforest-data.txt' );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
 			gtb_theme_built_path() . '/inc/class/class-themeforest-data.php',
@@ -1394,5 +1398,38 @@ class Export_Theme {
 		$namespace = implode( '_', $parts );
 
 		return $namespace;
+	}
+
+	/**
+	 * Copy Dir
+	 *
+	 * @param string $source .
+	 * @param string $destination .
+	 */
+	public function copy_dir( $source, $destination ) {
+		if ( ! is_dir( $source ) ) {
+			return;
+		}
+
+		if ( ! is_dir( $destination ) ) {
+			wp_mkdir_p( $destination );
+		}
+
+		$items = scandir( $source );
+
+		foreach ( $items as $item ) {
+			if ( '.' === $item || '..' === $item ) {
+				continue;
+			}
+
+			$src_path  = $source . DIRECTORY_SEPARATOR . $item;
+			$dest_path = $destination . DIRECTORY_SEPARATOR . $item;
+
+			if ( is_dir( $src_path ) ) {
+				$this->copy_dir( $src_path, $dest_path );
+			} else {
+				copy( $src_path, $dest_path );
+			}
+		}
 	}
 }

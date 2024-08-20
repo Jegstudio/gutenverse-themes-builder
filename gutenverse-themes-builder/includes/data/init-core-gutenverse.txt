@@ -43,8 +43,8 @@ class Init {
 	 * Class constructor.
 	 */
 	private function __construct() {
-		$this->load_hooks();
 		$this->init_instance();
+		$this->load_hooks();
 	}
 
 	/**
