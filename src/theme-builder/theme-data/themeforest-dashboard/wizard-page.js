@@ -66,10 +66,10 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
         const matches = str.match(regex);
 
         return parts.map((part, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
                 {part}
                 {index < matches?.length ? <span className='gutenverse'>{matches[index]}</span> : null}
-            </React.Fragment>
+            </Fragment>
         ));
     };
 
@@ -200,22 +200,8 @@ const ImportTemplates = ({ updateProgress }) => {
 
 const WizardPage = () => {
     const [progress, setProgress] = useState('installPlugin');
-    const [themeData, setThemeData] = useState(null);
-    const [templateList, setTemplateList] = useState(null);
     const [progressCount, setProgressCount] = useState(0);
     const [action, setAction] = useState('install');
-
-    useEffect(() => {
-        // getThemeData(null, response => {
-        //     const themeDataRes = response;
-        //     setThemeData(themeDataRes?.other)
-        // });
-
-        // getTemplateList(response => {
-        //     const templates = response?.data?.filter(template => template?.template_type === 'custom_template');
-        //     setTemplateList(templates)
-        // });
-    }, []);
 
     const updateProgress = (progress, inc) => {
         setProgress(progress);
@@ -225,11 +211,11 @@ const WizardPage = () => {
     const content = () => {
         switch (progress) {
             case 'done':
-                const { gtbAssetURL } = window['GutenverseDashboard'];
+                const { images } = window['GutenThemeConfig'];
 
                 return <div className='finalizing'>
                     <div className='image-wrapper'>
-                        <img className='image-done' src={gtbAssetURL + '/img/final.png'} />
+                        <img className='image-done' src={images + '/final.png'} />
                     </div>
                     <div className='final-detail'>
                         <h3 className='final-title'>{__('Congratulations All Set 🤩', 'gutenverse-themes-builder')}</h3>

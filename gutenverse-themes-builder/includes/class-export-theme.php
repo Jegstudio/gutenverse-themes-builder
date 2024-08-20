@@ -603,6 +603,11 @@ class Export_Theme {
 			if ( isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/themeforest/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gtb_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gtb_theme_built_path() . 'assets/img/final.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gtb_theme_built_path() . 'assets/img/image-dancer.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
 			} else {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
@@ -653,8 +658,26 @@ class Export_Theme {
 
 		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
 
-		$assigns = array();
+		$assigns    = array();
+		$theme_logo = '';
 		if ( ! empty( $other['dashboard'] ) ) {
+			$theme_data = maybe_unserialize( $data['theme_data'] );
+			$theme_slug = $this->get_constant_name( $theme_data['slug'] );
+
+			if ( isset( $other['dashboard']['logo'] ) ) {
+				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
+				$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
+				$theme_logo = "{$theme_slug}_URI . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
+			}
+
+			if ( ! is_wp_error( $image_data ) ) {
+				$system->put_contents(
+					$thumbnail,
+					$image_data['body'],
+					FS_CHMOD_FILE
+				);
+			}
+
 			if ( ! empty( $other['dashboard']['templates'] ) ) {
 				foreach ( $other['dashboard']['templates'] as $template ) {
 					if ( isset( $template['exclude'] ) ) {
@@ -663,7 +686,7 @@ class Export_Theme {
 
 					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
 					$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
-					$thumb_url  = gtb_theme_built_path( null, true ) . 'assets/img/' . $template['thumbnail']['filename'];
+					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $template['thumbnail']['filename'] . "'";
 
 					if ( ! is_wp_error( $image_data ) ) {
 						$system->put_contents(
@@ -676,12 +699,13 @@ class Export_Theme {
 					$assigns[] = "array(
 						'title' => '{$template['name']}',
 						'page'  => '{$template['page_name']}',
-						'thumb' => '{$thumb_url}',
+						'thumb' => {$thumb_url},
 					)";
 				}
 			}
 		}
 
+		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';

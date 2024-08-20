@@ -27,7 +27,7 @@ class Themeforest_Data {
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'theme_wizard' ) );
-		add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
+		//add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
 	}
 
 	/**

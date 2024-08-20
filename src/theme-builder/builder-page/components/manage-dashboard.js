@@ -531,18 +531,18 @@ const ContentPreview = () => {
                             <img className='image' src={gtbAssetURL + '/img/mockup-upgrade-pro.png'} />
                             <p className='content-title'>{__('Upgrade To Gutenverse PRO', 'gutenverse-themes-builder')}</p>
                             <p className='content-description'>{__('Unlock the WordPress Editor\'s potential with Gutenverse PRO.', 'gutenverse-themes-builder')}</p>
-                            <div className='action-button'>{__('Subcsribe', 'gutenverse-themes-builder')}</div>
-                        </div>
-                        <div className='bottom'>
-                            <p className='content-title'>{__('Join Our Newsletter', 'gutenverse-themes-builder')}</p>
-                            <p className='content-description'>{__('Be the first to receive updates and stay informed about all our news', 'gutenverse-themes-builder')}</p>
-                            <input type='text' placeholder={__('Your Email', 'gutenverse-themes-builder')} />
                             <div className='action-button'>
                                 {__('Upgrade To PRO', 'gutenverse-themes-builder')}
                                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 11L0.5 2.75L4.625 6.5L7.25 2L9.875 6.5L14 2.75L12.5 11H2ZM12.5 13.25C12.5 13.7 12.2 14 11.75 14H2.75C2.3 14 2 13.7 2 13.25V12.5H12.5V13.25Z" fill="white" />
                                 </svg>
                             </div>
+                        </div>
+                        <div className='bottom'>
+                            <p className='content-title'>{__('Join Our Newsletter', 'gutenverse-themes-builder')}</p>
+                            <p className='content-description'>{__('Be the first to receive updates and stay informed about all our news', 'gutenverse-themes-builder')}</p>
+                            <input type='text' placeholder={__('Your Email', 'gutenverse-themes-builder')} />
+                            <div className='action-button'>{__('Subcsribe', 'gutenverse-themes-builder')}</div>
                         </div>
                     </div>
                 </div>;
@@ -657,7 +657,7 @@ const ManageDashbaord = () => {
                 }
             ]}
         >
-            <ContentPreview />
+            {/* <ContentPreview /> */}
             <div className='manage-dashboard'>
                 <p>{__('Select your dashboard mode:', 'gutenverse-themes-builder')}</p>
                 <div>
