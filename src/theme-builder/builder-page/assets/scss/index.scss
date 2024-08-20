@@ -995,9 +995,30 @@ body {
     }
 
     .manage-dashboard {
+        .custom-templates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 10px;
+            .image-wrapper {
+                width: 100%;
+                overflow: scroll;
+            }
+            .template-import {
+                >div {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 10px;
+                    label {
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+        }
         .template-import {
             padding: 20px;
             border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 8px;
         }
 
         .image-wrapper {
