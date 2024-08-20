@@ -136,7 +136,7 @@
             }
 
             .content-desc {
-                width: 100%;
+                width: 700px;
                 margin-top: 20px;
                 align-self: stretch;
                 flex-grow: 0;
@@ -648,10 +648,8 @@
         border-radius: 0 0 10px 10px;
 
         .logo {
-            width: 120px;
-
             img {
-                width: 100%;
+                height: 30px;
             }
         }
 

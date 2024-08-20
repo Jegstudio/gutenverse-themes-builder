@@ -27,14 +27,14 @@ class Themeforest_Data {
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'theme_wizard' ) );
-		//add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
+		add_action( 'admin_init', array( $this, 'theme_redirect' ), 99 );
 	}
 
 	/**
 	 * Wizard Menu.
 	 */
 	public function theme_wizard() {
-		if ( get_option( '{{slug}}_done' ) !== 'yes' ) {
+		if ( get_option( '{{slug}}_wizard_setup_done' ) !== 'yes' ) {
 			add_theme_page(
 				'Wizard Setup',
 				'Wizard Setup',
@@ -53,17 +53,17 @@ class Themeforest_Data {
 		?>
 		<div id="gutenverse-theme-wizard"></div>
 		<?php
-		if ( isset( $_POST['my_theme_wizard_done'] ) ) {
-			update_option( '{{slug}}_done', 'yes' );
-			wp_safe_redirect( admin_url() );
-			exit;
-		}
 	}
 
 	public function theme_redirect() {
-		if ( get_option( '{{slug}}_done' ) !== 'yes' && ( ! isset( $_GET['page'] ) || $_GET['page'] !== '{{slug}}-wizard' ) ) {
+		if ( get_option( '{{slug}}_wizard_init_done' ) !== 'yes' ) {
+			update_option( '{{slug}}_wizard_init_done', 'yes' );
 			wp_safe_redirect( admin_url( 'admin.php?page={{slug}}-wizard' ) );
 			exit;
+		}
+
+		if ( isset( $_GET['page'] ) && isset( $_GET['wizard_setup_done'] ) && $_GET['page'] === '{{slug}}-dashboard' && $_GET['wizard_setup_done'] === 'yes' ) {
+			update_option( '{{slug}}_wizard_setup_done', 'yes' );
 		}
 	}
 

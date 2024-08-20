@@ -130,7 +130,9 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
             case 'install':
             default:
                 return <Fragment>
-                    <div onClick={() => updateProgress('importTemplate', 1)} className='button-skip'>{__('Skip', 'gutenverse-temes-builder')}</div>
+                    <div onClick={() => {
+                            window.location.href = `${window['GutenThemeConfig']['dashboardPage']}`
+                    }} className='button-skip'>{__('Skip', 'gutenverse-temes-builder')}</div>
                     <div onClick={() => onInstall()} className='button-install'>{__('Install Required Plugins', 'gutenverse-temes-builder')}</div>
                 </Fragment>;
         }
@@ -220,7 +222,7 @@ const WizardPage = () => {
                         <h3 className='final-title'>{__('Congratulations All Set 🤩', 'gutenverse-themes-builder')}</h3>
                         <p className='final-desc'>{__('Gutenverse is a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', 'gutenverse-themes-builder')}</p>
                         <div onClick={() => {
-                            window.location.href = window['GutenThemeConfig']['dashboardPage']
+                            window.location.href = `${window['GutenThemeConfig']['dashboardPage']}&wizard_setup_done=yes`
                         }} className='button-visit'>{__('Visit Dashboard', 'gutenverse-temes-builder')}</div>
                     </div>
                 </div>;
