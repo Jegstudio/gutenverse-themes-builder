@@ -309,7 +309,7 @@ const SupportIcon = () => {
 }
 
 const DashboardPage = () => {
-    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', subscribed = false } = window['GutenThemeConfig'];
+    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', supportLink='https://support.jegtheme.com', subscribed = false } = window['GutenThemeConfig'];
     const [email, setEmail] = useState('');
     const [menu, setMenu] = useState('dashboard');
     const [pluginState, setPluginState] = useState('install');
@@ -487,7 +487,7 @@ const DashboardPage = () => {
                                 </div>
                                 <p className='content-title'>{__('Any Questions?', 'gutenverse-themes-builder')}</p>
                                 <p className='content-description'>{__('Our support team is ready to help you with any questions or problems.', 'gutenverse-themes-builder')}</p>
-                                <div className='action-button'>{__('Ask for Support', 'gutenverse-themes-builder')}</div>
+                                <div className='action-button' onClick={() => window.open(supportLink, '_blank')}>{__('Ask for Support', 'gutenverse-themes-builder')}</div>
                             </div>
                         </div>
                     </div>

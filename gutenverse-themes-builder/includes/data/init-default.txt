@@ -578,6 +578,7 @@ class Init {
 			'dashboardPage'=> admin_url( 'themes.php?page={{slug}}-dashboard' ),
 			'logo'         => {{theme_logo}},
 			'upgradePro'   => 'https://gutenverse.com/pro',
+			'supportLink'  => 'https://support.jegtheme.com',
 			'libraryApi'   => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
 			'pages'        => array(
 				{{page_list}}
