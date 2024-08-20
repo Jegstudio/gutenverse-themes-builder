@@ -114,39 +114,30 @@ class Themeforest_Data {
 		);
 
 		foreach ( $templates as $value ) {
-			if ( ! empty( $value->is_custom ) ) {
-				$query = new WP_Query(
+			if ( ! $title || $title === $value['title'] ) {
+				$query = new \WP_Query(
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => $value->title,
+						'title'          => $value['title'],
 						'posts_per_page' => 1,
 					)
 				);
 
 				if ( ! $query->have_posts() ) {
 					$new_page = array(
-						'post_title'    => $value->title,
+						'post_title'    => $value['title'],
 						'post_content'  => '',
 						'post_status'   => 'publish',
 						'post_type'     => 'page',
-						'page_template' => $value->slug,
+						'page_template' => $value['slug'],
 					);
 
 					$page_id = wp_insert_post( $new_page );
-				} else {
-					$post_id  = $query->post->ID;
-					$template = 'template-' . $value->slug;
+				}
 
-					if ( isset( $_POST[ $template ] ) ) {
-						$page_data = array(
-							'ID'            => $post_id,
-							'page_template' => $value->slug,
-						);
-						wp_update_post( $page_data );
-					} else {
-						//reassign
-					}
+				if ( $title ) {
+					break;
 				}
 			}
 		}

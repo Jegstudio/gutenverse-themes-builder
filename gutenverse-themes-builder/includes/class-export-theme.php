@@ -246,9 +246,11 @@ class Export_Theme {
 					continue;
 				}
 
+				$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
 				$assigns[] = "array(
 					'title' => '{$template['name']}',
 					'page'  => '{$template['page_name']}',
+					'slug'  => '{$slug}',
 					'thumb' => '{$template['thumbnail']['url']}',
 				)";
 			}
@@ -699,6 +701,7 @@ class Export_Theme {
 					$assigns[] = "array(
 						'title' => '{$template['name']}',
 						'page'  => '{$template['page_name']}',
+						'demo'  => '{$template['page_demo']}',
 						'thumb' => {$thumb_url},
 					)";
 				}

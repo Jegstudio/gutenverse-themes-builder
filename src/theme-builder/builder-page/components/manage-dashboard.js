@@ -631,10 +631,12 @@ const ManageDashbaord = () => {
                     }
                 });
 
+                const filteredCore = syncedTemplates.filter(template => template.category !== 'core')
+
                 setDashboardData({
                     ...dashboardData,
                     ...themeDataRes?.other?.dashboard,
-                    templates: syncedTemplates
+                    templates: filteredCore
                 });
             });
         });
