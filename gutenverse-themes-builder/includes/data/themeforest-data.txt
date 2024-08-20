@@ -150,7 +150,7 @@ class Themeforest_Data {
 			}
 		}
 
-		return null;
+		return true;
 	}
 
 	/**
