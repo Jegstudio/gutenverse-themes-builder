@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
@@ -292,7 +292,7 @@ const SupportIcon = () => {
 
 const DashboardPage = () => {
     const [menu, setMenu] = useState('dashboard');
-    const { logo, upgradePro = 'https://gutenverse.com/pro', subscribed = false } = window['GutenThemeConfig'];
+    const { home_url, version, logo, title, upgradePro = 'https://gutenverse.com/pro', subscribed = false } = window['GutenThemeConfig'];
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [invalid, setInvalid] = useState(false);
@@ -313,22 +313,6 @@ const DashboardPage = () => {
         }
     };
 
-    const afterSubscribed = () => {
-        apiFetch({
-            path: 'gutenverse-client/v1/subscribed',
-            method: 'POST',
-            data: {
-                subscribed: true,
-                email,
-            },
-        })
-            .then(() => {
-                setDone(true);
-                setEmail('');
-            })
-            .catch(() => { });
-    };
-
     const onSubscribe = () => {
         if (isEmpty(email)) {
             setInvalid('empty');
@@ -347,19 +331,17 @@ const DashboardPage = () => {
 
             subscribeNews({
                 email,
-                domain: url,
+                domain: home_url,
             })
-                .then((result) => {
-                    if (result.data) {
-                        afterSubscribed();
-                    } else {
-                        setLoading(false);
-                        setInvalid('error');
-                    }
+                .then(() => {
+                    setDone(true);
+                    setEmail('');
                 })
                 .catch(() => {
-                    setLoading(false);
                     setInvalid('error');
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
     };
@@ -381,14 +363,14 @@ const DashboardPage = () => {
                 return <div className='content-wrapper'>
                     <div className='content-left'>
                         <div className='top'>
-                            <p className='description'>{__('Welcome to Finalyze Theme 👋', 'gutenverse-themes-builder')}</p>
-                            <p className='version'>{__('version 1.0.0', 'gutenverse-themes-builder')}</p>
+                            <p className='description'>{sprintf(__('Welcome to %s Theme 👋', 'gutenverse-themes-builder'), title)}</p>
+                            <p className='version'>{__('version ', 'gutenverse-themes-builder')}{version}</p>
                         </div>
                         <div className='middle'>
                             <img className='background' src={images + '/bg-dashboard-tf.png'} />
                             <div className='detail'>
                                 <div className='texts'>
-                                    <p className='texts-title'>{__('Thank You For Choosing Finalyze', 'gutenverse-themes-builder')}</p>
+                                    <p className='texts-title'>{sprintf(__('Thank You For Choosing  %s', 'gutenverse-themes-builder'), title)}</p>
                                     <p className='texts-description'>{__('Thank you for bringing happiness to us, We really appreciate you for purchasing Finalyze Theme. Take advantage and get familiar with the features Finalyze offers and create a stunning site with ease.', 'gutenverse-themes-builder')}</p>
                                 </div>
                                 <div className='dancer'>
@@ -413,7 +395,7 @@ const DashboardPage = () => {
                                 </div>
                                 <p className='content-title'>{__('Install Demo', 'gutenverse-themes-builder')}</p>
                                 <p className='content-description'>{__('Importing the demo and style takes only one click. It is easily customizable.', 'gutenverse-themes-builder')}</p>
-                                <div className='action-button'>{__('Import Demo', 'gutenverse-themes-builder')}</div>
+                                <div className='action-button' onClick={() => setMenu('demo')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
                             </div>
                             <div className='content-3'>
                                 <Wave />

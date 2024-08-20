@@ -560,6 +560,8 @@ class Init {
 		}
 
 		return array(
+			'home_url'     => home_url(),
+			'version'      => {{constant}}_VERSION,
 			'images'       => {{constant}}_URI . '/assets/img/',
 			'title'        => esc_html__( '{{title}}', '{{slug}}' ),
 			'description'  => esc_html__( '{{description}}', '{{slug}}' ),
