@@ -805,6 +805,22 @@
                             text-align: left;
                             color: #011627;
                             margin: 0;
+
+                            .gradient-text {
+                                background: linear-gradient(93deg, #f045ff -14%, #4569ff 51%, #68e4f4 106%), linear-gradient(to right, #3f3bf7, #68e4f4), linear-gradient(to bottom, #fff3, #fff3);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                /* For non-webkit browsers */
+                                text-fill-color: transparent;
+                                /* For non-webkit browsers */
+                                position: relative;
+                            }
+
+                            .blink-icon {
+                                position: absolute;
+                                margin-top: -20px;
+                            }
                         }
 
                         .texts-description {
