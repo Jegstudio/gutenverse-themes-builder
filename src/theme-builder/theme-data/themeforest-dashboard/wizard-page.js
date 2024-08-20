@@ -89,7 +89,7 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 }).then(() => {
                     installPlugins(index + 1);
                 }).catch(() => {
-                    alert('Error during installing plugin');
+                    console.error('Error during installing plugin');
                 })
             } else if (!plugin?.active) {
                 wp?.apiFetch({
@@ -101,6 +101,7 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 }).then(() => {
                     installPlugins(index + 1);
                 }).catch(() => {
+                    console.error('Error during plugin activation');
                 })
             } else {
                 installPlugins(index + 1);

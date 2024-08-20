@@ -55,6 +55,13 @@ class Themeforest_Data {
 		<?php
 	}
 
+	/**
+	 * Check parameter.
+	 */
+	private function is_wizard_done() {
+		return isset( $_GET['page'] ) && isset( $_GET['wizard_setup_done'] ) && $_GET['page'] === '{{slug}}-dashboard' && $_GET['wizard_setup_done'] === 'yes';
+	}
+
 	public function theme_redirect() {
 		if ( get_option( '{{slug}}_wizard_init_done' ) !== 'yes' ) {
 			update_option( '{{slug}}_wizard_init_done', 'yes' );
@@ -62,7 +69,7 @@ class Themeforest_Data {
 			exit;
 		}
 
-		if ( isset( $_GET['page'] ) && isset( $_GET['wizard_setup_done'] ) && $_GET['page'] === '{{slug}}-dashboard' && $_GET['wizard_setup_done'] === 'yes' ) {
+		if ( $this->is_wizard_done() ) {
 			update_option( '{{slug}}_wizard_setup_done', 'yes' );
 		}
 	}
