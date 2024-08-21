@@ -114,7 +114,7 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 setAction('done');
             }, 1000);
         }
-            
+
     }
 
     const onInstall = () => {
@@ -180,6 +180,23 @@ const ImportTemplates = ({ updateProgress }) => {
     const [importerStatus, setImporterStatus] = useState(0)
     const [done, setDone] = useState(false)
 
+    const updateTemplateStatus = (title) => {
+        setTemplateList(prevTemplateList =>
+            prevTemplateList.map(template =>
+                template.title === title
+                    ? {
+                        ...template,
+                        status: {
+                            ...template.status,
+                            using_template: true,
+                            exists: true,
+                        },
+                    }
+                    : template
+            )
+        );
+    };
+
     const importTemplates = template => {
         setImporterStep([
             "Creating Pages",
@@ -200,6 +217,7 @@ const ImportTemplates = ({ updateProgress }) => {
         }).then(() => {
             setImporterStatus(`Assigning Templates: ${template.page}....`)
             setImporterCurrent(2);
+            updateTemplateStatus(template.title);
             setTimeout(() => {
                 setImporterStatus(`Done....`)
                 setImporterCurrent(3);
@@ -232,7 +250,7 @@ const ImportTemplates = ({ updateProgress }) => {
                         title: template.page
                     }
                 });
-
+                updateTemplateStatus(template.title);
                 setImporterStatus(`Assigning Templates: ${template.page}....`);
                 setImporterCurrent(i + 1);
 
@@ -278,7 +296,21 @@ const ImportTemplates = ({ updateProgress }) => {
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
-                            <div className='button-import-page' onClick={() => importTemplates(template)}>{__('Import Page', 'gutenverse-themes-builder')}</div>
+                            <div
+                                className={`button-import-page ${template?.status?.exists
+                                    ? (template?.status?.using_template ? 'imported' : 'switch')
+                                    : 'import'
+                                    }`}
+                                onClick={() => {
+                                    if (!template.status.using_template) {
+                                        importTemplates(template)
+                                    }
+                                }}
+                            >
+                                {template?.status?.exists
+                                    ? (template?.status?.using_template ? __('Imported', 'gutenverse-themes-builder') : __('Switch Template', 'gutenverse-themes-builder'))
+                                    : __('Import Page', 'gutenverse-themes-builder')}
+                            </div>
                             <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
                         </div>
                     </div>

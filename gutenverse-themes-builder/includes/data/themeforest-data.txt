@@ -134,7 +134,15 @@ class Themeforest_Data {
 					)
 				);
 
-				if ( ! $query->have_posts() ) {
+				if ( $query->have_posts() ) {
+					$existing_page = $query->posts[0];
+					wp_update_post(
+						array(
+							'ID'            => $existing_page->ID,
+							'page_template' => $value['slug'],
+						)
+					);
+				} else {
 					$new_page = array(
 						'post_title'    => $value['page'],
 						'post_content'  => '',
