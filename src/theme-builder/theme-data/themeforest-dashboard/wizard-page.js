@@ -74,42 +74,47 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
     };
 
     const installPlugins = (index = 0) => {
-        setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
         if (plugins && index < plugins.length) {
-            const plugin = plugins[index];
+            setTimeout(() => {
+                setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
+                const plugin = plugins[index];
 
-            if (!plugin?.installed) {
-                wp?.apiFetch({
-                    path: 'wp/v2/plugins',
-                    method: 'POST',
-                    data: {
-                        slug: plugin?.slug,
-                        status: 'active'
-                    },
-                }).then(() => {
+                if (!plugin?.installed) {
+                    wp?.apiFetch({
+                        path: 'wp/v2/plugins',
+                        method: 'POST',
+                        data: {
+                            slug: plugin?.slug,
+                            status: 'active'
+                        },
+                    }).then(() => {
+                        installPlugins(index + 1);
+                    }).catch(() => {
+                        console.error('Error during installing plugin');
+                    })
+                } else if (!plugin?.active) {
+                    wp?.apiFetch({
+                        path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
+                        method: 'POST',
+                        data: {
+                            status: 'active'
+                        }
+                    }).then(() => {
+                        installPlugins(index + 1);
+                    }).catch(() => {
+                        console.error('Error during plugin activation');
+                    })
+                } else {
                     installPlugins(index + 1);
-                }).catch(() => {
-                    console.error('Error during installing plugin');
-                })
-            } else if (!plugin?.active) {
-                wp?.apiFetch({
-                    path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
-                    method: 'POST',
-                    data: {
-                        status: 'active'
-                    }
-                }).then(() => {
-                    installPlugins(index + 1);
-                }).catch(() => {
-                    console.error('Error during plugin activation');
-                })
-            } else {
-                installPlugins(index + 1);
-            }
+                }
+            }, 1000);
         } else {
-            setAction('done');
             setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
+            setTimeout(() => {
+                setAction('done');
+            }, 1000);
         }
+            
     }
 
     const onInstall = () => {
