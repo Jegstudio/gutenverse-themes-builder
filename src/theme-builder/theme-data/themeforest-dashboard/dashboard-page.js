@@ -99,19 +99,20 @@ const ImportTemplates = () => {
     }
 
     const importAll = async () => {
-        const steps = [];
-        templateList.forEach(element => {
-            steps.push(element.title)
-        });
+        const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
+
+        const steps = filteredTemplateList.map(element => element.title);
         setImporterStep(steps);
         setDone(false);
         setModal(true);
-        for (let i = 0; i < templateList.length; i++) {
-            const template = templateList[i];
+
+        for (let i = 0; i < filteredTemplateList.length; i++) {
+            const template = filteredTemplateList[i];
 
             try {
                 setImporterNotice(`Creating “${template.title}” page in progress...`);
-                setImporterStatus(`Create Page: ${template.page}....`)
+                setImporterStatus(`Create Page: ${template.page}....`);
+
                 await wp?.apiFetch({
                     path: `gtb-themes-backend/v1/pages/assign`,
                     method: 'POST',
@@ -119,6 +120,7 @@ const ImportTemplates = () => {
                         title: template.page
                     }
                 });
+
                 updateTemplateStatus(template.title);
                 setImporterStatus(`Assigning Templates: ${template.page}....`);
                 setImporterCurrent(i + 1);
@@ -132,7 +134,7 @@ const ImportTemplates = () => {
 
         setTimeout(() => {
             setImporterStatus(`Done....`);
-            setImporterCurrent(templateList.length + 1);
+            setImporterCurrent(filteredTemplateList.length + 1);
             setTimeout(() => {
                 setDone(true);
             }, 500);
