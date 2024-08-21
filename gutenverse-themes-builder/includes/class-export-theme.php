@@ -701,11 +701,12 @@ class Export_Theme {
 							FS_CHMOD_FILE
 						);
 					}
-
+					$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
 					$assigns[] = "array(
 						'title' => '{$template['name']}',
 						'page'  => '{$template['page_name']}',
 						'demo'  => '{$template['page_demo']}',
+						'slug'  => '{$slug}',
 						'thumb' => {$thumb_url},
 					)";
 				}

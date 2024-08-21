@@ -124,19 +124,19 @@ class Themeforest_Data {
 		);
 
 		foreach ( $templates as $value ) {
-			if ( ! $title || $title === $value['title'] ) {
+			if ( ! $title || $title === $value['page'] ) {
 				$query = new \WP_Query(
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => $value['title'],
+						'title'          => $value['page'],
 						'posts_per_page' => 1,
 					)
 				);
 
 				if ( ! $query->have_posts() ) {
 					$new_page = array(
-						'post_title'    => $value['title'],
+						'post_title'    => $value['page'],
 						'post_content'  => '',
 						'post_status'   => 'publish',
 						'post_type'     => 'page',

@@ -169,15 +169,24 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
 const ImportTemplates = ({ updateProgress }) => {
     const { assign } = window['GutenThemeConfig'];
 
+    const [templateList, setTemplateList] = useState(assign);
+    const [importerStep, setImporterStep] = useState([
+        "Creating Pages",
+        "Assigning Templates",
+    ]);
     const [modal, setModal] = useState(false);
     const [importerNotice, setImporterNotice] = useState('')
     const [importerCurrent, setImporterCurrent] = useState(0)
     const [importerStatus, setImporterStatus] = useState(0)
     const [done, setDone] = useState(false)
 
-    const importTemplates = title => {
-        setImporterNotice(`Creating “${title}” page in progress...`);
-        setImporterStatus(`Create Page: ${title}....`)
+    const importTemplates = template => {
+        setImporterStep([
+            "Creating Pages",
+            "Assigning Templates",
+        ])
+        setImporterNotice(`Creating “${template.title}” page in progress...`);
+        setImporterStatus(`Create Page: ${template.page}....`)
         setImporterCurrent(1);
         setDone(false);
         setModal(true);
@@ -186,10 +195,10 @@ const ImportTemplates = ({ updateProgress }) => {
             path: `gtb-themes-backend/v1/pages/assign`,
             method: 'POST',
             data: {
-                title
+                title: template.page
             }
         }).then(() => {
-            setImporterStatus(`Assigning Templates: ${title}....`)
+            setImporterStatus(`Assigning Templates: ${template.page}....`)
             setImporterCurrent(2);
             setTimeout(() => {
                 setImporterStatus(`Done....`)
@@ -202,12 +211,51 @@ const ImportTemplates = ({ updateProgress }) => {
         })
     }
 
+    const importAll = async () => {
+        const steps = [];
+        templateList.forEach(element => {
+            steps.push(element.title)
+        });
+        setImporterStep(steps);
+        setDone(false);
+        setModal(true);
+        for (let i = 0; i < templateList.length; i++) {
+            const template = templateList[i];
+
+            try {
+                setImporterNotice(`Creating “${template.title}” page in progress...`);
+                setImporterStatus(`Create Page: ${template.page}....`)
+                await wp?.apiFetch({
+                    path: `gtb-themes-backend/v1/pages/assign`,
+                    method: 'POST',
+                    data: {
+                        title: template.page
+                    }
+                });
+
+                setImporterStatus(`Assigning Templates: ${template.page}....`);
+                setImporterCurrent(i + 1);
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+            } catch (error) {
+                console.error(`Failed to assign template for page: ${template.page}`, error);
+            }
+        }
+
+        setTimeout(() => {
+            setImporterStatus(`Done....`);
+            setImporterCurrent(templateList.length + 1);
+            setTimeout(() => {
+                setDone(true);
+            }, 500);
+        }, 500);
+    };
+
+
     return <div className='template-install'>
         {modal && <ImporterModal
-            importerStep={[
-                "Creating Pages",
-                "Assigning Templates",
-            ]}
+            importerStep={importerStep}
             importerNotice={importerNotice}
             importerCurrent={importerCurrent}
             importerStatus={importerStatus}
@@ -216,7 +264,7 @@ const ImportTemplates = ({ updateProgress }) => {
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', 'gutenverse-temes-builder')}</h1>
-            <div className='button-import-all' onClick={() => importTemplates(false)}>
+            <div className='button-import-all' onClick={() => importAll()}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.00033 13.3327C3.63366 13.3327 3.31966 13.202 3.05833 12.9407C2.79699 12.6793 2.66655 12.3656 2.66699 11.9993V9.99935H4.00033V11.9993H12.0003V9.99935H13.3337V11.9993C13.3337 12.366 13.203 12.68 12.9417 12.9413C12.6803 13.2027 12.3665 13.3331 12.0003 13.3327H4.00033ZM8.00033 10.666L4.66699 7.33268L5.60033 6.36602L7.33366 8.09935V2.66602H8.66699V8.09935L10.4003 6.36602L11.3337 7.33268L8.00033 10.666Z" fill="white" />
                 </svg>
@@ -224,13 +272,13 @@ const ImportTemplates = ({ updateProgress }) => {
             </div>
         </div>
         <div className='template-list'>
-            {assign?.map((template, key) => {
+            {templateList?.map((template, key) => {
                 return <div className='template-page' key={key}>
                     <img src={template?.thumb} />
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
-                            <div className='button-import-page' onClick={() => importTemplates(template?.title)}>{__('Import Page', 'gutenverse-themes-builder')}</div>
+                            <div className='button-import-page' onClick={() => importTemplates(template)}>{__('Import Page', 'gutenverse-themes-builder')}</div>
                             <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
                         </div>
                     </div>
