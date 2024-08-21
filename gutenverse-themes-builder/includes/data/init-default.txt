@@ -598,7 +598,7 @@ class Init {
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => $value['page'],
+						'title'          => '' !== $value['page'] ? $value['page'] : $value['title'],
 						'posts_per_page' => 1,
 					)
 				);

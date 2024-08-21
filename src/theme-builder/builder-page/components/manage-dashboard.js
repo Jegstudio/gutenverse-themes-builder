@@ -732,17 +732,6 @@ const ManageDashbaord = () => {
                                                 onChange={e => updateTemplateData(index, 'page_demo', e?.target?.value)}
                                             />
                                         </div>
-                                        <div>
-                                            <label htmlFor="exclude">
-                                                {__('Exclude this Template?', 'gutenverse-themes-builder')}
-                                            </label>
-                                            <input
-                                                type="checkbox"
-                                                name="exclude"
-                                                checked={template?.exclude}
-                                                onChange={e => updateTemplateData(index, 'exclude', e?.target?.checked)}
-                                            />
-                                        </div>
                                         <MediaSelect updateThumbnailData={value => updateTemplateData(index, 'thumbnail', value)} />
                                         {template?.thumbnail && <div className="image-wrapper">
                                             <img src={template?.thumbnail?.url} />

@@ -243,10 +243,6 @@ class Export_Theme {
 
 		if ( ! empty( $other['dashboard']['templates'] ) ) {
 			foreach ( $other['dashboard']['templates'] as $template ) {
-				if ( $template['exclude'] ) {
-					continue;
-				}
-
 				$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
 				$assigns[] = "array(
 					'title' => '{$template['name']}',
@@ -686,10 +682,6 @@ class Export_Theme {
 
 			if ( ! empty( $other['dashboard']['templates'] ) ) {
 				foreach ( $other['dashboard']['templates'] as $template ) {
-					if ( isset( $template['exclude'] ) ) {
-						continue;
-					}
-
 					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
 					$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
 					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $template['thumbnail']['filename'] . "'";

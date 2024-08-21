@@ -212,7 +212,7 @@ const ImportTemplates = ({ updateProgress }) => {
             path: `gtb-themes-backend/v1/pages/assign`,
             method: 'POST',
             data: {
-                title: template.page
+                title: template.title
             }
         }).then(() => {
             setImporterStatus(`Assigning Templates: ${template.page}....`)
@@ -248,7 +248,7 @@ const ImportTemplates = ({ updateProgress }) => {
                     path: `gtb-themes-backend/v1/pages/assign`,
                     method: 'POST',
                     data: {
-                        title: template.page
+                        title: template.title
                     }
                 });
 
