@@ -297,7 +297,7 @@ const ImportTemplates = ({ updateProgress }) => {
     </div>
 }
 
-const ImporterModal = ({
+export const ImporterModal = ({
     importerStep = [
         "Fetching Data",
         "Importing Assets",

@@ -3,6 +3,7 @@ import { useEffect, useState } from '@wordpress/element';
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import { Loader } from 'react-feather';
+import { ImporterModal } from './wizard-page';
 
 const CloseIcon = ({ fill = 'inherit' }) => <svg width="12" height="12" viewBox="0 0 12 12" fill={fill} xmlns="http://www.w3.org/2000/svg">
     <path d="M7.17593 6.00048L10.7593 2.42548C10.9162 2.26856 11.0043 2.05573 11.0043 1.83381C11.0043 1.6119 10.9162 1.39907 10.7593 1.24215C10.6023 1.08523 10.3895 0.99707 10.1676 0.99707C9.94567 0.99707 9.73285 1.08523 9.57593 1.24215L6.00093 4.82548L2.42593 1.24215C2.26901 1.08523 2.05618 0.99707 1.83426 0.99707C1.61234 0.99707 1.39951 1.08523 1.24259 1.24215C1.08567 1.39907 0.997516 1.6119 0.997516 1.83381C0.997516 2.05573 1.08567 2.26856 1.24259 2.42548L4.82593 6.00048L1.24259 9.57548C1.16449 9.65295 1.10249 9.74512 1.06018 9.84667C1.01788 9.94822 0.996094 10.0571 0.996094 10.1671C0.996094 10.2772 1.01788 10.3861 1.06018 10.4876C1.10249 10.5892 1.16449 10.6813 1.24259 10.7588C1.32006 10.8369 1.41223 10.8989 1.51378 10.9412C1.61533 10.9835 1.72425 11.0053 1.83426 11.0053C1.94427 11.0053 2.05319 10.9835 2.15474 10.9412C2.25629 10.8989 2.34846 10.8369 2.42593 10.7588L6.00093 7.17548L9.57593 10.7588C9.6534 10.8369 9.74556 10.8989 9.84711 10.9412C9.94866 10.9835 10.0576 11.0053 10.1676 11.0053C10.2776 11.0053 10.3865 10.9835 10.4881 10.9412C10.5896 10.8989 10.6818 10.8369 10.7593 10.7588C10.8374 10.6813 10.8994 10.5892 10.9417 10.4876C10.984 10.3861 11.0058 10.2772 11.0058 10.1671C11.0058 10.0571 10.984 9.94822 10.9417 9.84667C10.8994 9.74512 10.8374 9.65295 10.7593 9.57548L7.17593 6.00048Z" fill={fill} />
@@ -35,36 +36,103 @@ const subscribeNews = (data) => {
 };
 
 const ImportTemplates = () => {
-    const [selected, setSelected] = useState(false);
-    const [installing, setInstalling] = useState({ show: true, message: 'Preparing...', progress: '1/4' })
     const { assign } = window['GutenThemeConfig'];
 
-    const importingTemplate = () => {
-        setInstalling({ show: true, message: 'Installing Templates...', progress: '2/4' });
+    const [templateList, setTemplateList] = useState(assign);
+    const [importerStep, setImporterStep] = useState([
+        "Creating Pages",
+        "Assigning Templates",
+    ]);
+    const [modal, setModal] = useState(false);
+    const [importerNotice, setImporterNotice] = useState('')
+    const [importerCurrent, setImporterCurrent] = useState(0)
+    const [importerStatus, setImporterStatus] = useState(0)
+    const [done, setDone] = useState(false)
+
+    const importTemplates = template => {
+        setImporterStep([
+            "Creating Pages",
+            "Assigning Templates",
+        ])
+        setImporterNotice(`Creating “${template.title}” page in progress...`);
+        setImporterStatus(`Create Page: ${template.page}....`)
+        setImporterCurrent(1);
+        setDone(false);
+        setModal(true);
+
+        wp?.apiFetch({
+            path: `gtb-themes-backend/v1/pages/assign`,
+            method: 'POST',
+            data: {
+                title: template.page
+            }
+        }).then(() => {
+            setImporterStatus(`Assigning Templates: ${template.page}....`)
+            setImporterCurrent(2);
+            setTimeout(() => {
+                setImporterStatus(`Done....`)
+                setImporterCurrent(3);
+                setTimeout(() => {
+                    setDone(true);
+                }, 500)
+            }, 500)
+        }).catch(() => {
+        })
+    }
+
+    const importAll = async () => {
+        const steps = [];
+        templateList.forEach(element => {
+            steps.push(element.title)
+        });
+        setImporterStep(steps);
+        setDone(false);
+        setModal(true);
+        for (let i = 0; i < templateList.length; i++) {
+            const template = templateList[i];
+
+            try {
+                setImporterNotice(`Creating “${template.title}” page in progress...`);
+                setImporterStatus(`Create Page: ${template.page}....`)
+                await wp?.apiFetch({
+                    path: `gtb-themes-backend/v1/pages/assign`,
+                    method: 'POST',
+                    data: {
+                        title: template.page
+                    }
+                });
+
+                setImporterStatus(`Assigning Templates: ${template.page}....`);
+                setImporterCurrent(i + 1);
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+            } catch (error) {
+                console.error(`Failed to assign template for page: ${template.page}`, error);
+            }
+        }
+
         setTimeout(() => {
-            setPluginState('done');
-            setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
-        }, 4000);
+            setImporterStatus(`Done....`);
+            setImporterCurrent(templateList.length + 1);
+            setTimeout(() => {
+                setDone(true);
+            }, 500);
+        }, 500);
     };
 
     return <div className='template-install'>
-        {selected && <div className='install-popup-wrapper'>
-            <div className='install-popup'>
-                <div className='popup-header'>
-                    <h3>{__('Installing Progress', 'gutenverse-themes-builder')}</h3>
-                    <div onClick={() => setSelected(false)}>
-                        <CloseIcon />
-                    </div>
-                </div>
-                <div className='popup-body'></div>
-                <div className='popup-footer'>
-                    <ImportLoading message={installing?.message} progress={installing?.progress} />
-                </div>
-            </div>
-        </div>}
+        {modal && <ImporterModal
+            importerStep={importerStep}
+            importerNotice={importerNotice}
+            importerCurrent={importerCurrent}
+            importerStatus={importerStatus}
+            done={done}
+            close={() => { setModal(false) }}
+        />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', 'gutenverse-temes-builder')}</h1>
-            <div className='button-import-all' onClick={() => setSelected('all')}>
+            <div className='button-import-all' onClick={() => importAll()}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.00033 13.3327C3.63366 13.3327 3.31966 13.202 3.05833 12.9407C2.79699 12.6793 2.66655 12.3656 2.66699 11.9993V9.99935H4.00033V11.9993H12.0003V9.99935H13.3337V11.9993C13.3337 12.366 13.203 12.68 12.9417 12.9413C12.6803 13.2027 12.3665 13.3331 12.0003 13.3327H4.00033ZM8.00033 10.666L4.66699 7.33268L5.60033 6.36602L7.33366 8.09935V2.66602H8.66699V8.09935L10.4003 6.36602L11.3337 7.33268L8.00033 10.666Z" fill="white" />
                 </svg>
@@ -78,8 +146,8 @@ const ImportTemplates = () => {
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
-                            <div className='button-import-page' onClick={() => setSelected(template?.title)}>{__('Import Page', 'gutenverse-themes-builder')}</div>
-                            <div className='button-view-demo'>{__('View Demo', 'gutenverse-themes-builder')}</div>
+                            <div className='button-import-page' onClick={() => importTemplates(template)}>{__('Import Page', 'gutenverse-themes-builder')}</div>
+                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
                         </div>
                     </div>
                 </div>
@@ -309,7 +377,7 @@ const SupportIcon = () => {
 }
 
 const DashboardPage = () => {
-    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', supportLink='https://support.jegtheme.com', subscribed = false } = window['GutenThemeConfig'];
+    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', supportLink = 'https://support.jegtheme.com', subscribed = false } = window['GutenThemeConfig'];
     const [email, setEmail] = useState('');
     const [menu, setMenu] = useState('dashboard');
     const [pluginState, setPluginState] = useState('install');
