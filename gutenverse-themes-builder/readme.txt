@@ -3,7 +3,7 @@ Contributors: Jegstudio
 Tags: themes, builder, template, block, editor
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ For additional information and assistance, please visit our extensive <a href="h
 
 
 == Changelog ==
+
+= 1.0.1 =
+* Add new themes dashboard builder
 
 = 1.0.0 - 2024-08-17 =
 * Initial Release
