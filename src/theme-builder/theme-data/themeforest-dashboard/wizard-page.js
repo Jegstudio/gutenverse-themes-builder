@@ -146,7 +146,7 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
 
     return <div className='plugin-install'>
         <h1 className='content-title'>{__('Install Required Plugins', 'gutenverse-temes-builder')}</h1>
-        <p className='content-desc'>{__('To access the full range of theme features, please install and activate the required plugins. Your enhanced user experience is just a few steps away!', 'gutenverse-themes-builder')}</p>
+        <p className='content-desc'>{__('To access the full range of theme features, please install and activate the required plugins. Your enhanced user experience is just a few steps away!', '--gtb-theme-namespace--')}</p>
         <div className='plugin-list'>
             {plugins?.map((plugin, key) => {
                 return <div className='plugin-data' key={key}>
@@ -310,10 +310,10 @@ const ImportTemplates = ({ updateProgress }) => {
                                 }}
                             >
                                 {template?.status?.exists
-                                    ? (template?.status?.using_template ? __('Imported', 'gutenverse-themes-builder') : __('Switch Template', 'gutenverse-themes-builder'))
-                                    : __('Import Page', 'gutenverse-themes-builder')}
+                                    ? (template?.status?.using_template ? __('Imported', '--gtb-theme-namespace--') : __('Switch Template', '--gtb-theme-namespace--'))
+                                    : __('Import Page', '--gtb-theme-namespace--')}
                             </div>
-                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
+                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', '--gtb-theme-namespace--')}</div>
                         </div>
                     </div>
                 </div>
@@ -337,13 +337,13 @@ export const ImporterModal = ({
         "Importing Assets",
         "Deploying Content"
     ],
-    importerNotice = __('Importing “Home” demo in progress...', 'gutenverse-themes-builder'),
+    importerNotice = __('Importing “Home” demo in progress...', '--gtb-theme-namespace--'),
     importerCurrent = 2,
-    importerStatus = __('Import: Demo Home....', 'gutenverse-themes-builder'),
-    headerText = __('Important Notice', 'gutenverse-themes-builder'),
-    warnText = __('Please do not refresh or close the page while importing data is in progress.', 'gutenverse-themes-builder'),
-    completeTitle = __('Install Demo Completed', 'gutenverse-themes-builder'),
-    completeSubtitle = __('All Demo is successfully imported!', 'gutenverse-themes-builder'),
+    importerStatus = __('Import: Demo Home....', '--gtb-theme-namespace--'),
+    headerText = __('Important Notice', '--gtb-theme-namespace--'),
+    warnText = __('Please do not refresh or close the page while importing data is in progress.', '--gtb-theme-namespace--'),
+    completeTitle = __('Install Demo Completed', '--gtb-theme-namespace--'),
+    completeSubtitle = __('All Demo is successfully imported!', '--gtb-theme-namespace--'),
     done = false,
     close = () => { }
 }) => {
@@ -402,7 +402,7 @@ export const ImporterModal = ({
                         {completeSubtitle}
                     </div>
                     <div className='close-buttom' onClick={() => close()}>
-                        {__('Close', 'gutenverse-themes-builder')}
+                        {__('Close', '--gtb-theme-namespace--')}
                     </div>
                 </div>
             </> : <>
@@ -436,7 +436,7 @@ export const ImporterModal = ({
                                             <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" stroke="#D0D5DD" />
                                         </svg>}
                                         <div>{step}</div>
-                                        {importerCurrent > item ? <span className='completed'>{__('Completed', 'gutenverse-themes-builder')}</span> : importerCurrent == item ? <div className='loading'>
+                                        {importerCurrent > item ? <span className='completed'>{__('Completed', '--gtb-theme-namespace--')}</span> : importerCurrent == item ? <div className='loading'>
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M8 1C8.13261 1 8.25979 1.05268 8.35355 1.14645C8.44732 1.24021 8.5 1.36739 8.5 1.5V4.5C8.5 4.63261 8.44732 4.75979 8.35355 4.85355C8.25979 4.94732 8.13261 5 8 5C7.86739 5 7.74022 4.94732 7.64645 4.85355C7.55268 4.75979 7.5 4.63261 7.5 4.5V1.5C7.5 1.36739 7.55268 1.24021 7.64645 1.14645C7.74022 1.05268 7.86739 1 8 1ZM8 11C8.13261 11 8.25979 11.0527 8.35355 11.1464C8.44732 11.2402 8.5 11.3674 8.5 11.5V14.5C8.5 14.6326 8.44732 14.7598 8.35355 14.8536C8.25979 14.9473 8.13261 15 8 15C7.86739 15 7.74022 14.9473 7.64645 14.8536C7.55268 14.7598 7.5 14.6326 7.5 14.5V11.5C7.5 11.3674 7.55268 11.2402 7.64645 11.1464C7.74022 11.0527 7.86739 11 8 11ZM15 8C15 8.13261 14.9473 8.25979 14.8536 8.35355C14.7598 8.44732 14.6326 8.5 14.5 8.5H11.5C11.3674 8.5 11.2402 8.44732 11.1464 8.35355C11.0527 8.25979 11 8.13261 11 8C11 7.86739 11.0527 7.74022 11.1464 7.64645C11.2402 7.55268 11.3674 7.5 11.5 7.5H14.5C14.6326 7.5 14.7598 7.55268 14.8536 7.64645C14.9473 7.74022 15 7.86739 15 8ZM5 8C5 8.13261 4.94732 8.25979 4.85355 8.35355C4.75979 8.44732 4.63261 8.5 4.5 8.5H1.5C1.36739 8.5 1.24021 8.44732 1.14645 8.35355C1.05268 8.25979 1 8.13261 1 8C1 7.86739 1.05268 7.74022 1.14645 7.64645C1.24021 7.55268 1.36739 7.5 1.5 7.5H4.5C4.63261 7.5 4.75979 7.55268 4.85355 7.64645C4.94732 7.74022 5 7.86739 5 8ZM3.05 3.05C3.14376 2.95626 3.27092 2.90361 3.4035 2.90361C3.53608 2.90361 3.66324 2.95626 3.757 3.05L5.88 5.172C5.97108 5.2663 6.02148 5.3926 6.02034 5.5237C6.0192 5.6548 5.96661 5.7802 5.87391 5.87291C5.78121 5.96561 5.6558 6.0182 5.5247 6.01934C5.3936 6.02048 5.2673 5.97008 5.173 5.879L3.05 3.757C2.95626 3.66324 2.90361 3.53608 2.90361 3.4035C2.90361 3.27092 2.95626 3.14376 3.05 3.05ZM10.121 10.121C10.2148 10.0273 10.3419 9.97461 10.4745 9.97461C10.6071 9.97461 10.7342 10.0273 10.828 10.121L12.95 12.243C13.0411 12.3373 13.0915 12.4636 13.0903 12.5947C13.0892 12.7258 13.0366 12.8512 12.9439 12.9439C12.8512 13.0366 12.7258 13.0892 12.5947 13.0903C12.4636 13.0915 12.3373 13.0411 12.243 12.95L10.121 10.828C10.0273 10.7342 9.97461 10.6071 9.97461 10.4745C9.97461 10.3419 10.0273 10.2148 10.121 10.121ZM12.95 3.051C13.0434 3.14472 13.0959 3.27166 13.0959 3.404C13.0959 3.53634 13.0434 3.66328 12.95 3.757L10.828 5.88C10.7337 5.97108 10.6074 6.02148 10.4763 6.02034C10.3452 6.0192 10.2198 5.96661 10.1271 5.87391C10.0344 5.78121 9.9818 5.6558 9.98066 5.5247C9.97952 5.3936 10.0299 5.2673 10.121 5.173L12.243 3.051C12.3368 2.95726 12.4639 2.90461 12.5965 2.90461C12.7291 2.90461 12.8562 2.95726 12.95 3.051ZM5.879 10.121C5.97274 10.2148 6.02539 10.3419 6.02539 10.4745C6.02539 10.6071 5.97274 10.7342 5.879 10.828L3.757 12.95C3.6627 13.0411 3.5364 13.0915 3.4053 13.0903C3.2742 13.0892 3.14879 13.0366 3.05609 12.9439C2.96339 12.8512 2.9108 12.7258 2.90966 12.5947C2.90852 12.4636 2.95892 12.3373 3.05 12.243L5.172 10.121C5.26576 10.0273 5.39292 9.97461 5.5255 9.97461C5.65808 9.97461 5.78524 10.0273 5.879 10.121Z" fill="#3B57F7" />
                                             </svg>
@@ -481,8 +481,8 @@ const WizardPage = () => {
                         <img className='image-done' src={images + '/final.png'} />
                     </div>
                     <div className='final-detail'>
-                        <h3 className='final-title'>{__('Congratulations All Set 🤩', 'gutenverse-themes-builder')}</h3>
-                        <p className='final-desc'>{__('Gutenverse is a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', 'gutenverse-themes-builder')}</p>
+                        <h3 className='final-title'>{__('Congratulations All Set 🤩', '--gtb-theme-namespace--')}</h3>
+                        <p className='final-desc'>{__('Gutenverse is a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
                         <div onClick={() => {
                             window.location.href = `${window['GutenThemeConfig']['dashboardPage']}&wizard_setup_done=yes`
                         }} className='button-visit'>{__('Visit Dashboard', 'gutenverse-temes-builder')}</div>

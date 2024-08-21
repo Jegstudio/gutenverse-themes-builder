@@ -178,10 +178,10 @@ const ImportTemplates = () => {
                                 }}
                             >
                                 {template?.status?.exists
-                                    ? (template?.status?.using_template ? __('Imported', 'gutenverse-themes-builder') : __('Switch Template', 'gutenverse-themes-builder'))
-                                    : __('Import Page', 'gutenverse-themes-builder')}
+                                    ? (template?.status?.using_template ? __('Imported', '--gtb-theme-namespace--') : __('Switch Template', '--gtb-theme-namespace--'))
+                                    : __('Import Page', '--gtb-theme-namespace--')}
                             </div>
-                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
+                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', '--gtb-theme-namespace--')}</div>
                         </div>
                     </div>
                 </div>
@@ -531,7 +531,7 @@ const DashboardPage = () => {
                 </div>;
             case 'install':
             default:
-                return <div className='action-button plugin-install' onClick={onInstall}>{__('Install Plugins', 'gutenverse-themes-builder')}</div>;
+                return <div className='action-button plugin-install' onClick={onInstall}>{__('Install Plugins', '--gtb-theme-namespace--')}</div>;
         }
     }
 
@@ -545,18 +545,18 @@ const DashboardPage = () => {
                 return <div className='content-wrapper'>
                     <div className='content-left'>
                         <div className='top'>
-                            <p className='description'>{sprintf(__('Welcome to %s Theme 👋', 'gutenverse-themes-builder'), title)}</p>
-                            <p className='version'>{__('version ', 'gutenverse-themes-builder')}{version}</p>
+                            <p className='description'>{sprintf(__('Welcome to %s Theme 👋', '--gtb-theme-namespace--'), title)}</p>
+                            <p className='version'>{__('version ', '--gtb-theme-namespace--')}{version}</p>
                         </div>
                         <div className='middle'>
                             <img className='background' src={images + '/bg-dashboard-tf.png'} />
                             <div className='detail'>
                                 <div className='texts'>
                                     <p className='texts-title'>
-                                        {__('Thank You For Choosing ', 'gutenverse-themes-builder')}
+                                        {__('Thank You For Choosing ', '--gtb-theme-namespace--')}
                                         <span className='gradient-text'>{title}<BlinkIcon /></span>
                                     </p>
-                                    <p className='texts-description'>{__('Thank you for bringing happiness to us, We really appreciate you for purchasing Finalyze Theme. Take advantage and get familiar with the features Finalyze offers and create a stunning site with ease.', 'gutenverse-themes-builder')}</p>
+                                    <p className='texts-description'>{__('Thank you for bringing happiness to us, We really appreciate you for purchasing Finalyze Theme. Take advantage and get familiar with the features Finalyze offers and create a stunning site with ease.', '--gtb-theme-namespace--')}</p>
                                 </div>
                                 <div className='dancer'>
                                     <img src={images + '/image-dancer.png'} />
@@ -569,8 +569,8 @@ const DashboardPage = () => {
                                 <div className='content-icon'>
                                     <PluginIcon />
                                 </div>
-                                <p className='content-title'>{__('Plugin Requirements', 'gutenverse-themes-builder')}</p>
-                                <p className='content-description'>{__('Install and activate the required plugins to unlock all theme features.', 'gutenverse-themes-builder')}</p>
+                                <p className='content-title'>{__('Plugin Requirements', '--gtb-theme-namespace--')}</p>
+                                <p className='content-description'>{__('Install and activate the required plugins to unlock all theme features.', '--gtb-theme-namespace--')}</p>
                                 {pluginButton()}
                             </div>
                             <div className='content-2'>
@@ -578,18 +578,18 @@ const DashboardPage = () => {
                                 <div className='content-icon'>
                                     <DemoIcon />
                                 </div>
-                                <p className='content-title'>{__('Install Demo', 'gutenverse-themes-builder')}</p>
-                                <p className='content-description'>{__('Importing the demo and style takes only one click. It is easily customizable.', 'gutenverse-themes-builder')}</p>
-                                <div className='action-button' onClick={() => setMenu('demo')}>{__('View Demo', 'gutenverse-themes-builder')}</div>
+                                <p className='content-title'>{__('Install Demo', '--gtb-theme-namespace--')}</p>
+                                <p className='content-description'>{__('Importing the demo and style takes only one click. It is easily customizable.', '--gtb-theme-namespace--')}</p>
+                                <div className='action-button' onClick={() => setMenu('demo')}>{__('View Demo', '--gtb-theme-namespace--')}</div>
                             </div>
                             <div className='content-3'>
                                 <Wave />
                                 <div className='content-icon'>
                                     <SupportIcon />
                                 </div>
-                                <p className='content-title'>{__('Any Questions?', 'gutenverse-themes-builder')}</p>
-                                <p className='content-description'>{__('Our support team is ready to help you with any questions or problems.', 'gutenverse-themes-builder')}</p>
-                                <div className='action-button' onClick={() => window.open(supportLink, '_blank')}>{__('Ask for Support', 'gutenverse-themes-builder')}</div>
+                                <p className='content-title'>{__('Any Questions?', '--gtb-theme-namespace--')}</p>
+                                <p className='content-description'>{__('Our support team is ready to help you with any questions or problems.', '--gtb-theme-namespace--')}</p>
+                                <div className='action-button' onClick={() => window.open(supportLink, '_blank')}>{__('Ask for Support', '--gtb-theme-namespace--')}</div>
                             </div>
                         </div>
                     </div>
@@ -597,20 +597,20 @@ const DashboardPage = () => {
                         <div className='top'>
                             <img className='background' src={images + '/bg-upgrade-pro.png'} />
                             <img className='image' src={images + '/mockup-upgrade-pro.png'} />
-                            <p className='content-title'>{__('Upgrade To ', 'gutenverse-themes-builder')}<span className='gradient-text'>{__('Gutenverse PRO', 'gutenverse-themes-builder')}</span></p>
-                            <p className='content-description'>{__('Unlock the WordPress Editor\'s potential with Gutenverse PRO.', 'gutenverse-themes-builder')}</p>
+                            <p className='content-title'>{__('Upgrade To ', '--gtb-theme-namespace--')}<span className='gradient-text'>{__('Gutenverse PRO', '--gtb-theme-namespace--')}</span></p>
+                            <p className='content-description'>{__('Unlock the WordPress Editor\'s potential with Gutenverse PRO.', '--gtb-theme-namespace--')}</p>
                             <div className='action-button' onClick={() => { window.open(upgradePro, '_blank'); }}>
-                                {__('Upgrade To PRO', 'gutenverse-themes-builder')}
+                                {__('Upgrade To PRO', '--gtb-theme-namespace--')}
                                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 11L0.5 2.75L4.625 6.5L7.25 2L9.875 6.5L14 2.75L12.5 11H2ZM12.5 13.25C12.5 13.7 12.2 14 11.75 14H2.75C2.3 14 2 13.7 2 13.25V12.5H12.5V13.25Z" fill="white" />
                                 </svg>
                             </div>
                         </div>
                         <div className='bottom'>
-                            <p className='content-title'>{__('Join Our Newsletter', 'gutenverse-themes-builder')}</p>
-                            <p className='content-description'>{__('Be the first to receive updates and stay informed about all our news', 'gutenverse-themes-builder')}</p>
-                            <input type='text' placeholder={__('Your Email', 'gutenverse-themes-builder')} value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-                            <div className='action-button' onClick={onSubscribe}>{__('Subcsribe', 'gutenverse-themes-builder')}</div>
+                            <p className='content-title'>{__('Join Our Newsletter', '--gtb-theme-namespace--')}</p>
+                            <p className='content-description'>{__('Be the first to receive updates and stay informed about all our news', '--gtb-theme-namespace--')}</p>
+                            <input type='text' placeholder={__('Your Email', '--gtb-theme-namespace--')} value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
+                            <div className='action-button' onClick={onSubscribe}>{__('Subcsribe', '--gtb-theme-namespace--')}</div>
                             {invalid && !done && <span className="warning">{invalidMessage()}</span>}
                         </div>
                     </div>
@@ -620,10 +620,10 @@ const DashboardPage = () => {
 
     return <div className='themeforest-dashboard'>
         <div className='dashboard-header'>
-            <div className='logo'>{logo ? <img src={logo} /> : __('LOGO', 'gutenverse-themes-builder')}</div>
+            <div className='logo'>{logo ? <img src={logo} /> : __('LOGO', '--gtb-theme-namespace--')}</div>
             <ul className='menu'>
-                <li onClick={() => setMenu('dashboard')} className={`${menu === 'dashboard' ? 'active' : ''}`}>{__('Dashboard', 'gutenverse-themes-builder')}</li>
-                <li onClick={() => setMenu('demo')} className={`${menu === 'demo' ? 'active' : ''}`}>{__('Demo', 'gutenverse-themes-builder')}</li>
+                <li onClick={() => setMenu('dashboard')} className={`${menu === 'dashboard' ? 'active' : ''}`}>{__('Dashboard', '--gtb-theme-namespace--')}</li>
+                <li onClick={() => setMenu('demo')} className={`${menu === 'demo' ? 'active' : ''}`}>{__('Demo', '--gtb-theme-namespace--')}</li>
             </ul>
         </div>
         <div className='dashboard-content'>

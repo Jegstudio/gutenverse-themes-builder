@@ -603,7 +603,13 @@ class Export_Theme {
 
 		if ( ! empty( $other['dashboard'] ) ) {
 			if ( isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/themeforest/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				$dashboard_script = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/themeforest/theme-dashboard.js' );
+				$dashboard_script = str_replace( '--gtb-theme-namespace--', $theme_data['slug'], $dashboard_script );
+				$system->put_contents(
+					gtb_theme_built_path() . 'assets/js/theme-dashboard.js',
+					$dashboard_script,
+					FS_CHMOD_FILE
+				);
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gtb_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
