@@ -570,7 +570,7 @@ class Init {
 			'note'         => esc_html__( '', '{{slug}}' ),
 			'note2'        => esc_html__( '', '{{slug}}' ),
 			'demo'         => esc_html__( '', '{{slug}}' ),
-			'demoUrl'      => esc_url( 'https:/gutenverse.com/demo?name={{slug}}' ),
+			'demoUrl'      => esc_url( 'https://gutenverse.com/demo?name={{slug}}' ),
 			'install'      => '',
 			'installText'  => esc_html__( 'Install Gutenverse Plugin', '{{slug}}' ),
 			'activateText' => esc_html__( 'Activate Gutenverse Plugin', '{{slug}}' ),
