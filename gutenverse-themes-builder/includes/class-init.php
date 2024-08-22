@@ -62,18 +62,24 @@ class Init {
 	 * Load custom theme Json
 	 */
 	public function load_custom_theme_json() {
-		$theme_dir = gtb_theme_folder_path( null, true );
+		$theme_dir = gtb_theme_folder_path();
 		$json_path = $theme_dir . 'theme.json';
 
 		if ( file_exists( $json_path ) && strpos( get_stylesheet(), 'gutenverse-basic' ) !== false ) {
 			add_filter(
 				'wp_theme_json_data_theme',
 				function ( $theme_json ) use ( $json_path ) {
-					$content = '';
-					$file    = wp_remote_get( $json_path );
+					global $wp_filesystem;
 
-					if ( ! is_wp_error( $file ) ) {
-						$content = wp_remote_retrieve_body( $file );
+					if (empty($wp_filesystem)) {
+						require_once ABSPATH . 'wp-admin/includes/file.php';
+						WP_Filesystem();
+					}
+
+					$content = '';
+
+					if ( $wp_filesystem->exists( $json_path ) ) {
+						$content = $wp_filesystem->get_contents($json_path);
 					}
 
 					$custom_theme_json = json_decode( $content, true );
