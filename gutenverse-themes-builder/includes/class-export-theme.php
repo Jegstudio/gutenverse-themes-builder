@@ -659,18 +659,13 @@ class Export_Theme {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
 		$add_class  = array();
-
-		if ( ! empty( $other['dashboard'] ) || 'themeforest' === $other['dashboard']['mode'] ) {
-			$add_class[] = 'new Themeforest_Data();';
-		}
-
-		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
-
 		$assigns    = array();
-		$theme_logo = '';
-		if ( ! empty( $other['dashboard'] ) ) {
-			$theme_data = maybe_unserialize( $data['theme_data'] );
-			$theme_slug = $this->get_constant_name( $theme_data['slug'] );
+		$theme_logo = '""';
+
+		if ( ! empty( $other['dashboard'] ) && 'themeforest' === $other['dashboard']['mode'] ) {
+			$add_class[] = 'new Themeforest_Data();';
+			$theme_data  = maybe_unserialize( $data['theme_data'] );
+			$theme_slug  = $this->get_constant_name( $theme_data['slug'] );
 
 			if ( isset( $other['dashboard']['logo'] ) ) {
 				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
@@ -713,6 +708,7 @@ class Export_Theme {
 
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
+		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
