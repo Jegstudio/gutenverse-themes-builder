@@ -632,7 +632,7 @@ class Export_Theme {
 		if ( ! empty( $other['plugins'] ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
-				$result = plugins_api(
+				$result      = plugins_api(
 					'plugin_information',
 					array(
 						'slug'   => $plugin['value'],
@@ -642,14 +642,20 @@ class Export_Theme {
 						),
 					)
 				);
-				$icons  = var_export( $result->icons, true );
+				$icons       = var_export( $result->icons, true );
+				$description = $result->sections['description'];
+				$short_desc  = '';
+				if ( preg_match( '/<p[^>]*>(.*?)<\/p>/', $description, $matches ) ) {
+					$short_desc = wp_strip_all_tags( $matches[1] );
+				}
 
 				$required[] = "array(
-					'slug'      => '{$plugin['value']}',
-					'title'     => '{$plugin['label']}',
-					'active'    => in_array( '{$plugin['value']}', \$plugins, true ),
-					'installed' => \$this->is_installed( '{$plugin['value']}' ),
-					'icons'     => {$icons},
+					'slug'       => '{$plugin['value']}',
+					'title'      => '{$plugin['label']}',
+					'short_desc' => '{$short_desc}',
+					'active'     => in_array( '{$plugin['value']}', \$plugins, true ),
+					'installed'  => \$this->is_installed( '{$plugin['value']}' ),
+					'icons'      => {$icons},
 				)";
 			}
 		}

@@ -155,7 +155,7 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                     </div>
                     <div className='plugin-detail'>
                         <h3 className='plugin-title'>{boldWord(plugin?.title, 'Gutenverse')}</h3>
-                        <p className='plugin-desc'>{`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius risus dolor, vitae ornare metus porta ac. Nulla dignissim velit tellus, sed aliquam est mattis et.`}</p>
+                        <p className='plugin-desc'>{plugin?.short_desc.toLowerCase()}</p>
                     </div>
                 </div>;
             })}
