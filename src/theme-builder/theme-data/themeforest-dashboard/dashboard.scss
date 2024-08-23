@@ -304,6 +304,10 @@
                 width: 100%;
                 display: flex;
                 justify-content: center;
+
+                img {
+                    width: 725px;
+                }
             }
 
             .final-detail {
@@ -349,6 +353,10 @@
                     text-align: center;
                     color: #fff;
                     margin-top: 24px;
+
+                    &:hover {
+                        background-color: #2435ec;
+                    }
                 }
             }
         }
@@ -384,6 +392,10 @@
             font-weight: 500;
             text-align: left;
             color: #fff;
+
+            &:hover {
+                background-color: #2435ec;
+            }
         }
     }
 
@@ -391,11 +403,10 @@
         display: flex;
         flex-wrap: wrap;
         padding: 50px 40px;
-        column-gap: 20px;
-        row-gap: 30px;
+        gap: 30px;
 
         .template-page {
-            width: calc(33.33% - 16px);
+            width: calc(33.33% - 22px);
             height: 350px;
             border-radius: 8px;
             border: solid 1px #e3e4e6;
@@ -526,6 +537,11 @@
             font-weight: 500;
             text-align: center;
             color: #3b57f7;
+
+            &:hover {
+                background: #3b57f7;
+                color: #fff;
+            }
         }
     }
 
