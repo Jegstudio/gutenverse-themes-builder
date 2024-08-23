@@ -237,7 +237,7 @@ class Export_Theme {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
 
-		if ( empty( $other['dashboard'] ) || 'default' === $other['dashboard']['mode'] ) {
+		if ( empty( $other['dashboard'] ) || ( isset( $other['dashboard']['mode'] ) && 'default' === $other['dashboard']['mode']['value'] ) ) {
 			return;
 		}
 
@@ -660,9 +660,9 @@ class Export_Theme {
 		$other      = maybe_unserialize( $data['other'] );
 		$add_class  = array();
 		$assigns    = array();
-		$theme_logo = '""';
+		$theme_logo = 'false';
 
-		if ( ! empty( $other['dashboard'] ) && 'themeforest' === $other['dashboard']['mode'] ) {
+		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$add_class[] = 'new Themeforest_Data();';
 			$theme_data  = maybe_unserialize( $data['theme_data'] );
 			$theme_slug  = $this->get_constant_name( $theme_data['slug'] );
