@@ -952,6 +952,10 @@
                 text-align: left;
                 color: #011627;
 
+                &:hover {
+                    color: #3b57f7;
+                }
+
                 &.active {
                     color: #3b57f7;
                     border-bottom: solid 2px #3b57f7;
@@ -1030,7 +1034,7 @@
             .middle {
                 border: solid 1px #e7f1ff;
                 position: relative;
-                border-radius: 10px;
+                border-radius: 20px;
                 overflow: hidden;
                 margin: 0 0 30px 0;
 
@@ -1056,6 +1060,8 @@
                         border-image-source: linear-gradient(359deg, #fff 131%, #fff0 15%);
                         border-image-slice: 1;
                         background-image: linear-gradient(to bottom, #fff, #fff0 200%);
+                        margin-top: -2px;
+                        margin-bottom: -5px;
 
                         img {
                             width: 232px;
@@ -1063,10 +1069,11 @@
                     }
 
                     .texts {
-                        padding: 30px;
+                        padding: 40px 60px 40px 30px;
                         display: flex;
                         flex-wrap: wrap;
-                        align-items: stretch;
+                        // align-items: stretch;
+                        align-content: space-between;
 
                         .texts-title {
                             width: 100%;
@@ -1102,10 +1109,10 @@
                             width: 100%;
                             font-family: Inter;
                             font-size: 14px;
-                            font-weight: normal;
+                            font-weight: 300;
                             font-stretch: normal;
                             font-style: normal;
-                            line-height: 1.4;
+                            line-height: 1.5;
                             letter-spacing: normal;
                             text-align: left;
                             color: #40505d;
@@ -1127,7 +1134,7 @@
                     flex-direction: column;
                     justify-content: flex-end;
                     align-items: flex-start;
-                    padding: 40px 30px 30px;
+                    padding: 57px 30px 30px;
                     border-radius: 15px;
                     border: solid 1px #e7f1ff;
                     background-color: #fff3;
@@ -1151,7 +1158,7 @@
                     .content-description {
                         font-family: Inter;
                         font-size: 14px;
-                        font-weight: normal;
+                        font-weight: 300;
                         font-stretch: normal;
                         font-style: normal;
                         line-height: 1.43;
@@ -1181,25 +1188,6 @@
 
                 .content-1 {
                     .action-button {
-                        cursor: pointer;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 10px;
-                        padding: 10px 22px 12px;
-                        border-radius: 8px;
-                        background-color: #3b57f7;
-                        font-family: Inter;
-                        font-size: 14px;
-                        font-weight: 500;
-                        font-stretch: normal;
-                        font-style: normal;
-                        line-height: normal;
-                        letter-spacing: normal;
-                        text-align: center;
-                        color: #fff;
-
                         &.plugin-loading {
                             min-width: 100px;
                         }
@@ -1208,6 +1196,16 @@
                             cursor: default;
                             background-color: #99a2a9;
                             padding: 10px 18px 12px;
+                            color: #fff;
+                            border-color: #99a2a9;
+
+                            &:hover {
+                                cursor: default;
+                                background-color: #99a2a9;
+                                padding: 10px 18px 12px;
+                                color: #fff;
+                                border-color: #99a2a9;
+                            }
                         }
 
                         .rotating {
@@ -1220,6 +1218,7 @@
                     }
                 }
 
+                .content-1,
                 .content-2,
                 .content-3 {
                     .action-button {
@@ -1234,13 +1233,35 @@
                         border: solid 1px #3b57f7;
                         font-family: Inter;
                         font-size: 14px;
-                        font-weight: 500;
+                        font-weight: 400;
                         font-stretch: normal;
                         font-style: normal;
                         line-height: normal;
                         letter-spacing: normal;
                         text-align: center;
                         color: #3b57f7;
+                        transition: border .5s ease, color .5s ease, background-color .5s ease;
+
+                        &:hover {
+                            cursor: pointer;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 10px 22px 12px;
+                            border-radius: 8px;
+                            background-color: #3b57f7;
+                            font-family: Inter;
+                            font-size: 14px;
+                            font-weight: 400;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: normal;
+                            letter-spacing: normal;
+                            text-align: center;
+                            color: #fff;
+                        }
                     }
                 }
             }
@@ -1267,7 +1288,9 @@
                 .image {
                     width: 100%;
                     z-index: 2;
-                    position: relative;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                 }
 
                 .content-title {
@@ -1282,6 +1305,7 @@
                     z-index: 2;
                     position: relative;
                     margin: 0;
+                    margin-top: 170px;
 
                     .gradient-text {
                         background: linear-gradient(93deg, #f045ff -14%, #4569ff 51%, #68e4f4 106%), linear-gradient(to right, #3f3bf7, #68e4f4), linear-gradient(to bottom, #fff3, #fff3);
@@ -1323,7 +1347,7 @@
                     position: relative;
                     font-family: Inter;
                     font-size: 14px;
-                    font-weight: 600;
+                    font-weight: 500;
                     font-stretch: normal;
                     font-style: normal;
                     line-height: normal;
@@ -1331,12 +1355,30 @@
                     text-align: center;
                     color: #fff;
                     margin: 16px 0 0;
+                    transition: transform .5s ease, color .5s ease;
+
+                    svg {
+                        path {
+                            transition: fill .5s ease;
+                        }
+                    }
+
+                    &:hover {
+                        color: hsla(0, 0%, 100%, .749);
+                        transform: scale(.94);
+
+                        svg {
+                            path {
+                                fill: hsla(0, 0%, 100%, .749);
+                            }
+                        }
+                    }
                 }
             }
 
             .bottom {
                 border-radius: 14px;
-                background-image: radial-gradient(circle at 50% 0%, #05131f00, #3996e6 128%), linear-gradient(to bottom, #05131f, #05131f);
+                background-image: radial-gradient(circle at 50% 0%, #05131f00, #2e618d 128%), linear-gradient(to bottom, #05131f, #05131f);
                 padding: 30px;
                 margin-top: 30px;
                 position: relative;
@@ -1374,6 +1416,7 @@
                     background-color: #fff;
                     width: 100%;
                     margin-top: 24px;
+                    border: unset;
                 }
 
                 .action-button {
@@ -1397,6 +1440,12 @@
                     text-align: left;
                     color: #fff;
                     margin-top: 16px;
+                    transition: transform .5s ease, color .5s ease;
+
+                    &:hover {
+                        color: hsla(0, 0%, 100%, .749);
+                        transform: scale(.94);
+                    }
                 }
 
                 .warning {

@@ -15,12 +15,12 @@ const BlinkIcon = () => <span className='blink-icon'>
         <path d="M13.1535 11.3184C12.4535 13.392 11.8862 13.9594 9.8125 14.6593C11.8862 15.3591 12.4535 15.9265 13.1535 18.0002C13.8533 15.9265 14.4207 15.3591 16.4943 14.6593C14.4207 13.9594 13.8533 13.392 13.1535 11.3184Z" fill="url(#paint1_linear_19089_7751)" />
         <defs>
             <linearGradient id="paint0_linear_19089_7751" x1="1.5998" y1="-4.72723" x2="18.2853" y2="20.486" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#65DCF5" />
-                <stop offset="1" stop-color="#65DCF5" stop-opacity="0" />
+                <stop stopColor="#65DCF5" />
+                <stop offset="1" stopColor="#65DCF5" stopOpacity="0" />
             </linearGradient>
             <linearGradient id="paint1_linear_19089_7751" x1="10.6853" y1="8.73945" x2="19.788" y2="22.4943" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#65DCF5" />
-                <stop offset="1" stop-color="#65DCF5" stop-opacity="0" />
+                <stop stopColor="#65DCF5" />
+                <stop offset="1" stopColor="#65DCF5" stopOpacity="0" />
             </linearGradient>
         </defs>
     </svg>
