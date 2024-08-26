@@ -2166,7 +2166,7 @@ class Backend_Api {
 	 */
 	public function import_template() {
 		$active_theme = wp_get_theme();
-		$theme_dir    = $active_theme->get_stylesheet_directory_uri();
+		$theme_dir    = $active_theme->get_stylesheet_directory();
 		$files        = array();
 		/**Get Files in Gutenverse Files Parts */
 		$files[] = array(
@@ -2196,17 +2196,24 @@ class Backend_Api {
 		$theme_db   = Database::instance()->theme_info;
 		$theme_info = $theme_db->get_theme_data( $theme_id );
 		$theme_slug = $theme_info[0]['slug'];
+
+		global $wp_filesystem;
+
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
 		foreach ( $files as $file ) {
 			if ( ! $file['files'] ) {
 				continue;
 			}
 			foreach ( $file['files'] as $doc ) {
-				$doc_file    = wp_remote_get( $doc );
 				$doc_name    = pathinfo( $doc );
 				$doc_content = '';
 
-				if ( ! is_wp_error( $doc_content ) ) {
-					$doc_content = wp_remote_retrieve_body( $doc_file );
+				if ( $wp_filesystem->exists( $doc ) ) {
+					$doc_content = $wp_filesystem->get_contents( $doc );
 				}
 
 				/**Change Template parts header & footer slug */

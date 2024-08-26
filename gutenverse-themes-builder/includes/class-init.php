@@ -71,7 +71,7 @@ class Init {
 				function ( $theme_json ) use ( $json_path ) {
 					global $wp_filesystem;
 
-					if (empty($wp_filesystem)) {
+					if ( empty( $wp_filesystem ) ) {
 						require_once ABSPATH . 'wp-admin/includes/file.php';
 						WP_Filesystem();
 					}
@@ -79,7 +79,7 @@ class Init {
 					$content = '';
 
 					if ( $wp_filesystem->exists( $json_path ) ) {
-						$content = $wp_filesystem->get_contents($json_path);
+						$content = $wp_filesystem->get_contents( $json_path );
 					}
 
 					$custom_theme_json = json_decode( $content, true );
