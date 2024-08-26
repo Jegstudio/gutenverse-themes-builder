@@ -1381,8 +1381,6 @@ class Backend_Api {
 						$category = 'pro';
 						break;
 					case 'core':
-						$category = 'core';
-						break;
 					default:
 						$category = 'core';
 						break;
@@ -1412,7 +1410,7 @@ class Backend_Api {
 					}
 					$content = str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
 				}
-				$theme_id = get_option( 'gtb_active_theme_id' );
+
 				if ( $theme_id ) {
 					$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
 					if ( null === $post_exists ) {

@@ -556,7 +556,7 @@ const DashboardPage = () => {
                                         {__('Thank You For Choosing ', '--gtb-theme-namespace--')}
                                         <span className='gradient-text'>{title}<BlinkIcon /></span>
                                     </p>
-                                    <p className='texts-description'>{__('Thank you for bringing happiness to us, We really appreciate you for purchasing Finalyze Theme. Take advantage and get familiar with the features Finalyze offers and create a stunning site with ease.', '--gtb-theme-namespace--')}</p>
+                                    <p className='texts-description'>{sprintf(__('Thank you for bringing us happiness! We truly appreciate your purchase of the %s Theme. Dive into its features, explore all the possibilities, and create a stunning site with ease.', '--gtb-theme-namespace--'), title)}</p>
                                 </div>
                                 <div className='dancer'>
                                     <img src={images + '/image-dancer.png'} />
