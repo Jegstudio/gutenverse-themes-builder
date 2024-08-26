@@ -588,7 +588,7 @@ const DashboardPage = () => {
                                     <SupportIcon />
                                 </div>
                                 <p className='content-title'>{__('Any Questions?', '--gtb-theme-namespace--')}</p>
-                                <p className='content-description'>{__('Our support team is ready to help you with any questions or problems.', '--gtb-theme-namespace--')}</p>
+                                <p className='content-description'>{__('Our support team is ready to help you with any questions or issues.', '--gtb-theme-namespace--')}</p>
                                 <div className='action-button' onClick={() => window.open(supportLink, '_blank')}>{__('Ask for Support', '--gtb-theme-namespace--')}</div>
                             </div>
                         </div>
