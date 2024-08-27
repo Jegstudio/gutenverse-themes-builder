@@ -1,9 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 
-const CloseIcon = ({ fill = 'inherit' }) => <svg width="12" height="12" viewBox="0 0 12 12" fill={fill} xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.17593 6.00048L10.7593 2.42548C10.9162 2.26856 11.0043 2.05573 11.0043 1.83381C11.0043 1.6119 10.9162 1.39907 10.7593 1.24215C10.6023 1.08523 10.3895 0.99707 10.1676 0.99707C9.94567 0.99707 9.73285 1.08523 9.57593 1.24215L6.00093 4.82548L2.42593 1.24215C2.26901 1.08523 2.05618 0.99707 1.83426 0.99707C1.61234 0.99707 1.39951 1.08523 1.24259 1.24215C1.08567 1.39907 0.997516 1.6119 0.997516 1.83381C0.997516 2.05573 1.08567 2.26856 1.24259 2.42548L4.82593 6.00048L1.24259 9.57548C1.16449 9.65295 1.10249 9.74512 1.06018 9.84667C1.01788 9.94822 0.996094 10.0571 0.996094 10.1671C0.996094 10.2772 1.01788 10.3861 1.06018 10.4876C1.10249 10.5892 1.16449 10.6813 1.24259 10.7588C1.32006 10.8369 1.41223 10.8989 1.51378 10.9412C1.61533 10.9835 1.72425 11.0053 1.83426 11.0053C1.94427 11.0053 2.05319 10.9835 2.15474 10.9412C2.25629 10.8989 2.34846 10.8369 2.42593 10.7588L6.00093 7.17548L9.57593 10.7588C9.6534 10.8369 9.74556 10.8989 9.84711 10.9412C9.94866 10.9835 10.0576 11.0053 10.1676 11.0053C10.2776 11.0053 10.3865 10.9835 10.4881 10.9412C10.5896 10.8989 10.6818 10.8369 10.7593 10.7588C10.8374 10.6813 10.8994 10.5892 10.9417 10.4876C10.984 10.3861 11.0058 10.2772 11.0058 10.1671C11.0058 10.0571 10.984 9.94822 10.9417 9.84667C10.8994 9.74512 10.8374 9.65295 10.7593 9.57548L7.17593 6.00048Z" fill={fill} />
-</svg>;
 
 const ImportLoading = (props) => {
     let progress = '0%';
@@ -166,6 +163,39 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
     </div>
 }
 
+const UpgradePro = ({ updateProgress }) => {
+    const { images, upgradePro } = window['GutenThemeConfig'];
+
+    return <div className='upgrade-pro-wrapper'>
+        <div className='upgrade-pro-content'>
+            <img className='background' src={images + '/bg-upgrade-wizard.png'} />
+            <h3 className='content-title'>
+                {__('Unlock Limitless Possibilities with ', '--gtb-theme-namespace--')}
+                <span className='gradient-text'>{__('Gutenverse PRO', '--gtb-theme-namespace--')}</span>
+            </h3>
+            <p className='content-desc'>
+                {__('Empowering you to build a website that truly stands out with advanced features and seamless integration.', '--gtb-theme-namespace--')}
+            </p>
+            <div className='upgrade-pro-button' onClick={() => window.open(upgradePro, '_blank')}>
+                {__('Upgrade To PRO', 'gutenverse-temes-builder')}
+                <svg width={16} height={16} viewBox="0 0 15 15" fill={'white'} transform={'translate(0,0)'} xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill={'white'} />
+                </svg>
+            </div>
+            <img className='upgrade-image' src={images + '/upgrade-content.png'} />
+        </div>
+        <div className='upgrade-pro-actions'>
+            <div onClick={() => updateProgress('importTemplate', -1)} className='button-back'>
+                <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
+                </svg>
+                {__('Back', 'gutenverse-temes-builder')}
+            </div>
+            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
+        </div>
+    </div>;
+}
+
 const ImportTemplates = ({ updateProgress }) => {
     const { assign } = window['GutenThemeConfig'];
 
@@ -326,7 +356,7 @@ const ImportTemplates = ({ updateProgress }) => {
                 </svg>
                 {__('Back', 'gutenverse-temes-builder')}
             </div>
-            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
+            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
         </div>
     </div>
 }
@@ -488,6 +518,8 @@ const WizardPage = () => {
                         }} className='button-visit'>{__('Visit Dashboard', 'gutenverse-temes-builder')}</div>
                     </div>
                 </div>;
+            case 'upgradePro':
+                return <UpgradePro updateProgress={updateProgress} />;
             case 'importTemplate':
                 return <ImportTemplates updateProgress={updateProgress} />;
             case 'installPlugin':
@@ -501,15 +533,19 @@ const WizardPage = () => {
             <div className='wizard-header'>
                 <div className={`progress ${progress === 'installPlugin' ? 'active' : ''} ${progressCount >= 0 ? 'done' : ''}`}>
                     <p className='number'>1</p>
-                    <h3 className='progress-title'>Plugin Requirements</h3>
+                    <h3 className='progress-title'>{__('Plugin Requirements', '--gtb-theme-namespace--')}</h3>
                 </div>
                 <div className={`progress ${progress === 'importTemplate' ? 'active' : ''} ${progressCount >= 1 ? 'done' : ''}`}>
                     <p className='number'>2</p>
-                    <h3 className='progress-title'>Assign Templates</h3>
+                    <h3 className='progress-title'>{__('Assign Templates', '--gtb-theme-namespace--')}</h3>
                 </div>
-                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
+                <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
                     <p className='number'>3</p>
-                    <h3 className='progress-title'>Finalizing</h3>
+                    <h3 className='progress-title'>{__('Upgrade Your Site', '--gtb-theme-namespace--')}</h3>
+                </div>
+                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 3 ? 'done' : ''}`}>
+                    <p className='number'>4</p>
+                    <h3 className='progress-title'>{__('Finalizing', '--gtb-theme-namespace--')}</h3>
                 </div>
             </div>
             <div className='wizard-body'>

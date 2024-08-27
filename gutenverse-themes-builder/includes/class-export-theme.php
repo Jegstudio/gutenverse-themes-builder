@@ -613,7 +613,12 @@ class Export_Theme {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gtb_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-wizard.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-wizard.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/upgrade-content.png', gtb_theme_built_path() . 'assets/img/upgrade-content.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gtb_theme_built_path() . 'assets/img/final.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-demo.png', gtb_theme_built_path() . 'assets/img/icon-demo.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-plugin.png', gtb_theme_built_path() . 'assets/img/icon-plugin.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-support.png', gtb_theme_built_path() . 'assets/img/icon-support.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gtb_theme_built_path() . 'assets/img/image-dancer.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
 			} else {
