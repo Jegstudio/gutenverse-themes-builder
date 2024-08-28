@@ -72,6 +72,7 @@ class Themeforest_Data {
 
 		if ( $this->is_wizard_done() ) {
 			update_option( '{{slug}}_wizard_setup_done', 'yes' );
+			wp_safe_redirect( admin_url( 'themes.php?page={{slug}}-dashboard' ) );
 		}
 	}
 

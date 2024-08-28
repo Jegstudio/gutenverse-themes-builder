@@ -123,8 +123,8 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
         switch (action) {
             case 'done':
                 return <Fragment>
-                    <div className='button-done'>{__('Installed & Activated', 'gutenverse-temes-builder')}</div>
-                    <div onClick={() => updateProgress('importTemplate', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
+                    <div className='button-done'>{__('Installed & Activated', '--gtb-theme-namespace--')}</div>
+                    <div onClick={() => updateProgress('importTemplate', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
                 </Fragment>;
             case 'loading':
                 return <Fragment>
@@ -135,14 +135,14 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 return <Fragment>
                     <div onClick={() => {
                         window.location.href = `${window['GutenThemeConfig']['dashboardPage']}`
-                    }} className='button-skip'>{__('Skip', 'gutenverse-temes-builder')}</div>
-                    <div onClick={() => onInstall()} className='button-install'>{__('Install Required Plugins', 'gutenverse-temes-builder')}</div>
+                    }} className='button-skip'>{__('Skip', '--gtb-theme-namespace--')}</div>
+                    <div onClick={() => onInstall()} className='button-install'>{__('Install Required Plugins', '--gtb-theme-namespace--')}</div>
                 </Fragment>;
         }
     }
 
     return <div className='plugin-install'>
-        <h1 className='content-title'>{__('Install Required Plugins', 'gutenverse-temes-builder')}</h1>
+        <h1 className='content-title'>{__('Install Required Plugins', '--gtb-theme-namespace--')}</h1>
         <p className='content-desc'>{__('To access the full range of theme features, please install and activate the required plugins. Your enhanced user experience is just a few steps away!', '--gtb-theme-namespace--')}</p>
         <div className='plugin-list'>
             {plugins?.map((plugin, key) => {
@@ -177,7 +177,7 @@ const UpgradePro = ({ updateProgress }) => {
                 {__('Empowering you to build a website that truly stands out with advanced features and seamless integration.', '--gtb-theme-namespace--')}
             </p>
             <div className='upgrade-pro-button' onClick={() => window.open(upgradePro, '_blank')}>
-                {__('Upgrade To PRO', 'gutenverse-temes-builder')}
+                {__('Upgrade To PRO', '--gtb-theme-namespace--')}
                 <svg width={16} height={16} viewBox="0 0 15 15" fill={'white'} transform={'translate(0,0)'} xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill={'white'} />
                 </svg>
@@ -189,9 +189,9 @@ const UpgradePro = ({ updateProgress }) => {
                 <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
                 </svg>
-                {__('Back', 'gutenverse-temes-builder')}
+                {__('Back', '--gtb-theme-namespace--')}
             </div>
-            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
+            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
         </div>
     </div>;
 }
@@ -199,6 +199,7 @@ const UpgradePro = ({ updateProgress }) => {
 const ImportTemplates = ({ updateProgress }) => {
     const { assign } = window['GutenThemeConfig'];
 
+    const [allImported, setAllImported] = useState(false);
     const [templateList, setTemplateList] = useState(assign);
     const [importerStep, setImporterStep] = useState([
         "Creating Pages",
@@ -302,6 +303,17 @@ const ImportTemplates = ({ updateProgress }) => {
         }, 500);
     };
 
+    useEffect(() => {
+        if (templateList?.length > 0) {
+            let allDone = true;
+
+            templateList?.map(template => {
+                allDone = allDone && template?.status?.exists && template?.status?.using_template;
+            });
+
+            setAllImported(allDone);
+        }
+    },[templateList])
 
     return <div className='template-install'>
         {modal && <ImporterModal
@@ -313,12 +325,16 @@ const ImportTemplates = ({ updateProgress }) => {
             close={() => { setModal(false) }}
         />}
         <div className='template-title'>
-            <h1 className='content-title'>{__('Import Prebuilt Demos', 'gutenverse-temes-builder')}</h1>
-            <div className='button-import-all' onClick={() => importAll()}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
+            <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
+                if (!allImported) {
+                    importAll();
+                }
+            }}>
+                {!allImported && <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.00033 13.3327C3.63366 13.3327 3.31966 13.202 3.05833 12.9407C2.79699 12.6793 2.66655 12.3656 2.66699 11.9993V9.99935H4.00033V11.9993H12.0003V9.99935H13.3337V11.9993C13.3337 12.366 13.203 12.68 12.9417 12.9413C12.6803 13.2027 12.3665 13.3331 12.0003 13.3327H4.00033ZM8.00033 10.666L4.66699 7.33268L5.60033 6.36602L7.33366 8.09935V2.66602H8.66699V8.09935L10.4003 6.36602L11.3337 7.33268L8.00033 10.666Z" fill="white" />
-                </svg>
-                {__('Import All Pages', 'gutenverse-temes-builder')}
+                </svg>}
+                {allImported ? __('All Pages Imported', '--gtb-theme-namespace--') : __('Import All Pages', '--gtb-theme-namespace--')}
             </div>
         </div>
         <div className='template-list'>
@@ -354,9 +370,9 @@ const ImportTemplates = ({ updateProgress }) => {
                 <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
                 </svg>
-                {__('Back', 'gutenverse-temes-builder')}
+                {__('Back', '--gtb-theme-namespace--')}
             </div>
-            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', 'gutenverse-temes-builder')}</div>
+            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
         </div>
     </div>
 }
@@ -480,7 +496,7 @@ export const ImporterModal = ({
                 <div className='importer-footer'>
                     <div className='footer-info'>
                         <span>{importerStatus}</span>
-                        <span>{__(`${(importerCurrent - 1)}/${(importerStep.length)} Completed`, 'gutenverse-temes-builder')}</span>
+                        <span>{__(`${(importerCurrent - 1)}/${(importerStep.length)} Completed`, '--gtb-theme-namespace--')}</span>
                     </div>
                 </div>
                 <div className='footer-loading'>
@@ -515,7 +531,7 @@ const WizardPage = () => {
                         <p className='final-desc'>{__('Gutenverse is a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
                         <div onClick={() => {
                             window.location.href = `${window['GutenThemeConfig']['dashboardPage']}&wizard_setup_done=yes`
-                        }} className='button-visit'>{__('Visit Dashboard', 'gutenverse-temes-builder')}</div>
+                        }} className='button-visit'>{__('Visit Dashboard', '--gtb-theme-namespace--')}</div>
                     </div>
                 </div>;
             case 'upgradePro':

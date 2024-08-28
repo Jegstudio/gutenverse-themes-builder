@@ -386,7 +386,6 @@
             gap: 5px;
             padding: 12px 15px;
             border-radius: 5px;
-            border: solid 1px #3b57f7;
             background-color: #3b57f7;
             font-family: Inter;
             font-size: 14px;
@@ -396,6 +395,15 @@
 
             &:hover {
                 background-color: #2435ec;
+            }
+
+            &.imported {
+                background-color: #99a2a9;
+                cursor: not-allowed;
+
+                &:hover {
+                    background-color: #99a2a9;
+                }
             }
         }
     }
