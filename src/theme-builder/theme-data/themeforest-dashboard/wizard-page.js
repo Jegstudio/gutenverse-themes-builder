@@ -100,16 +100,17 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                         installPlugins(index + 1);
                     }).catch(() => {
                         console.error('Error during plugin activation');
+                        installPlugins(index);
                     })
                 } else {
                     installPlugins(index + 1);
                 }
-            }, 1000);
+            }, 1500);
         } else {
             setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
             setTimeout(() => {
                 setAction('done');
-            }, 1000);
+            }, 1500);
         }
 
     }
