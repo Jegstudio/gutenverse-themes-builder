@@ -342,8 +342,13 @@ class Export_Theme {
 
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
+			if ( $color->slug ) {
+				$slug = strtolower( $color->slug );
+			} else {
+				$slug = 'theme-' . $index;
+			}
 			$fix_colors[] = array(
-				'slug'  => 'theme-' . $index,
+				'slug'  => $slug,
 				'name'  => $color->name,
 				'color' => $color->color,
 			);
@@ -1188,6 +1193,24 @@ class Export_Theme {
 					$image_arr = explode( '/', $image );
 				}
 				$image_name = $image_arr[ count( $image_arr ) - 1 ];
+				/**Check if the $image_name have . in their name other than extention and end with _ */
+				/** Split the image name by the last dot to separate the extension */
+				$parts = explode( '.', $image_name );
+
+				/** Check if the filename ends with an underscore  */
+				if ( 2 < count( $parts ) ) {
+					/** The last part is the extension */
+					$extension = array_pop( $parts );
+
+					/** Recombine the remaining parts into the main part of the filename  */
+					$filename = implode( '.', $parts );
+					if ( substr( $filename, -1 ) === '_' ) {
+						/** Remove the trailing underscore */
+						$filename = rtrim( $filename, '_' );
+						/** Reconstruct the full image name */
+						$image_name = $filename . '.' . $extension;
+					}
+				}
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
 				$content    = str_replace( $image, $image_code, $content );
 			}
@@ -1272,10 +1295,29 @@ class Export_Theme {
 				$image_target = $image_res['nores'];
 			}
 
-			$image_arr   = explode( '/', $image_target );
-			$image_name  = $image_arr[ count( $image_arr ) - 1 ];
-			$destination = $img_dir . '/' . $image_name;
+			$image_arr  = explode( '/', $image_target );
+			$image_name = $image_arr[ count( $image_arr ) - 1 ];
 
+			/** Check if the $image_name have . in their name other than extention and end with _ */
+			/** Split the image name by the last dot to separate the extension */
+			$parts = explode( '.', $image_name );
+
+			/** Check if the filename ends with an underscore  */
+			if ( 2 < count( $parts ) ) {
+				/** The last part is the extension */
+				$extension = array_pop( $parts );
+
+				/** Recombine the remaining parts into the main part of the filename  */
+				$filename = implode( '.', $parts );
+				if ( substr( $filename, -1 ) === '_' ) {
+					/** Remove the trailing underscore */
+					$filename = rtrim( $filename, '_' );
+					/** Reconstruct the full image name */
+					$image_name = $filename . '.' . $extension;
+				}
+			}
+
+			$destination = $img_dir . '/' . $image_name;
 			if ( ! file_exists( $destination ) ) {
 				$image_data = wp_remote_get( $image_target, array( 'sslverify' => true ) );
 

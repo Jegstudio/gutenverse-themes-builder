@@ -795,7 +795,6 @@ class Backend_Api {
 		$theme         = wp_get_theme();
 		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
 		$update_colors = json_decode( $themedata['post_content'] );
-
 		if ( ! isset( $update_colors->settings ) ) {
 			$update_colors->settings = (object) array(
 				'color' => (object) array(
@@ -1406,15 +1405,22 @@ class Backend_Api {
 			gutenverse_rlog( 'Import Global Color Data Failed!' );
 		}
 		/** Decode the JSON data into a PHP array */
-		$data_array        = json_decode( $json_data, true );
-		$color_data        = $data_array['settings']['color']['palette'];
+		$data_array     = json_decode( $json_data, true );
+		$color_data     = $data_array['settings']['color']['palette'];
+		$new_color_data = array();
+		foreach ( $color_data as $key => $color ) {
+			$new_color_data[] = (object) $color;
+		}
 		$global_db         = Database::instance()->theme_globals;
 		$data_global       = $global_db->get_data( $id );
 		$data_global_color = maybe_unserialize( $data_global[0]['colors'] );
-		$color_data        = array_merge( $data_global_color, $color_data );
+		if ( ! $data_global_color ) {
+			$data_global_color = array();
+		}
+		$new_color_data = array_merge( $data_global_color, $new_color_data );
 		$global_db->update_data(
 			array(
-				'colors' => maybe_serialize( $color_data ),
+				'colors' => maybe_serialize( $new_color_data ),
 			),
 			array(
 				'id' => $id,
@@ -1436,23 +1442,29 @@ class Backend_Api {
 		/**Get Color Data */
 		$theme_dir = $active_theme->get_stylesheet_directory();
 		$json_data = file_get_contents( $theme_dir . '/theme.json' );
+
 		if ( ! $json_data ) {
 			/** Handle the error if the file cannot be read */
 			gutenverse_rlog( 'Import Global Color Data Failed!' );
 		}
+
 		/** Decode the JSON data into a PHP array */
-		$json_data_decode          = json_decode( $json_data, true );
-		$color_data                = $json_data_decode['settings']['color']['palette'];
-		$global_fonts_now          = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
-		$global_color_now          = get_option( 'gutenverse-global-variable-color-gutenverse-basic', false );
-		$title                     = 'global-import-' . $active_theme_name . '-' . substr( uniqid(), -5 );
-		$global_db                 = Database::instance()->theme_globals;
+		$json_data_decode = json_decode( $json_data, true );
+		$color_data       = $json_data_decode['settings']['color']['palette'];
+		$new_color_data   = array();
+		foreach ( $color_data as $key => $color ) {
+			$new_color_data[] = (object) $color;
+		}
+		$global_fonts_now = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
+		$global_color_now = get_option( 'gutenverse-global-variable-color-gutenverse-basic', false );
+		$title            = 'global-import-' . $active_theme_name . '-' . substr( uniqid(), -5 );
+		$global_db        = Database::instance()->theme_globals;
 		try {
 			$data = array(
 				'title'  => $title,
 				'file'   => '',
 				'fonts'  => maybe_serialize( $active_theme_global_fonts ),
-				'colors' => maybe_serialize( $color_data ),
+				'colors' => maybe_serialize( $new_color_data ),
 			);
 			$global_db->create_data( $data );
 			$data = array(
@@ -1503,7 +1515,7 @@ class Backend_Api {
 				$file_data = include $file;
 				$name      = $file_data['title'];
 				$content   = $file_data['content'];
-				preg_match_all( '/https?:\/\/[^\s"]+/', $content, $matches );
+				preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 				$urls = $matches[0];
 				/** Filter image URLs */
 				$image_urls   = array_filter( $urls, 'is_image_url' );
@@ -1591,7 +1603,7 @@ class Backend_Api {
 
 		/** Get the file name and extension  */
 		$theme_id  = get_option( 'gtb_active_theme_id' );
-		$file_name = 'gtb-' . $theme_id . '-' . basename( wp_parse_url( $url, PHP_URL_PATH ) );
+		$file_name = basename( wp_parse_url( $url, PHP_URL_PATH ) );
 
 		/**Check if $file_name have '.' inside the name then add _ in the end of the name*/
 		$filename_without_extension     = pathinfo( $file_name, PATHINFO_FILENAME );
