@@ -10,6 +10,7 @@ import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import TextControl from '../controls/text-control';
 import { ArrowLeft } from 'react-feather';
 import FileControl from '../controls/file-control';
+import apiFetch from '@wordpress/api-fetch';
 
 const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updateDetails, actionGlobalData, notice }) => {
     const [loading, setLoading] = useState(false);
@@ -157,6 +158,7 @@ const ManageGlobal = () => {
     const [data, setData] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
     const [switchPopup, setSwitchPopup] = useState(false);
+    const [importLoad, setImportLoad] = useState(false);
 
     const setEditGlobal = (data) => {
         setData(data);
@@ -179,6 +181,21 @@ const ManageGlobal = () => {
     const updateActiveID = () => {
         updateActiveGlobal(switchPopup, updateGlobalList);
     };
+
+    const handleImportColor = (id) => {
+        setImportLoad(true);
+        apiFetch({
+            path: '/gtb-backend/v1/template/import/global-color',
+            method: 'POST',
+            data: {
+                'id' : id
+            }
+        }).then((result) => {
+            setImportLoad(false);
+        }).catch(() => {
+            setImportLoad(false);
+        })
+    }
 
     let Content = null;
 
@@ -216,6 +233,9 @@ const ManageGlobal = () => {
                                             {activeGlobal !== global?.id && <a className="edit" onClick={() => setSwitchPopup(global?.id)}>Set Active</a>}
                                             <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
                                             <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
+                                            {
+                                                importLoad ? <div className="button button-loading" disabled>Loading... </div> : <a className="edit" onClick={() => handleImportColor(global?.id)}>{__('Import Color', 'gutenverse-themes-builder')}</a>
+                                            }
                                         </div>
                                     </td>
                                 </tr>;

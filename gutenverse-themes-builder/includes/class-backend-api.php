@@ -355,6 +355,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'template/import/global-color',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'import_global_color' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'pattern/delete',
 			array(
 				'methods'             => 'POST',
@@ -1027,27 +1037,86 @@ class Backend_Api {
 	public function delete_theme( $request ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
-		global $wp_filesystem;
+		global $wp_filesystem, $wpdb;
 
-		$theme_id  = $request->get_param( 'theme_id' );
-		$active_id = get_option( 'gtb_active_theme_id' );
+		try {
+			/**Start the transaction */
+			$wpdb->query( 'START TRANSACTION' );
 
-		$this->reset_theme( $active_id );
+			$theme_id = $request->get_param( 'theme_id' );
 
-		$info_db = Database::instance()->theme_info;
-		$info_db->delete_data( $theme_id );
+			$active_id = get_option( 'gtb_active_theme_id' );
 
-		if ( $active_id === $theme_id ) {
-			update_option( 'gtb_active_theme_id', null );
+			$this->reset_theme( $active_id );
+
+			$info_db = Database::instance()->theme_info;
+			$info_db->delete_data( $theme_id );
+
+			$args = array(
+				'post_type'      => 'gutenverse-pattern',
+				'meta_query'     => array(
+					array(
+						'key'   => '_pattern_theme_id',
+						'value' => $theme_id,
+					),
+				),
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			);
+
+			$query = new WP_Query( $args );
+
+			/**Check if any posts are found */
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $post_id ) {
+					/** Delete the post */
+					wp_delete_post( $post_id, true );
+				}
+			}
+
+			/**  Query attachments with the specific meta key and value */
+			$args = array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'meta_query'     => array(
+					array(
+						'key'   => '_img_theme_id',
+						'value' => $theme_id,
+					),
+				),
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			);
+
+			$query = new WP_Query( $args );
+
+			/**  Check if any attachments are found */
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $attachment_id ) {
+					/** Delete the attachment  */
+					wp_delete_attachment( $attachment_id, true );
+				}
+			}
+
+			if ( $active_id === $theme_id ) {
+				update_option( 'gtb_active_theme_id', null );
+			}
+
+			$theme_folder = gtb_theme_folder_path( $theme_id );
+
+			if ( is_dir( $theme_folder ) ) {
+				$wp_filesystem->rmdir( $theme_folder );
+			}
+
+			$wpdb->query( 'COMMIT' );
+			// Reset post data to the original global $post object
+			wp_reset_postdata();
+			return $this->get_theme_list();
+			// If everything is successful, commit the transaction
+		} catch ( Exception $e ) {
+			// If something went wrong, roll back the transaction
+			$wpdb->query( 'ROLLBACK' );
 		}
-
-		$theme_folder = gtb_theme_folder_path( $theme_id );
-
-		if ( is_dir( $theme_folder ) ) {
-			$wp_filesystem->rmdir( $theme_folder );
-		}
-
-		return $this->get_theme_list();
 	}
 
 	/**
@@ -1321,15 +1390,59 @@ class Backend_Api {
 
 		return $patterns->posts;
 	}
+
+	/**
+	 * Import Global Color
+	 *
+	 * @param object $request Request Object.
+	 */
+	public function import_global_color( $request ) {
+		$id           = esc_html( sanitize_text_field( wp_unslash( $request->get_param( 'id' ) ) ) );
+		$active_theme = wp_get_theme();
+		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$json_data    = file_get_contents( $theme_dir . '/theme.json' );
+		if ( ! $json_data ) {
+			/** Handle the error if the file cannot be read */
+			gutenverse_rlog( 'Import Global Color Data Failed!' );
+		}
+		/** Decode the JSON data into a PHP array */
+		$data_array        = json_decode( $json_data, true );
+		$color_data        = $data_array['settings']['color']['palette'];
+		$global_db         = Database::instance()->theme_globals;
+		$data_global       = $global_db->get_data( $id );
+		$data_global_color = maybe_unserialize( $data_global[0]['colors'] );
+		$color_data        = array_merge( $data_global_color, $color_data );
+		$global_db->update_data(
+			array(
+				'colors' => maybe_serialize( $color_data ),
+			),
+			array(
+				'id' => $id,
+			)
+		);
+	}
+
 	/**
 	 * Import Global Font
 	 */
 	public function import_global_font() {
+		/**Get Font Data */
 		$active_theme              = wp_get_theme();
 		$active_theme_name         = str_replace( ' ', '_', $active_theme->get( 'Name' ) );
 		$class_name                = $active_theme_name . '\\Init';
 		$class_instance            = $class_name::instance();
 		$active_theme_global_fonts = $class_instance->default_font_variable();
+
+		/**Get Color Data */
+		$theme_dir = $active_theme->get_stylesheet_directory();
+		$json_data = file_get_contents( $theme_dir . '/theme.json' );
+		if ( ! $json_data ) {
+			/** Handle the error if the file cannot be read */
+			gutenverse_rlog( 'Import Global Color Data Failed!' );
+		}
+		/** Decode the JSON data into a PHP array */
+		$json_data_decode          = json_decode( $json_data, true );
+		$color_data                = $json_data_decode['settings']['color']['palette'];
 		$global_fonts_now          = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
 		$global_color_now          = get_option( 'gutenverse-global-variable-color-gutenverse-basic', false );
 		$title                     = 'global-import-' . $active_theme_name . '-' . substr( uniqid(), -5 );
@@ -1339,7 +1452,7 @@ class Backend_Api {
 				'title'  => $title,
 				'file'   => '',
 				'fonts'  => maybe_serialize( $active_theme_global_fonts ),
-				'colors' => maybe_serialize( '' ),
+				'colors' => maybe_serialize( $color_data ),
 			);
 			$global_db->create_data( $data );
 			$data = array(
@@ -1358,6 +1471,7 @@ class Backend_Api {
 			gutenverse_rlog( $th->getMessage() );
 		}
 	}
+
 	/**
 	 * Import Pattern
 	 */
@@ -1443,7 +1557,7 @@ class Backend_Api {
 			'post_status' => 'inherit',
 			'meta_query'  => array(
 				array(
-					'key'     => '_wp_attachment_url',
+					'key'     => '_wp_attached_url',
 					'value'   => $url,
 					'compare' => '=',
 				),
@@ -1462,28 +1576,9 @@ class Backend_Api {
 	 * @return integer
 	 */
 	public function download_and_save_image( $url, $dir = '' ) {
-		/** Check if the image already exists */
-
-		if ( $this->image_exists_in_media_library( $url ) ) {
-			$args  = array(
-				'post_type'   => 'attachment',
-				'post_status' => 'inherit',
-				'meta_query'  => array(
-					array(
-						'key'     => '_wp_attachment_url',
-						'value'   => $url,
-						'compare' => '=',
-					),
-				),
-			);
-			$query = new WP_Query( $args );
-			if ( $query->have_posts() ) {
-				$query->the_post();
-				return get_the_ID();
-			}
-		}
-
 		$temp_file = download_url( $url );
+
+		/**If download attempt failed, get image from theme directory */
 		if ( is_wp_error( $temp_file ) ) {
 			$file_name  = basename( wp_parse_url( $url, PHP_URL_PATH ) );
 			$local_file = $dir . '/' . $file_name;
@@ -1495,7 +1590,29 @@ class Backend_Api {
 		}
 
 		/** Get the file name and extension  */
-		$file_name = basename( wp_parse_url( $url, PHP_URL_PATH ) );
+		$theme_id  = get_option( 'gtb_active_theme_id' );
+		$file_name = 'gtb-' . $theme_id . '-' . basename( wp_parse_url( $url, PHP_URL_PATH ) );
+
+		/**Check if $file_name have '.' inside the name then add _ in the end of the name*/
+		$filename_without_extension     = pathinfo( $file_name, PATHINFO_FILENAME );
+		$extension                      = pathinfo( $file_name, PATHINFO_EXTENSION );
+		$arr_filename_without_extension = explode( '.', $filename_without_extension );
+		$post_name                      = $filename_without_extension;
+		if ( 1 < count( $arr_filename_without_extension ) ) {
+			$file_name = $filename_without_extension . '_.' . $extension;
+			$post_name = $filename_without_extension . '_';
+		}
+		/** Check if the image already exists */
+		$args  = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'name'        => $post_name,
+		);
+		$query = new WP_Query( $args );
+		if ( $query->have_posts() ) {
+			$query->the_post();
+			return get_the_ID();
+		}
 
 		/** Prepare the file array  */
 		$file = array(
@@ -1521,7 +1638,9 @@ class Backend_Api {
 		}
 
 		/** Save the original URL as a meta field  */
+		$url = wp_get_attachment_url( $attachment_id );
 		update_post_meta( $attachment_id, '_wp_attachment_url', $url );
+		update_post_meta( $attachment_id, '_img_theme_id', $theme_id );
 		return $attachment_id;
 	}
 
@@ -2159,6 +2278,7 @@ class Backend_Api {
 			'status' => 'success',
 		);
 	}
+
 	/**
 	 * Import Template
 	 */
