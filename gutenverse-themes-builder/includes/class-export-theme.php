@@ -1120,7 +1120,11 @@ class Export_Theme {
 
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
-			$new_slug = 'theme-' . $index;
+			if ( $color->slug ) {
+				$new_slug = strtolower( $color->slug );
+			} else {
+				$new_slug = 'theme-' . $index;
+			}
 			$content  = str_replace( $color->slug, $new_slug, $content );
 			$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
 		}
