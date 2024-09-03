@@ -382,16 +382,7 @@ class Init {
 			$initial_font = get_option( 'gutenverse-font-init-' . $theme_name );
 
 			if ( ! $initial_font ) {
-				$result = array();
-				$array1 = $config['globalVariable']['fonts'];
-				$array2 = $this->default_font_variable();
-				foreach ( $array1 as $item ) {
-					$result[ $item['id'] ] = $item;
-				}
-				foreach ( $array2 as $item ) {
-					$result[ $item['id'] ] = $item;
-				}
-				$config['globalVariable']['fonts'] = $result;
+				$config['globalVariable']['fonts'] = array_merge( $config['globalVariable']['fonts'], $this->default_font_variable() );
 				update_option( 'gutenverse-font-init-' . $theme_name, true );
 			}
 		}
