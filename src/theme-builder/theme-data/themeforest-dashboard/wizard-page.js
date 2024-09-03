@@ -134,9 +134,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
             case 'install':
             default:
                 return <Fragment>
-                    <div onClick={() => {
-                        window.location.href = `${window['GutenThemeConfig']['dashboardPage']}`
-                    }} className='button-skip'>{__('Skip', '--gtb-theme-namespace--')}</div>
                     <div onClick={() => onInstall()} className='button-install'>{__('Install Required Plugins', '--gtb-theme-namespace--')}</div>
                 </Fragment>;
         }

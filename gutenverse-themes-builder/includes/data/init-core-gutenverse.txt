@@ -142,8 +142,6 @@ class Init {
 			}
 		}
 
-		$button_text = __( 'Install Required Plugins', '{{slug}}' );
-		$button_link = wp_nonce_url( self_admin_url( 'themes.php?page={{slug}}-dashboard' ), 'install-plugin_gutenverse' );
 		?>
 		<style>
 			.install-gutenverse-plugin-notice {
@@ -290,102 +288,8 @@ class Init {
 				}
 			}
 		</style>
-		<script>
-		var promises = [];
-		var actions = <?php echo wp_json_encode( $actions ); ?>;
-
-		function sequenceInstall (plugins, index = 0) {
-			if (plugins[index]) {
-				var plugin = plugins[index];
-
-				switch (actions[plugin?.slug]) {
-					case 'active':
-						break;
-					case 'inactive':
-						var path = plugin?.slug + '/' + plugin?.slug;
-						promises.push(
-							wp.apiFetch({
-								path: 'wp/v2/plugins/plugin?plugin=' + path,									
-								method: 'POST',
-								data: {
-									status: 'active'
-								}
-							}).then(() => {
-								sequenceInstall(plugins, index + 1);
-							}).catch((error) => {
-							})
-						);
-						break;
-					default:
-						promises.push(
-							wp.apiFetch({
-								path: 'wp/v2/plugins',
-								method: 'POST',
-								data: {
-									slug: plugin?.slug,
-									status: 'active'
-								}
-							}).then(() => {
-								sequenceInstall(plugins, index + 1);
-							}).catch((error) => {
-							})
-						);
-						break;
-				}
-			}
-
-			return;
-		};
-
-		jQuery( function( $ ) {
-			$( 'div.notice.install-gutenverse-plugin-notice' ).on( 'click', 'button.notice-dismiss', function( event ) {
-				event.preventDefault();
-				$.post( ajaxurl, {
-					action: '{{slug}}_set_admin_notice_viewed',
-					nonce: '<?php echo esc_html( wp_create_nonce( '{{slug}}_admin_notice' ) ); ?>',
-				} );
-			} );
-
-			$("#gutenverse-install-plugin").on('click', function(e) {
-				var hasFinishClass = $(this).hasClass('finished');
-				var hasLoaderClass = $(this).hasClass('loader');
-
-				if(!hasFinishClass) {
-					e.preventDefault();
-				}
-
-				if(!hasLoaderClass && !hasFinishClass) {
-					promises = [];
-					var plugins = <?php echo wp_json_encode( $plugins ); ?>;
-					$(this).addClass('loader').text('');
-
-					sequenceInstall(plugins);
-					Promise.all(promises).then(() => {	
-						window.location.reload();					
-						$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
-					});
-				}
-			});
-		} );
-		</script>
-		<div class="notice is-dismissible install-gutenverse-plugin-notice">
-			<div class="gutenverse-notice-inner">
-				<div class="gutenverse-notice-content">
-					<div class="gutenverse-notice-text">
-						<h3><?php esc_html_e( 'Take Your Website To New Height with', '{{slug}}' ); ?> <span>Gutenverse!</span></h3> 
-						<p><?php esc_html_e( '{{title}} theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access {{title}} templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.', '{{slug}}' ); ?></p>
-						<div class="gutenverse-bottom">
-							<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( $button_link ); ?>">
-								<?php echo esc_html( $button_text ); ?>
-							</a>
-						</div>
-					</div>
-					<div class="gutenverse-notice-image">
-						<img src="<?php echo esc_url( {{constant}}_URI . '/assets/img/banner-install-gutenverse-2.png' ); ?>"/>
-					</div>
-				</div>
-			</div>
-		</div>
+		{{dashboard_script}}
+		{{dashboard_notice}}
 		<?php
 	}
 

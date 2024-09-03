@@ -672,6 +672,102 @@ class Export_Theme {
 		$add_class  = array();
 		$assigns    = array();
 		$theme_logo = 'false';
+		$notice     = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+			<div class="gutenverse-notice-inner">
+				<div class="gutenverse-notice-content">
+					<div class="gutenverse-notice-text">
+						<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
+						<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
+						<div class="gutenverse-bottom">
+							<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
+								<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
+							</a>
+						</div>
+					</div>
+					<div class="gutenverse-notice-image">
+						<img src="<?php echo esc_url( ' . $this->get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse-2.png\' ); ?>"/>
+					</div>
+				</div>
+			</div>
+		</div>';
+		$script     = "<script>
+		var promises = [];
+		var actions = <?php echo wp_json_encode( \$actions ); ?>;
+
+		function sequenceInstall (plugins, index = 0) {
+			if (plugins[index]) {
+				var plugin = plugins[index];
+
+				switch (actions[plugin?.slug]) {
+					case 'active':
+						break;
+					case 'inactive':
+						var path = plugin?.slug + '/' + plugin?.slug;
+						promises.push(
+							wp.apiFetch({
+								path: 'wp/v2/plugins/plugin?plugin=' + path,									
+								method: 'POST',
+								data: {
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
+							})
+						);
+						break;
+					default:
+						promises.push(
+							wp.apiFetch({
+								path: 'wp/v2/plugins',
+								method: 'POST',
+								data: {
+									slug: plugin?.slug,
+									status: 'active'
+								}
+							}).then(() => {
+								sequenceInstall(plugins, index + 1);
+							}).catch((error) => {
+							})
+						);
+						break;
+				}
+			}
+
+			return;
+		};
+
+		jQuery( function( $ ) {
+			$( 'div.notice.install-gutenverse-plugin-notice' ).on( 'click', 'button.notice-dismiss', function( event ) {
+				event.preventDefault();
+				$.post( ajaxurl, {
+					action: '{{slug}}_set_admin_notice_viewed',
+					nonce: '<?php echo esc_html( wp_create_nonce( '{{slug}}_admin_notice' ) ); ?>',
+				} );
+			} );
+
+			$('#gutenverse-install-plugin').on('click', function(e) {
+				var hasFinishClass = $(this).hasClass('finished');
+				var hasLoaderClass = $(this).hasClass('loader');
+
+				if(!hasFinishClass) {
+					e.preventDefault();
+				}
+
+				if(!hasLoaderClass && !hasFinishClass) {
+					promises = [];
+					var plugins = <?php echo wp_json_encode( \$plugins ); ?>;
+					$(this).addClass('loader').text('');
+
+					sequenceInstall(plugins);
+					Promise.all(promises).then(() => {						
+						window.location.reload();
+						$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
+					});
+				}
+			});
+		} );
+		</script>";
 
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$add_class[] = 'new Themeforest_Data();';
@@ -715,8 +811,30 @@ class Export_Theme {
 					)";
 				}
 			}
+
+			$notice = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+				<div class="gutenverse-notice-inner">
+					<div class="gutenverse-notice-content">
+						<div class="gutenverse-notice-text">
+							<h3><?php esc_html_e( \'Complete Setup to Activate All \', \'' . $theme_data['slug'] . '\' ); ?> <span>' . $theme_data['title'] . ' Features!</span></h3> 
+							<p><?php esc_html_e( \'Complete the setup process to unlock all features and customization options. Maximize the potential of your ' . $theme_data['title'] . ' theme and get the most out of your website design.\', \'' . $theme_data['slug'] . '\' ); ?></p>
+							<div class="gutenverse-bottom">
+								<a class="gutenverse-button" id="gutenverse-wizard-setup" href="<?php echo esc_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-wizard\' ) ); ?>">
+									<?php echo esc_html( __( \'Complete Wizard Setup\', \'' . $theme_data['slug'] . '\' ) ); ?>
+								</a>
+							</div>
+						</div>
+						<div class="gutenverse-notice-image">
+							<img src="<?php echo esc_url( ' . $this->get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse-2.png\' ); ?>"/>
+						</div>
+					</div>
+				</div>
+			</div>';
+			$script = '';
 		}
 
+		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );
+		$placeholder = str_replace( '{{dashboard_notice}}', $notice, $placeholder );
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
