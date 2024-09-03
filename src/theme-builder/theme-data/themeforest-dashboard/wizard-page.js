@@ -100,16 +100,17 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                         installPlugins(index + 1);
                     }).catch(() => {
                         console.error('Error during plugin activation');
+                        installPlugins(index);
                     })
                 } else {
                     installPlugins(index + 1);
                 }
-            }, 1000);
+            }, 1500);
         } else {
             setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
             setTimeout(() => {
                 setAction('done');
-            }, 1000);
+            }, 1500);
         }
 
     }
@@ -133,9 +134,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
             case 'install':
             default:
                 return <Fragment>
-                    <div onClick={() => {
-                        window.location.href = `${window['GutenThemeConfig']['dashboardPage']}`
-                    }} className='button-skip'>{__('Skip', '--gtb-theme-namespace--')}</div>
                     <div onClick={() => onInstall()} className='button-install'>{__('Install Required Plugins', '--gtb-theme-namespace--')}</div>
                 </Fragment>;
         }
@@ -206,10 +204,11 @@ const ImportTemplates = ({ updateProgress }) => {
         "Assigning Templates",
     ]);
     const [modal, setModal] = useState(false);
-    const [importerNotice, setImporterNotice] = useState('')
-    const [importerCurrent, setImporterCurrent] = useState(0)
-    const [importerStatus, setImporterStatus] = useState(0)
-    const [done, setDone] = useState(false)
+    const [importerNotice, setImporterNotice] = useState('');
+    const [importerCurrent, setImporterCurrent] = useState(0);
+    const [importerStatus, setImporterStatus] = useState(0);
+    const [done, setDone] = useState(false);
+    const [completeSubtitle, setCompleteSubtitle] = useState(null);
 
     const updateTemplateStatus = (title) => {
         setTemplateList(prevTemplateList =>
@@ -254,6 +253,7 @@ const ImportTemplates = ({ updateProgress }) => {
                 setImporterCurrent(3);
                 setTimeout(() => {
                     setDone(true);
+                    setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
                 }, 500)
             }, 500)
         }).catch(() => {
@@ -299,6 +299,7 @@ const ImportTemplates = ({ updateProgress }) => {
             setImporterCurrent(filteredTemplateList.length + 1);
             setTimeout(() => {
                 setDone(true);
+                setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
             }, 500);
         }, 500);
     };
@@ -321,6 +322,7 @@ const ImportTemplates = ({ updateProgress }) => {
             importerNotice={importerNotice}
             importerCurrent={importerCurrent}
             importerStatus={importerStatus}
+            completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
         />}

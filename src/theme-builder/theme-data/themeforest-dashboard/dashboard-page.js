@@ -41,10 +41,11 @@ const ImportTemplates = () => {
         "Assigning Templates",
     ]);
     const [modal, setModal] = useState(false);
-    const [importerNotice, setImporterNotice] = useState('')
-    const [importerCurrent, setImporterCurrent] = useState(0)
-    const [importerStatus, setImporterStatus] = useState(0)
-    const [done, setDone] = useState(false)
+    const [importerNotice, setImporterNotice] = useState('');
+    const [importerCurrent, setImporterCurrent] = useState(0);
+    const [importerStatus, setImporterStatus] = useState(0);
+    const [done, setDone] = useState(false);
+    const [completeSubtitle, setCompleteSubtitle] = useState(null);
 
     const updateTemplateStatus = (title) => {
         setTemplateList(prevTemplateList =>
@@ -89,6 +90,7 @@ const ImportTemplates = () => {
                 setImporterCurrent(3);
                 setTimeout(() => {
                     setDone(true);
+                    setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
                 }, 500)
             }, 500)
         }).catch(() => {
@@ -134,6 +136,7 @@ const ImportTemplates = () => {
             setImporterCurrent(filteredTemplateList.length + 1);
             setTimeout(() => {
                 setDone(true);
+                setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
             }, 500);
         }, 500);
     };
@@ -156,6 +159,7 @@ const ImportTemplates = () => {
             importerNotice={importerNotice}
             importerCurrent={importerCurrent}
             importerStatus={importerStatus}
+            completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
         />}
