@@ -266,9 +266,15 @@ class Init {
 				border-radius: 5px;
 				background: #3B57F7;
 				color: #fff;
-				padding: 8px 30px;
+				padding: 10px 15px;
 				font-weight: 500;
 				background: linear-gradient(to left, #68E4F4, #4569FF, #F045FF);
+				transition: transform 0.5s ease, color 0.5s ease;
+			}
+
+			.install-gutenverse-plugin-notice a.gutenverse-button:hover {
+				color: hsla(0, 0%, 100%, .749);
+				transform: scale(.94);
 			}
 
 			#gutenverse-install-plugin.loader:after {
