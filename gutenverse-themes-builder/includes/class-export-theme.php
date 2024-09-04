@@ -353,13 +353,41 @@ class Export_Theme {
 		$fix_colors = array();
 
 		// change colors slug into lowercase to prevent errors.
-		foreach ( $colors as $index => $color ) {
-			$slug         = 'theme-' . $index;
+		$idx = 0 ;
+		foreach ( $colors as $color ) {
+			$slug         = 'theme-' . $idx;
 			$fix_colors[] = array(
 				'slug'  => $slug,
 				'name'  => $color->name,
 				'color' => $color->color,
 			);
+			$idx++;
+		}
+		$theme_id        = get_option( 'gtb_active_theme_id' );
+		$theme_db        = Database::instance()->theme_info;
+		$theme_info      = $theme_db->get_theme_data( $theme_id );
+		$theme_slug      = $theme_info[0]['slug'];
+		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_slug );
+		/** Create an associative array to store the color of colors */
+		$color_index = array();
+		foreach ( $colors as $color ) {
+			$color_index[ $color->color ] = true;
+		}
+		$import_filtered = array_filter(
+			$imported_colors,
+			function ( $import ) use ( $color_index ) {
+				return ! isset( $color_index[ strtolower( $import->color ) ] );
+			}
+		);
+		/** Loop through imported colors to find duplicate colors */
+		foreach ( $import_filtered as $color ) {
+			$slug         = 'theme-' . $idx;
+			$fix_colors[] = array(
+				'slug'  => $slug,
+				'name'  => $color->name,
+				'color' => $color->color,
+			);
+			$idx++;
 		}
 
 		$placeholder = str_replace( '{{theme_color_settings}}', wp_json_encode( $fix_colors ), $placeholder );
@@ -1129,8 +1157,8 @@ class Export_Theme {
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
 			$new_slug = 'theme-' . $index;
-			$content = str_replace( $color->slug, $new_slug, $content );
-			$content = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
+			$content  = str_replace( $color->slug, $new_slug, $content );
+			$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
 		}
 
 		return $content;
