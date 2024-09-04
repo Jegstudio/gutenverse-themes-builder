@@ -186,10 +186,7 @@ const ManageGlobal = () => {
         setImportLoad(true);
         apiFetch({
             path: '/gtb-backend/v1/template/import/global-color',
-            method: 'POST',
-            data: {
-                'id' : id
-            }
+            method: 'GET',
         }).then((result) => {
             setImportLoad(false);
         }).catch(() => {
@@ -217,6 +214,12 @@ const ManageGlobal = () => {
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
                         buttonLoading: false
+                    },
+                    {
+                        buttonText: __('Import Color', 'gutenverse-themes-builder'),
+                        buttonEvent: () => handleImportColor(),
+                        buttonIcon: false,
+                        buttonLoading: importLoad,
                     }
                 ]}
             >
@@ -233,9 +236,6 @@ const ManageGlobal = () => {
                                             {activeGlobal !== global?.id && <a className="edit" onClick={() => setSwitchPopup(global?.id)}>Set Active</a>}
                                             <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
                                             <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
-                                            {
-                                                importLoad ? <div className="button button-loading" disabled>Loading... </div> : <a className="edit" onClick={() => handleImportColor(global?.id)}>{__('Import Color', 'gutenverse-themes-builder')}</a>
-                                            }
                                         </div>
                                     </td>
                                 </tr>;

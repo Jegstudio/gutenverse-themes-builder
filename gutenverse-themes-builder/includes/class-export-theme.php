@@ -156,6 +156,19 @@ class Export_Theme {
 		$placeholder = ! empty( $theme_data['slug'] ) ? str_replace( '{{slug}}', $theme_data['slug'], $placeholder ) : $placeholder;
 		$placeholder = str_replace( '{{tags}}', $theme_tags, $placeholder );
 
+		$colors          = $this->get_color_settings();
+		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_data['slug'] );
+		/** Create an empty array to store unique colors  */
+		$add_css = '';
+		/** Loop through imported colors to find duplicate colors */
+		foreach ( $imported_colors as $import ) {
+			foreach ( $colors as $idx => $color ) {
+				if ( strtolower( $color->color ) === strtolower( $import->color ) ) {
+					$add_css .= '--wp--preset--color--' . strtolower( $import->slug ) . ': var(--wp--preset--color--theme-' . $idx . ');';
+				}
+			}
+		}
+		$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		$system->put_contents(
 			gtb_theme_built_path() . 'style.css',
 			$placeholder,
@@ -279,7 +292,6 @@ class Export_Theme {
 	 */
 	public function create_enqueue_string( $handler, $type, $media = null, $theme_data ) {
 		$theme_version = $this->get_constant_name( $theme_data['slug'] ) . '_VERSION';
-
 		if ( 'null' === $media ) {
 			if ( 'css' === $type ) {
 				return "wp_enqueue_style( '{$handler}' );";
@@ -342,11 +354,7 @@ class Export_Theme {
 
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
-			if ( $color->slug ) {
-				$slug = strtolower( $color->slug );
-			} else {
-				$slug = 'theme-' . $index;
-			}
+			$slug         = 'theme-' . $index;
 			$fix_colors[] = array(
 				'slug'  => $slug,
 				'name'  => $color->name,
@@ -1120,13 +1128,9 @@ class Export_Theme {
 
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
-			if ( $color->slug ) {
-				$new_slug = strtolower( $color->slug );
-			} else {
-				$new_slug = 'theme-' . $index;
-			}
-			$content  = str_replace( $color->slug, $new_slug, $content );
-			$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
+			$new_slug = 'theme-' . $index;
+			$content = str_replace( $color->slug, $new_slug, $content );
+			$content = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
 		}
 
 		return $content;

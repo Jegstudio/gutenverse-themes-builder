@@ -357,7 +357,7 @@ class Backend_Api {
 			self::ENDPOINT,
 			'template/import/global-color',
 			array(
-				'methods'             => 'POST',
+				'methods'             => 'GET',
 				'callback'            => array( $this, 'import_global_color' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
@@ -825,7 +825,6 @@ class Backend_Api {
 			),
 			$theme_id
 		);
-
 		return $this->get_global_list();
 	}
 
@@ -1392,11 +1391,12 @@ class Backend_Api {
 
 	/**
 	 * Import Global Color
-	 *
-	 * @param object $request Request Object.
 	 */
-	public function import_global_color( $request ) {
-		$id           = esc_html( sanitize_text_field( wp_unslash( $request->get_param( 'id' ) ) ) );
+	public function import_global_color() {
+		$theme_id     = get_option( 'gtb_active_theme_id' );
+		$theme_db     = Database::instance()->theme_info;
+		$theme_info   = $theme_db->get_theme_data( $theme_id );
+		$theme_slug   = $theme_info[0]['slug'];
 		$active_theme = wp_get_theme();
 		$theme_dir    = $active_theme->get_stylesheet_directory();
 		$json_data    = file_get_contents( $theme_dir . '/theme.json' );
@@ -1411,27 +1411,24 @@ class Backend_Api {
 		foreach ( $color_data as $key => $color ) {
 			$new_color_data[] = (object) $color;
 		}
-		$global_db         = Database::instance()->theme_globals;
-		$data_global       = $global_db->get_data( $id );
-		$data_global_color = maybe_unserialize( $data_global[0]['colors'] );
-		if ( ! $data_global_color ) {
-			$data_global_color = array();
+		$option_name = 'gutenverse-global-color-import-' . $theme_slug;
+		$options     = get_option( $option_name );
+		if ( ! isset( $options ) ) {
+			add_option( $option_name, $new_color_data );
+		} else {
+			update_option( $option_name, $new_color_data );
 		}
-		$new_color_data = array_merge( $data_global_color, $new_color_data );
-		$global_db->update_data(
-			array(
-				'colors' => maybe_serialize( $new_color_data ),
-			),
-			array(
-				'id' => $id,
-			)
-		);
 	}
 
 	/**
 	 * Import Global Font
 	 */
 	public function import_global_font() {
+		/**Get GTB Theme Active Slug */
+		$theme_id   = get_option( 'gtb_active_theme_id' );
+		$theme_db   = Database::instance()->theme_info;
+		$theme_info = $theme_db->get_theme_data( $theme_id );
+		$theme_slug = $theme_info[0]['slug'];
 		/**Get Font Data */
 		$active_theme              = wp_get_theme();
 		$active_theme_name         = str_replace( ' ', '_', $active_theme->get( 'Name' ) );
@@ -1455,6 +1452,13 @@ class Backend_Api {
 		foreach ( $color_data as $key => $color ) {
 			$new_color_data[] = (object) $color;
 		}
+		$option_name = 'gutenverse-global-color-import-' . $theme_slug;
+		$options     = get_option( $option_name );
+		if ( ! isset( $options ) ) {
+			add_option( $option_name, $new_color_data );
+		} else {
+			update_option( $option_name, $new_color_data );
+		}
 		$global_fonts_now = get_option( 'gutenverse-global-variable-font-gutenverse-basic', false );
 		$global_color_now = get_option( 'gutenverse-global-variable-color-gutenverse-basic', false );
 		$title            = 'global-import-' . $active_theme_name . '-' . substr( uniqid(), -5 );
@@ -1464,7 +1468,7 @@ class Backend_Api {
 				'title'  => $title,
 				'file'   => '',
 				'fonts'  => maybe_serialize( $active_theme_global_fonts ),
-				'colors' => maybe_serialize( $new_color_data ),
+				'colors' => '',
 			);
 			$global_db->create_data( $data );
 			$data = array(
