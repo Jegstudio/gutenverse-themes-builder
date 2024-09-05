@@ -8,6 +8,8 @@
 
 namespace {{namespace}};
 
+use WP_Query;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -58,6 +60,7 @@ class Init {
 		add_action( 'wp_ajax_{{slug}}_set_admin_notice_viewed', array( $this, 'notice_closed' ) );
 		add_action( 'admin_notices', array( $this, 'notice_install_plugin' ) );
 
+		add_action( 'after_switch_theme', array( $this, 'update_global_styles_after_theme_switch' ) );
 		add_filter( 'gutenverse_block_config', array( $this, 'default_font' ), 10 );
 		add_filter( 'gutenverse_font_header', array( $this, 'default_header_font' ) );
 		add_filter( 'gutenverse_global_css', array( $this, 'global_header_style' ) );
@@ -99,6 +102,76 @@ class Init {
 	public function init_instance() {
 		new Asset_Enqueue();
 		{{additional_class}}
+	}
+
+	/**
+	 * Update Global Styles After Theme Switch
+	 */
+	public function update_global_styles_after_theme_switch() {
+		// Get the path to the current theme's theme.json file
+		$theme_json_path = get_template_directory() . '/theme.json';
+		$theme_slug      = get_option( 'stylesheet' ); // Get the current theme's slug
+		$args            = array(
+			'post_type'      => 'wp_global_styles',
+			'post_status'    => 'publish',
+			'name'           => 'wp-global-styles-' . $theme_slug,
+			'posts_per_page' => 1,
+		);
+
+		$global_styles_query = new WP_Query( $args );
+		// Check if the theme.json file exists
+		if ( file_exists( $theme_json_path ) && $global_styles_query->have_posts() ) {
+			$global_styles_query->the_post();
+			$global_styles_post_id = get_the_ID();
+			// Step 2: Get the existing global styles (color palette)
+			$global_styles_content = json_decode( get_post_field( 'post_content', $global_styles_post_id ), true );
+			if ( isset( $global_styles_content['settings']['color']['palette']['theme'] ) ) {
+				$existing_colors = $global_styles_content['settings']['color']['palette']['theme'];
+			} else {
+				$existing_colors = array();
+			}
+
+			// Step 3: Extract slugs from the existing colors
+			$existing_slugs = array_column( $existing_colors, 'slug' );
+			// Step 4:Read the contents of the theme.json file
+
+			$theme_json_content = file_get_contents( $theme_json_path );
+			$theme_json_data    = json_decode( $theme_json_content, true );
+
+			// Access the color palette from the theme.json file
+			if ( isset( $theme_json_data['settings']['color']['palette'] ) ) {
+
+				$theme_colors = $theme_json_data['settings']['color']['palette'];
+
+				// Step 5: Loop through theme.json colors and add them if they don't exist
+				foreach ( $theme_colors as $theme_color ) {
+					if ( ! in_array( $theme_color['slug'], $existing_slugs ) ) {
+						$existing_colors[] = $theme_color; // Add new color to the existing palette
+					}
+				}
+				foreach ( $theme_colors as $theme_color ) {
+					$theme_slug = $theme_color['slug'];
+
+					// Step 6: Use in_array to check if the slug already exists in the global palette
+					if ( ! in_array( $theme_slug, $existing_slugs ) ) {
+						// If the slug does not exist, add the theme color to the global palette
+						$global_colors[] = $theme_color;
+					}
+				}
+				// Step 6: Update the global styles content with the new colors
+				$global_styles_content['settings']['color']['palette']['theme'] = $existing_colors;
+
+				// Step 7: Save the updated global styles back to the post
+				wp_update_post(
+					array(
+						'ID'           => $global_styles_post_id,
+						'post_content' => wp_json_encode( $global_styles_content ),
+					)
+				);
+
+			}
+			wp_reset_postdata(); // Reset the query
+		}
 	}
 
 	/**

@@ -165,11 +165,12 @@ class Export_Theme {
 				foreach ( $colors as $idx => $color ) {
 					if ( strtolower( $color->color ) === strtolower( $import->color ) ) {
 						$add_css .= '--wp--preset--color--' . strtolower( $import->slug ) . ': var(--wp--preset--color--theme-' . $idx . ');';
+						$add_css .= '--wp--preset--color--theme-' . $idx . ': var(--wp--preset--color--' . strtolower( $import->slug ) . ');';
 					}
 				}
 			}
-			$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		}
+		$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		$system->put_contents(
 			gtb_theme_built_path() . 'style.css',
 			$placeholder,
@@ -383,13 +384,11 @@ class Export_Theme {
 			);
 			/** Loop through imported colors to find duplicate colors */
 			foreach ( $import_filtered as $color ) {
-				$slug         = 'theme-' . $idx;
 				$fix_colors[] = array(
-					'slug'  => $slug,
+					'slug'  => $color->slug,
 					'name'  => $color->name,
 					'color' => $color->color,
 				);
-				++$idx;
 			}
 		}
 
@@ -1155,8 +1154,12 @@ class Export_Theme {
 	 * @param string $content template content .
 	 */
 	private function fix_colors( $content ) {
-		$colors = $this->get_color_settings();
-
+		$colors          = $this->get_color_settings();
+		$theme_id        = get_option( 'gtb_active_theme_id' );
+		$theme_db        = Database::instance()->theme_info;
+		$theme_info      = $theme_db->get_theme_data( $theme_id );
+		$theme_slug      = $theme_info[0]['slug'];
+		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_slug );
 		// change colors slug into lowercase to prevent errors.
 		foreach ( $colors as $index => $color ) {
 			$new_slug = 'theme-' . $index;
