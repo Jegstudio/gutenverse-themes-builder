@@ -158,17 +158,18 @@ class Export_Theme {
 
 		$colors          = $this->get_color_settings();
 		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_data['slug'] );
-		/** Create an empty array to store unique colors  */
-		$add_css = '';
-		/** Loop through imported colors to find duplicate colors */
-		foreach ( $imported_colors as $import ) {
-			foreach ( $colors as $idx => $color ) {
-				if ( strtolower( $color->color ) === strtolower( $import->color ) ) {
-					$add_css .= '--wp--preset--color--' . strtolower( $import->slug ) . ': var(--wp--preset--color--theme-' . $idx . ');';
+		if ( $imported_colors ) {
+			$add_css = '';
+			/** Loop through imported colors to find duplicate colors */
+			foreach ( $imported_colors as $import ) {
+				foreach ( $colors as $idx => $color ) {
+					if ( strtolower( $color->color ) === strtolower( $import->color ) ) {
+						$add_css .= '--wp--preset--color--' . strtolower( $import->slug ) . ': var(--wp--preset--color--theme-' . $idx . ');';
+					}
 				}
 			}
+			$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		}
-		$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		$system->put_contents(
 			gtb_theme_built_path() . 'style.css',
 			$placeholder,
@@ -353,7 +354,7 @@ class Export_Theme {
 		$fix_colors = array();
 
 		// change colors slug into lowercase to prevent errors.
-		$idx = 0 ;
+		$idx = 0;
 		foreach ( $colors as $color ) {
 			$slug         = 'theme-' . $idx;
 			$fix_colors[] = array(
@@ -361,33 +362,35 @@ class Export_Theme {
 				'name'  => $color->name,
 				'color' => $color->color,
 			);
-			$idx++;
+			++$idx;
 		}
 		$theme_id        = get_option( 'gtb_active_theme_id' );
 		$theme_db        = Database::instance()->theme_info;
 		$theme_info      = $theme_db->get_theme_data( $theme_id );
 		$theme_slug      = $theme_info[0]['slug'];
 		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_slug );
-		/** Create an associative array to store the color of colors */
-		$color_index = array();
-		foreach ( $colors as $color ) {
-			$color_index[ $color->color ] = true;
-		}
-		$import_filtered = array_filter(
-			$imported_colors,
-			function ( $import ) use ( $color_index ) {
-				return ! isset( $color_index[ strtolower( $import->color ) ] );
+		if ( $imported_colors ) {
+			/** Create an associative array to store the color of colors */
+			$color_index = array();
+			foreach ( $colors as $color ) {
+				$color_index[ $color->color ] = true;
 			}
-		);
-		/** Loop through imported colors to find duplicate colors */
-		foreach ( $import_filtered as $color ) {
-			$slug         = 'theme-' . $idx;
-			$fix_colors[] = array(
-				'slug'  => $slug,
-				'name'  => $color->name,
-				'color' => $color->color,
+			$import_filtered = array_filter(
+				$imported_colors,
+				function ( $import ) use ( $color_index ) {
+					return ! isset( $color_index[ strtolower( $import->color ) ] );
+				}
 			);
-			$idx++;
+			/** Loop through imported colors to find duplicate colors */
+			foreach ( $import_filtered as $color ) {
+				$slug         = 'theme-' . $idx;
+				$fix_colors[] = array(
+					'slug'  => $slug,
+					'name'  => $color->name,
+					'color' => $color->color,
+				);
+				++$idx;
+			}
 		}
 
 		$placeholder = str_replace( '{{theme_color_settings}}', wp_json_encode( $fix_colors ), $placeholder );
