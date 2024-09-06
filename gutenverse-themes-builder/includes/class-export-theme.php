@@ -374,7 +374,7 @@ class Export_Theme {
 			/** Create an associative array to store the color of colors */
 			$color_index = array();
 			foreach ( $colors as $color ) {
-				$color_index[ $color->color ] = true;
+				$color_index[ strtolower( $color->color ) ] = true;
 			}
 			$import_filtered = array_filter(
 				$imported_colors,
