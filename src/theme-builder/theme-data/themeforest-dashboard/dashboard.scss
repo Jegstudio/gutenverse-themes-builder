@@ -263,7 +263,7 @@
                     justify-content: center;
                     align-items: center;
                     gap: 6px;
-                    padding: 8px 24px 10px;
+                    padding: 10px 24px;
                     border-radius: 5px;
                     border: solid 1px #3b57f7;
                     background-color: #fff;
@@ -315,7 +315,7 @@
 
             .final-detail {
                 margin-top: 40px;
-                width: 425px;
+                width: 480px;
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
@@ -356,6 +356,7 @@
                     text-align: center;
                     color: #fff;
                     margin-top: 24px;
+                    transition: background-color .3s ease, color .3s ease;
 
                     &:hover {
                         background-color: #2435ec;
@@ -540,7 +541,7 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            padding: 8px 24px 10px;
+            padding: 10px 24px;
             border-radius: 5px;
             border: solid 1px #3b57f7;
             background-color: #fff;
@@ -623,12 +624,14 @@
             color: white;
             display: flex;
             transition: all .5s ease;
-            padding: 10px 15px 10px 20px;
+            padding: 15px 22px 15px 24px;
             justify-content: center;
             align-items: center;
             gap: 6px;
-            border-radius: 5px;
+            border-radius: 8px;
             background: linear-gradient(92deg, #F045FF -12.88%, #4569FF 51.2%, #68E4F4 105.74%), rgba(255, 255, 255, 0.20);
+            font-size: 16px;
+            font-weight: 500;
 
             svg,
             span {
@@ -692,7 +695,7 @@
             z-index: 1;
             position: relative;
             width: 640px;
-            margin: -15px auto 35px;
+            margin: -10px auto 35px;
         }
     }
 
@@ -726,7 +729,7 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            padding: 8px 24px 10px;
+            padding: 10px 24px;
             border-radius: 5px;
             border: solid 1px #3b57f7;
             background-color: #fff;
