@@ -1,6 +1,6 @@
 <?php
 /**
- * REST APIs class
+ * Themeforest Data class
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -11,7 +11,7 @@ namespace {{namespace}};
 /**
  * Class Api
  *
- * @package gutenverse-themes-builder
+ * @package {{slug}}
  */
 class Themeforest_Data {
 	/**
