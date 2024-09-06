@@ -176,13 +176,6 @@ class Themeforest_Data {
 		);
 
 		wp_enqueue_style(
-			'{{slug}}-roboto-font',
-			{{constant}}_URI . '/assets/dashboard-fonts/roboto/roboto.css',
-			array(),
-			{{constant}}_VERSION
-		);
-
-		wp_enqueue_style(
 			'{{slug}}-jakarta-sans-font',
 			{{constant}}_URI . '/assets/dashboard-fonts/plus-jakarta-sans/plus-jakarta-sans.css',
 			array(),
