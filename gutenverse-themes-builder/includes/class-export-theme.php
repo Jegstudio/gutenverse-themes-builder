@@ -252,7 +252,7 @@ class Export_Theme {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
 
-		if ( empty( $other['dashboard'] ) || ( isset( $other['dashboard']['mode'] ) && 'default' === $other['dashboard']['mode']['value'] ) ) {
+		if ( empty( $other['dashboard'] ) || ( isset( $other['dashboard']['mode'] ) && 'default' === $other['dashboard']['mode']['value'] ) || ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) ) {
 			return;
 		}
 
@@ -664,6 +664,9 @@ class Export_Theme {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-support.png', gtb_theme_built_path() . 'assets/img/icon-support.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gtb_theme_built_path() . 'assets/img/image-dancer.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
+			} elseif ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/lite/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/lite/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
 			} else {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
@@ -674,6 +677,26 @@ class Export_Theme {
 		}
 		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
 		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
+
+		$dashboard_data_string = '';
+		if ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
+			$dasboard_data               = array();
+			$dasboard_data['comparison'] = array();
+			if ( isset( $other['dashboard']['comparison'] ) && is_array( $other['dashboard']['comparison'] ) ) {
+				foreach ( $other['dashboard']['comparison'] as $key => $value ) {
+					$dasboard_data['comparison'][ $key ] = $value;
+				}
+			}
+
+			$dashboard_data_string = '';
+			foreach ( $dasboard_data as $key => $value ) {
+				$dashboard_data_string .= "'$key' => " . var_export( $value, true ) . ",\n";
+			}
+
+			$dashboard_data_string = rtrim( $dashboard_data_string, ",\n" );
+		}
+
+		$placeholder = str_replace( '{{dashboard_data}}', $dashboard_data_string, $placeholder );
 
 		$required = array();
 

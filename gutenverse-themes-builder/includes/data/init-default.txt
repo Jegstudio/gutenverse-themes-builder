@@ -570,6 +570,9 @@ class Init {
 			'assign'       => array(
 				{{assign_templates}}
 			),
+			'dashboardData'=> array(
+				{{dashboard_data}}
+			),
 		);
 
 		if ( isset( $config['assign'] ) && $config['assign'] ) {
