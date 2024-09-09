@@ -117,7 +117,7 @@ if ( ! function_exists( 'gtb_theme_built_path' ) ) {
 	 *
 	 * @return string
 	 */
-	function gtb_theme_built_path( $theme_id = null, $url = false ) {
+	function gtb_theme_built_path( $theme_id = null, $url = false, $child = false ) {
 		if ( null === $theme_id ) {
 			$theme_id = get_option( 'gtb_active_theme_id' );
 		}
@@ -127,10 +127,10 @@ if ( ! function_exists( 'gtb_theme_built_path' ) ) {
 		$theme   = $result[0];
 
 		if ( $url ) {
-			return trailingslashit( wp_upload_dir()['baseurl'] . '/' . $theme['slug'] );
+			return trailingslashit( wp_upload_dir()['baseurl'] . '/' . $theme['slug'] . ( $child ? '-child' : '' ) );
 		}
 
-		return trailingslashit( wp_upload_dir()['basedir'] . '/' . $theme['slug'] );
+		return trailingslashit( wp_upload_dir()['basedir'] . '/' . $theme['slug'] . ( $child ? '-child' : '' ) );
 	}
 }
 

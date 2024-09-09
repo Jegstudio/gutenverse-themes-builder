@@ -5,7 +5,12 @@ import { __ } from '@wordpress/i18n';
 const ExportTheme = () => {
     const startExport = () => {
         exportTheme(response => {
-            window.open(response);
+            window.open(response?.fileresult?.fileurl);
+            if (response?.fileresult?.child?.fileurl) {
+                setTimeout(()=>{
+                    window.open(response?.fileresult?.child?.fileurl);
+                }, 500)
+            }
         });
     };
 

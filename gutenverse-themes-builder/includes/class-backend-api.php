@@ -1141,7 +1141,7 @@ class Backend_Api {
 	public function export_theme( $request ) {
 		$result = new Export_Theme();
 
-		return $result->fileresult['fileurl'];
+		return $result;
 	}
 
 	/**

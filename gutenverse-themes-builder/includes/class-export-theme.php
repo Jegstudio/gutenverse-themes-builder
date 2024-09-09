@@ -100,6 +100,96 @@ class Export_Theme {
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
 		$this->extractor_send_file( $data );
+
+		// child theme .
+		$other = maybe_unserialize( $data['other'] );
+		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
+			$this->create_child_theme( $wp_filesystem, $data );
+		}
+	}
+
+	/**
+	 * Create Child Theme
+	 *
+	 * @param object $system .
+	 * @param array  $data .
+	 */
+	public function create_child_theme( $system, $data ) {
+		$child_theme_dir = gtb_theme_built_path( null, false, true );
+		if ( is_dir( $child_theme_dir ) ) {
+			$system->rmdir( $child_theme_dir, true );
+		}
+		wp_mkdir_p( $child_theme_dir );
+		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+		// style.
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/style-child.txt' );
+		$theme_tags  = ! empty( $theme_data['tags'] ) ? join( ',', $theme_data['tags'] ) : '';
+		$placeholder = ! empty( $theme_data['title'] ) ? str_replace( '{{title}}', $theme_data['title'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['description'] ) ? str_replace( '{{description}}', $theme_data['description'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['author_name'] ) ? str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['author_uri'] ) ? str_replace( '{{author_uri}}', $theme_data['author_uri'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['theme_uri'] ) ? str_replace( '{{theme_uri}}', $theme_data['theme_uri'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['slug'] ) ? str_replace( '{{slug}}', $theme_data['slug'], $placeholder ) : $placeholder;
+		$placeholder = str_replace( '{{tags}}', $theme_tags, $placeholder );
+
+		$system->put_contents(
+			$child_theme_dir . 'style.css',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
+
+		// functions.
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/functions-child.txt' );
+		$placeholder = ! empty( $theme_data['slug'] ) ? str_replace( '{{slug}}', $theme_data['slug'], $placeholder ) : $placeholder;
+
+		$system->put_contents(
+			$child_theme_dir . 'functions.php',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
+
+		// screenshot.
+		if ( ! empty( $other['screenshots'] ) ) {
+			$image      = $other['screenshots']['thumbnail']['url'];
+			$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
+
+			if ( ! is_wp_error( $image_data ) ) {
+				$system->put_contents(
+					$child_theme_dir . '/screenshot.jpg',
+					$image_data['body'],
+					FS_CHMOD_FILE
+				);
+			}
+		}
+
+		// zip.
+		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-child.zip';
+
+		$zip = new ZipArchive();
+		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+
+		// Create recursive directory iterator.
+		$files = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator( gtb_theme_built_path( null, false, true ) ),
+			RecursiveIteratorIterator::LEAVES_ONLY
+		);
+
+		foreach ( $files as $name => $file ) {
+			if ( ! $file->isDir() ) {
+				$file_path     = $file->getRealPath();
+				$relative_path = substr( $file_path, strlen( trailingslashit( wp_upload_dir()['basedir'] ) ) );
+				$zip->addFile( $file_path, $relative_path );
+			}
+		}
+
+		$zip->close();
+
+		$this->fileresult['child'] = array(
+			'filename' => $data['slug'] . '-child.zip',
+			'filepath' => $zip_path,
+			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-child.zip',
+		);
 	}
 
 	/**
@@ -280,6 +370,12 @@ class Export_Theme {
 		$system->put_contents(
 			gtb_theme_built_path() . '/inc/class/class-themeforest-data.php',
 			$placeholder,
+			FS_CHMOD_FILE
+		);
+
+		$system->put_contents(
+			gtb_theme_built_path() . '/index.php',
+			$system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/index.txt' ),
 			FS_CHMOD_FILE
 		);
 	}
