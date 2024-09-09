@@ -530,7 +530,7 @@ const WizardPage = () => {
                     </div>
                     <div className='final-detail'>
                         <h3 className='final-title'>{__('Congratulations All Set 🤩', '--gtb-theme-namespace--')}</h3>
-                        <p className='final-desc'>{__('This themes build by Gutenverse, a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
+                        <p className='final-desc'>{__('This theme is built with Gutenverse, a powerful and lightweight Gutenberg blocks and page builder plugin for the WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
                         <div onClick={() => {
                             window.location.href = `${window['GutenThemeConfig']['dashboardPage']}&wizard_setup_done=yes`
                         }} className='button-visit'>{__('Visit Dashboard', '--gtb-theme-namespace--')}</div>
