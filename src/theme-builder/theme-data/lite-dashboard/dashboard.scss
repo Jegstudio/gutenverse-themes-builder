@@ -203,6 +203,13 @@
 
                 &.pro {
                     border: solid 1px rgba(91, 183, 248, 0.5);
+
+                    .comparison-item-inner {
+                        .title {
+                            border-bottom: dashed 1px rgba(91, 183, 248, 0.5);
+                        }
+                    }
+
                 }
 
                 .comparison-item-inner {
