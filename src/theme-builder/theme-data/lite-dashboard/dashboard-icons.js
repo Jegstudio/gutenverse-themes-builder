@@ -29,4 +29,4 @@ export const CompX = () => <svg width="20" height="20" viewBox="0 0 20 20" fill=
     </defs>
 </svg>
 
-export const Crown = () => <svg width="16" height="16" viewBox="0 0 13 13" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill="white"></path></svg>
+export const Crown = () => <svg width="16" height="16" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill="white"></path></svg>

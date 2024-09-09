@@ -180,6 +180,55 @@ const ManageDashbaord = () => {
                     </>}
                     {dashboardData?.mode?.value === 'lite' && <>
                         <div>
+                            <h3>{__('Names and Description', 'gutenverse-themes-builder')}</h3>
+                            <label>{__('Core Theme Name :', 'gutenverse-themes-builder')}</label>
+                            <br/>
+                            <input type="text"
+                                onChange={(e) => {
+                                    updateData('comparison', {
+                                        ...dashboardData?.comparison,
+                                        name_core: e.target.value
+                                    });
+                                }}
+                                value={dashboardData?.comparison?.name_core}
+                            />
+                            <br/>
+                            <label>{__('Lite Theme Name :', 'gutenverse-themes-builder')}</label>
+                            <br/>
+                            <input type="text"
+                                onChange={(e) => {
+                                    updateData('comparison', {
+                                        ...dashboardData?.comparison,
+                                        name_lite: e.target.value
+                                    });
+                                }}
+                                value={dashboardData?.comparison?.name_lite}
+                            />
+                            <br/>
+                            <label>{__('Pro Theme Name :', 'gutenverse-themes-builder')}</label>
+                            <br/>
+                            <input type="text"
+                                onChange={(e) => {
+                                    updateData('comparison', {
+                                        ...dashboardData?.comparison,
+                                        name_pro: e.target.value
+                                    });
+                                }}
+                                value={dashboardData?.comparison?.name_pro}
+                            />
+                            <br/>
+                            <label>{__('Comparison Description :', 'gutenverse-themes-builder')}</label>
+                            <br/>
+                            <textarea
+                                onChange={(e) => {
+                                    updateData('comparison', {
+                                        ...dashboardData?.comparison,
+                                        description: e.target.value
+                                    });
+                                }}
+                                value={dashboardData?.comparison?.description}
+                            />
+                            <br/>
                             <h3>{__('Theme Comparison Features', 'gutenverse-themes-builder')}</h3>
                             <label>{__('Core Theme Template Count :', 'gutenverse-themes-builder')}</label>
                             <br/>

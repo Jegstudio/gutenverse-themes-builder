@@ -14,9 +14,9 @@ const DashboardPage = () => {
         dashboardData
     } = window['GutenThemeConfig'];
 
-    const coreTitle = title.replace('Lite', '') + ' Core';
-    const liteTitle = title.replace('Lite', '') + ' Lite';
-    const proTitle = title.replace('Lite', '') + ' Pro';
+    const coreTitle = dashboardData?.comparison?.name_core;
+    const liteTitle = dashboardData?.comparison?.name_lite;
+    const proTitle = dashboardData?.comparison?.name_pro;
 
     const [allActive, setAllActive] = useState(false);
     const [popupImg, setPopupImg] = useState('');
@@ -113,7 +113,7 @@ const DashboardPage = () => {
         <div className="bottom-container">
             <div className="comparison">
                 <h2 className="title">{title} Theme Comparison Features</h2>
-                <p className="description">Here's a comparison of {coreTitle}, {liteTitle}, and {proTitle} to help you determine which version best suits your needs.</p>
+                <p className="description">{dashboardData?.comparison?.description}</p>
                 <div className='comparison-wrapper'>
                     <div className='comparison-item'>
                         <div className='comparison-item-inner'>
@@ -192,23 +192,23 @@ const DashboardPage = () => {
                                     <span>Mouse Move Effect</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Background Effect</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Transform</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Text Clip</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Condition Filter</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Fluid Background</span>
                                 </div>
                             </div>
@@ -283,31 +283,31 @@ const DashboardPage = () => {
                                     <span>Mouse Move Effect</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Background Effect</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Transform</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Text Clip</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Highlight Styles</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Condition Filter</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Fluid Background</span>
                                 </div>
                                 <div className='list-item disable'>
-                                    <CompCheck />
+                                    <CompX />
                                     <span>Custom Font</span>
                                 </div>
                             </div>
