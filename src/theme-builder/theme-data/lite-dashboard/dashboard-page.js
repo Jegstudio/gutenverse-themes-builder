@@ -21,6 +21,7 @@ const DashboardPage = () => {
     const [allActive, setAllActive] = useState(false);
     const [popupImg, setPopupImg] = useState('');
     const [openPopup, setOpenPopup] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         let done = true;
@@ -46,6 +47,7 @@ const DashboardPage = () => {
             const plugin = plugins[index];
 
             if (!plugin?.installed) {
+                setLoading(true);
                 wp?.apiFetch({
                     path: 'wp/v2/plugins',
                     method: 'POST',
@@ -60,6 +62,7 @@ const DashboardPage = () => {
                 })
             }
             if (!plugin?.active) {
+                setLoading(true);
                 wp?.apiFetch({
                     path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
                     method: 'POST',
@@ -71,18 +74,46 @@ const DashboardPage = () => {
                 }).catch(() => {
                 })
             }
+
+            if (plugin?.installed && plugin?.active) {
+                installPlugins(index + 1);
+            }
         } else {
             window.location.reload();
         }
     }
 
     const buttonState = () => {
+        const [dotCount, setDotCount] = useState(0);
+
+        useEffect(() => {
+            if (loading) {
+                const interval = setInterval(() => {
+                    setDotCount(prevCount => (prevCount + 1) % 3);
+                }, 500);
+                return () => clearInterval(interval);
+            }
+        }, [loading]);
+
+        const dots = (
+            <>
+                <div style={{ opacity: dotCount === 0 ? 1 : 0.3 }}>.</div>
+                <div style={{ opacity: dotCount === 1 ? 1 : 0.3 }}>.</div>
+                <div style={{ opacity: dotCount === 2 ? 1 : 0.3 }}>.</div>
+            </>
+        );
+
         if (!allActive) {
-            return <div onClick={() => installPlugins(0)} className="theme-button">Install &amp; Activate Plugins</div>;
+            return (
+                <div onClick={() => installPlugins(0)} className={`theme-button ${loading ? 'active loading' : ''}`}>
+                    {loading ? 'Installing & Activating' : 'Install & Activate Plugins'}
+                    {loading && dots}
+                </div>
+            );
         }
 
-        return <div className="theme-button active">Plugins Installed &amp; Activated</div>;
-    }
+        return <div className="theme-button active">Plugins Installed & Activated</div>;
+    };
 
     return <Fragment>
         <div className="top-container">
@@ -313,7 +344,7 @@ const DashboardPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='comparison-item'>
+                    <div className='comparison-item pro'>
                         <div className='comparison-item-inner'>
                             <h2 className="title">{proTitle} <span>PRO {<Crown/>}</span></h2>
                             <div className='comparison-list'>

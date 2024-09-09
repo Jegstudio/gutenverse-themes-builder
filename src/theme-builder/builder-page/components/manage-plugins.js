@@ -139,7 +139,10 @@ const ManagePlugins = () => {
                 <ul>
                     {plugins.map((plugin, key) => {
                         return <li className="plugin-req" key={key}>
-                            <p className="name">{plugin?.label}</p>
+                            <textarea value={plugin?.label} onChange={e => updatePluginValue({
+                                ...plugin,
+                                label: e.target.value
+                            }, key)} />
                             <p className="type">{plugin?.type}</p>
                             <input type="text" value={plugin?.version} onChange={e => updatePluginValue({
                                 ...plugin,
