@@ -11,6 +11,7 @@ import ManageScreenshots from './components/manage-screenshots';
 import ReadmeEditor from './components/readme-editor';
 import ManageGlobal from './components/manage-global';
 import ManageDashbaord from './components/manage-dashboard';
+import ManageNotice from './components/manage-notice';
 
 const ThemeBuilder = ({ location }) => {
     const [path, setPath] = useState('list');
@@ -55,6 +56,9 @@ const ThemeBuilder = ({ location }) => {
             break;
         case 'export-theme':
             Content = ExportTheme;
+            break;
+        case 'notice-editor':
+            Content = ManageNotice;
             break;
         default:
             Content = ThemeList;

@@ -1,3 +1,10 @@
+@import "@wordpress/components/build-style/style";
+@import "@wordpress/block-editor/build-style/style";
+@import "@wordpress/block-library/build-style/style";
+@import "@wordpress/block-library/build-style/editor";
+@import "@wordpress/block-library/build-style/theme";
+@import "@wordpress/format-library/build-style/style";
+
 body {
     --gtb-white: #ffffff;
     --gtb-black: #000000;
@@ -1086,3 +1093,163 @@ body {
         }
     }
 }
+
+// .notice-input {
+//     border-radius: 3px;
+//     border: 1px solid #e3e4e6;
+
+//     .editor-styles-wrapper {
+//         flex: 1 1;
+//         padding: 20px;
+
+//         p {
+//             font-size: inherit;
+//             line-height: inherit;
+//         }
+
+//         ul,
+//         ol {
+//             margin: 0;
+//             padding: 0;
+//         }
+
+//         ul li,
+//         ol li {
+//             margin-bottom: initial;
+//         }
+
+//         ul {
+//             list-style-type: disc;
+//         }
+
+//         ol {
+//             list-style-type: decimal;
+//         }
+
+//         ul ul,
+//         ol ul {
+//             list-style-type: circle;
+//         }
+//     }
+
+//     .block-editor-url-popover,
+//     .components-popover__content {
+//         width: fit-content;
+
+//         .block-editor-media-placeholder__url-input-form {
+//             display: flex;
+//             margin: 0;
+//             padding: 5px;
+//         }
+
+//         .components-dropdown-menu__menu {
+//             width: 300px;
+//         }
+//     }
+
+//     .editor__logo {
+//         font-size: 20px;
+//         font-weight: 300;
+//     }
+
+//     .editor__body {
+//         position: relative;
+//         display: flex;
+//         flex-direction: column;
+//         min-height: 180px;
+
+//         img {
+//             max-width: 100%;
+//             height: auto;
+//         }
+
+//         iframe {
+//             width: 100%;
+//         }
+
+//         .components-navigate-regions {
+//             height: 100%;
+//         }
+//     }
+
+//     .editor__toolbar {
+//         display: flex;
+//         position: relative;
+//         border-bottom: 1px solid #e3e4e6;
+//         height: 46px;
+//         align-items: center;
+//         align-content: center;
+
+//         .navigation_block {
+//             border-right: 1px solid #e3e4e6;
+//             padding: 4px;
+//         }
+
+//         .components-accessible-toolbar {
+//             border: none !important;
+//         }
+//     }
+
+//     .editor__sidebar {
+//         position: absolute;
+//         background: white;
+//         top: 0;
+//         right: 0;
+//         bottom: 0;
+//         height: auto;
+//         overflow: auto;
+//         width: 296px;
+//         max-width: 100%;
+//         -webkit-overflow-scrolling: touch;
+//         border-left: 1px solid #e3e4e6;
+
+//         // @include break-small() {
+//         //     position: relative;
+//         // }
+//     }
+
+//     @keyframes edit-post__fade-in-animation {
+//         from {
+//             opacity: 0;
+//         }
+
+//         to {
+//             opacity: 1;
+//         }
+//     }
+
+//     [data-reach-dialog-overlay] {
+//         z-index: 50;
+//     }
+
+//     .editor__code {
+//         padding: 17px;
+//     }
+
+//     .block-editor-default-block-appender {
+//         position: relative;
+//     }
+
+//     .block-editor-inserter {
+//         position: absolute;
+//         top: 50%;
+//         right: 0;
+//         transform: translateY(-50%);
+
+//         .components-button {
+//             height: unset;
+//             svg{
+//                 fill: white;
+//             }
+//         }
+
+//         .block-editor-button-block-appender svg {
+//             color: white;
+//             background-color: black;
+//         }
+//     }
+
+//     .components-panel__body.block-editor-block-inspector__advanced {
+//         display: none;
+//     }
+// }
