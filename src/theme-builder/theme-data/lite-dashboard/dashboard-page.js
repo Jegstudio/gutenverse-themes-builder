@@ -11,7 +11,8 @@ const DashboardPage = () => {
         pages,
         demoUrl,
         plugins,
-        dashboardData
+        dashboardData,
+        slug
     } = window['GutenThemeConfig'];
 
     const coreTitle = dashboardData?.comparison?.name_core;
@@ -348,7 +349,7 @@ const DashboardPage = () => {
                         <div className='comparison-item-inner'>
                             <h2 className="title">{proTitle} <span>PRO {<Crown/>}</span></h2>
                             <div className='comparison-list'>
-                                <a href='https://gutenverse.com/pro/' className='upgrade-button' target='_blank'>
+                                <a href={`https://gutenverse.com/pro?utm_source=${slug}&utm_medium=dashboard&utm_campaign=upgradepro`} className='upgrade-button' target='_blank'>
                                     <span>Upgrade Now</span><Crown/>
                                 </a>
                                 <span>By upgrading to Gutenverse Pro, you'll unlock the pro version of {proTitle}, <b>30+</b> other themes, and all exclusive PRO features.</span>

@@ -588,6 +588,7 @@ class Init {
 			'doneText'     => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
 			'dashboardPage'=> admin_url( 'themes.php?page={{slug}}-dashboard' ),
 			'logo'         => {{theme_logo}},
+			'slug'         => '{{slug}}',
 			'upgradePro'   => 'https://gutenverse.com/pro',
 			'supportLink'  => 'https://support.jegtheme.com/forums/forum/fse-themes/',
 			'libraryApi'   => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
