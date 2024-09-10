@@ -184,7 +184,7 @@ const DashboardPage = () => {
                                 </div>
                                 <div className='list-item disable'>
                                     <CompX />
-                                    <span>Icon Libraryt</span>
+                                    <span>Icon Library</span>
                                 </div>
                                 <div className='list-item disable'>
                                     <CompX />
