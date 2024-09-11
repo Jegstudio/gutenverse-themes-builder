@@ -5,6 +5,7 @@ const themeBuilderLiteDashboard = require("./scripts/theme-builder-lite-dashboar
 const themeBuilderEditor = require("./scripts/theme-builder-editor");
 const themeBuilderPage = require("./scripts/theme-builder-page");
 const { dashboard } = require("./scripts/dashboard");
+const admin = require("./scripts/admin");
 
 module.exports = [
     themeBuilderBlocks,
@@ -13,5 +14,6 @@ module.exports = [
     themeBuilderPage,
     themeBuilderThemeforestDashboard,
     themeBuilderLiteDashboard,
-    dashboard
+    dashboard,
+    admin
 ];

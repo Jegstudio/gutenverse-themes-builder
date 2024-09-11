@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Gutenverse Themes Builder
+ * Requires Plugins: gutenverse
  * Description: Build advance themes that fit for wp.org and any other marketplace.
  * Plugin URI: https://gutenverse.com/
  * Author: Jegstudio
@@ -11,6 +12,10 @@
  *
  * @package gutenverse-themes-builder
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 defined( 'GUTENVERSE_THEMES_BUILDER' ) || define( 'GUTENVERSE_THEMES_BUILDER', 'gutenverse-themes-builder' );
 defined( 'GUTENVERSE_THEMES_BUILDER_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_VERSION', '1.0.1' );

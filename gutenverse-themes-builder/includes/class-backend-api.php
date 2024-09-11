@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 use Gutenverse\Framework\Global_Variable;
 use WP_Query;
@@ -864,7 +868,7 @@ class Backend_Api {
 
 		$result = $info_db->create_data( $data );
 
-		$this->check_directory( gtb_theme_folder_path( $theme_id ), $result );
+		$this->check_directory( gutenverse_themes_builder_theme_folder_path( $theme_id ), $result );
 
 		return array(
 			'status' => 'success',
@@ -942,7 +946,7 @@ class Backend_Api {
 		}
 
 		$info_db = Database::instance()->theme_info;
-		$current = gtb_get_theme_mode( $theme_id );
+		$current = gutenverse_themes_builder_get_theme_mode( $theme_id );
 
 		if ( ! empty( $current ) && $info_details['theme_mode'] !== $current ) {
 			$this->save_templates( $theme_id );
@@ -1011,7 +1015,7 @@ class Backend_Api {
 		if ( ! empty( $template_list ) ) {
 			foreach ( $template_list as $template_data ) {
 				$template_name = strtolower( $template_data['category'] . '-' . $template_data['name'] );
-				$template_type = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'wp_template_part' : 'wp_template';
+				$template_type = in_array( $template_data['template_type'], gutenverse_themes_builder_parts(), true ) ? 'wp_template_part' : 'wp_template';
 
 				$posts = get_posts(
 					array(
@@ -1100,7 +1104,7 @@ class Backend_Api {
 				update_option( 'gtb_active_theme_id', null );
 			}
 
-			$theme_folder = gtb_theme_folder_path( $theme_id );
+			$theme_folder = gutenverse_themes_builder_theme_folder_path( $theme_id );
 
 			if ( is_dir( $theme_folder ) ) {
 				$wp_filesystem->rmdir( $theme_folder );
@@ -1522,12 +1526,12 @@ class Backend_Api {
 				preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 				$urls = $matches[0];
 				/** Filter image URLs */
-				$image_urls   = array_filter( $urls, 'is_image_url' );
+				$image_urls   = array_filter( $urls, 'gutenverse_themes_builder_is_image_url' );
 				$replacements = array();
 				/** Replace Image Url Content */
 				if ( ! empty( $image_urls ) ) {
 					foreach ( $image_urls as $url ) {
-						$image_without_res = get_image_without_resolution( $url );
+						$image_without_res = gutenverse_themes_builder_get_image_without_resolution( $url );
 						if ( $image_without_res ) {
 							$url = $image_without_res['nores'];
 						}
@@ -1778,7 +1782,7 @@ class Backend_Api {
 		global $wp_filesystem;
 
 		if ( 'content' === $media_type ) {
-			$folder = gtb_theme_folder_path() . '/assets/' . $type;
+			$folder = gutenverse_themes_builder_theme_folder_path() . '/assets/' . $type;
 			$file   = $folder . '/' . $handler . '.' . $type;
 
 			$this->check_directory( $folder );
@@ -1930,7 +1934,7 @@ class Backend_Api {
 
 		if ( ! empty( $family ) ) {
 			$slug   = strtolower( str_replace( ' ', '-', $family ) );
-			$folder = gtb_theme_folder_path() . '/assets/fonts/' . $slug;
+			$folder = gutenverse_themes_builder_theme_folder_path() . '/assets/fonts/' . $slug;
 			$weight = $this->get_font_params( $style, $weights );
 
 			$this->check_directory( $folder );
@@ -1979,7 +1983,7 @@ class Backend_Api {
 			global $wp_filesystem;
 
 			$slug        = strtolower( str_replace( ' ', '-', $data[0]['family'] ) );
-			$font_folder = gtb_theme_folder_path() . '/assets/fonts/' . $slug;
+			$font_folder = gutenverse_themes_builder_theme_folder_path() . '/assets/fonts/' . $slug;
 			$wp_filesystem->rmdir( $font_folder, true );
 		}
 
@@ -2097,7 +2101,7 @@ class Backend_Api {
 			$templates_data = $templates_db->get_data( $theme_id );
 
 			return array(
-				'mode' => gtb_get_theme_mode( $theme_id ),
+				'mode' => gutenverse_themes_builder_get_theme_mode( $theme_id ),
 				'data' => $templates_data,
 			);
 		}
@@ -2113,17 +2117,17 @@ class Backend_Api {
 	public function create_template( $request ) {
 		$template_data  = $request->get_param( 'template_data' );
 		$theme_id       = get_option( 'gtb_active_theme_id' );
-		$allow_template = gtb_check_theme_mode( $template_data['category'], $theme_id );
+		$allow_template = gutenverse_themes_builder_check_theme_mode( $template_data['category'], $theme_id );
 
 		if ( ! empty( $template_data ) && $theme_id && $allow_template ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			WP_Filesystem();
 			global $wp_filesystem;
 
-			$theme_dir       = gtb_theme_folder_path();
+			$theme_dir       = gutenverse_themes_builder_theme_folder_path();
 			$category        = $template_data['category'];
 			$category_folder = $theme_dir . '/' . $category;
-			$template_type   = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_type   = in_array( $template_data['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 			$template_name   = strtolower( str_replace( ' ', '-', $template_data['name'] ) );
 			$file_path       = $category_folder . '/' . $template_type . '/' . $template_name . '.html';
 
@@ -2181,7 +2185,7 @@ class Backend_Api {
 		}
 
 		foreach ( $templates_data as $template ) {
-			$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_type = in_array( $template['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
 			$file_dir      = $template_dir . '/' . $template['category'] . '/' . $template_type . '/' . $template_name . '.html';
 
@@ -2212,16 +2216,16 @@ class Backend_Api {
 	 * @param string $template_content .
 	 */
 	public function create_template_import( $category, $theme_id, $template_type, $template_name, $template_content ) {
-		$allow_template = gtb_check_theme_mode( $category, $theme_id );
+		$allow_template = gutenverse_themes_builder_check_theme_mode( $category, $theme_id );
 		if ( $allow_template ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			WP_Filesystem();
 			global $wp_filesystem;
 
-			$theme_dir       = gtb_theme_folder_path();
+			$theme_dir       = gutenverse_themes_builder_theme_folder_path();
 			$category_folder = $theme_dir . '/' . $category;
 			$file_path       = $category_folder . '/' . $template_type . '/' . $template_name . '.html';
-			$file_type       = in_array( $template_name, gtb_parts(), true ) ? 'parts' : 'templates';
+			$file_type       = in_array( $template_name, gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 			$this->check_directory( $category_folder . '/templates' );
 			$this->check_directory( $category_folder . '/parts' );
 
@@ -2384,7 +2388,7 @@ class Backend_Api {
 								$value          = $post->post_name;
 								$label          = $post->post_title;
 								$pattern        = $matches_pattern[0][ $index ];
-								$string_pattern = '<!-- wp:gutenverse-themes-builder/pattern-wrapper {"mode":"' . $mode . '","pattern":{"value":"' . $value . '","label":"' . $label . '","content":"' . gtb_to_unicode_escape( $content ) . '"}} --> ' . $content . ' <!-- /wp:gutenverse-themes-builder/pattern-wrapper -->';
+								$string_pattern = '<!-- wp:gutenverse-themes-builder/pattern-wrapper {"mode":"' . $mode . '","pattern":{"value":"' . $value . '","label":"' . $label . '","content":"' . gutenverse_themes_builder_to_unicode_escape( $content ) . '"}} --> ' . $content . ' <!-- /wp:gutenverse-themes-builder/pattern-wrapper -->';
 								$doc_content    = str_replace( $pattern, $string_pattern, $doc_content );
 							}
 						}
@@ -2406,11 +2410,11 @@ class Backend_Api {
 		 * Create theme folder & files
 		 */
 		if ( ! empty( $template_data ) ) {
-			$theme_dir       = gtb_theme_folder_path();
+			$theme_dir       = gutenverse_themes_builder_theme_folder_path();
 			$templates_db    = Database::instance()->theme_templates;
 			$category        = $template_data['category'];
 			$category_folder = $theme_dir . '/' . $category;
-			$template_type   = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_type   = in_array( $template_data['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 			$template_name   = strtolower( str_replace( ' ', '-', $template_data['name'] ) );
 			$file_path       = $category_folder . '/' . $template_type . '/' . $template_name . '.html';
 
@@ -2420,7 +2424,7 @@ class Backend_Api {
 				);
 
 				if ( file_exists( $file_path ) ) {
-					$post_type = in_array( $template_data['template_type'], gtb_parts(), true ) ? 'wp_template_part' : 'wp_template';
+					$post_type = in_array( $template_data['template_type'], gutenverse_themes_builder_parts(), true ) ? 'wp_template_part' : 'wp_template';
 					$post_name = strtolower( $template_data['category'] . '-' . $template_data['name'] );
 
 					$posts = get_posts(
@@ -2471,8 +2475,8 @@ class Backend_Api {
 		$families  = array();
 
 		if ( ! empty( $font_list['data'] ) ) {
-			$folder = gtb_theme_folder_path() . '/assets/fonts/';
-			$src    = gtb_theme_folder_path( null, true ) . '/assets/fonts/';
+			$folder = gutenverse_themes_builder_theme_folder_path() . '/assets/fonts/';
+			$src    = gutenverse_themes_builder_theme_folder_path( null, true ) . '/assets/fonts/';
 
 			foreach ( $font_list['data'] as $font ) {
 				$slug        = strtolower( str_replace( ' ', '-', $font['family'] ) );
@@ -2574,7 +2578,7 @@ class Backend_Api {
 		}
 
 		$placeholder     = str_replace( '{{layout_sizes}}', wp_json_encode( $layout ), $placeholder );
-		$theme_json_path = gtb_theme_folder_path() . '/theme.json';
+		$theme_json_path = gutenverse_themes_builder_theme_folder_path() . '/theme.json';
 
 		$wp_filesystem->put_contents(
 			$theme_json_path,

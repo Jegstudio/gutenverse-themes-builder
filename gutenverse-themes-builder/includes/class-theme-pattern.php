@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Theme Helper
  *
@@ -64,7 +68,7 @@ class Theme_Pattern {
 	 */
 	public function update_custom_quickedit_box() {
 		if ( isset( $_POST ) && isset( $_POST['pattern_type'] ) ) {
-			update_post_meta( $_POST['post_ID'], '_pattern_category', $_POST['pattern_type'] );
+			update_post_meta( esc_attr( $_POST['post_ID'] ), '_pattern_category', esc_attr( $_POST['pattern_type'] ) );
 		}
 
 		return;

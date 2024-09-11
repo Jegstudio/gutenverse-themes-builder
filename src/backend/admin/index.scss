@@ -1,0 +1,19 @@
+.gtb-notice-action .install-action {
+    color: #fff;
+    background: #1B67A5;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 7px 15px;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.gtb-notice-action .install-action.process {
+    background: #ccc;
+    color: #666;
+    pointer-events: none;
+}
+
+.gtb-notice-action .install-action.success {
+    background: #4CAF50;
+}
