@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 
 /**
@@ -49,11 +53,11 @@ class Theme_Helper {
 
 		if ( ! empty( $templates ) ) {
 			foreach ( $templates as $template ) {
-				if ( ! gtb_check_theme_mode( $template['category'], $theme_id ) ) {
+				if ( ! gutenverse_themes_builder_check_theme_mode( $template['category'], $theme_id ) ) {
 					continue;
 				}
 
-				$is_parts      = in_array( $template['template_type'], gtb_parts(), true );
+				$is_parts      = in_array( $template['template_type'], gutenverse_themes_builder_parts(), true );
 				$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
 
 				if ( 'wp_template' === $template_type && ! $is_parts ) {
@@ -100,7 +104,7 @@ class Theme_Helper {
 			foreach ( $templates as $template ) {
 				$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
 				$slug          = strtolower( $template['category'] . '-' . $template_name );
-				$type          = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+				$type          = in_array( $template['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 
 				if ( $template_slug === $slug ) {
 					return $uploaddir . '/' . $template['category'] . '/' . $type . '/' . $template_name . '.html';

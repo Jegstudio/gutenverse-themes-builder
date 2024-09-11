@@ -7,6 +7,10 @@
  * @package gutenverse-themes-builder
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 spl_autoload_register(
 	function ( $class ) {
 		$prefix   = 'Gutenverse_Themes_Builder\\';

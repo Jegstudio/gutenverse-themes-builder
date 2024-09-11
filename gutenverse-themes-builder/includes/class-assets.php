@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 
 /**

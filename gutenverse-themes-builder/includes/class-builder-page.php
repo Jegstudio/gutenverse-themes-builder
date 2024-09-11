@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 
 /**
@@ -253,7 +257,7 @@ class Builder_Page {
 		$config['editPath']      = admin_url( 'post.php' );
 		$config['createPattern'] = admin_url( 'post-new.php?post_type=gutenverse-pattern' );
 		$config['themeSlug']     = $this->get_theme_slug();
-		$config['themeMode']     = gtb_get_theme_mode();
+		$config['themeMode']     = gutenverse_themes_builder_get_theme_mode();
 
 		return $config;
 	}
