@@ -1,9 +1,9 @@
-import { exportTheme } from '../../../data/api-fetch';
+import { exportTemplate, exportTheme } from '../../../data/api-fetch';
 import ContentWrapper from './content-wrapper';
 import { __ } from '@wordpress/i18n';
 
 const ExportTheme = () => {
-    const startExport = () => {
+    const startExportTheme = () => {
         exportTheme(response => {
             window.open(response?.fileresult?.fileurl);
             if (response?.fileresult?.child?.fileurl) {
@@ -14,6 +14,12 @@ const ExportTheme = () => {
         });
     };
 
+    const startExportTemplate = () => {
+        exportTemplate(response => {
+            
+        });
+    }
+
     return (
         <ContentWrapper
             title={__('Export Theme', 'gutenverse-themes-builder')}
@@ -21,8 +27,8 @@ const ExportTheme = () => {
         >
             <>
                 <div className="buttons">
-                    <div className="button" onClick={startExport}>{__('Export as Them', 'gutenverse-themes-builder')}</div>
-                    <div className="button" onClick={startExport}>{__('Export only Templates', 'gutenverse-themes-builder')}</div>
+                    <div className="button" onClick={startExportTheme}>{__('Export as Them', 'gutenverse-themes-builder')}</div>
+                    <div className="button" onClick={startExportTemplate}>{__('Export only Templates', 'gutenverse-themes-builder')}</div>
                 </div>
             </>
         </ContentWrapper>

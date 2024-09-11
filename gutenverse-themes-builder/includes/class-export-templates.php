@@ -75,7 +75,7 @@ class Export_Templates {
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
 		$data       = $theme_data[0];
-		$theme_dir  = gtb_theme_built_path();
+		$theme_dir  = rtrim( gtb_theme_built_path(), '/' ) . '-demos/';
 
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
@@ -94,7 +94,7 @@ class Export_Templates {
 		// $this->create_init_php( $wp_filesystem, $data, $theme_id );
 		// $this->create_assets( $wp_filesystem, $data );
 		// $this->create_themeforest_data( $wp_filesystem, $data );
-		// $this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
+		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		// $this->register_patterns( $wp_filesystem, $data );
 		// $this->export_all_images( $wp_filesystem );
 		// $this->create_thumbnail( $wp_filesystem, $data );
@@ -107,6 +107,169 @@ class Export_Templates {
 		// 	$this->create_child_theme( $wp_filesystem, $data );
 		// }
 	}
+
+	/**
+	 * Create Template Files
+	 *
+	 * @param object $system .
+	 * @param string $theme_id .
+	 * @param string $theme_slug .
+	 */
+	public function create_templates( $system, $theme_id, $theme_slug ) {
+		$templates_db      = Database::instance()->theme_templates;
+		$templates_data    = $templates_db->get_data( $theme_id );
+		$html_content      = array();
+		$templates_content = get_block_templates( array(), 'wp_template' ); // phpcs:ignore
+		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
+		$headers           = array();
+		$footers           = array();
+		$template_parts    = array();
+
+		foreach ( $templates_content as $template ) {
+			$html_content[ $template->slug ] = $template->content;
+		}
+
+		foreach ( $parts_content as $part ) {
+			$html_content[ $part->slug ] = $part->content;
+		}
+
+		foreach ( $templates_data as $template ) {
+			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
+
+			if ( 'header' === $template['template_type'] ) {
+				$header = array(
+					'from' => $template['category'] . '-' . $template_name,
+					'to'   => $template_name,
+				);
+
+				array_push( $headers, $header );
+			}
+
+			if ( 'footer' === $template['template_type'] ) {
+				$footer = array(
+					'from' => $template['category'] . '-' . $template_name,
+					'to'   => $template_name,
+				);
+
+				array_push( $footers, $footer );
+			}
+		}
+
+		foreach ( $templates_data as $template ) {
+			if ( ! gtb_check_theme_mode( $template['category'], $theme_id ) ) {
+				continue;
+			}
+
+			$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
+			$file_dir      = gtb_theme_folder_path() . '/' . $template['category'] . '/' . $template_type . '/' . $template_name . '.html';
+
+			if ( file_exists( $file_dir ) ) {
+				$target_dir  = rtrim( gtb_theme_built_path(), '/' ) . '-demos/' . $template_type;
+				$target_file = $target_dir . '/' . $template_name . '.html';
+
+				if ( ! is_dir( $target_dir ) ) {
+					wp_mkdir_p( $target_dir );
+				}
+
+
+				copy( $file_dir, $target_file );
+
+				$slug_key = strtolower( $template['category'] . '-' . $template_name );
+				if ( ! empty( $html_content[ $slug_key ] ) ) {
+					$content = $this->fix_colors( $html_content[ $slug_key ] );
+					$content = $this->fix_core_navigation( $content );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					foreach ( $headers as $header ) {
+						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+						$content = preg_replace( $search, $replace, $content );
+					}
+
+					foreach ( $footers as $footer ) {
+						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|footer)")?\s*} \/-->/';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+						$content = preg_replace( $search, $replace, $content );
+					}
+
+					$system->put_contents(
+						$target_file,
+						$content,
+						FS_CHMOD_FILE
+					);
+				}
+			}
+
+			// add blank and basic tempaltes.
+			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+				if ( 'core' === $template['category'] ) {
+					$system->put_contents(
+						$canvas_target_dir . '/blank-canvas.html',
+						'<!-- wp:post-content /-->',
+						FS_CHMOD_FILE
+					);
+				} else {
+					$system->put_contents(
+						$canvas_target_dir . '/blank-canvas.html',
+						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+<div class="guten-element guten-post-content guten-gwZ6H6"></div>
+<!-- /wp:gutenverse/post-content -->',
+						FS_CHMOD_FILE
+					);
+				}
+			}
+			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+				if ( 'core' === $template['category'] ) {
+					$system->put_contents(
+						$canvas_target_dir . '/template-basic.html',
+						'<!-- wp:template-part {"slug":"header"} /-->
+
+<!-- wp:post-content /-->
+
+<!-- wp:template-part {"slug":"footer"} /-->',
+						FS_CHMOD_FILE
+					);
+				} else {
+					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+
+<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+<div class="guten-element guten-post-content guten-ReyA1K"></div>
+<!-- /wp:gutenverse/post-content -->
+
+<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+
+					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+					$header_slug = false;
+					$footer_slug = false;
+					foreach ( $headers as $header ) {
+						$header_slug = $header['to'];
+					}
+					foreach ( $footers as $footer ) {
+						$footer_slug = $footer['to'];
+					}
+					if ( $header_slug ) {
+						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
+					} else {
+						$content = preg_replace( "'--header_slug--'", 'header', $content );
+					}
+					if ( $footer_slug ) {
+						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
+					} else {
+						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
+					}
+
+					$system->put_contents(
+						$canvas_target_dir . '/template-basic.html',
+						$content,
+						FS_CHMOD_FILE
+					);
+				}
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------
 
 	/**
 	 * Create Child Theme
@@ -1083,163 +1246,7 @@ class Export_Templates {
 		);
 	}
 
-	/**
-	 * Create Template Files
-	 *
-	 * @param object $system .
-	 * @param string $theme_id .
-	 * @param string $theme_slug .
-	 */
-	public function create_templates( $system, $theme_id, $theme_slug ) {
-		$templates_db      = Database::instance()->theme_templates;
-		$templates_data    = $templates_db->get_data( $theme_id );
-		$html_content      = array();
-		$templates_content = get_block_templates( array(), 'wp_template' ); // phpcs:ignore
-		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
-		$headers           = array();
-		$footers           = array();
-		$template_parts    = array();
-		foreach ( $templates_content as $template ) {
-			$html_content[ $template->slug ] = $template->content;
-		}
-
-		foreach ( $parts_content as $part ) {
-			$html_content[ $part->slug ] = $part->content;
-		}
-
-		foreach ( $templates_data as $template ) {
-			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
-
-			if ( 'header' === $template['template_type'] ) {
-				$header = array(
-					'from' => $template['category'] . '-' . $template_name,
-					'to'   => $template_name,
-				);
-
-				array_push( $headers, $header );
-			}
-
-			if ( 'footer' === $template['template_type'] ) {
-				$footer = array(
-					'from' => $template['category'] . '-' . $template_name,
-					'to'   => $template_name,
-				);
-
-				array_push( $footers, $footer );
-			}
-		}
-		foreach ( $templates_data as $template ) {
-			if ( ! gtb_check_theme_mode( $template['category'], $theme_id ) ) {
-				continue;
-			}
-
-			$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
-			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
-			$file_dir      = gtb_theme_folder_path() . '/' . $template['category'] . '/' . $template_type . '/' . $template_name . '.html';
-
-			if ( file_exists( $file_dir ) ) {
-				$target_dir  = $this->get_target_dir( $theme_id, $template['category'] ) . $template_type;
-				$target_file = $target_dir . '/' . $template_name . '.html';
-
-				if ( ! is_dir( $target_dir ) ) {
-					wp_mkdir_p( $target_dir );
-				}
-
-				copy( $file_dir, $target_file );
-
-				$slug_key = strtolower( $template['category'] . '-' . $template_name );
-				if ( ! empty( $html_content[ $slug_key ] ) ) {
-					$content = $this->fix_colors( $html_content[ $slug_key ] );
-					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
-					foreach ( $headers as $header ) {
-						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
-						$content = preg_replace( $search, $replace, $content );
-					}
-
-					foreach ( $footers as $footer ) {
-						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|footer)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
-						$content = preg_replace( $search, $replace, $content );
-					}
-
-					$system->put_contents(
-						$target_file,
-						$content,
-						FS_CHMOD_FILE
-					);
-				}
-			}
-
-			// add blank and basic tempaltes.
-			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:post-content /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-<div class="guten-element guten-post-content guten-gwZ6H6"></div>
-<!-- /wp:gutenverse/post-content -->',
-						FS_CHMOD_FILE
-					);
-				}
-			}
-			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						'<!-- wp:template-part {"slug":"header"} /-->
-
-<!-- wp:post-content /-->
-
-<!-- wp:template-part {"slug":"footer"} /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
-
-<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-<div class="guten-element guten-post-content guten-ReyA1K"></div>
-<!-- /wp:gutenverse/post-content -->
-
-<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
-
-					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-					$header_slug = false;
-					$footer_slug = false;
-					foreach ( $headers as $header ) {
-						$header_slug = $header['to'];
-					}
-					foreach ( $footers as $footer ) {
-						$footer_slug = $footer['to'];
-					}
-					if ( $header_slug ) {
-						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
-					} else {
-						$content = preg_replace( "'--header_slug--'", 'header', $content );
-					}
-					if ( $footer_slug ) {
-						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-					} else {
-						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
-					}
-
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						$content,
-						FS_CHMOD_FILE
-					);
-				}
-			}
-		}
-	}
+	
 
 	/**
 	 * Check templates location
