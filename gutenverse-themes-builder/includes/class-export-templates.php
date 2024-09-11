@@ -179,7 +179,7 @@ class Export_Templates {
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_colors( $html_content[ $slug_key ] );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					// $content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';

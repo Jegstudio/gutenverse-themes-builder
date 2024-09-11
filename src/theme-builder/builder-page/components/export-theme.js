@@ -27,7 +27,7 @@ const ExportTheme = () => {
         >
             <>
                 <div className="buttons">
-                    <div className="button" onClick={startExportTheme}>{__('Export as Them', 'gutenverse-themes-builder')}</div>
+                    <div className="button" onClick={startExportTheme}>{__('Export as Theme', 'gutenverse-themes-builder')}</div>
                     <div className="button" onClick={startExportTemplate}>{__('Export only Templates', 'gutenverse-themes-builder')}</div>
                 </div>
             </>
