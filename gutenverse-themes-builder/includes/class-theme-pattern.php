@@ -67,11 +67,12 @@ class Theme_Pattern {
 	 * Update Quick Edit.
 	 */
 	public function update_custom_quickedit_box() {
-		if ( isset( $_POST ) && isset( $_POST['pattern_type'] ) ) {
-			update_post_meta( esc_attr( $_POST['post_ID'] ), '_pattern_category', esc_attr( $_POST['pattern_type'] ) );
-		}
+		$id = isset( $_POST['post_ID'] ) ? intval( wp_unslash( $_POST['post_ID'] ) ) : false;
+		$pattern = isset( $_POST['pattern_type'] ) ? sanitize_text_field( wp_unslash( $_POST['pattern_type'] ) ) : false;
 
-		return;
+		if ( $id && $pattern ) {
+			update_post_meta( $id, '_pattern_category', $pattern );
+		}
 	}
 
 

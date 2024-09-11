@@ -1403,11 +1403,25 @@ class Backend_Api {
 		$theme_slug   = $theme_info[0]['slug'];
 		$active_theme = wp_get_theme();
 		$theme_dir    = $active_theme->get_stylesheet_directory();
-		$json_data    = file_get_contents( $theme_dir . '/theme.json' );
-		if ( ! $json_data ) {
-			/** Handle the error if the file cannot be read */
-			gutenverse_rlog( 'Import Global Color Data Failed!' );
+		global $wp_filesystem;
+
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
 		}
+
+		$json_file_path = $theme_dir . '/theme.json';
+
+		if ( ! $wp_filesystem->exists( $json_file_path ) ) {
+			gutenverse_rlog( 'Import Global Color Data Failed: theme.json file does not exist!' );
+		}
+
+		$json_data = $wp_filesystem->get_contents( $json_file_path );
+
+		if ( ! $json_data ) {
+			gutenverse_rlog( 'Import Global Color Data Failed: Unable to read theme.json file!' );
+		}
+
 		/** Decode the JSON data into a PHP array */
 		$data_array     = json_decode( $json_data, true );
 		$color_data     = $data_array['settings']['color']['palette'];
@@ -1442,11 +1456,24 @@ class Backend_Api {
 
 		/**Get Color Data */
 		$theme_dir = $active_theme->get_stylesheet_directory();
-		$json_data = file_get_contents( $theme_dir . '/theme.json' );
+
+		global $wp_filesystem;
+
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		$json_file_path = $theme_dir . '/theme.json';
+
+		if ( ! $wp_filesystem->exists( $json_file_path ) ) {
+			gutenverse_rlog( 'Import Global Color Data Failed: theme.json file does not exist!' );
+		}
+
+		$json_data = $wp_filesystem->get_contents( $json_file_path );
 
 		if ( ! $json_data ) {
-			/** Handle the error if the file cannot be read */
-			gutenverse_rlog( 'Import Global Color Data Failed!' );
+			gutenverse_rlog( 'Import Global Color Data Failed: Unable to read theme.json file!' );
 		}
 
 		/** Decode the JSON data into a PHP array */
