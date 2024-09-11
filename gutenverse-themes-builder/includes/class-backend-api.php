@@ -128,6 +128,16 @@ class Backend_Api {
 			)
 		);
 
+		register_rest_route(
+			self::ENDPOINT,
+			'templates/export',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'export_templates' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
 		// Assets.
 		register_rest_route(
 			self::ENDPOINT,
@@ -1140,6 +1150,17 @@ class Backend_Api {
 	 */
 	public function export_theme( $request ) {
 		$result = new Export_Theme();
+
+		return $result;
+	}
+
+	/**
+	 * Export Templates
+	 *
+	 * @param object $request .
+	 */
+	public function export_templates( $request ) {
+		$result = new Export_Templates();
 
 		return $result;
 	}

@@ -20,9 +20,9 @@ const ExportTheme = () => {
             description={__('Export your current active theme as zip file.', 'gutenverse-themes-builder')}
         >
             <>
-                {/* Tambah element select disini */}
                 <div className="buttons">
-                    <div className="button" onClick={startExport}>{__('Export', 'gutenverse-themes-builder')}</div>
+                    <div className="button" onClick={startExport}>{__('Export as Them', 'gutenverse-themes-builder')}</div>
+                    <div className="button" onClick={startExport}>{__('Export only Templates', 'gutenverse-themes-builder')}</div>
                 </div>
             </>
         </ContentWrapper>
