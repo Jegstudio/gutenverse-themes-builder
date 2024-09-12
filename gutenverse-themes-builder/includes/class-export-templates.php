@@ -75,7 +75,7 @@ class Export_Templates {
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
 		$data       = $theme_data[0];
-		$theme_dir  = rtrim( gtb_theme_built_path(), '/' ) . '-demos/';
+		$theme_dir  = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/';
 
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
@@ -89,7 +89,6 @@ class Export_Templates {
 		// $this->create_readme( $wp_filesystem, $data );
 		// $this->create_style_css( $wp_filesystem, $data );
 		// $this->create_theme_json( $wp_filesystem, $data );
-		// $this->create_function_php( $wp_filesystem, $data );
 		// $this->create_autoload_php( $wp_filesystem, $data );
 		// $this->create_init_php( $wp_filesystem, $data, $theme_id );
 		// $this->create_assets( $wp_filesystem, $data );
@@ -97,9 +96,7 @@ class Export_Templates {
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		// $this->register_patterns( $wp_filesystem, $data );
 		// $this->export_all_images( $wp_filesystem );
-		// $this->create_thumbnail( $wp_filesystem, $data );
-		// $this->create_dashboard( $wp_filesystem, $data );
-		// $this->extractor_send_file( $data );
+		$this->extractor_send_file( $data );
 
 		// // child theme .
 		// $other = maybe_unserialize( $data['other'] );
@@ -156,16 +153,16 @@ class Export_Templates {
 		}
 
 		foreach ( $templates_data as $template ) {
-			if ( ! gtb_check_theme_mode( $template['category'], $theme_id ) ) {
+			if ( ! gutenverse_themes_builder_check_theme_mode( $template['category'], $theme_id ) ) {
 				continue;
 			}
 
-			$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+			$template_type = in_array( $template['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 			$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
-			$file_dir      = gtb_theme_folder_path() . '/' . $template['category'] . '/' . $template_type . '/' . $template_name . '.html';
+			$file_dir      = gutenverse_themes_builder_theme_folder_path() . '/' . $template['category'] . '/' . $template_type . '/' . $template_name . '.html';
 
 			if ( file_exists( $file_dir ) ) {
-				$target_dir  = rtrim( gtb_theme_built_path(), '/' ) . '-demos/' . $template_type;
+				$target_dir  = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/' . $template_type;
 				$target_file = $target_dir . '/' . $template_name . '.html';
 
 				if ( ! is_dir( $target_dir ) ) {
@@ -278,7 +275,7 @@ class Export_Templates {
 	 * @param array  $data .
 	 */
 	public function create_child_theme( $system, $data ) {
-		$child_theme_dir = gtb_theme_built_path( null, false, true );
+		$child_theme_dir = gutenverse_themes_builder_theme_built_path( null, false, true );
 		if ( is_dir( $child_theme_dir ) ) {
 			$system->rmdir( $child_theme_dir, true );
 		}
@@ -334,7 +331,7 @@ class Export_Templates {
 
 		// Create recursive directory iterator.
 		$files = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( gtb_theme_built_path( null, false, true ) ),
+			new RecursiveDirectoryIterator( gutenverse_themes_builder_theme_built_path( null, false, true ) ),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
@@ -379,7 +376,7 @@ class Export_Templates {
 		$placeholder = ! empty( $theme_data['description'] ) ? str_replace( '{{description}}', $theme_data['description'], $placeholder ) : $placeholder;
 
 		$system->put_contents(
-			gtb_theme_built_path() . 'readme.txt',
+			gutenverse_themes_builder_theme_built_path() . 'readme.txt',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -425,7 +422,7 @@ class Export_Templates {
 		}
 		$placeholder = ! empty( $add_css ) ? str_replace( '{{additional_css}}', $add_css, $placeholder ) : str_replace( '{{additional_css}}', '', $placeholder );
 		$system->put_contents(
-			gtb_theme_built_path() . 'style.css',
+			gutenverse_themes_builder_theme_built_path() . 'style.css',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -448,7 +445,7 @@ class Export_Templates {
 		foreach ( $assets as $asset ) {
 			if ( 'content' === $asset['media_type'] ) {
 				$content = $asset['content'];
-				$inc_dir = gtb_theme_built_path() . 'assets/' . $asset['type'];
+				$inc_dir = gutenverse_themes_builder_theme_built_path() . 'assets/' . $asset['type'];
 
 				if ( ! is_dir( $inc_dir ) ) {
 					wp_mkdir_p( $inc_dir );
@@ -489,7 +486,7 @@ class Export_Templates {
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
-			gtb_theme_built_path() . '/inc/class/class-asset-enqueue.php',
+			gutenverse_themes_builder_theme_built_path() . '/inc/class/class-asset-enqueue.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -521,7 +518,7 @@ class Export_Templates {
 			}
 		}
 
-		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gtb_theme_built_path() . 'assets/dashboard-fonts' );
+		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gutenverse_themes_builder_theme_built_path() . 'assets/dashboard-fonts' );
 
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/themeforest-data.txt' );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
@@ -531,13 +528,13 @@ class Export_Templates {
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
-			gtb_theme_built_path() . '/inc/class/class-themeforest-data.php',
+			gutenverse_themes_builder_theme_built_path() . '/inc/class/class-themeforest-data.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
 
 		$system->put_contents(
-			gtb_theme_built_path() . '/index.php',
+			gutenverse_themes_builder_theme_built_path() . '/index.php',
 			$system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/index.txt' ),
 			FS_CHMOD_FILE
 		);
@@ -682,8 +679,8 @@ class Export_Templates {
 		}
 
 		if ( ! empty( $fonts ) ) {
-			$folder = gtb_theme_folder_path() . 'assets/fonts/';
-			$src    = gtb_theme_built_path() . 'assets/fonts/';
+			$folder = gutenverse_themes_builder_theme_folder_path() . 'assets/fonts/';
+			$src    = gutenverse_themes_builder_theme_built_path() . 'assets/fonts/';
 
 			if ( ! is_dir( $src ) ) {
 				wp_mkdir_p( $src );
@@ -802,31 +799,7 @@ class Export_Templates {
 		 * Put content into file
 		 */
 		$system->put_contents(
-			gtb_theme_built_path() . 'theme.json',
-			$placeholder,
-			FS_CHMOD_FILE
-		);
-	}
-
-	/**
-	 * Create Functions.php File
-	 *
-	 * @param object $system .
-	 * @param array  $data .
-	 */
-	public function create_function_php( $system, $data ) {
-		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/functions.txt' );
-
-		$theme_data = maybe_unserialize( $data['theme_data'] );
-
-		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
-		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
-		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
-		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
-		$placeholder = str_replace( '{{theme_version}}', $theme_data['theme_version'], $placeholder );
-
-		$system->put_contents(
-			gtb_theme_built_path() . 'functions.php',
+			gutenverse_themes_builder_theme_built_path() . 'theme.json',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -848,7 +821,7 @@ class Export_Templates {
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 
-		$inc_dir = gtb_theme_built_path() . 'inc';
+		$inc_dir = gutenverse_themes_builder_theme_built_path() . 'inc';
 
 		if ( ! is_dir( $inc_dir ) ) {
 			wp_mkdir_p( $inc_dir );
@@ -889,16 +862,16 @@ class Export_Templates {
 
 		// Build dashboard.
 
-		if ( ! is_dir( gtb_theme_built_path() . 'assets/js' ) ) {
-			wp_mkdir_p( gtb_theme_built_path() . 'assets/js' );
+		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/js' ) ) {
+			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/js' );
 		}
 
-		if ( ! is_dir( gtb_theme_built_path() . 'assets/css' ) ) {
-			wp_mkdir_p( gtb_theme_built_path() . 'assets/css' );
+		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/css' ) ) {
+			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/css' );
 		}
 
-		if ( ! is_dir( gtb_theme_built_path() . 'assets/img' ) ) {
-			wp_mkdir_p( gtb_theme_built_path() . 'assets/img' );
+		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
+			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/img' );
 		}
 
 		$other = maybe_unserialize( $data['other'] );
@@ -908,34 +881,34 @@ class Export_Templates {
 				$dashboard_script = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/themeforest/theme-dashboard.js' );
 				$dashboard_script = str_replace( '--gtb-theme-namespace--', $theme_data['slug'], $dashboard_script );
 				$system->put_contents(
-					gtb_theme_built_path() . 'assets/js/theme-dashboard.js',
+					gutenverse_themes_builder_theme_built_path() . 'assets/js/theme-dashboard.js',
 					$dashboard_script,
 					FS_CHMOD_FILE
 				);
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gtb_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-wizard.png', gtb_theme_built_path() . 'assets/img/bg-upgrade-wizard.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/upgrade-content.png', gtb_theme_built_path() . 'assets/img/upgrade-content.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gtb_theme_built_path() . 'assets/img/final.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-demo.png', gtb_theme_built_path() . 'assets/img/icon-demo.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-plugin.png', gtb_theme_built_path() . 'assets/img/icon-plugin.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-support.png', gtb_theme_built_path() . 'assets/img/icon-support.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gtb_theme_built_path() . 'assets/img/image-dancer.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gtb_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-wizard.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-upgrade-wizard.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/upgrade-content.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/upgrade-content.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/final.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-demo.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-demo.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-plugin.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-plugin.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-support.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-support.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/image-dancer.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
 			} elseif ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/lite/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/lite/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/lite/theme-dashboard.js', gutenverse_themes_builder_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/lite/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
 			} else {
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gutenverse_themes_builder_theme_built_path() . 'assets/js/theme-dashboard.js' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
 			}
 		} else {
-			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gtb_theme_built_path() . 'assets/js/theme-dashboard.js' );
-			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gtb_theme_built_path() . 'assets/css/theme-dashboard.css' );
+			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/js/default/theme-dashboard.js', gutenverse_themes_builder_theme_built_path() . 'assets/js/theme-dashboard.js' );
+			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
 		}
-		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gtb_theme_built_path() . 'assets/img/background-banner.png' );
-		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gtb_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/background-banner.png' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
 
 		$dashboard_data_string = '';
 		if ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
@@ -1101,7 +1074,7 @@ class Export_Templates {
 
 			if ( isset( $other['dashboard']['logo'] ) ) {
 				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
-				$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
+				$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
 				$theme_logo = "{$theme_slug}_URI . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
 			}
 
@@ -1116,7 +1089,7 @@ class Export_Templates {
 			if ( ! empty( $other['dashboard']['templates'] ) ) {
 				foreach ( $other['dashboard']['templates'] as $template ) {
 					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
-					$thumbnail  = gtb_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
+					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
 					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $template['thumbnail']['filename'] . "'";
 
 					if ( ! is_wp_error( $image_data ) ) {
@@ -1167,8 +1140,8 @@ class Export_Templates {
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
 		if ( ! empty( $other['screenshots'] ) && ! empty( $other['screenshots']['dashboard'] ) ) {
-			if ( ! is_dir( gtb_theme_built_path() . 'assets/img' ) ) {
-				wp_mkdir_p( gtb_theme_built_path() . 'assets/img' );
+			if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
+				wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/img' );
 			}
 
 			foreach ( $other['screenshots']['dashboard'] as $key => $dashboard ) {
@@ -1176,7 +1149,7 @@ class Export_Templates {
 
 				if ( ! is_wp_error( $image_data ) ) {
 					$system->put_contents(
-						gtb_theme_built_path() . 'assets/img/' . $dashboard['filename'],
+						gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $dashboard['filename'],
 						$image_data['body'],
 						FS_CHMOD_FILE
 					);
@@ -1196,7 +1169,7 @@ class Export_Templates {
 			foreach ( $templates_data as $template ) {
 				if ( in_array( $template['category'], array( 'gutenverse', 'pro' ), true ) ) {
 					$template_name = strtolower( str_replace( ' ', '-', $template['name'] ) );
-					$template_type = in_array( $template['template_type'], gtb_parts(), true ) ? 'parts' : 'templates';
+					$template_type = in_array( $template['template_type'], gutenverse_themes_builder_parts(), true ) ? 'parts' : 'templates';
 
 					if ( 'templates' === $template_type ) {
 						$template_names[] = "'{$template_name}'";
@@ -1233,7 +1206,7 @@ class Export_Templates {
 		}
 
 		$placeholder = str_replace( '{{theme_fonts}}', $fonts, $placeholder );
-		$class_dir   = gtb_theme_built_path() . 'inc/class';
+		$class_dir   = gutenverse_themes_builder_theme_built_path() . 'inc/class';
 
 		if ( ! is_dir( $class_dir ) ) {
 			wp_mkdir_p( $class_dir );
@@ -1257,9 +1230,9 @@ class Export_Templates {
 	 * @return string
 	 */
 	private function get_target_dir( $theme_id, $category ) {
-		$theme_mode  = gtb_get_theme_mode( $theme_id );
-		$custom_dir  = gtb_theme_built_path() . '/' . $category . '-files/';
-		$default_dir = gtb_theme_built_path();
+		$theme_mode  = gutenverse_themes_builder_get_theme_mode( $theme_id );
+		$custom_dir  = gutenverse_themes_builder_theme_built_path() . '/' . $category . '-files/';
+		$default_dir = gutenverse_themes_builder_theme_built_path();
 
 		switch ( $theme_mode ) {
 			case 'core-gutenverse':
@@ -1335,7 +1308,7 @@ class Export_Templates {
 	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
-		$pattern_dir = gtb_theme_built_path() . '/inc/patterns/';
+		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 
 		if ( ! is_dir( $pattern_dir ) ) {
 			wp_mkdir_p( $pattern_dir );
@@ -1554,7 +1527,7 @@ class Export_Templates {
 		$placeholder = str_replace( '{{pro_patterns}}', $pro_pattern_list, $placeholder );
 
 		$system->put_contents(
-			gtb_theme_built_path() . '/inc/class/class-block-patterns.php',
+			gutenverse_themes_builder_theme_built_path() . '/inc/class/class-block-patterns.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -1567,7 +1540,7 @@ class Export_Templates {
 	 */
 	private function export_all_images( $system ) {
 		$image_list = array_unique( $this->image_list );
-		$img_dir    = gtb_theme_built_path() . '/assets/img';
+		$img_dir    = gutenverse_themes_builder_theme_built_path() . '/assets/img';
 
 		if ( ! is_dir( $img_dir ) ) {
 			wp_mkdir_p( $img_dir );
@@ -1619,40 +1592,6 @@ class Export_Templates {
 	}
 
 	/**
-	 * Create Thumbnail
-	 *
-	 * @param object $system .
-	 * @param array  $data .
-	 */
-	private function create_thumbnail( $system, $data ) {
-		$other = maybe_unserialize( $data['other'] );
-
-		if ( empty( $other['screenshots'] ) ) {
-			return;
-		}
-
-		$image      = $other['screenshots']['thumbnail']['url'];
-		$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
-
-		if ( ! is_wp_error( $image_data ) ) {
-			$system->put_contents(
-				gtb_theme_built_path() . '/screenshot.jpg',
-				$image_data['body'],
-				FS_CHMOD_FILE
-			);
-		}
-	}
-
-	/**
-	 * Create Dashboard
-	 *
-	 * @param object $system .
-	 * @param array  $data .
-	 */
-	private function create_dashboard( $system, $data ) {
-	}
-
-	/**
 	 * Send File to User.
 	 *
 	 * @param array $data .
@@ -1665,7 +1604,7 @@ class Export_Templates {
 
 		// Create recursive directory iterator.
 		$files = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( gtb_theme_built_path() ),
+			new RecursiveDirectoryIterator( gutenverse_themes_builder_theme_built_path() ),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
