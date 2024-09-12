@@ -46,7 +46,6 @@ const ManageNotice = () => {
 
     useEffect(() => {
         getThemeData(null, response => {
-            console.log(response);
             if (response?.other?.notice) {
                 setBlocks(parse(response?.other?.notice));
             }

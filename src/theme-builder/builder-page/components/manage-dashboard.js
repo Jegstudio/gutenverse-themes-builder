@@ -92,8 +92,6 @@ const ManageDashbaord = () => {
         });
     };
 
-    console.log(dashboardData);
-
     return (
         <ContentWrapper
             title={__('Manage Dashboard', 'gutenverse-themes-builder')}
