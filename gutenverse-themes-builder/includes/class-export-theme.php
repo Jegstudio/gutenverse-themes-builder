@@ -1490,6 +1490,7 @@ class Export_Theme {
 	private function export_all_images( $system ) {
 		$image_list = array_unique( $this->image_list );
 		$img_dir    = gtb_theme_built_path() . '/assets/img';
+		
 		if ( ! is_dir( $img_dir ) ) {
 			wp_mkdir_p( $img_dir );
 		}
