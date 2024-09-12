@@ -86,6 +86,9 @@ class Export_Templates {
 		}
 
 		wp_mkdir_p( $theme_dir );
+		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
+		$this->extractor_send_file( $data );
+
 		// $this->create_readme( $wp_filesystem, $data );
 		// $this->create_style_css( $wp_filesystem, $data );
 		// $this->create_theme_json( $wp_filesystem, $data );
@@ -93,15 +96,13 @@ class Export_Templates {
 		// $this->create_init_php( $wp_filesystem, $data, $theme_id );
 		// $this->create_assets( $wp_filesystem, $data );
 		// $this->create_themeforest_data( $wp_filesystem, $data );
-		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		// $this->register_patterns( $wp_filesystem, $data );
 		// $this->export_all_images( $wp_filesystem );
-		$this->extractor_send_file( $data );
 
 		// // child theme .
 		// $other = maybe_unserialize( $data['other'] );
 		// if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
-		// 	$this->create_child_theme( $wp_filesystem, $data );
+		// $this->create_child_theme( $wp_filesystem, $data );
 		// }
 	}
 
@@ -169,14 +170,13 @@ class Export_Templates {
 					wp_mkdir_p( $target_dir );
 				}
 
-
 				copy( $file_dir, $target_file );
 
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_colors( $html_content[ $slug_key ] );
 					$content = $this->fix_core_navigation( $content );
-					// $content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -266,6 +266,62 @@ class Export_Templates {
 		}
 	}
 
+	/**
+	 * Build Patterns
+	 *
+	 * @param string $html_content .
+	 * @param string $theme_id .
+	 * @param object $system .
+	 * @param string $theme_slug .
+	 */
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
+		$html_blocks = parse_blocks( $html_content );
+		$blocks      = _flatten_blocks( $html_blocks );
+		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
+
+		if ( ! is_dir( $pattern_dir ) ) {
+			wp_mkdir_p( $pattern_dir );
+		}
+
+		foreach ( $blocks as $block ) {
+			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
+				$pattern_before = serialize_block( $block );
+				$pattern_after  = '';
+
+				if ( ! empty( $block['attrs']['pattern']['value'] ) ) {
+					$pattern_name = $block['attrs']['pattern']['value'];
+
+					$posts = get_posts(
+						array(
+							'post_type' => 'gutenverse-pattern',
+							'name'      => $pattern_name,
+						)
+					);
+
+					if ( ! empty( $posts ) ) {
+						$pattern_theme_id = get_post_meta( $posts[0]->ID, '_pattern_theme_id', true );
+						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
+						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+					}
+
+					if ( $theme_id === $pattern_theme_id ) {
+						$pattern_after = str_replace( "'", "\'", $posts[0]->post_content );
+						// $pattern_after = $this->extract_images( $pattern_after, $system, $theme_slug );
+						$pattern_after = $this->fix_colors( $pattern_after );
+						$pattern_after = $this->fix_core_navigation( $pattern_after );
+						$pattern_after = $this->replace_template_part( $pattern_after, $theme_slug );
+					}
+
+					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
+				}
+			}
+		}
+
+		return $html_content;
+	}
+
+	// ----------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------------
 
 	/**
@@ -1219,7 +1275,7 @@ class Export_Templates {
 		);
 	}
 
-	
+
 
 	/**
 	 * Check templates location
@@ -1297,86 +1353,7 @@ class Export_Templates {
 		return $html_content;
 	}
 
-	/**
-	 * Build Patterns
-	 *
-	 * @param string $html_content .
-	 * @param string $theme_id .
-	 * @param object $system .
-	 * @param string $theme_slug .
-	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
-		$html_blocks = parse_blocks( $html_content );
-		$blocks      = _flatten_blocks( $html_blocks );
-		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 
-		if ( ! is_dir( $pattern_dir ) ) {
-			wp_mkdir_p( $pattern_dir );
-		}
-
-		foreach ( $blocks as $block ) {
-			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
-				$pattern_before = serialize_block( $block );
-				$pattern_after  = '';
-
-				if ( ! empty( $block['attrs']['pattern']['value'] ) ) {
-					$pattern_name  = $block['attrs']['pattern']['value'];
-					$pattern_title = $block['attrs']['pattern']['label'];
-
-					$posts = get_posts(
-						array(
-							'post_type' => 'gutenverse-pattern',
-							'name'      => $pattern_name,
-						)
-					);
-
-					if ( ! empty( $posts ) ) {
-						$pattern_theme_id = get_post_meta( $posts[0]->ID, '_pattern_theme_id', true );
-						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
-					}
-
-					if ( $theme_id === $pattern_theme_id ) {
-						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
-						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-						$content     = str_replace( "'", "\'", $posts[0]->post_content );
-						$content     = $this->extract_images( $content, $system, $theme_slug );
-						$content     = $this->fix_colors( $content );
-						$content     = $this->fix_core_navigation( $content );
-						$content     = $this->replace_template_part( $content, $theme_slug );
-						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
-						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
-						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
-						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
-
-						$system->put_contents(
-							$target_file,
-							$placeholder,
-							FS_CHMOD_FILE
-						);
-
-						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
-
-						switch ( $pattern_category ) {
-							case 'pro':
-								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							case 'gutenverse':
-								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							default:
-								$this->core_patterns[] = "'{$pattern_name}'";
-								break;
-						}
-					}
-
-					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
-				}
-			}
-		}
-
-		return $html_content;
-	}
 
 	/**
 	 * Replace Template Part
@@ -1445,7 +1422,7 @@ class Export_Templates {
 			foreach ( $matches[0] as $image ) {
 				$this->add_image( $image );
 				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
-				$image_without_resolution = get_image_without_resolution( $image );
+				$image_without_resolution = gutenverse_themes_builder_get_image_without_resolution( $image );
 				if ( $image_without_resolution ) {
 					$image_arr = explode( '/', $image_without_resolution['nores'] );
 				} else {
@@ -1597,14 +1574,14 @@ class Export_Templates {
 	 * @param array $data .
 	 */
 	public function extractor_send_file( $data ) {
-		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '.zip';
+		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-demos' . '.zip';
 
 		$zip = new ZipArchive();
 		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
 
 		// Create recursive directory iterator.
 		$files = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( gutenverse_themes_builder_theme_built_path() ),
+			new RecursiveDirectoryIterator( rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/' ),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
@@ -1619,9 +1596,9 @@ class Export_Templates {
 		$zip->close();
 
 		$this->fileresult = array(
-			'filename' => $data['slug'] . '.zip',
+			'filename' => $data['slug'] . '-demos' . '.zip',
 			'filepath' => $zip_path,
-			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '.zip',
+			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
 		);
 	}
 
