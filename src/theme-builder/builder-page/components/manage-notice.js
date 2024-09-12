@@ -15,7 +15,7 @@ import {
     BlockNavigationDropdown,
     RichText
 } from '@wordpress/block-editor';
-import { createBlock, serialize } from '@wordpress/blocks';
+import { createBlock, serialize, parse } from '@wordpress/blocks';
 import {
     Popover,
     SlotFillProvider,
@@ -23,6 +23,7 @@ import {
 } from '@wordpress/components';
 import '@wordpress/format-library';
 import { __experimentalGetCoreBlocks, registerCoreBlocks } from '@wordpress/block-library';
+import { getThemeData, updateOtherData } from '../../../data/api-fetch';
 
 const SUPPORT_BLOCKS = [
     'core/paragraph',
@@ -43,12 +44,20 @@ const ManageNotice = () => {
     const [loading, setLoading] = useState(false);
     const [blocks, setBlocks] = useState([createBlock('core/paragraph')]);
 
-    console.log(blocks);
+    useEffect(() => {
+        getThemeData(null, response => {
+            console.log(response);
+            if (response?.other?.notice) {
+                setBlocks(parse(response?.other?.notice));
+            }
+        });
+    }, []);
+
     const saveNotice = () => {
         setLoading(true);
         updateOtherData({
             key: 'notice',
-            data: serialize(blocks),
+            data: serialize(blocks)
         }, () => {
             setLoading(false);
         });
@@ -60,7 +69,6 @@ const ManageNotice = () => {
             description={__('Edit your current active theme notice content here. This will be built as notification for your theme.', 'gutenverse-themes-builder')}
         >
             <div className="notice-wrapper">
-                <label>{__('Notice Message', 'gutenverse-theme-builder')}</label>
                 <div className="notice-input">
                     <div className="editor__body">
                         <SlotFillProvider>
@@ -107,7 +115,7 @@ const ManageNotice = () => {
             </div>
             {!loading && <div className="data-footer">
                 <div className="buttons inline">
-                    <button className="button create" onClick={saveNotice}>{__('Save Readme', 'gutenverse-themes-builder')}</button>
+                    <button className="button create" onClick={saveNotice}>{__('Save Notice', 'gutenverse-themes-builder')}</button>
                 </div>
             </div>}
         </ContentWrapper>

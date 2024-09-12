@@ -610,11 +610,16 @@ class Export_Theme {
 	 * @param array  $data .
 	 */
 	public function create_upgrader_php( $system, $data ) {
-		$theme_data  = maybe_unserialize( $data['theme_data'] );
+		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+		if ( ! isset( $other['notice'] ) || $this->is_serialized_block_empty( $other['notice'] ) ) {
+			return;
+		}
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/upgrader.txt' );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
-		$placeholder = str_replace( '{{notice_message}}', $theme_data['notice_message'], $placeholder );
+		$placeholder = str_replace( '{{notice_message}}', $other['notice'], $placeholder );
 
 		$inc_dir = gtb_theme_built_path() . 'inc';
 
@@ -623,10 +628,27 @@ class Export_Theme {
 		}
 
 		$system->put_contents(
-			$inc_dir . '/class-upgrader.php',
+			$inc_dir . '/class/class-upgrader.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
+	}
+
+	/**
+	 * Check if block empty
+	 *
+	 * @param string $content .
+	 */
+	public function is_serialized_block_empty( $content ) {
+		if ( has_blocks( $content ) ) {
+			$blocks = parse_blocks( $content );
+			foreach ( $blocks as $block ) {
+				if ( ! empty( trim( strip_tags( $block['innerHTML'] ) ) ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	/**
 	 * Create class-init.php File
@@ -1468,7 +1490,6 @@ class Export_Theme {
 	private function export_all_images( $system ) {
 		$image_list = array_unique( $this->image_list );
 		$img_dir    = gtb_theme_built_path() . '/assets/img';
-
 		if ( ! is_dir( $img_dir ) ) {
 			wp_mkdir_p( $img_dir );
 		}

@@ -1094,162 +1094,163 @@ body {
     }
 }
 
-// .notice-input {
-//     border-radius: 3px;
-//     border: 1px solid #e3e4e6;
+.notice-input {
+    border-radius: 3px;
+    border: 1px solid #e3e4e6;
+    margin: 20px 0px;
+    .editor-styles-wrapper {
+        flex: 1 1;
+        padding: 20px;
+        background-color: white;
+        p {
+            font-size: inherit;
+            line-height: inherit;
+        }
 
-//     .editor-styles-wrapper {
-//         flex: 1 1;
-//         padding: 20px;
+        ul,
+        ol {
+            margin: 0;
+            padding: 0;
+        }
 
-//         p {
-//             font-size: inherit;
-//             line-height: inherit;
-//         }
+        ul li,
+        ol li {
+            margin-bottom: initial;
+        }
 
-//         ul,
-//         ol {
-//             margin: 0;
-//             padding: 0;
-//         }
+        ul {
+            list-style-type: disc;
+        }
 
-//         ul li,
-//         ol li {
-//             margin-bottom: initial;
-//         }
+        ol {
+            list-style-type: decimal;
+        }
 
-//         ul {
-//             list-style-type: disc;
-//         }
+        ul ul,
+        ol ul {
+            list-style-type: circle;
+        }
+    }
 
-//         ol {
-//             list-style-type: decimal;
-//         }
+    .block-editor-url-popover,
+    .components-popover__content {
+        width: fit-content;
 
-//         ul ul,
-//         ol ul {
-//             list-style-type: circle;
-//         }
-//     }
+        .block-editor-media-placeholder__url-input-form {
+            display: flex;
+            margin: 0;
+            padding: 5px;
+        }
 
-//     .block-editor-url-popover,
-//     .components-popover__content {
-//         width: fit-content;
+        .components-dropdown-menu__menu {
+            width: 300px;
+        }
+    }
 
-//         .block-editor-media-placeholder__url-input-form {
-//             display: flex;
-//             margin: 0;
-//             padding: 5px;
-//         }
+    .editor__logo {
+        font-size: 20px;
+        font-weight: 300;
+    }
 
-//         .components-dropdown-menu__menu {
-//             width: 300px;
-//         }
-//     }
+    .editor__body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 180px;
 
-//     .editor__logo {
-//         font-size: 20px;
-//         font-weight: 300;
-//     }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
 
-//     .editor__body {
-//         position: relative;
-//         display: flex;
-//         flex-direction: column;
-//         min-height: 180px;
+        iframe {
+            width: 100%;
+        }
 
-//         img {
-//             max-width: 100%;
-//             height: auto;
-//         }
+        .components-navigate-regions {
+            height: 100%;
+        }
+    }
 
-//         iframe {
-//             width: 100%;
-//         }
+    .editor__toolbar {
+        display: flex;
+        position: relative;
+        border-bottom: 1px solid #e3e4e6;
+        height: 46px;
+        align-items: center;
+        align-content: center;
+        background-color: white;
 
-//         .components-navigate-regions {
-//             height: 100%;
-//         }
-//     }
+        .navigation_block {
+            border-right: 1px solid #e3e4e6;
+            padding: 4px;
+        }
 
-//     .editor__toolbar {
-//         display: flex;
-//         position: relative;
-//         border-bottom: 1px solid #e3e4e6;
-//         height: 46px;
-//         align-items: center;
-//         align-content: center;
+        .components-accessible-toolbar {
+            border: none !important;
+        }
+    }
 
-//         .navigation_block {
-//             border-right: 1px solid #e3e4e6;
-//             padding: 4px;
-//         }
+    .editor__sidebar {
+        position: absolute;
+        background: white;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        height: auto;
+        overflow: auto;
+        width: 296px;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        border-left: 1px solid #e3e4e6;
 
-//         .components-accessible-toolbar {
-//             border: none !important;
-//         }
-//     }
+        // @include break-small() {
+        //     position: relative;
+        // }
+    }
 
-//     .editor__sidebar {
-//         position: absolute;
-//         background: white;
-//         top: 0;
-//         right: 0;
-//         bottom: 0;
-//         height: auto;
-//         overflow: auto;
-//         width: 296px;
-//         max-width: 100%;
-//         -webkit-overflow-scrolling: touch;
-//         border-left: 1px solid #e3e4e6;
+    @keyframes edit-post__fade-in-animation {
+        from {
+            opacity: 0;
+        }
 
-//         // @include break-small() {
-//         //     position: relative;
-//         // }
-//     }
+        to {
+            opacity: 1;
+        }
+    }
 
-//     @keyframes edit-post__fade-in-animation {
-//         from {
-//             opacity: 0;
-//         }
+    [data-reach-dialog-overlay] {
+        z-index: 50;
+    }
 
-//         to {
-//             opacity: 1;
-//         }
-//     }
+    .editor__code {
+        padding: 17px;
+    }
 
-//     [data-reach-dialog-overlay] {
-//         z-index: 50;
-//     }
+    .block-editor-default-block-appender {
+        position: relative;
+    }
 
-//     .editor__code {
-//         padding: 17px;
-//     }
+    .block-editor-inserter {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
 
-//     .block-editor-default-block-appender {
-//         position: relative;
-//     }
+        .components-button {
+            height: unset;
+            svg{
+                fill: white;
+            }
+        }
 
-//     .block-editor-inserter {
-//         position: absolute;
-//         top: 50%;
-//         right: 0;
-//         transform: translateY(-50%);
+        .block-editor-button-block-appender svg {
+            color: white;
+            background-color: black;
+        }
+    }
 
-//         .components-button {
-//             height: unset;
-//             svg{
-//                 fill: white;
-//             }
-//         }
-
-//         .block-editor-button-block-appender svg {
-//             color: white;
-//             background-color: black;
-//         }
-//     }
-
-//     .components-panel__body.block-editor-block-inspector__advanced {
-//         display: none;
-//     }
-// }
+    .components-panel__body.block-editor-block-inspector__advanced {
+        display: none;
+    }
+}
