@@ -39,10 +39,10 @@ git submodule add git@github.com:Jegstudio/gutenverse-core.git
 <strong>If you have an issue with the submodule</strong>, you can reset the `gutenverse-core` submodule using the command below:
 
 ```
-git submodule deinit <namasubmodule>    
-git rm <namasubmodule>
-git rm --cached <namasubmodule>
-rm -rf .git/modules/<namasubmodule>
+git submodule deinit gutenverse-core    
+git rm gutenverse-core
+git rm --cached gutenverse-core
+rm -rf .git/modules/gutenverse-core
 ```
 
 <h3><a>Running the Project</a></h3>
