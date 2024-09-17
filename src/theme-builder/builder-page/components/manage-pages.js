@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { deletePage, getPageList, getTemplateListSelector } from '../../../data/api-fetch';
+import { deletePage, getPageList } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
@@ -9,35 +9,35 @@ import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { ArrowLeft } from 'react-feather';
+import { AsyncSelect } from 'gutenverse-core/components';
 
-export const CreatePagePopup = ({ onClose, updateList }) => {
+export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [pageName, setPageName] = useState('');
     const [templateSlug, setTemplateSlug] = useState('default');
-    const [pageCategory, setPageCategory] = useState('gutenverse');
-    const [noticeMessage, setNoticeMessage] = useState('');
+    const pageCategory = 'gutenverse';
 
     const pageSubmit = () => {
         if (pageName !== '') {
             apiFetch({
-                path: '/gtb-backend/v1/page/create',
+                path: '/gtb-backend/v1/pages/create',
                 method: 'POST',
                 data: {
                     name: pageName,
-                    category: pageCategory
+                    category: pageCategory,
+                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default'
                 }
             }).then(result => {
                 const { status, data } = result;
                 if ('success' === status) {
-                    updateList(result?.data?.list);
+                    updateList(result?.data);
                     onClose();
-                } else {
-                    const { message } = data;
-                    setNoticeMessage(message);
                 }
+            }).catch((err) => {
+                alert(err.message);
             });
         }
     };
-
+    
     return (
         <div className="popup-container" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
@@ -45,13 +45,22 @@ export const CreatePagePopup = ({ onClose, updateList }) => {
                     <span className="title pattern">{__('Create Page')}</span>
                 </div>
                 <div className="popup-body">
-                    {!isEmpty(noticeMessage) && <div className="gtb-notice">
-                        {noticeMessage}
-                    </div>}
-                    <div className="input-wrap pattern-name">
+                    <div className="input-wrap">
                         <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={pageName} onChange={e => setPageName(e.target.value)} />
                         <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
+                    </div>
+                    <div className='input-wrap'>
+                        <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
+                        <AsyncSelect
+                            id={"template-selector"}
+                            className={"async-select-container"}
+                            classNamePrefix={"async-select"}
+                            isMulti={false}
+                            noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
+                            onChange={(value)=> setTemplateSlug(value.value)}
+                            loadOptions={input => onSearch(input)}
+                        />
                     </div>
                 </div>
                 <div className="popup-footer">
@@ -70,81 +79,58 @@ export const CreatePagePopup = ({ onClose, updateList }) => {
     );
 };
 
-export const EditPatternPopup = ({ id, onClose, updateList }) => {
-    const [patternName, setPatternName] = useState('');
-    const [patternSlug, setPatternSlug] = useState('');
-    const [patternCategory, setPatternCategory] = useState('');
-    const [noticeMessage, setNoticeMessage] = useState('');
-    const [fetching, setFetching] = useState(true);
+export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
+    const [pageName, setPageName] = useState(page.post_title);
+    const [templateSlug, setTemplateSlug] = useState(page.template);
+    const pageCategory = 'gutenverse';
 
-    useEffect(() => {
-        apiFetch({
-            path: addQueryArgs('gtb-backend/v1/pattern/data', {
-                id
-            })
-        }).then(result => {
-            if (!isEmpty(result)) {
-                setPatternSlug(result?.slug);
-                setPatternName(result?.name);
-                setPatternCategory(result?.category);
-                setFetching(false);
-            }
-        }).catch(() => { });
-    }, []);
-
-    const patternSubmit = () => {
-        if (!fetching && patternName !== '' && patternSlug !== '') {
+    const pageSubmit = () => {
+        if (pageName !== '') {
             apiFetch({
-                path: '/gtb-backend/v1/pattern/edit',
+                path: '/gtb-backend/v1/pages/update',
                 method: 'POST',
                 data: {
-                    id: id,
-                    name: patternName,
-                    slug: patternSlug,
-                    category: patternCategory
+                    id : page.ID,
+                    name: pageName,
+                    category: pageCategory,
+                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default'
                 }
             }).then(result => {
                 const { status, data } = result;
-
                 if ('success' === status) {
-                    updateList(result?.data?.list);
+                    updateList(result?.data);
                     onClose();
-                } else {
-                    const { message } = data;
-                    setNoticeMessage(message);
                 }
+            }).catch((err) => {
+                alert(err.message);
             });
         }
     };
-
+    
     return (
-        <div className="popup-container">
-            <div className="popup-content">
+        <div className="popup-container" onClick={onClose}>
+            <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
-                    <span className="title pattern">{__('Edit Pattern')}</span>
+                    <span className="title pattern">{__('Edit Page')}</span>
                 </div>
                 <div className="popup-body">
-                    {!isEmpty(noticeMessage) && <div className="gtb-notice">
-                        {noticeMessage}
-                    </div>}
-                    <div className="input-wrap pattern-slug">
-                        <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
-                        <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
-                        <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gutenverse-themes-builder')}</span>
+                    <div className="input-wrap">
+                        <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
+                        <input type="text" value={pageName} onChange={e => setPageName(e.target.value)} />
+                        <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
                     </div>
-                    <div className="input-wrap pattern-name">
-                        <label>{__('Pattern Name', 'gutenverse-themes-builder')}</label>
-                        <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
-                        <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
-                    </div>
-                    <div className="input-wrap pattern-category">
-                        <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
-                        <select onChange={e => { setPatternCategory(e.target.value); }}>
-                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
-                        </select>
-                        <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
+                    <div className='input-wrap'>
+                        <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
+                        <AsyncSelect
+                            id={"template-selector"}
+                            className={"async-select-container"}
+                            classNamePrefix={"async-select"}
+                            isMulti={false}
+                            noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
+                            onChange={(value)=> setTemplateSlug(value.value)}
+                            loadOptions={input => onSearch(input)}
+                            value={{id: templateSlug, label: templateSlug}}
+                        />
                     </div>
                 </div>
                 <div className="popup-footer">
@@ -153,8 +139,8 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                             <ArrowLeft size={14} />
                             {__('Back', 'gutenverse-themes-builder')}
                         </div>
-                        <div className="button" onClick={patternSubmit}>
-                            {__('Save', 'gutenverse-themes-builder')}
+                        <div className="button" onClick={pageSubmit}>
+                            {__('Submit', 'gutenverse-themes-builder')}
                         </div>
                     </div>
                 </div>
@@ -167,9 +153,7 @@ const ManagePages = () => {
     const [pageList, setPageList] = useState([]);
     const [deletePopup, setDeletePopup] = useState(false);
     const [createPagePopup, setCreatePagePopup] = useState(false);
-    const [editPatternPopup, setEditPatternPopup] = useState(false);
-    const [templateList, setTemplateList] = useState([]);
-    const [templateSearch, setTemplateSearch] = useState('');
+    const [editPagePopup, setEditPagePopup] = useState(false);
     const {
         editPath,
     } = window['GutenverseThemeBuilder'];
@@ -177,15 +161,30 @@ const ManagePages = () => {
     const updateList = (result) => {
         setPageList(result);
     };
-    const afterFetching = (response) => {
-        setTemplateList(response?.data);
-    };
+    const onSearch = (input) => new Promise(resolve => {
+        apiFetch({
+            method: 'POST',
+            path: addQueryArgs('gtb-backend/v1/templates/list'),
+            data: {
+                search : input,
+                category : 'gutenverse'
+            }
+        }).then((response) => {
+            let data = response.data.map(el => {
+                return {
+                    label: el.name,
+                    value: el.name
+                };
+            });
+            resolve(data);
+        }).catch((err) => {
+            alert(err.message);
+        });
+    });
     useEffect(() => {
-        getPageList({ paged: 1 }, updateList);
-        getTemplateListSelector({ search: templateSearch, category: 'gutenverse'}, afterFetching );
+        getPageList(updateList);
     }, []);
-    console.log(templateList);
-    const removePage = () => deletePage({ page_id: deletePopup, paged: 1 }, updateList);
+    const removePage = () => deletePage({ id: deletePopup }, updateList);
     return (
         <ContentWrapper
             title={__('Page List', 'gutenverse-themes-builder')}
@@ -201,20 +200,20 @@ const ManagePages = () => {
             ]}
         >
             <>
-                {/* <Table
+                <Table
                     heads={['ID', 'Slug', 'Title', 'Action',]}
                 >
                     <>
-                        {!isEmpty(patternList) && patternList.map((pattern, key) => {
+                        {!isEmpty(pageList) && pageList.map((page, key) => {
                             return <tr key={key}>
-                                <td>{pattern?.ID}</td>
-                                <td>{pattern?.post_name}</td>
-                                <td>{pattern?.post_title}</td>
+                                <td>{page?.ID}</td>
+                                <td>{page?.post_name}</td>
+                                <td>{page?.post_title}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPatternPopup(pattern?.ID)}><EditIcon />Edit</a>
-                                        <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${pattern?.ID}&action=edit`}><EditIcon />Edit Content</a>
-                                        <a className="delete" onClick={() => setDeletePopup(pattern?.ID)}><DeleteIcon />Delete</a>
+                                        <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>
+                                        <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit Content</a>
+                                        <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
                                     </div>
                                 </td>
                             </tr>;
@@ -224,11 +223,20 @@ const ManagePages = () => {
                 {deletePopup && <WarningPopup
                     title={__('Are you sure want to delete this pattern?', 'gutenverse-themes-builder')}
                     detail={__('Any templates that use this pattern will NOT be able to render and use this pattern again.', 'gutenverse-themes-builder')}
-                    onProceed={removePattern}
+                    onProceed={removePage}
                     onClose={() => setDeletePopup(false)}
-                />} */}
-                {createPagePopup && <CreatePagePopup onClose={() => setCreatePagePopup(false)} updateList={updateList} />}
-                {/* {editPatternPopup && <EditPatternPopup id={editPatternPopup} onClose={() => setEditPatternPopup(false)} updateList={updateList} />} */}
+                />}
+                {createPagePopup && <CreatePagePopup 
+                    onClose={() => setCreatePagePopup(false)} 
+                    updateList={updateList}
+                    onSearch={onSearch}
+                />}
+                {editPagePopup && <EditPagePopup 
+                    page={editPagePopup} 
+                    onClose={() => setEditPagePopup(false)} 
+                    updateList={updateList}
+                    onSearch={onSearch}
+                />}
             </>
         </ContentWrapper>
     );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * REST APIs class
  *
@@ -16,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Gutenverse_Themes_Builder\Database\Database;
 use Gutenverse\Framework\Global_Variable;
 use WP_Query;
+use WP_REST_Response;
 use ZipArchive;
 use WP_Theme_Json_Resolver;
 
@@ -25,6 +27,7 @@ use WP_Theme_Json_Resolver;
  * @package gutenverse-themes-builder
  */
 class Backend_Api {
+
 	/**
 	 * Endpoint Path
 	 *
@@ -445,6 +448,47 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'import_images' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		/**Pages End Point */
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/create',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'create_pages' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/list',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_page_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/delete',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'delete_page' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/update',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'update_page' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -2154,9 +2198,9 @@ class Backend_Api {
 	 * @return array
 	 */
 	public function get_template_list_search( $request ) {
-		$theme_id   = get_option( 'gtb_active_theme_id' );
-		$search     = gutenverse_esc_data( $request->get_param( 'search' ), 'string' );
-		$category   = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$search   = gutenverse_esc_data( $request->get_param( 'search' ), 'string' );
+		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
 
 		if ( $theme_id ) {
 			$templates_db   = Database::instance()->theme_templates;
@@ -2234,8 +2278,8 @@ class Backend_Api {
 		$templates_data    = $templates_db->get_data( $theme_id );
 		$template_dir      = trailingslashit( wp_upload_dir()['basedir'] ) . '/gtb-' . $theme_id . '/';
 		$html_content      = array();
-		$templates_content = get_block_templates( array(), 'wp_template' ); // phpcs:ignore
-		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
+		$templates_content = get_block_templates(array(), 'wp_template'); // phpcs:ignore
+		$parts_content     = get_block_templates(array(), 'wp_template_part'); // phpcs:ignore
 
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
@@ -2601,7 +2645,6 @@ class Backend_Api {
 					"name": "' . $font['family'] . '",
 					"slug": "' . $slug . '"
 				}';
-
 			}
 		}
 
@@ -2843,5 +2886,169 @@ class Backend_Api {
 		$wp_filesystem->put_contents( $file_path, $body, FS_CHMOD_FILE );
 
 		return $headers;
+	}
+
+	/**
+	 * Get Page List
+	 */
+	public function get_page_list() {
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$pages    = new \WP_Query(
+			array(
+				'post_type'      => 'page',
+				'posts_per_page' => -1,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_gtb_page_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
+		$data     = array();
+		if ( $pages->have_posts() ) {
+			foreach ( $pages->posts as $post ) {
+				$template = get_post_meta( $post->ID, '_wp_page_template', true );
+				$data[]   = array(
+					'ID'         => $post->ID,
+					'post_name'  => $post->post_name,
+					'post_title' => $post->post_title,
+					'template'   => explode( '-', $template )[1],
+				);
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * Create Page
+	 *
+	 * @param object $request .
+	 */
+	public function create_pages( $request ) {
+		$name     = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$theme_id = get_option( 'gtb_active_theme_id' );
+
+		if ( empty( $name ) ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Creating Page Failed!',
+				),
+				400
+			);
+		}
+		if ( $theme_id ) {
+			$page    = array(
+				'post_type'    => 'page',
+				'post_title'   => $name,
+				'post_content' => '',
+				'post_status'  => 'publish',
+				'post_author'  => get_current_user_id(),  // ID of the author (user ID)
+				'meta_input'   => array(
+					'_wp_page_template'  => $template,
+					'_gtb_page_category' => $category,
+					'_gtb_page_theme_id' => $theme_id,
+				),
+			);
+			$success = wp_insert_post( $page );
+			if ( ! $success ) {
+				return new WP_REST_Response(
+					array(
+						'status'  => 'failed',
+						'message' => 'Creating Page Failed!',
+					),
+					400
+				);
+			}
+			return new WP_REST_Response(
+				array(
+					'status' => 'success',
+					'data'   => $this->get_page_list(),
+				),
+				200
+			);
+		}
+	}
+
+	/**
+	 * Delete Page
+	 *
+	 * @param object $request .
+	 */
+	public function delete_page( $request ) {
+		$id         = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
+		$is_deleted = wp_delete_post( $id, true );
+		if ( ! $is_deleted ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Deleting Page Failed!',
+				),
+				400
+			);
+		}
+		return new WP_REST_Response(
+			array(
+				'status' => 'success',
+				'data'   => $this->get_page_list(),
+			),
+			200
+		);
+	}
+	/**
+	 * Update Page
+	 *
+	 * @param object $request .
+	 */
+	public function update_page( $request ) {
+		$name     = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$id       = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
+		$theme_id = get_option( 'gtb_active_theme_id' );
+
+		if ( empty( $name ) ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Creating Page Failed!',
+				),
+				400
+			);
+		}
+		if ( $theme_id ) {
+			$page = array(
+				'ID'          => $id,
+				'post_title'  => $name,
+				'post_author' => get_current_user_id(),  // ID of the author (user ID)
+				'meta_input'  => array(
+					'_wp_page_template' => $template,
+				),
+			);
+			update_post_meta( $id, '_wp_page_template', $template );
+			$success = wp_update_post( $page );
+			if ( ! $success ) {
+				return new WP_REST_Response(
+					array(
+						'status'  => 'failed',
+						'message' => 'Creating Page Failed!',
+					),
+					400
+				);
+			}
+			return new WP_REST_Response(
+				array(
+					'status' => 'success',
+					'data'   => $this->get_page_list(),
+				),
+				200
+			);
+		}
 	}
 }

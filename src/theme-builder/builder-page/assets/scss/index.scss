@@ -714,6 +714,9 @@ body {
                 display: flex;
                 flex-wrap: wrap;
 
+                .async-select-container{
+                    width: 100%;
+                }
                 &>input,
                 &>select {
                     width: 100%;
