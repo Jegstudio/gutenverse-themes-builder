@@ -112,6 +112,22 @@ export const getTemplateList = (callback = def_callback) => {
     });
 };
 
+export const getTemplateListSelector = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/templates/list'),
+        data: {
+            search : params.search,
+            category : params.category
+        }
+    }).then((response) => {
+        console.log(response)
+        callback(response);
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
 export const createTemplate = (params, callback = def_callback) => {
     const {
         template_data = {}
@@ -139,6 +155,31 @@ export const deleteTemplate = (params, callback = def_callback) => {
         path: addQueryArgs('gtb-backend/v1/templates/delete'),
         data: {
             template_data
+        }
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+/* Page */
+export const getPageList = (params, callback = def_callback) => {
+    apiFetch({
+        path: addQueryArgs('gtb-backend/v1/page/list', {
+            ...params
+        }),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const deletePage = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/page/delete'),
+        data: {
+            ...params
         }
     }).then((response) => {
         callback(response);

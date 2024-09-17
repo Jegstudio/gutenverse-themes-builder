@@ -12,6 +12,7 @@ import ReadmeEditor from './components/readme-editor';
 import ManageGlobal from './components/manage-global';
 import ManageDashbaord from './components/manage-dashboard';
 import ManageNotice from './components/manage-notice';
+import ManagePages from './components/manage-pages';
 
 const ThemeBuilder = ({ location }) => {
     const [path, setPath] = useState('list');
@@ -26,6 +27,9 @@ const ThemeBuilder = ({ location }) => {
     switch (path) {
         case 'manage-templates':
             Content = ManageTemplates;
+            break;
+        case 'manage-pages':
+            Content = ManagePages;
             break;
         case 'manage-patterns':
             Content = PatternList;

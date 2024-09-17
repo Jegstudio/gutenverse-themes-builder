@@ -268,6 +268,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'templates/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_template_list_search' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'templates/create',
 			array(
 				'methods'             => 'POST',
@@ -2135,6 +2145,30 @@ class Backend_Api {
 
 		return false;
 	}
+
+	/**
+	 * Get template list search
+	 *
+	 * @param object $request .
+	 *
+	 * @return array
+	 */
+	public function get_template_list_search( $request ) {
+		$theme_id   = get_option( 'gtb_active_theme_id' );
+		$search     = gutenverse_esc_data( $request->get_param( 'search' ), 'string' );
+		$category   = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+
+		if ( $theme_id ) {
+			$templates_db   = Database::instance()->theme_templates;
+			$templates_data = $templates_db->get_data_on_search( $theme_id, $category, $search );
+			return array(
+				'data' => $templates_data,
+			);
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * Create template
