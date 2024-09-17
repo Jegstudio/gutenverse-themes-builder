@@ -761,7 +761,7 @@ class Export_Theme {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/final.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-demo.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-demo.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-plugin.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-plugin.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-support.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-support.png' );
+				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/icon-docs.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/icon-docs.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/image-dancer.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/image-dancer.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/mockup-upgrade-pro.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/mockup-upgrade-pro.png' );
 			} elseif ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
