@@ -1524,7 +1524,6 @@ class Export_Theme {
 	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
-		
 
 		foreach ( $blocks as $block ) {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
@@ -1546,6 +1545,7 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
+						$this->extract_images( $posts[0]->post_content, $system, $theme_slug );
 						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
 					}
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
