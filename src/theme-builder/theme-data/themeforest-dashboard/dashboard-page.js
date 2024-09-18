@@ -179,7 +179,7 @@ const ImportTemplates = () => {
         <div className='template-list'>
             {templateList?.map((template, key) => {
                 return <div className='template-page' key={key}>
-                    <img src={template?.thumb} />
+                    <img src={template?.image_url} />
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
@@ -198,7 +198,7 @@ const ImportTemplates = () => {
                                     ? (template?.status?.using_template ? __('Imported', '--gtb-theme-namespace--') : __('Switch Template', '--gtb-theme-namespace--'))
                                     : __('Import Page', '--gtb-theme-namespace--')}
                             </div>
-                            <div className='button-view-demo' onClick={() => window.open(template?.demo, '_blank')}>{__('View Demo', '--gtb-theme-namespace--')}</div>
+                            <div className='button-view-demo' onClick={() => window.open(template?.preview_url, '_blank')}>{__('View Demo', '--gtb-theme-namespace--')}</div>
                         </div>
                     </div>
                 </div>
