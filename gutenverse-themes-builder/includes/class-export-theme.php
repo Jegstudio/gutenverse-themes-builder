@@ -358,7 +358,6 @@ class Export_Theme {
 					'title' => '{$template['name']}',
 					'page'  => '{$template['page_name']}',
 					'slug'  => '{$slug}',
-					'thumb' => '{$template['thumbnail']['url']}',
 				)";
 			}
 		}
@@ -1045,6 +1044,10 @@ class Export_Theme {
 				</div>
 			</div>';
 			$script = '';
+		}
+
+		if ( isset( $other['notice'] ) && ! $this->is_serialized_block_empty( $other['notice'] ) ) {
+			$add_class[] = 'new Upgrader();';
 		}
 
 		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );

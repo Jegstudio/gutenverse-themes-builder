@@ -8,8 +8,6 @@
 
 namespace {{namespace}};
 
-use {{namespace}}\Upgrader;
-
 use WP_Query;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -49,7 +47,6 @@ class Init {
 	private function __construct() {
 		$this->init_instance();
 		$this->load_hooks();
-		$this->register_upgrader();
 	}
 
 	/**
@@ -97,13 +94,6 @@ class Init {
 		}
 
 		return $template_files;
-	}
-	
-	/**
-	 * Register Upgrader.
-	 */
-	public function register_upgrader() {
-		new Upgrader();
 	}
 
 	/**
