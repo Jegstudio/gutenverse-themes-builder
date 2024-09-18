@@ -579,7 +579,7 @@ class Init {
 
 		$page_list       = array();
 		$page_json_dir   = {{constant}}_DIR . '/gutenverse-pages';
-		$page_json_files = glob( $page . '/*.json' );
+		$page_json_files = glob( $page_json_dir . '/*.json' );
 
 		foreach ( $page_json_files as $page_file ) {
 			$json_data  = $wp_filesystem->get_contents( $page_file );
