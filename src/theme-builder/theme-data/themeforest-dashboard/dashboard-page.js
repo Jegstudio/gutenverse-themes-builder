@@ -32,10 +32,10 @@ const subscribeNews = (data) => {
 };
 
 const ImportTemplates = () => {
-    const { assign } = window['GutenThemeConfig'];
+    const { pagelist } = window['GutenThemeConfig'];
 
     const [allImported, setAllImported] = useState(false);
-    const [templateList, setTemplateList] = useState(assign);
+    const [templateList, setTemplateList] = useState(pagelist);
     const [importerStep, setImporterStep] = useState([
         "Creating Pages",
         "Assigning Templates",
