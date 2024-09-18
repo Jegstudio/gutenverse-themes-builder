@@ -9,7 +9,7 @@ import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { ArrowLeft } from 'react-feather';
-import { AsyncSelect } from 'gutenverse-core/components';
+import AsyncSelect from 'react-select/async';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
