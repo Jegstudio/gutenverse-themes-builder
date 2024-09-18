@@ -214,6 +214,7 @@ class Init {
 			add_action( 'wp_ajax_gtb_install_plugin', array( $this, 'gtb_plugin_manager_ajax' ) );
 			add_action( 'wp_ajax_gtb_plugin_notice_close', array( $this, 'plugin_notice_close' ) );
 		}
+		add_filter( 'display_post_states', array( $this, 'add_custom_post_state' ), 10, 2 );
 
 		/* TODO : Remove this later! */
 		add_action( 'init', array( $this, 'alter_table' ) );
@@ -524,5 +525,16 @@ class Init {
 	 */
 	public function plugin_notice_close() {
 		update_option( 'gtb_plugin_notice_flag', 0 );
+	}
+
+	/**
+	 * Add Custom Post State
+	 */
+	public function add_custom_post_state( $post_states, $post ) {
+		$is_gtb_page = get_post_meta( $post->ID, '_gtb_page_theme_id', true );
+		if ( $is_gtb_page ) {
+			$post_states['gutenverse_page'] = 'Gutenverse Page';
+		}
+		return $post_states;
 	}
 }

@@ -11,20 +11,63 @@ import { addQueryArgs } from '@wordpress/url';
 import { ArrowLeft } from 'react-feather';
 import { AsyncSelect } from 'gutenverse-core/components';
 
+const MediaSelect = ({ updateThumbnailData }) => {
+    const [thumbnailFrame, setThumbnailFrame] = useState(null);
+
+    useEffect(() => {
+        const firstFrame = wp?.media({
+            title: 'Select or Upload Media',
+            button: {
+                text: 'Select as Thumbnail'
+            },
+            library: {
+                type: ['image/jpg', 'image/jpeg', , 'image/webp']
+            },
+            multiple: false
+        });
+
+        setThumbnailFrame(firstFrame);
+    }, []);
+
+    useEffect(() => {
+        if (thumbnailFrame) {
+            thumbnailFrame.on('select', function () {
+                const attachment = thumbnailFrame.state().get('selection').first().toJSON();
+                updateThumbnailData({
+                    id: attachment?.id,
+                    url: attachment?.url,
+                });
+            });
+        }
+    }, [thumbnailFrame]);
+
+    const selectItem = (frame) => {
+        if (frame) {
+            frame.open();
+            return;
+        }
+    };
+
+    return <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
+};
 export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [pageName, setPageName] = useState('');
+    const [pagePreview, setPagePreview] = useState('');
     const [templateSlug, setTemplateSlug] = useState('default');
+    const [pageImage, setPageImage] = useState('');
     const pageCategory = 'gutenverse';
-
+    
     const pageSubmit = () => {
-        if (pageName !== '') {
+        if (pageName !== '' && pagePreview !== '' && !isEmpty(pageImage)) {
             apiFetch({
                 path: '/gtb-backend/v1/pages/create',
                 method: 'POST',
                 data: {
                     name: pageName,
                     category: pageCategory,
-                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default'
+                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
+                    pagePreview : pagePreview,
+                    pageImage: pageImage?.id
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -35,6 +78,8 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
             }).catch((err) => {
                 alert(err.message);
             });
+        }else{
+            alert('You need to fill all field!');
         }
     };
     
@@ -62,6 +107,26 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                             loadOptions={input => onSearch(input)}
                         />
                     </div>
+                    <div className='input-wrap'>
+                        <label>
+                            {__('Page Preview Url', 'gutenverse-themes-builder')}
+                        </label>
+                        <input
+                            type="text"
+                            name="page_demo"
+                            value={pagePreview}
+                            onChange={e => setPagePreview(e.target.value)}
+                        />
+                    </div>
+                    <div className='input-wrap media-wrap'>
+                        <label>
+                            {__('Page Image', 'gutenverse-themes-builder')}
+                        </label>
+                        <MediaSelect updateThumbnailData={value => setPageImage(value)} />
+                        {pageImage?.url && <div className="image-wrapper">
+                            <img src={pageImage?.url}/>
+                        </div>}
+                    </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons spaced">
@@ -82,6 +147,8 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
 export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
     const [pageName, setPageName] = useState(page.post_title);
     const [templateSlug, setTemplateSlug] = useState(page.template);
+    const [pagePreview, setPagePreview] = useState(page.page_preview);
+    const [pageImage, setPageImage] = useState(page.page_image);
     const pageCategory = 'gutenverse';
 
     const pageSubmit = () => {
@@ -93,7 +160,9 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     id : page.ID,
                     name: pageName,
                     category: pageCategory,
-                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default'
+                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
+                    pagePreview : pagePreview,
+                    pageImage: pageImage?.id
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -132,6 +201,26 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                             value={{id: templateSlug, label: templateSlug}}
                         />
                     </div>
+                    <div className='input-wrap'>
+                        <label>
+                            {__('Page Preview Url', 'gutenverse-themes-builder')}
+                        </label>
+                        <input
+                            type="text"
+                            name="page_demo"
+                            value={pagePreview}
+                            onChange={e => setPagePreview(e.target.value)}
+                        />
+                    </div>
+                    <div className='input-wrap media-wrap'>
+                        <label>
+                            {__('Page Image', 'gutenverse-themes-builder')}
+                        </label>
+                        <MediaSelect updateThumbnailData={value => setPageImage(value)} />
+                        {pageImage?.url && <div className="image-wrapper">
+                            <img src={pageImage?.url}/>
+                        </div>}
+                    </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons spaced">
@@ -157,6 +246,7 @@ const ManagePages = () => {
     const {
         editPath,
     } = window['GutenverseThemeBuilder'];
+    const siteUrl = window.location.origin;
 
     const updateList = (result) => {
         setPageList(result);
@@ -214,6 +304,7 @@ const ManagePages = () => {
                                         <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>
                                         <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit Content</a>
                                         <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
+                                        <a className="edit" target="_blank" rel="noreferrer" href={`${siteUrl}/${page?.post_name}`}>View</a>
                                     </div>
                                 </td>
                             </tr>;
