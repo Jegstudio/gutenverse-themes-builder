@@ -24,6 +24,11 @@ const Navigation = ({ location }) => {
             path: 'manage-templates',
         },
         {
+            name: __('Page', 'gutenverse'),
+            slug: pageSlug,
+            path: 'manage-pages',
+        },
+        {
             name: __('Patterns', 'gutenverse'),
             slug: pageSlug,
             path: 'manage-patterns',

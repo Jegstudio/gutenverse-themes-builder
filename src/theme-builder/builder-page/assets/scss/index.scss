@@ -710,10 +710,26 @@ body {
         .popup-body {
             padding: 20px;
 
+            
             .input-wrap {
                 display: flex;
                 flex-wrap: wrap;
 
+                &.media-wrap{
+                    flex-direction: column;
+                    label{
+                        margin: 12px 0px;
+                    }
+                    img{
+                        max-width: 200px;
+                    }
+                    .image-wrapper{
+                        margin-top: 12px;
+                    }
+                }
+                .async-select-container{
+                    width: 100%;
+                }
                 &>input,
                 &>select {
                     width: 100%;

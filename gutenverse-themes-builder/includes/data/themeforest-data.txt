@@ -118,8 +118,8 @@ class Themeforest_Data {
 	 * @return int|string
 	 */
 	public function handle_pages( $request ) {
-		$title = $request->get_param( 'title' );
 
+		$title = $request->get_param( 'title' );
 		$templates = array(
 			{{assign_templates}}
 		);

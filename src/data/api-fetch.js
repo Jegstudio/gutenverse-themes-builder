@@ -112,6 +112,7 @@ export const getTemplateList = (callback = def_callback) => {
     });
 };
 
+
 export const createTemplate = (params, callback = def_callback) => {
     const {
         template_data = {}
@@ -143,6 +144,30 @@ export const deleteTemplate = (params, callback = def_callback) => {
     }).then((response) => {
         callback(response);
     }).catch(() => {
+    });
+};
+
+/* Page */
+export const getPageList = (callback = def_callback) => {
+    apiFetch({
+        path: addQueryArgs('gtb-backend/v1/pages/list'),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const deletePage = (params, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/pages/delete'),
+        data: {
+            ...params
+        }
+    }).then((response) => {
+        callback(response.data);
+    }).catch((err) => {
+        alert(err.message)
     });
 };
 
