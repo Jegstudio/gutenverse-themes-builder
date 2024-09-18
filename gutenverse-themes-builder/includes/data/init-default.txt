@@ -544,10 +544,32 @@ class Init {
 	 * Register static data to be used in theme's js file
 	 */
 	public function theme_config() {
+		global $wp_filesystem;
+
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
 		$active_plugins = get_option( 'active_plugins' );
 		$plugins = array();
 		foreach( $active_plugins as $active ) {
 			$plugins[] = explode( '/', $active)[0];
+		}
+
+		$page_list       = array();
+		$page_json_dir   = {{constant}}_DIR . '/gutenverse-pages';
+		$page_json_files = glob( $page_json_dir . '/*.json' );
+
+		foreach ( $page_json_files as $page_file ) {
+			$json_data  = $wp_filesystem->get_contents( $page_file );
+			$array_data = json_decode( $json_data, true );
+
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				continue;
+			} else {
+				$page_list[] = $array_data;
+			}
 		}
 
 		$config = array(
@@ -579,9 +601,7 @@ class Init {
 			'plugins'      => array(
 				{{plugins_required}}
 			),
-			'assign'       => array(
-				{{assign_templates}}
-			),
+			'pagelist'       => $page_list,
 			'dashboardData'=> array(
 				{{dashboard_data}}
 			),
