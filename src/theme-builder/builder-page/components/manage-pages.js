@@ -262,8 +262,8 @@ const ManagePages = () => {
         }).then((response) => {
             let data = response.data.map(el => {
                 return {
-                    label: el.name,
-                    value: el.name
+                    label: el.name.toLowerCase(),
+                    value: el.name.toLowerCase()
                 };
             });
             resolve(data);
