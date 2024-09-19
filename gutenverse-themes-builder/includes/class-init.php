@@ -174,6 +174,7 @@ class Init {
 	 */
 	public function load_framework() {
 		if ( $this->can_load_framework() ) {
+			defined( 'GUTENVERSE_FRAMEWORK_URL_PATH' ) || define( 'GUTENVERSE_FRAMEWORK_URL_PATH', plugins_url( GUTENVERSE_THEMES_BUILDER ) . '/lib/framework' );
 			require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
 		}
 	}
