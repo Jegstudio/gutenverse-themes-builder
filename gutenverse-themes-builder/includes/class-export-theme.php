@@ -142,50 +142,41 @@ class Export_Theme {
 			if ( ! is_dir( $pattern_dir ) ) {
 				wp_mkdir_p( $pattern_dir );
 			}
-			foreach ( $patterns as $pattern ) {
-				$content     = $this->extract_images( $pattern->post_content, $system, $data['slug'] );
-				$content     = $this->fix_colors( $content );
-				$content     = $this->fix_core_navigation( $content );
-				$html_blocks = parse_blocks( $pattern->post_content );
-				$blocks      = _flatten_blocks( $html_blocks );
-				foreach ( $blocks as $block ) {
-					if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
-						$pattern_name     = $block['attrs']['pattern']['value'];
-						$pattern_title    = $block['attrs']['pattern']['label'];
-						$pattern_category = get_post_meta( $pattern->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+			foreach ( $patterns->posts as $pattern ) {
+				$content          = $this->extract_images( $pattern->post_content, $system, $data['slug'] );
+				$content          = $this->fix_colors( $content );
+				$content          = $this->fix_core_navigation( $content );
+				$pattern_name     = $pattern->post_name;
+				$pattern_title    = $pattern->post_title;
+				$pattern_category = get_post_meta( $pattern->ID, '_pattern_category', true );
+				$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
 
-						/** Create pattern php files */
-						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
-						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-						$content     = str_replace( "'", "\'", $pattern->post_content );
-						$content     = $this->extract_images( $content, $system, $data['slug'] );
-						$content     = $this->fix_colors( $content );
-						$content     = $this->fix_core_navigation( $content );
-						$content     = $this->replace_template_part( $content, $data['slug'] );
-						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
-						$placeholder = str_replace( '{{theme_slug}}', $data['slug'], $placeholder );
-						$placeholder = str_replace( '{{pattern_category}}', $data['slug'] . '-' . $pattern_category, $placeholder );
-						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
+				/** Create pattern php files */
+				$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
+				$target_file = $pattern_dir . '/' . $pattern_name . '.php';
+				$content     = str_replace( "'", "\'", $content );
+				$content     = $this->replace_template_part( $content, $data['slug'] );
+				$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
+				$placeholder = str_replace( '{{theme_slug}}', $data['slug'], $placeholder );
+				$placeholder = str_replace( '{{pattern_category}}', $data['slug'] . '-' . $pattern_category, $placeholder );
+				$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 
-						$system->put_contents(
-							$target_file,
-							$placeholder,
-							FS_CHMOD_FILE
-						);
+				$system->put_contents(
+					$target_file,
+					$placeholder,
+					FS_CHMOD_FILE
+				);
 
-						switch ( $pattern_category ) {
-							case 'pro':
-								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							case 'gutenverse':
-								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							default:
-								$this->core_patterns[] = "'{$pattern_name}'";
-								break;
-						}
-					}
+				switch ( $pattern_category ) {
+					case 'pro':
+						$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+						break;
+					case 'gutenverse':
+						$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+						break;
+					default:
+						$this->core_patterns[] = "'{$pattern_name}'";
+						break;
 				}
 			}
 		}
@@ -221,9 +212,12 @@ class Export_Theme {
 			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/page-json.txt' );
 
 			/** Add Template slug to mold */
-			$template      = get_post_meta( $page->ID, '_wp_page_template', true );
-			$template_slug = explode( '-', $template )[1];
-			$placeholder   = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : $placeholder;
+			$template = get_post_meta( $page->ID, '_wp_page_template', true );
+			$parts    = explode( '-', $template );
+			array_shift( $parts );
+			$template_slug = implode( '-', $parts );
+
+			$placeholder = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : $placeholder;
 
 			/** Add Page Title */
 			$placeholder = ! empty( $page->post_title ) ? str_replace( '{{page_title}}', $page->post_title, $placeholder ) : $placeholder;
@@ -239,11 +233,11 @@ class Export_Theme {
 			$placeholder = ! empty( $file_path ) ? str_replace( '{{image_url}}', $image_path, $placeholder ) : $placeholder;
 
 			/**Add Content */
-			$content     = $this->fix_colors( $page->post_content );
-			$content     = $this->extract_images( $content, $system, $data['slug'] );
-			$content     = $this->fix_core_navigation( $content );
-			$content     = $this->build_patterns( $content, $theme_id, $system, $data['slug'] );
-			$placeholder = str_replace( '{{content}}', $content, $placeholder );
+			$content = $this->fix_colors( $page->post_content );
+			$content = $this->extract_images( $content, $system, $data['slug'], true );
+			$content = $this->fix_core_navigation( $content );
+			$content = $this->build_patterns( $content, $theme_id, $system, $data['slug'] );
+			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -1141,28 +1135,47 @@ class Export_Theme {
 					FS_CHMOD_FILE
 				);
 			}
-
-			if ( ! empty( $other['dashboard']['templates'] ) ) {
-				foreach ( $other['dashboard']['templates'] as $template ) {
-					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
-					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
-					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $template['thumbnail']['filename'] . "'";
-
+			$pages = new \WP_Query(
+				array(
+					'post_type'      => 'page',
+					'posts_per_page' => -1,
+					'meta_query' => array( //phpcs:ignore
+						array(
+							'key'     => '_gtb_page_theme_id',
+							'value'   => $theme_id,
+							'compare' => '===',
+						),
+					),
+				)
+			);
+			if ( $pages->have_posts() ) {
+				foreach ( $pages->posts as $post ) {
+					$image_id   = get_post_meta( $post->ID, '_gtb_page_image', true );
+					$image_url  = wp_get_attachment_url( $image_id );
+					$image_data = wp_remote_get( $image_url, array( 'sslverify' => true ) );
+					$file_path  = get_post_meta( $image_id, '_wp_attached_file', true );
+					$filename   = basename( $file_path );
+					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $filename;
+					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $filename . "'";
+					$post_demo  = get_post_meta( $post->ID, '_gtb_page_preview', true );
+					$template   = get_post_meta( $post->ID, '_wp_page_template', true );
+					$parts      = explode( '-', $template );
+					array_shift( $parts );
+					$template_slug = implode( '-', $parts );
 					if ( ! is_wp_error( $image_data ) ) {
 						$system->put_contents(
 							$thumbnail,
 							$image_data['body'],
 							FS_CHMOD_FILE
 						);
+						$assigns[] = "array(
+							'title' => '{$post->post_title}',
+							'page'  => '{$post->post_title}',
+							'demo'  => '{$post_demo}',
+							'slug'  => '{$template_slug}',
+							'thumb' => {$thumb_url},
+						)";
 					}
-					$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
-					$assigns[] = "array(
-						'title' => '{$template['name']}',
-						'page'  => '{$template['page_name']}',
-						'demo'  => '{$template['page_demo']}',
-						'slug'  => '{$slug}',
-						'thumb' => {$thumb_url},
-					)";
 				}
 			}
 
@@ -1545,7 +1558,6 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						$this->extract_images( $posts[0]->post_content, $system, $theme_slug );
 						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
 					}
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
@@ -1612,11 +1624,12 @@ class Export_Theme {
 	/**
 	 * Extract Images
 	 *
-	 * @param string $content .
-	 * @param object $system .
-	 * @param string $slug .
+	 * @param string  $content .
+	 * @param object  $system .
+	 * @param string  $slug .
+	 * @param boolean $is_outside_pattern_wrapper .
 	 */
-	private function extract_images( $content, $system, $slug ) {
+	private function extract_images( $content, $system, $slug, $is_outside_pattern_wrapper = false ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
@@ -1649,7 +1662,10 @@ class Export_Theme {
 					}
 				}
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-				$content    = str_replace( $image, $image_code, $content );
+				if ( $is_outside_pattern_wrapper ) {
+					$image_code = "{{home_url}}/assets/img/$image_name";
+				}
+				$content = str_replace( $image, $image_code, $content );
 			}
 		}
 		return $content;
