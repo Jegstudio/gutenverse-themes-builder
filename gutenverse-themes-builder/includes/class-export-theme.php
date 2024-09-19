@@ -143,7 +143,8 @@ class Export_Theme {
 				wp_mkdir_p( $pattern_dir );
 			}
 			foreach ( $patterns->posts as $pattern ) {
-				$content          = $this->extract_images( $pattern->post_content, $system, $data['slug'] );
+				$content          = str_replace( "'", "\'", $pattern->post_content );
+				$content          = $this->extract_images( $content, $system, $data['slug'] );
 				$content          = $this->fix_colors( $content );
 				$content          = $this->fix_core_navigation( $content );
 				$pattern_name     = $pattern->post_name;
@@ -233,6 +234,7 @@ class Export_Theme {
 
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true );
+			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
@@ -855,13 +857,12 @@ class Export_Theme {
 		$placeholder = str_replace( '{{notice_message}}', $other['notice'], $placeholder );
 
 		$inc_dir = gutenverse_themes_builder_theme_built_path() . 'inc/class';
-
 		if ( ! is_dir( $inc_dir ) ) {
 			wp_mkdir_p( $inc_dir );
 		}
 
 		$system->put_contents(
-			$inc_dir . '/class/class-upgrader.php',
+			$inc_dir . '/class-upgrader.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
@@ -1357,7 +1358,9 @@ class Export_Theme {
 
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
-					$content = $this->fix_colors( $html_content[ $slug_key ] );
+					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->extract_images( $content, $system, $theme_slug );
+					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
 					$content = $this->build_patterns( $content, $theme_id, $theme_slug );
 					foreach ( $headers as $header ) {
