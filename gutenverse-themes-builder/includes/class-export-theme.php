@@ -100,9 +100,9 @@ class Export_Theme {
 		$this->create_assets( $wp_filesystem, $data );
 		$this->create_themeforest_data( $wp_filesystem, $data );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
-		$this->register_patterns( $wp_filesystem, $data );
 		$this->create_pages( $wp_filesystem, $theme_id, $data );
 		$this->create_patterns( $wp_filesystem, $theme_id, $data );
+		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
@@ -138,14 +138,20 @@ class Export_Theme {
 		);
 		if ( $patterns->have_posts() ) {
 			$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
+
+			if ( ! is_dir( $pattern_dir ) ) {
+				wp_mkdir_p( $pattern_dir );
+			}
 			foreach ( $patterns as $pattern ) {
+				$content     = $this->extract_images( $pattern->post_content, $system, $data['slug'] );
+				$content     = $this->fix_colors( $content );
+				$content     = $this->fix_core_navigation( $content );
 				$html_blocks = parse_blocks( $pattern->post_content );
 				$blocks      = _flatten_blocks( $html_blocks );
 				foreach ( $blocks as $block ) {
 					if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
 						$pattern_name     = $block['attrs']['pattern']['value'];
 						$pattern_title    = $block['attrs']['pattern']['label'];
-						$pattern_theme_id = get_post_meta( $pattern->ID, '_pattern_theme_id', true );
 						$pattern_category = get_post_meta( $pattern->ID, '_pattern_category', true );
 						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
 
@@ -485,6 +491,17 @@ class Export_Theme {
 
 		if ( empty( $other['dashboard'] ) || ( isset( $other['dashboard']['mode'] ) && 'default' === $other['dashboard']['mode']['value'] ) || ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) ) {
 			return;
+		}
+
+		if ( ! empty( $other['dashboard']['templates'] ) ) {
+			foreach ( $other['dashboard']['templates'] as $template ) {
+				$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
+				$assigns[] = "array(
+					'title' => '{$template['name']}',
+					'page'  => '{$template['page_name']}',
+					'slug'  => '{$slug}',
+				)";
+			}
 		}
 
 		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gutenverse_themes_builder_theme_built_path() . 'assets/dashboard-fonts' );
@@ -1507,11 +1524,6 @@ class Export_Theme {
 	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
-		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
-
-		if ( ! is_dir( $pattern_dir ) ) {
-			wp_mkdir_p( $pattern_dir );
-		}
 
 		foreach ( $blocks as $block ) {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
@@ -1533,6 +1545,7 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
+						$this->extract_images( $posts[0]->post_content, $system, $theme_slug );
 						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
 					}
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
