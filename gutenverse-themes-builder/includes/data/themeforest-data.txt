@@ -138,7 +138,7 @@ class Themeforest_Data {
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => $value['title'],
+						'title'          => $value['pagetitle'],
 						'posts_per_page' => 1,
 					)
 				);
@@ -153,7 +153,7 @@ class Themeforest_Data {
 					);
 				} else {
 					$new_page = array(
-						'post_title'    => $value['title'],
+						'post_title'    => $value['pagetitle'],
 						'post_content'  => $content,
 						'post_status'   => 'publish',
 						'post_type'     => 'page',

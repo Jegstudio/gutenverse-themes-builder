@@ -154,7 +154,6 @@ class Export_Theme {
 				/** Create pattern php files */
 				$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
 				$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-				$content     = str_replace( "'", "\'", $content );
 				$content     = $this->replace_template_part( $content, $data['slug'] );
 				$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
 				$placeholder = str_replace( '{{theme_slug}}', $data['slug'], $placeholder );
@@ -233,10 +232,10 @@ class Export_Theme {
 			$placeholder = ! empty( $file_path ) ? str_replace( '{{image_url}}', $image_path, $placeholder ) : $placeholder;
 
 			/**Add Content */
-			$content = $this->fix_colors( $page->post_content );
-			$content = $this->extract_images( $content, $system, $data['slug'], true );
-			$content = $this->fix_core_navigation( $content );
-			$content = $this->build_patterns( $content, $theme_id, $system, $data['slug'] );
+			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true );
+			$content     = $this->extract_images( $content, $system, $data['slug'], true );
+			$content     = $this->fix_colors( $content );
+			$content     = $this->fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
 
 			/**Create the file*/
@@ -1360,7 +1359,7 @@ class Export_Theme {
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_colors( $html_content[ $slug_key ] );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $theme_slug );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -1529,12 +1528,12 @@ class Export_Theme {
 	/**
 	 * Build Patterns
 	 *
-	 * @param string $html_content .
-	 * @param string $theme_id .
-	 * @param object $system .
-	 * @param string $theme_slug .
+	 * @param string  $html_content .
+	 * @param string  $theme_id .
+	 * @param string  $theme_slug .
+	 * @param boolean $only_get_content .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
+	private function build_patterns( $html_content, $theme_id, $theme_slug, $only_get_content = false ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
 
@@ -1542,7 +1541,6 @@ class Export_Theme {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
 				$pattern_before = serialize_block( $block );
 				$pattern_after  = '';
-
 				if ( ! empty( $block['attrs']['pattern']['value'] ) ) {
 					$pattern_name = $block['attrs']['pattern']['value'];
 
@@ -1558,8 +1556,13 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
+						if ( $only_get_content ) {
+							$pattern_after = $posts[0]->post_content;
+						} else {
+							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
+						}
 					}
+
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
 				}
 			}
