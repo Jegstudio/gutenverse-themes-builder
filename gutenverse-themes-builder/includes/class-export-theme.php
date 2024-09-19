@@ -854,7 +854,7 @@ class Export_Theme {
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{notice_message}}', $other['notice'], $placeholder );
 
-		$inc_dir = gtb_theme_built_path() . 'inc';
+		$inc_dir = gutenverse_themes_builder_theme_built_path() . 'inc/class';
 
 		if ( ! is_dir( $inc_dir ) ) {
 			wp_mkdir_p( $inc_dir );

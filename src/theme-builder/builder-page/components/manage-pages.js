@@ -247,7 +247,7 @@ const ManagePages = () => {
         editPath,
     } = window['GutenverseThemeBuilder'];
     const {
-        domainURL
+       url
     } = window['GutenverseDashboard'];
 
     const updateList = (result) => {
@@ -306,7 +306,7 @@ const ManagePages = () => {
                                         <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>
                                         <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit Content</a>
                                         <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
-                                        <a className="edit" target="_blank" rel="noreferrer" href={`${domainURL}/${page?.post_name}`}>View</a>
+                                        <a className="edit" target="_blank" rel="noreferrer" href={`${url}/${page?.post_name}`}>View</a>
                                     </div>
                                 </td>
                             </tr>;
