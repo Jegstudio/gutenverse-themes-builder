@@ -3058,11 +3058,11 @@ class Backend_Api {
 		}
 		if ( $theme_id ) {
 			$page = array(
-				'ID'          => $id,
-				'post_title'  => $name,
-				'post_author' => get_current_user_id(),
-				'meta_input'  => array(
-					'_wp_page_template'     => $template,
+				'ID'            => $id,
+				'post_title'    => $name,
+				'post_author'   => get_current_user_id(),
+				'page_template' => $template,
+				'meta_input'    => array(
 					'_gtb_page_category'    => $category,
 					'_gtb_page_preview'     => $preview,
 					'_gtb_page_image'       => $image,
