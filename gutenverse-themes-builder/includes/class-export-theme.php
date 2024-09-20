@@ -234,7 +234,12 @@ class Export_Theme {
 
 			/**Add Is Homepage */
 			$is_homepage = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
-			$placeholder = ! empty( $is_homepage ) ? str_replace( '{{is_homepage}}', $is_homepage, $placeholder ) : str_replace( '{{is_homepage}}', false, $placeholder );
+			if ( $is_homepage ) {
+				$is_homepage = 'true';
+			} else {
+				$is_homepage = 'false';
+			}
+			$placeholder = str_replace( '{{is_homepage}}', $is_homepage, $placeholder );
 
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true );
