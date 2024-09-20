@@ -641,7 +641,7 @@
 
         .upgrade-pro-button:hover {
             transform: scale(0.94);
-            
+
             svg,
             span {
                 opacity: 0.75;
@@ -691,7 +691,7 @@
             color: #40505d;
         }
 
-        .upgrade-image{
+        .upgrade-image {
             z-index: 1;
             position: relative;
             width: 640px;
@@ -1140,13 +1140,14 @@
             margin: 0;
             padding: 0;
 
-            li, .support {
+            li,
+            .support {
                 cursor: pointer;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                gap: 10px;
+                gap: 6px;
                 padding: 28px 4px;
                 font-family: Inter;
                 font-size: 14px;
@@ -1160,11 +1161,23 @@
 
                 &:hover {
                     color: #3b57f7;
+
+                    svg {
+                        path {
+                            fill: #3b57f7;
+                        }
+                    }
                 }
 
                 &.active {
                     color: #3b57f7;
                     border-bottom: solid 2px #3b57f7;
+
+                    svg {
+                        path {
+                            fill: #3b57f7;
+                        }
+                    }
                 }
             }
         }
@@ -1385,7 +1398,7 @@
                         position: absolute;
                         top: 20px;
                         right: 20px;
-                        
+
                         img {
                             width: 36px;
                         }
