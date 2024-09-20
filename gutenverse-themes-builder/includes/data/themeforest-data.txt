@@ -133,6 +133,7 @@ class Themeforest_Data {
 		$theme_url = get_template_directory_uri();
 		foreach ( $templates as $value ) {
 			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
+			$page_id = null;
 			if ( ! $title || $title === $value['pagetitle'] ) {
 				$query = new \WP_Query(
 					array(
@@ -145,6 +146,7 @@ class Themeforest_Data {
 
 				if ( $query->have_posts() ) {
 					$existing_page = $query->posts[0];
+					$page_id = $existing_page->ID;
 					wp_update_post(
 						array(
 							'ID'            => $existing_page->ID,
@@ -159,8 +161,12 @@ class Themeforest_Data {
 						'post_type'     => 'page',
 						'page_template' => $value['template'],
 					);
-
 					$page_id = wp_insert_post( $new_page );
+				}
+
+				if( $value['is_homepage'] && $page_id ){
+					update_option( 'show_on_front', 'page' );
+					update_option( 'page_on_front', $page_id );
 				}
 
 				if ( $title ) {

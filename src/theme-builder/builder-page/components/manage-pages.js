@@ -10,6 +10,8 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { ArrowLeft } from 'react-feather';
 import AsyncSelect from 'react-select/async';
+import SelectSearchControl from '../controls/select-search-control';
+import SwitchControl from '../controls/switch-control';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
@@ -55,8 +57,8 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [pagePreview, setPagePreview] = useState('');
     const [templateSlug, setTemplateSlug] = useState('default');
     const [pageImage, setPageImage] = useState('');
+    const [isHomepage, setIsHomepage] = useState(false);
     const pageCategory = 'gutenverse';
-    
     const pageSubmit = () => {
         if (pageName !== '' && pagePreview !== '' && !isEmpty(pageImage)) {
             apiFetch({
@@ -67,7 +69,8 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                     category: pageCategory,
                     template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
                     pagePreview : pagePreview,
-                    pageImage: pageImage?.id
+                    pageImage: pageImage?.id,
+                    isHomepage: isHomepage
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -96,9 +99,10 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                         <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className='input-wrap'>
-                        <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
+                        <label>{__('Template', 'gutenverse-themes-builder')}</label>
                         <AsyncSelect
                             id={"template-selector"}
+                            title={__('Template', 'gutenverse-themes-builder')}
                             className={"async-select-container"}
                             classNamePrefix={"async-select"}
                             isMulti={false}
@@ -106,6 +110,15 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                             onChange={(value)=> setTemplateSlug(value.value)}
                             loadOptions={input => onSearch(input)}
                         />
+                    </div>
+                    <div className='input-wrap'>
+                        <input
+                            type="checkbox"
+                            onChange={() => setIsHomepage(!isHomepage)}
+                            checked={isHomepage}
+                            hidden
+                        />
+                        <label>{__('Assign as Homepage', 'gutenverse-themes-builder')}</label>
                     </div>
                     <div className='input-wrap'>
                         <label>
@@ -149,6 +162,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
     const [templateSlug, setTemplateSlug] = useState(page.template);
     const [pagePreview, setPagePreview] = useState(page.page_preview);
     const [pageImage, setPageImage] = useState(page.page_image);
+    const [isHomepage, setIsHomepage] = useState(page?.is_homepage);
     const pageCategory = 'gutenverse';
 
     const pageSubmit = () => {
@@ -162,7 +176,8 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     category: pageCategory,
                     template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
                     pagePreview : pagePreview,
-                    pageImage: pageImage?.id
+                    pageImage: pageImage?.id,
+                    isHomepage: isHomepage
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -200,6 +215,15 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                             loadOptions={input => onSearch(input)}
                             value={{id: templateSlug, label: templateSlug}}
                         />
+                    </div>
+                    <div className='input-wrap'>
+                        <input
+                            type="checkbox"
+                            onChange={() => setIsHomepage(!isHomepage)}
+                            checked={isHomepage}
+                            hidden
+                        />
+                        <label>{__('Assign as Homepage', 'gutenverse-themes-builder')}</label>
                     </div>
                     <div className='input-wrap'>
                         <label>

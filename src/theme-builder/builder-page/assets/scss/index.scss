@@ -710,13 +710,20 @@ body {
         .popup-body {
             padding: 20px;
 
-            
+            .input-wrapper{
+                flex-direction: column;
+            }
             .input-wrap {
                 display: flex;
                 flex-wrap: wrap;
+                align-items: center;
 
+                .select-inner{
+                    margin: 12px 0px;
+                }
                 &.media-wrap{
                     flex-direction: column;
+                    align-items: normal;
                     label{
                         margin: 12px 0px;
                     }
@@ -738,6 +745,11 @@ body {
                     background: var(--gtb-white);
                     border: 1px solid var(--gtb-grey-soft);
                     border-radius: 5px;
+                }
+
+                &>input[type=checkbox]{
+                    width: 17px;
+                    height: 17px;
                 }
 
                 label {

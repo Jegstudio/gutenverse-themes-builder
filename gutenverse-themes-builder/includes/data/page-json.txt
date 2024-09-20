@@ -3,5 +3,6 @@
     "pagetitle": "{{page_title}}",
     "content" : {{content}},
     "preview_url" : "{{preview_url}}",
-    "image_url" : "{{image_url}}"
+    "image_url" : "{{image_url}}",
+    "is_homepage" : {{is_homepage}}
 }

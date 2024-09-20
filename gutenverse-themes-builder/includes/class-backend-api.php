@@ -2914,6 +2914,7 @@ class Backend_Api {
 				$template      = get_post_meta( $post->ID, '_wp_page_template', true );
 				$page_preview  = get_post_meta( $post->ID, '_gtb_page_preview', true );
 				$page_image_id = get_post_meta( $post->ID, '_gtb_page_image', true );
+				$is_homepage   = get_post_meta( $post->ID, '_gtb_page_is_homepage', true );
 				$page_image    = (object) array(
 					'url' => wp_get_attachment_url( $page_image_id ),
 					'id'  => $page_image_id,
@@ -2925,6 +2926,7 @@ class Backend_Api {
 					'template'     => explode( '-', $template )[1],
 					'page_preview' => $page_preview ? $page_preview : '',
 					'page_image'   => $page_image,
+					'is_homepage'  => $is_homepage,
 				);
 			}
 		}
@@ -2937,12 +2939,13 @@ class Backend_Api {
 	 * @param object $request .
 	 */
 	public function create_pages( $request ) {
-		$name     = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
-		$template = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
-		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
-		$preview  = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
-		$image    = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
-		$theme_id = get_option( 'gtb_active_theme_id' );
+		$name        = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template    = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category    = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
+		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
+		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$theme_id    = get_option( 'gtb_active_theme_id' );
 
 		if ( empty( $name ) || empty( $preview ) || empty( $image ) ) {
 			return new WP_REST_Response(
@@ -2961,11 +2964,12 @@ class Backend_Api {
 				'post_status'  => 'publish',
 				'post_author'  => get_current_user_id(),
 				'meta_input'   => array(
-					'_wp_page_template'  => $template,
-					'_gtb_page_category' => $category,
-					'_gtb_page_theme_id' => $theme_id,
-					'_gtb_page_preview'  => $preview,
-					'_gtb_page_image'    => $image,
+					'_wp_page_template'     => $template,
+					'_gtb_page_category'    => $category,
+					'_gtb_page_theme_id'    => $theme_id,
+					'_gtb_page_preview'     => $preview,
+					'_gtb_page_image'       => $image,
+					'_gtb_page_is_homepage' => $is_homepage,
 				),
 			);
 			$success = wp_insert_post( $page );
@@ -3019,13 +3023,14 @@ class Backend_Api {
 	 * @param object $request .
 	 */
 	public function update_page( $request ) {
-		$name     = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
-		$template = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
-		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
-		$id       = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
-		$preview  = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
-		$image    = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
-		$theme_id = get_option( 'gtb_active_theme_id' );
+		$name        = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template    = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category    = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$id          = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
+		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
+		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
+		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$theme_id    = get_option( 'gtb_active_theme_id' );
 
 		if ( empty( $name ) ) {
 			return new WP_REST_Response(
@@ -3042,13 +3047,13 @@ class Backend_Api {
 				'post_title'  => $name,
 				'post_author' => get_current_user_id(),
 				'meta_input'  => array(
-					'_wp_page_template' => $template,
+					'_wp_page_template'     => $template,
+					'_gtb_page_category'    => $category,
+					'_gtb_page_preview'     => $preview,
+					'_gtb_page_image'       => $image,
+					'_gtb_page_is_homepage' => $is_homepage,
 				),
 			);
-			update_post_meta( $id, '_wp_page_template', $template );
-			update_post_meta( $id, '_gtb_page_category', $category );
-			update_post_meta( $id, '_gtb_page_preview', $preview );
-			update_post_meta( $id, '_gtb_page_image', $image );
 
 			$success = wp_update_post( $page );
 			if ( ! $success ) {

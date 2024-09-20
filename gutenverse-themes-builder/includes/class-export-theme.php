@@ -232,6 +232,10 @@ class Export_Theme {
 			$image_path  = 'assets/img/' . basename( $file_path );
 			$placeholder = ! empty( $file_path ) ? str_replace( '{{image_url}}', $image_path, $placeholder ) : $placeholder;
 
+			/**Add Is Homepage */
+			$is_homepage    = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
+			$placeholder = ! empty( $is_homepage ) ? str_replace( '{{is_homepage}}', $is_homepage, $placeholder ) : str_replace( '{{is_homepage}}', false, $placeholder );
+
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true );
 			$content     = str_replace( "'", "\'", $content );
@@ -1203,12 +1207,12 @@ class Export_Theme {
 		if ( isset( $other['notice'] ) && ! $this->is_serialized_block_empty( $other['notice'] ) ) {
 			$add_class[] = 'new Upgrader();';
 		}
-
+		
 		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );
 		$placeholder = str_replace( '{{dashboard_notice}}', $notice, $placeholder );
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
-		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
+		$placeholder = str_replace( '{{additional_class}}', join( "\n\t\t\t\t", $add_class ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();

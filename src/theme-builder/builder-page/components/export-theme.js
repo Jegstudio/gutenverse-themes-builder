@@ -1,8 +1,11 @@
 import { exportTheme } from '../../../data/api-fetch';
 import ContentWrapper from './content-wrapper';
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+
 
 const ExportTheme = () => {
+    const [loading, setLoading] = useState(false);
     const startExport = () => {
         exportTheme(response => {
             window.open(response?.fileresult?.fileurl);
