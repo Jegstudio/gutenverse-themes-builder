@@ -118,19 +118,27 @@ class Themeforest_Data {
 	 * @return int|string
 	 */
 	public function handle_pages( $request ) {
-
-		$title = $request->get_param( 'title' );
-		$templates = array(
-			{{assign_templates}}
-		);
-
+		global $wp_filesystem;
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		WP_Filesystem();
+		$title        = $request->get_param( 'title' );
+		$active_theme = wp_get_theme();
+		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$files        = glob( $theme_dir . '/gutenverse-pages/*' );
+		$templates    = array();
+		foreach( $files as $file ){
+			$json_file_data = $wp_filesystem->get_contents( $file );
+			$templates[]    = json_decode( $json_file_data, true );
+		}
+		$theme_url = get_template_directory_uri();
 		foreach ( $templates as $value ) {
-			if ( ! $title || $title === $value['title'] ) {
+			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
+			if ( ! $title || $title === $value['pagetitle'] ) {
 				$query = new \WP_Query(
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => '' !== $value['page'] ? $value['page'] : $value['title'],
+						'title'          => $value['pagetitle'],
 						'posts_per_page' => 1,
 					)
 				);
@@ -140,16 +148,16 @@ class Themeforest_Data {
 					wp_update_post(
 						array(
 							'ID'            => $existing_page->ID,
-							'page_template' => $value['slug'],
+							'page_template' => $value['template'],
 						)
 					);
 				} else {
 					$new_page = array(
-						'post_title'    => '' !== $value['page'] ? $value['page'] : $value['title'],
-						'post_content'  => '',
+						'post_title'    => $value['pagetitle'],
+						'post_content'  => $content,
 						'post_status'   => 'publish',
 						'post_type'     => 'page',
-						'page_template' => $value['slug'],
+						'page_template' => $value['template'],
 					);
 
 					$page_id = wp_insert_post( $new_page );
