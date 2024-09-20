@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { PlusIcon } from '../data/icons';
+import { PlusIcon, WarningIcon } from '../data/icons';
 
 const ContentWrapper = (props) => {
     const {
@@ -14,7 +14,12 @@ const ContentWrapper = (props) => {
                 buttonLoading: false
             }
         ],
-        children
+        children,
+        showNotice = false,
+        notice = {
+            icon : <WarningIcon/>,
+            message : () => __('Notice Message', 'gutenverse-themes-builder'),
+        }
     } = props;
 
     const ButtonElement = () => {
@@ -32,6 +37,15 @@ const ContentWrapper = (props) => {
                 </div>
                 {headingButton && <div className="button-wrapper"><ButtonElement /></div>}
             </div>
+            {
+                showNotice && <div className='content-notice'>
+                {notice?.icon}
+                <div className='notice-message'>
+                {notice?.message()}
+                </div>
+                </div>
+            }
+            
             {children}
         </div>
     );

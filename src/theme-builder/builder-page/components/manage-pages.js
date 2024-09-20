@@ -3,7 +3,7 @@ import { deletePage, getPageList } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
-import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
+import { DeleteIcon, EditIcon, PlusIcon, WarningIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
@@ -314,6 +314,21 @@ const ManagePages = () => {
                     buttonLoading: false
                 }
             ]}
+            showNotice={true}
+            notice = {{
+                icon : <WarningIcon/>,
+                message : () => {
+                    return <>
+                        <p><b>Warning:</b> You only need to make one of these options:</p>
+                        <ul style={{listStyle: 'circle', padding: '10px'}}>
+                            <li>Template Home</li>
+                            <li>Template FrontPage</li>
+                            <li>Page Homepage ( page that assign as homepage) </li>
+                        </ul>
+                        <p>If you already make one you don't need to make the other 2. For further explanation please read <a href='https://developer.wordpress.org/themes/basics/template-hierarchy/' target='_blank' >Wordpress hierarchy</a></p>
+                    </>
+                },
+            }}
         >
             <>
                 <Table
