@@ -233,7 +233,7 @@ class Export_Theme {
 			$placeholder = ! empty( $file_path ) ? str_replace( '{{image_url}}', $image_path, $placeholder ) : $placeholder;
 
 			/**Add Is Homepage */
-			$is_homepage    = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
+			$is_homepage = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
 			$placeholder = ! empty( $is_homepage ) ? str_replace( '{{is_homepage}}', $is_homepage, $placeholder ) : str_replace( '{{is_homepage}}', false, $placeholder );
 
 			/**Add Content */
@@ -490,17 +490,6 @@ class Export_Theme {
 
 		if ( empty( $other['dashboard'] ) || ( isset( $other['dashboard']['mode'] ) && 'default' === $other['dashboard']['mode']['value'] ) || ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) ) {
 			return;
-		}
-
-		if ( ! empty( $other['dashboard']['templates'] ) ) {
-			foreach ( $other['dashboard']['templates'] as $template ) {
-				$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
-				$assigns[] = "array(
-					'title' => '{$template['name']}',
-					'page'  => '{$template['page_name']}',
-					'slug'  => '{$slug}',
-				)";
-			}
 		}
 
 		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gutenverse_themes_builder_theme_built_path() . 'assets/dashboard-fonts' );
@@ -1023,6 +1012,7 @@ class Export_Theme {
 		$other      = maybe_unserialize( $data['other'] );
 		$add_class  = array();
 		$assigns    = array();
+		$data_page  = array();
 		$theme_logo = 'false';
 		$notice     = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
 			<div class="gutenverse-notice-inner">
@@ -1163,6 +1153,7 @@ class Export_Theme {
 					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $filename . "'";
 					$post_demo  = get_post_meta( $post->ID, '_gtb_page_preview', true );
 					$template   = get_post_meta( $post->ID, '_wp_page_template', true );
+					$order      = get_post_meta( $post->ID, '_gtb_page_order', true );
 					$parts      = explode( '-', $template );
 					array_shift( $parts );
 					$template_slug = implode( '-', $parts );
@@ -1172,14 +1163,36 @@ class Export_Theme {
 							$image_data['body'],
 							FS_CHMOD_FILE
 						);
-						$assigns[] = "array(
-							'title' => '{$post->post_title}',
-							'page'  => '{$post->post_title}',
-							'demo'  => '{$post_demo}',
-							'slug'  => '{$template_slug}',
-							'thumb' => {$thumb_url},
-						)";
+						$data_page[] = (object) array(
+							'title' => $post->post_title,
+							'page'  => $post->post_title,
+							'demo'  => $post_demo,
+							'slug'  => $template_slug,
+							'thumb' => $thumb_url,
+							'order' => $order,
+						);
 					}
+				}
+				usort(
+					$data_page,
+					function ( $a, $b ) {
+						if ( 'string' === gettype( $a->order ) ) {
+							$a->order = (int) $a->order;
+						}
+						if ( 'string' === gettype( $b->order ) ) {
+							$b->order = (int) $b->order;
+						}
+						return $a->order - $b->order;
+					}
+				);
+				foreach ( $data_page as $dt ) {
+					$assigns[] = "array(
+						'title' => '{$dt->title}',
+						'page'  => '{$dt->page}',
+						'demo'  => '{$dt->demo}',
+						'slug'  => '{$dt->slug}',
+						'thumb' => {$dt->thumb},
+					)";
 				}
 			}
 
@@ -1207,7 +1220,7 @@ class Export_Theme {
 		if ( isset( $other['notice'] ) && ! $this->is_serialized_block_empty( $other['notice'] ) ) {
 			$add_class[] = 'new Upgrader();';
 		}
-		
+
 		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );
 		$placeholder = str_replace( '{{dashboard_notice}}', $notice, $placeholder );
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );

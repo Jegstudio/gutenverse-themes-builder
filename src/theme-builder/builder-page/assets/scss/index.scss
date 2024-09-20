@@ -674,6 +674,7 @@ body {
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(2px);
         z-index: 99999;
+        overflow-y: scroll;
     }
 
     .popup-content {

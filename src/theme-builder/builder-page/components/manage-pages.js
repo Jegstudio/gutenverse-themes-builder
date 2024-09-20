@@ -10,8 +10,6 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { ArrowLeft } from 'react-feather';
 import AsyncSelect from 'react-select/async';
-import SelectSearchControl from '../controls/select-search-control';
-import SwitchControl from '../controls/switch-control';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
@@ -58,7 +56,9 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [templateSlug, setTemplateSlug] = useState('default');
     const [pageImage, setPageImage] = useState('');
     const [isHomepage, setIsHomepage] = useState(false);
+    const [order, setOrder] = useState(0);
     const pageCategory = 'gutenverse';
+
     const pageSubmit = () => {
         if (pageName !== '' && pagePreview !== '' && !isEmpty(pageImage)) {
             apiFetch({
@@ -70,7 +70,8 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                     template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
                     pagePreview : pagePreview,
                     pageImage: pageImage?.id,
-                    isHomepage: isHomepage
+                    isHomepage: isHomepage,
+                    order : order,
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -97,6 +98,11 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                         <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={pageName} onChange={e => setPageName(e.target.value)} />
                         <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
+                    </div>
+                    <div className="input-wrap">
+                        <label>{__('Page Order', 'gutenverse-themes-builder')}</label>
+                        <input type="number" min="1" value={order} onChange={e => setOrder(e.target.value)} />
+                        <span className="description">{__('Set Your Page Order in Wizard. Page order cannot be duplicate. Each Page must have different order.', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className='input-wrap'>
                         <label>{__('Template', 'gutenverse-themes-builder')}</label>
@@ -163,6 +169,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
     const [pagePreview, setPagePreview] = useState(page.page_preview);
     const [pageImage, setPageImage] = useState(page.page_image);
     const [isHomepage, setIsHomepage] = useState(page?.is_homepage);
+    const [order, setOrder] = useState(page?.order);
     const pageCategory = 'gutenverse';
 
     const pageSubmit = () => {
@@ -177,7 +184,8 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
                     pagePreview : pagePreview,
                     pageImage: pageImage?.id,
-                    isHomepage: isHomepage
+                    isHomepage: isHomepage,
+                    order: order
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -202,6 +210,11 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                         <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
                         <input type="text" value={pageName} onChange={e => setPageName(e.target.value)} />
                         <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
+                    </div>
+                    <div className="input-wrap">
+                        <label>{__('Page Order', 'gutenverse-themes-builder')}</label>
+                        <input type="number" min="1" value={order} onChange={e => setOrder(e.target.value)} />
+                        <span className="description">{__('Set Your Page Order in Wizard. Page order cannot be duplicate. Each Page must have different order.', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className='input-wrap'>
                         <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
@@ -332,12 +345,12 @@ const ManagePages = () => {
         >
             <>
                 <Table
-                    heads={['ID', 'Slug', 'Title', 'Action',]}
+                    heads={['Order', 'Slug', 'Title', 'Action',]}
                 >
                     <>
                         {!isEmpty(pageList) && pageList.map((page, key) => {
                             return <tr key={key}>
-                                <td>{page?.ID}</td>
+                                <td>{page?.order}</td>
                                 <td>{page?.post_name}</td>
                                 <td>{page?.post_title}</td>
                                 <td>

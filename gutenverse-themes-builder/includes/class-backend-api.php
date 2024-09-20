@@ -2897,8 +2897,6 @@ class Backend_Api {
 			array(
 				'post_type'      => 'page',
 				'posts_per_page' => -1,
-				'orderby'        => 'date',
-				'order'          => 'DESC',
 				'meta_query' => array( //phpcs:ignore
 					array(
 						'key'     => '_gtb_page_theme_id',
@@ -2915,6 +2913,7 @@ class Backend_Api {
 				$page_preview  = get_post_meta( $post->ID, '_gtb_page_preview', true );
 				$page_image_id = get_post_meta( $post->ID, '_gtb_page_image', true );
 				$is_homepage   = get_post_meta( $post->ID, '_gtb_page_is_homepage', true );
+				$order         = get_post_meta( $post->ID, '_gtb_page_order', true );
 				$page_image    = (object) array(
 					'url' => wp_get_attachment_url( $page_image_id ),
 					'id'  => $page_image_id,
@@ -2927,9 +2926,22 @@ class Backend_Api {
 					'page_preview' => $page_preview ? $page_preview : '',
 					'page_image'   => $page_image,
 					'is_homepage'  => $is_homepage,
+					'order'        => $order,
 				);
 			}
 		}
+		usort(
+			$data,
+			function ( $a, $b ) {
+				if ( 'string' === gettype( $a['order'] ) ) {
+					$a['order'] = (int) $a['order'];
+				}
+				if ( 'string' === gettype( $b['order'] ) ) {
+					$b['order'] = (int) $b['order'];
+				}
+				return $a['order'] - $b['order'];
+			}
+		);
 		return $data;
 	}
 
@@ -2945,6 +2957,7 @@ class Backend_Api {
 		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
 		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
 		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$order       = gutenverse_esc_data( $request->get_param( 'order' ), 'int' );
 		$theme_id    = get_option( 'gtb_active_theme_id' );
 
 		if ( empty( $name ) || empty( $preview ) || empty( $image ) ) {
@@ -2970,6 +2983,7 @@ class Backend_Api {
 					'_gtb_page_preview'     => $preview,
 					'_gtb_page_image'       => $image,
 					'_gtb_page_is_homepage' => $is_homepage,
+					'_gtb_page_order'       => $order,
 				),
 			);
 			$success = wp_insert_post( $page );
@@ -3030,6 +3044,7 @@ class Backend_Api {
 		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
 		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
 		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$order       = gutenverse_esc_data( $request->get_param( 'order' ), 'int' );
 		$theme_id    = get_option( 'gtb_active_theme_id' );
 
 		if ( empty( $name ) ) {
@@ -3052,6 +3067,7 @@ class Backend_Api {
 					'_gtb_page_preview'     => $preview,
 					'_gtb_page_image'       => $image,
 					'_gtb_page_is_homepage' => $is_homepage,
+					'_gtb_page_order'       => $order,
 				),
 			);
 
