@@ -7,6 +7,7 @@ import { useState } from '@wordpress/element';
 const ExportTheme = () => {
     const [loading, setLoading] = useState(false);
     const startExport = () => {
+        setLoading(true);
         exportTheme(response => {
             window.open(response?.fileresult?.fileurl);
             if (response?.fileresult?.child?.fileurl) {
@@ -14,6 +15,7 @@ const ExportTheme = () => {
                     window.open(response?.fileresult?.child?.fileurl);
                 }, 500)
             }
+            setLoading(false);
         });
     };
 
@@ -25,7 +27,7 @@ const ExportTheme = () => {
             <>
                 {/* Tambah element select disini */}
                 <div className="buttons">
-                    <div className="button" onClick={startExport}>{__('Export', 'gutenverse-themes-builder')}</div>
+                    { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export', 'gutenverse-themes-builder')}</div>}
                 </div>
             </>
         </ContentWrapper>
