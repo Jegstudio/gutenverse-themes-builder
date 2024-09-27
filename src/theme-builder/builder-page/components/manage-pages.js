@@ -61,13 +61,17 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
 
     const pageSubmit = () => {
         if (pageName !== '' && pagePreview !== '' && !isEmpty(pageImage)) {
+            let slug = 'default';
+            if('default' !== templateSlug){
+                slug = `gutenverse-${templateSlug}`
+            }
             apiFetch({
                 path: '/gtb-backend/v1/pages/create',
                 method: 'POST',
                 data: {
                     name: pageName,
                     category: pageCategory,
-                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
+                    template: slug,
                     pagePreview : pagePreview,
                     pageImage: pageImage?.id,
                     isHomepage: isHomepage,
@@ -174,6 +178,10 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
 
     const pageSubmit = () => {
         if (pageName !== '') {
+            let slug = 'default';
+            if('default' !== templateSlug){
+                slug = `gutenverse-${templateSlug}`
+            }
             apiFetch({
                 path: '/gtb-backend/v1/pages/update',
                 method: 'POST',
@@ -181,7 +189,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     id : page.ID,
                     name: pageName,
                     category: pageCategory,
-                    template: 'default' !== templateSlug ? `gutenverse-${templateSlug}` : 'default',
+                    template: slug,
                     pagePreview : pagePreview,
                     pageImage: pageImage?.id,
                     isHomepage: isHomepage,
@@ -310,10 +318,12 @@ const ManagePages = () => {
             alert(err.message);
         });
     });
+
     useEffect(() => {
         getPageList(updateList);
     }, []);
     const removePage = () => deletePage({ id: deletePopup }, updateList);
+
     return (
         <ContentWrapper
             title={__('Page List', 'gutenverse-themes-builder')}

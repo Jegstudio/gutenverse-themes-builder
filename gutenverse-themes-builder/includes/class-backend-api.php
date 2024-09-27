@@ -1278,7 +1278,6 @@ class Backend_Api {
 			$sync     = gutenverse_esc_data( $request->get_param( 'sync' ), 'bool' );
 
 			$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
-			gutenverse_rlog($id, $post_exists->ID);
 			if ( empty( $post_exists ) || $id === $post_exists->ID ) {
 				$post_id = wp_update_post(
 					array(
@@ -2914,20 +2913,28 @@ class Backend_Api {
 		$data     = array();
 		if ( $pages->have_posts() ) {
 			foreach ( $pages->posts as $post ) {
-				$template      = get_post_meta( $post->ID, '_wp_page_template', true );
-				$page_preview  = get_post_meta( $post->ID, '_gtb_page_preview', true );
-				$page_image_id = get_post_meta( $post->ID, '_gtb_page_image', true );
-				$is_homepage   = get_post_meta( $post->ID, '_gtb_page_is_homepage', true );
-				$order         = get_post_meta( $post->ID, '_gtb_page_order', true );
-				$page_image    = (object) array(
+				$template          = get_post_meta( $post->ID, '_wp_page_template', true );
+				$page_preview      = get_post_meta( $post->ID, '_gtb_page_preview', true );
+				$page_image_id     = get_post_meta( $post->ID, '_gtb_page_image', true );
+				$is_homepage       = get_post_meta( $post->ID, '_gtb_page_is_homepage', true );
+				$order             = get_post_meta( $post->ID, '_gtb_page_order', true );
+				$page_image        = (object) array(
 					'url' => wp_get_attachment_url( $page_image_id ),
 					'id'  => $page_image_id,
 				);
-				$data[]        = array(
+				$template_page_arr = explode( '-', $template );
+				$template_page     = '';
+				if ( 'gutenverse' === $template_page_arr[0] ) {
+					$sliced_array  = array_slice( $template_page_arr, 1 );
+					$template_page = implode( '-', $sliced_array );
+				} else {
+					$template_page = $template;
+				}
+				$data[] = array(
 					'ID'           => $post->ID,
 					'post_name'    => $post->post_name,
 					'post_title'   => $post->post_title,
-					'template'     => explode( '-', $template )[1],
+					'template'     => $template_page,
 					'page_preview' => $page_preview ? $page_preview : '',
 					'page_image'   => $page_image,
 					'is_homepage'  => $is_homepage,
@@ -3075,7 +3082,6 @@ class Backend_Api {
 					'_gtb_page_order'       => $order,
 				),
 			);
-
 			$success = wp_update_post( $page );
 			if ( ! $success ) {
 				return new WP_REST_Response(
