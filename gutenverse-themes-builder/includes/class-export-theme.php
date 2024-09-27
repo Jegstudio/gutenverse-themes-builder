@@ -101,7 +101,6 @@ class Export_Theme {
 		$this->create_themeforest_data( $wp_filesystem, $data );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		$this->create_pages( $wp_filesystem, $theme_id, $data );
-		$this->create_patterns( $wp_filesystem, $theme_id, $data );
 		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
@@ -112,73 +111,6 @@ class Export_Theme {
 		$other = maybe_unserialize( $data['other'] );
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$this->create_child_theme( $wp_filesystem, $data );
-		}
-	}
-
-	/**
-	 * Create Child Theme
-	 *
-	 * @param object $system .
-	 * @param string $theme_id .
-	 * @param array  $data .
-	 */
-	public function create_patterns( $system, $theme_id, $data ) {
-		$patterns = new \WP_Query(
-			array(
-				'post_type'      => 'gutenverse-pattern',
-				'posts_per_page' => -1,
-				'meta_query' => array( //phpcs:ignore
-					array(
-						'key'     => '_pattern_theme_id',
-						'value'   => $theme_id,
-						'compare' => '===',
-					),
-				),
-			)
-		);
-		if ( $patterns->have_posts() ) {
-			$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
-
-			if ( ! is_dir( $pattern_dir ) ) {
-				wp_mkdir_p( $pattern_dir );
-			}
-			foreach ( $patterns->posts as $pattern ) {
-				$content          = str_replace( "'", "\'", $pattern->post_content );
-				$content          = $this->extract_images( $content, $system, $data['slug'] );
-				$content          = $this->fix_colors( $content );
-				$content          = $this->fix_core_navigation( $content );
-				$pattern_name     = $pattern->post_name;
-				$pattern_title    = $pattern->post_title;
-				$pattern_category = get_post_meta( $pattern->ID, '_pattern_category', true );
-				$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
-
-				/** Create pattern php files */
-				$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
-				$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-				$content     = $this->replace_template_part( $content, $data['slug'] );
-				$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
-				$placeholder = str_replace( '{{theme_slug}}', $data['slug'], $placeholder );
-				$placeholder = str_replace( '{{pattern_category}}', $data['slug'] . '-' . $pattern_category, $placeholder );
-				$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
-
-				$system->put_contents(
-					$target_file,
-					$placeholder,
-					FS_CHMOD_FILE
-				);
-
-				switch ( $pattern_category ) {
-					case 'pro':
-						$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-						break;
-					case 'gutenverse':
-						$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-						break;
-					default:
-						$this->core_patterns[] = "'{$pattern_name}'";
-						break;
-				}
-			}
 		}
 	}
 
@@ -1384,7 +1316,7 @@ class Export_Theme {
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -1555,12 +1487,17 @@ class Export_Theme {
 	 *
 	 * @param string  $html_content .
 	 * @param string  $theme_id .
+	 * @param object  $system .
 	 * @param string  $theme_slug .
 	 * @param boolean $only_get_content .
 	 */
-	private function build_patterns( $html_content, $theme_id, $theme_slug, $only_get_content = false ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
+		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
+		if ( ! is_dir( $pattern_dir ) ) {
+			wp_mkdir_p( $pattern_dir );
+		}
 
 		foreach ( $blocks as $block ) {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
@@ -1581,7 +1518,75 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						if ( $only_get_content ) {
+						$content          = str_replace( "'", "\'", $posts[0]->post_content );
+						$content          = $this->extract_images( $content, $system, $theme_slug );
+						$content          = $this->fix_colors( $content );
+						$content          = $this->fix_core_navigation( $content );
+						$pattern_name     = $posts[0]->post_name;
+						$pattern_title    = $posts[0]->post_title;
+						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
+						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
+
+						/** Create pattern php files */
+						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
+						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
+						$content     = $this->replace_template_part( $content, $theme_slug );
+						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
+						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
+						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
+
+						/**replace additional object with object sync */
+						if ( $pattern_sync ) {
+							/**For Sync Pattern */
+							$pattern_sync_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/sync/';
+							if ( ! is_dir( $pattern_sync_dir ) ) {
+								wp_mkdir_p( $pattern_sync_dir );
+							}
+							$sync_target      = $pattern_sync_dir . '/' . $pattern_name . '.php';
+							$sync_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
+							$sync_placeholder = str_replace( '{{pattern_title}}', $pattern_title, $sync_placeholder );
+							$sync_placeholder = str_replace( '{{theme_slug}}', $theme_slug, $sync_placeholder );
+							$sync_placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $sync_placeholder );
+							$sync_placeholder = str_replace( '{{pattern_content}}', $content, $sync_placeholder );
+							$sync_placeholder = str_replace( '{{additional_object}}', '', $sync_placeholder );
+
+							$system->put_contents(
+								$sync_target,
+								$sync_placeholder,
+								FS_CHMOD_FILE
+							);
+
+							/**For Pattern Folder */
+							$additional   = "'sync' => true,";
+							$placeholder  = str_replace( '{{additional_object}}', $additional, $placeholder );
+							$sync_content = '<!-- wp:block { "ref":{{id}} } /-->';
+							$placeholder  = str_replace( '{{pattern_content}}', $sync_content, $placeholder );
+						} else {
+							$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
+							$placeholder = str_replace( '{{additional_object}}', '', $placeholder );
+						}
+
+						/**Add pattern to class_block_pattern array to register pattern */
+						switch ( $pattern_category ) {
+							case 'pro':
+								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								break;
+							case 'gutenverse':
+								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								break;
+							default:
+								$this->core_patterns[] = "'{$pattern_name}'";
+								break;
+						}
+
+						$system->put_contents(
+							$target_file,
+							$placeholder,
+							FS_CHMOD_FILE
+						);
+
+						if ( $only_get_content && ! $pattern_sync ) {
 							$pattern_after = $posts[0]->post_content;
 						} else {
 							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
