@@ -1579,10 +1579,10 @@ class Export_Theme {
 						/**replace additional object with object sync */
 						if ( $pattern_sync ) {
 							$additional  = "'is_sync' => true,";
-							$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 						} else {
-							$placeholder = str_replace( '{{additional_object}}', '', $placeholder );
+							$additional  = "'is_sync' => false,";
 						}
+						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 
 						/**Add pattern to class_block_pattern array to register pattern */
 						switch ( $pattern_category ) {
