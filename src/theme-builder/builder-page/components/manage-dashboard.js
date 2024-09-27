@@ -47,7 +47,7 @@ const MediaSelect = ({ updateThumbnailData }) => {
 
 const ManageDashbaord = () => {
     const [dashboardData, setDashboardData] = useState({});
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         getThemeData(null, response => {
             const themeDataRes = response;
@@ -66,10 +66,14 @@ const ManageDashbaord = () => {
     };
 
     const updateDashboardData = () => {
-        updateOtherData({
-            key: 'dashboard',
-            data: { ...dashboardData }
-        });
+        setLoading(true);
+        setInterval(() => {
+            updateOtherData({
+                key: 'dashboard',
+                data: { ...dashboardData }
+            });
+            setLoading(false)
+        }, 500);
     };
 
     return (
@@ -82,7 +86,7 @@ const ManageDashbaord = () => {
                     buttonText: __('Save', 'gutenverse-themes-builder'),
                     buttonEvent: updateDashboardData,
                     buttonIcon: false,
-                    buttonLoading: false
+                    buttonLoading: loading
                 }
             ]}
         >
