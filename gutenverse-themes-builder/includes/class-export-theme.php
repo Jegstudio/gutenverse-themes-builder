@@ -35,25 +35,46 @@ class Export_Theme {
 	public $fileresult;
 
 	/**
-	 * Core Patterns
+	 * Template Core Patterns
 	 *
 	 * @var array
 	 */
-	private $core_patterns;
+	private $template_core_patterns;
 
 	/**
-	 * Gutenverse Patterns
+	 * Template Gutenverse Patterns
 	 *
 	 * @var array
 	 */
-	private $gutenverse_patterns;
+	private $template_gutenverse_patterns;
 
 	/**
-	 * Pro Patterns
+	 * Template Pro Patterns
 	 *
 	 * @var array
 	 */
-	private $pro_patterns;
+	private $template_pro_patterns;
+
+	/**
+	 * Page Core Patterns
+	 *
+	 * @var array
+	 */
+	private $page_core_patterns;
+
+	/**
+	 * Page Gutenverse Patterns
+	 *
+	 * @var array
+	 */
+	private $page_gutenverse_patterns;
+
+	/**
+	 * Page Pro Patterns
+	 *
+	 * @var array
+	 */
+	private $page_pro_patterns;
 
 	/**
 	 * List of Images
@@ -174,12 +195,28 @@ class Export_Theme {
 			$placeholder = str_replace( '{{is_homepage}}', $is_homepage, $placeholder );
 
 			/**Add Content */
-			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true );
+			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
+
+			/**Add Pattern */
+			if ( ! empty( $this->page_core_patterns ) ) {
+				$core_pattern_list = join( ', ', $this->page_core_patterns );
+			}
+			$placeholder = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
+
+			if ( ! empty( $this->page_gutenverse_patterns ) ) {
+				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
+			}
+			$placeholder = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
+
+			if ( ! empty( $this->page_pro_patterns ) ) {
+				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
+			}
+			$placeholder = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -1316,7 +1353,7 @@ class Export_Theme {
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, false, 'template' );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -1490,10 +1527,12 @@ class Export_Theme {
 	 * @param object  $system .
 	 * @param string  $theme_slug .
 	 * @param boolean $only_get_content .
+	 * @param string  $place .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false, $place = 'template' ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
+
 		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 		if ( ! is_dir( $pattern_dir ) ) {
 			wp_mkdir_p( $pattern_dir );
@@ -1535,48 +1574,38 @@ class Export_Theme {
 						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
 						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
+						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 
 						/**replace additional object with object sync */
 						if ( $pattern_sync ) {
-							/**For Sync Pattern */
-							$pattern_sync_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/sync/';
-							if ( ! is_dir( $pattern_sync_dir ) ) {
-								wp_mkdir_p( $pattern_sync_dir );
-							}
-							$sync_target      = $pattern_sync_dir . '/' . $pattern_name . '.php';
-							$sync_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
-							$sync_placeholder = str_replace( '{{pattern_title}}', $pattern_title, $sync_placeholder );
-							$sync_placeholder = str_replace( '{{theme_slug}}', $theme_slug, $sync_placeholder );
-							$sync_placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $sync_placeholder );
-							$sync_placeholder = str_replace( '{{pattern_content}}', $content, $sync_placeholder );
-							$sync_placeholder = str_replace( '{{additional_object}}', '', $sync_placeholder );
-
-							$system->put_contents(
-								$sync_target,
-								$sync_placeholder,
-								FS_CHMOD_FILE
-							);
-
-							/**For Pattern Folder */
-							$additional   = "'sync' => true,";
-							$placeholder  = str_replace( '{{additional_object}}', $additional, $placeholder );
-							$sync_content = '<!-- wp:block { "ref":{{id}} } /-->';
-							$placeholder  = str_replace( '{{pattern_content}}', $sync_content, $placeholder );
+							$additional  = "'is_sync' => true,";
+							$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 						} else {
-							$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 							$placeholder = str_replace( '{{additional_object}}', '', $placeholder );
 						}
 
 						/**Add pattern to class_block_pattern array to register pattern */
 						switch ( $pattern_category ) {
 							case 'pro':
-								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								if ( 'template' === $place ) {
+									$this->template_pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_pro_patterns[] = '"' . $pattern_name . '"';
+								}
 								break;
 							case 'gutenverse':
-								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								if ( 'template' === $place ) {
+									$this->template_gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_gutenverse_patterns[] = '"' . $pattern_name . '"';
+								}
 								break;
 							default:
-								$this->core_patterns[] = "'{$pattern_name}'";
+								if ( 'template' === $place ) {
+									$this->template_core_patterns[] = "'{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_core_patterns[] = '"' . $pattern_name . '"';
+								}
 								break;
 						}
 
@@ -1732,22 +1761,22 @@ class Export_Theme {
 		$gutenverse_pattern_list = '';
 		$pro_pattern_list        = '';
 
-		if ( ! empty( $this->core_patterns ) ) {
-			$core_pattern_list = join( ",\r\t\t\t", $this->core_patterns );
+		if ( ! empty( $this->template_core_patterns ) ) {
+			$core_pattern_list = join( ",\r\t\t\t", $this->template_core_patterns );
 			$core_pattern_list = "$core_pattern_list,";
 		}
 
 		$placeholder = str_replace( '{{core_patterns}}', $core_pattern_list, $placeholder );
 
-		if ( ! empty( $this->gutenverse_patterns ) ) {
-			$gutenverse_pattern_list = join( ";\r\t\t\t", $this->gutenverse_patterns );
+		if ( ! empty( $this->template_gutenverse_patterns ) ) {
+			$gutenverse_pattern_list = join( ";\r\t\t\t", $this->template_gutenverse_patterns );
 			$gutenverse_pattern_list = "$gutenverse_pattern_list;";
 		}
 
 		$placeholder = str_replace( '{{gutenverse_patterns}}', $gutenverse_pattern_list, $placeholder );
 
-		if ( ! empty( $this->pro_patterns ) ) {
-			$pro_pattern_list = join( ";\r\t\t\t", $this->pro_patterns );
+		if ( ! empty( $this->template_pro_patterns ) ) {
+			$pro_pattern_list = join( ";\r\t\t\t", $this->template_pro_patterns );
 			$pro_pattern_list = "$pro_pattern_list;";
 		}
 
