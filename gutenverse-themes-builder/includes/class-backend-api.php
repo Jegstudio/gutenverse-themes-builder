@@ -1217,9 +1217,10 @@ class Backend_Api {
 		$theme_id = get_option( 'gtb_active_theme_id' );
 
 		if ( $theme_id ) {
-			$slug     = $request->get_param( 'slug' );
-			$category = $request->get_param( 'category' );
-			$name     = $request->get_param( 'name' );
+			$slug     = gutenverse_esc_data( $request->get_param( 'slug' ) );
+			$category = gutenverse_esc_data( $request->get_param( 'category' ) );
+			$name     = gutenverse_esc_data( $request->get_param( 'name' ) );
+			$sync     = gutenverse_esc_data( $request->get_param( 'sync' ), 'bool' );
 
 			$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
 
@@ -1230,12 +1231,12 @@ class Backend_Api {
 						'post_name'   => $slug,
 						'post_status' => 'publish',
 						'post_type'   => 'gutenverse-pattern',
-
 					)
 				);
 
 				add_post_meta( $post_id, '_pattern_category', $category );
 				add_post_meta( $post_id, '_pattern_theme_id', $theme_id );
+				add_post_meta( $post_id, '_pattern_sync', $sync );
 
 				return array(
 					'status' => 'success',
@@ -1270,13 +1271,14 @@ class Backend_Api {
 		$theme_id = get_option( 'gtb_active_theme_id' );
 
 		if ( $theme_id ) {
-			$id       = $request->get_param( 'id' );
-			$slug     = $request->get_param( 'slug' );
-			$category = $request->get_param( 'category' );
-			$name     = $request->get_param( 'name' );
+			$id       = gutenverse_esc_data( $request->get_param( 'id' ), 'int' );
+			$slug     = gutenverse_esc_data( $request->get_param( 'slug' ) );
+			$category = gutenverse_esc_data( $request->get_param( 'category' ) );
+			$name     = gutenverse_esc_data( $request->get_param( 'name' ) );
+			$sync     = gutenverse_esc_data( $request->get_param( 'sync' ), 'bool' );
 
 			$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
-
+			gutenverse_rlog($id, $post_exists->ID);
 			if ( empty( $post_exists ) || $id === $post_exists->ID ) {
 				$post_id = wp_update_post(
 					array(
@@ -1290,6 +1292,7 @@ class Backend_Api {
 				);
 
 				update_post_meta( $post_id, '_pattern_category', $category );
+				update_post_meta( $post_id, '_pattern_sync', $sync );
 
 				return array(
 					'status' => 'success',
@@ -1390,10 +1393,12 @@ class Backend_Api {
 
 		if ( $post ) {
 			$pattern_category = get_post_meta( $id, '_pattern_category', true );
+			$pattern_sync     = get_post_meta( $id, '_pattern_sync', true );
 			return array(
 				'slug'     => $post->post_name,
 				'name'     => $post->post_title,
 				'category' => $pattern_category,
+				'sync'     => $pattern_sync,
 			);
 		} else {
 			return false;

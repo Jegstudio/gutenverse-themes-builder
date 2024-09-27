@@ -14,6 +14,7 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
     const [patternName, setPatternName] = useState('');
     const [patternSlug, setPatternSlug] = useState('');
     const [patternCategory, setPatternCategory] = useState('core');
+    const [patternSync, setPatternSync] = useState(false);
     const [noticeMessage, setNoticeMessage] = useState('');
 
     const patternSubmit = () => {
@@ -24,7 +25,8 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                 data: {
                     name: patternName,
                     slug: patternSlug,
-                    category: patternCategory
+                    category: patternCategory,
+                    sync: patternSync
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -69,6 +71,16 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                         </select>
                         <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
                     </div>
+                    <div className="input-wrap pattern-sync">
+                        <input
+                            type="checkbox"
+                            onChange={() => setPatternSync(!patternSync)}
+                            checked={patternSync}
+                            hidden
+                        />
+                        <label>{__('Pattern Sync', 'gutenverse-themes-builder')}</label><br/>
+                        <span className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</span>
+                    </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons spaced">
@@ -91,6 +103,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
     const [patternSlug, setPatternSlug] = useState('');
     const [patternCategory, setPatternCategory] = useState('');
     const [noticeMessage, setNoticeMessage] = useState('');
+    const [patternSync, setPatternSync] = useState(false);
     const [fetching, setFetching] = useState(true);
 
     useEffect(() => {
@@ -103,6 +116,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                 setPatternSlug(result?.slug);
                 setPatternName(result?.name);
                 setPatternCategory(result?.category);
+                setPatternSync(result?.sync);
                 setFetching(false);
             }
         }).catch(() => { });
@@ -117,7 +131,8 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     id: id,
                     name: patternName,
                     slug: patternSlug,
-                    category: patternCategory
+                    category: patternCategory,
+                    sync: patternSync
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -161,6 +176,16 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                             <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                         </select>
                         <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
+                    </div>
+                    <div className="input-wrap pattern-sync">
+                        <input
+                            type="checkbox"
+                            onChange={() => setPatternSync(!patternSync)}
+                            checked={patternSync}
+                            hidden
+                        />
+                        <label>{__('Pattern Sync', 'gutenverse-themes-builder')}</label><br/>
+                        <span className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</span>
                     </div>
                 </div>
                 <div className="popup-footer">
