@@ -134,6 +134,19 @@ class Themeforest_Data {
 		foreach ( $templates as $value ) {
 			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
 			$page_id = null;
+
+			if ( ! empty( $value['core-patterns'] ) ) {
+				$this->import_synced_patterns( $value['core-patterns'] );
+			}
+
+			if ( ! empty( $value['pro-patterns'] ) ) {
+				$this->import_synced_patterns( $value['pro-patterns'] );
+			}
+
+			if ( ! empty( $value['gutenverse-patterns'] ) ) {
+				$this->import_synced_patterns( $value['gutenverse-patterns'] );
+			}
+
 			if ( ! $title || $title === $value['pagetitle'] ) {
 				$query = new \WP_Query(
 					array(
@@ -176,6 +189,47 @@ class Themeforest_Data {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Create Synced Pattern
+	 */
+	public function import_synced_patterns( $patterns ) {
+		foreach ( $patterns as $block_pattern ) {
+			$pattern_file = get_theme_file_path( '/inc/patterns/' . $block_pattern . '.php' );
+			$pattern_data = require $pattern_file;
+
+			if ( !! $pattern_data['is_sync'] ) {
+				$post = get_page_by_path( $block_pattern . '-synced', OBJECT, 'wp_block' );
+
+				if ( empty( $post ) ) {
+					$post_id = wp_insert_post(
+						array(
+							'post_name'    => $block_pattern . '-synced',
+							'post_title'   => $pattern_data['title'],
+							'post_content' => $pattern_data['content'],
+							'post_status'  => 'publish',
+							'post_author'  => 1,
+							'post_type'    => 'wp_block',
+						)
+					);
+
+					$pattern_data['content']  = '<!-- wp:block {"ref":' . $post_id . '} /-->';
+					$pattern_data['inserter'] = false;
+
+					$result = register_block_pattern(
+						'{{slug}}/' . $block_pattern,
+						$pattern_data
+					);
+				}
+
+			} else {
+				register_block_pattern(
+					'{{slug}}/' . $block_pattern,
+					$pattern_data
+				);
+			}
+		}
 	}
 
 	/**
