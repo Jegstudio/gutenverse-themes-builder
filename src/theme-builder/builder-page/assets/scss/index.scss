@@ -261,8 +261,8 @@ body {
 
         .edit,
         .delete {
-            padding: 4px 12px;
-            border-radius: 50px;
+            padding: 8px 14px;
+            border-radius: 5px;
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 400;
@@ -644,7 +644,12 @@ body {
                 th,
                 td {
                     padding: 15px 0;
+                    &.footer-content{
+                        display: flex;
+                        justify-content: space-between;
+                    }
                 }
+
 
                 .template-delete {
                     cursor: pointer;

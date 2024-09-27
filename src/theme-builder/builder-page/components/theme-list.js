@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { deleteTheme, getThemeList, updateActiveTheme } from '../../../data/api-fetch';
+import { deleteTheme, getThemeList, getThemeListPagination, updateActiveTheme } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
@@ -128,14 +128,21 @@ const ThemeList = () => {
     const [activeTheme, setActiveTheme] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
     const [switchPopup, setSwitchPopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
 
     const updateThemeList = (result) => {
-        setThemeList(result?.data);
+        console.log(result);
+        setThemeList(result?.data.list);
+        setTotalPage(parseInt(result?.data.total_data));
         setActiveTheme(result?.active);
     };
 
     useEffect(() => {
-        getThemeList(updateThemeList);
+        getThemeListPagination({
+            paged,
+            num_post : 10
+        },updateThemeList);
     }, []);
 
     const setEditTheme = (id) => {
@@ -177,6 +184,10 @@ const ThemeList = () => {
                 <>
                     <Table
                         heads={['Theme ID', 'Slug', 'Name', 'Status', 'Action',]}
+                        length={themeList.length}
+                        paged={paged}
+                        setPaged={setPaged}
+                        totalPage={themeList.totalPage}
                     >
                         <>
                             {!isEmpty(themeList) && themeList.map((theme, key) => {
@@ -186,7 +197,7 @@ const ThemeList = () => {
                                     <td>{theme?.theme_id}</td>
                                     <td>{theme?.slug}</td>
                                     <td>{theme?.theme_data?.title}</td>
-                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('Active', 'gutenverse-themes-builder') : __('Inactive', 'gutenverse-themes-builder')}</span></td>
+                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('ACTIVE', 'gutenverse-themes-builder') : __('INACTIVE', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {!active && <a className="edit" onClick={() => setSwitchPopup(theme?.theme_id)}>Set Active</a>}
