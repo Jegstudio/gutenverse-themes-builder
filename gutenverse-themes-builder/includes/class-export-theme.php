@@ -207,16 +207,19 @@ class Export_Theme {
 				$core_pattern_list = join( ', ', $this->page_core_patterns );
 			}
 			$placeholder = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
+			$this->page_core_patterns = array();
 
 			if ( ! empty( $this->page_gutenverse_patterns ) ) {
 				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
 			}
 			$placeholder = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
+			$this->page_gutenverse_patterns = array();
 
 			if ( ! empty( $this->page_pro_patterns ) ) {
 				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
 			}
 			$placeholder = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
+			$this->page_pro_patterns = array();
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
