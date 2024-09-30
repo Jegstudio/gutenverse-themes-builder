@@ -1,14 +1,13 @@
 import { useState, useEffect } from '@wordpress/element';
-import { deletePattern, getPatternList } from '../../../data/api-fetch';
+import { deletePattern, getPatternListPagination } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
-import { DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
+import { CloseIcon, DeleteIcon, EditIcon, PlusIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
-import { ArrowLeft } from 'react-feather';
 
 export const CreatePatternPopup = ({ onClose, updateList }) => {
     const [patternName, setPatternName] = useState('');
@@ -47,6 +46,9 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Create Pattern')}</span>
+                    <div className="close-button" onClick={onClose}>
+                        <CloseIcon />
+                    </div>
                 </div>
                 <div className="popup-body">
                     {!isEmpty(noticeMessage) && <div className="gtb-notice">
@@ -83,11 +85,7 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                     </div>
                 </div>
                 <div className="popup-footer">
-                    <div className="buttons spaced">
-                        <div className="back-button" onClick={onClose}>
-                            <ArrowLeft size={14} />
-                            {__('Back', 'gutenverse-themes-builder')}
-                        </div>
+                    <div className="buttons end">
                         <div className="button" onClick={patternSubmit}>
                             {__('Submit', 'gutenverse-themes-builder')}
                         </div>
@@ -105,6 +103,8 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
     const [noticeMessage, setNoticeMessage] = useState('');
     const [patternSync, setPatternSync] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [isEdited, setIsEdited] = useState(false);
+    const [closeWhenEdited, setCloseWhenEdited] = useState(false);
 
     useEffect(() => {
         apiFetch({
@@ -148,11 +148,31 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
         }
     };
 
-    return (
-        <div className="popup-container">
-            <div className="popup-content">
+    const handleOnClose = () => {
+        if(isEdited){
+            setCloseWhenEdited(true);
+        }else{
+            onClose();
+        }
+    }
+
+    return <>
+        {
+            closeWhenEdited ? <WarningPopup 
+                title={__('Are you sure want to leave this menu ?', 'gutenverse-themes-builder')}
+                detail={__('Changes you made may not be saved.', 'gutenverse-themes-builder')}
+                onProceed={onClose}
+                onClose={() => setCloseWhenEdited(false)}
+                actionText={__('Leave', 'gutenverse-themes-builder')}
+                buttonFill='#3B57F7'
+                svgFill='#FFC908'
+            /> : <div className="popup-container" onClick={handleOnClose}>
+            <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Edit Pattern')}</span>
+                    <div className="close-button" onClick={handleOnClose}>
+                        <CloseIcon />
+                    </div>
                 </div>
                 <div className="popup-body">
                     {!isEmpty(noticeMessage) && <div className="gtb-notice">
@@ -160,17 +180,17 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     </div>}
                     <div className="input-wrap pattern-slug">
                         <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
-                        <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
+                        <input type="text" value={patternSlug} onChange={e => { setPatternSlug(e.target.value); setIsEdited(true)}} />
                         <span className="description">{__('Slug must use lowercase letter and replace spacing with dash (-).', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-name">
                         <label>{__('Pattern Name', 'gutenverse-themes-builder')}</label>
-                        <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
+                        <input type="text" value={patternName} onChange={e => { setPatternName(e.target.value); setIsEdited(true)}} />
                         <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="input-wrap pattern-category">
                         <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
-                        <select onChange={e => { setPatternCategory(e.target.value); }}>
+                        <select onChange={e => { setPatternCategory(e.target.value); setIsEdited(true)}}>
                             <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
                             <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
                             <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
@@ -180,7 +200,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     <div className="input-wrap pattern-sync">
                         <input
                             type="checkbox"
-                            onChange={() => setPatternSync(!patternSync)}
+                            onChange={() => { setPatternSync(e.target.value); setIsEdited(true)}}
                             checked={patternSync}
                             hidden
                         />
@@ -189,11 +209,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     </div>
                 </div>
                 <div className="popup-footer">
-                    <div className="buttons spaced">
-                        <div className="back-button" onClick={onClose}>
-                            <ArrowLeft size={14} />
-                            {__('Back', 'gutenverse-themes-builder')}
-                        </div>
+                    <div className="buttons end">
                         <div className="button" onClick={patternSubmit}>
                             {__('Save', 'gutenverse-themes-builder')}
                         </div>
@@ -201,7 +217,9 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                 </div>
             </div>
         </div>
-    );
+        }
+    </>
+        
 };
 
 const PatternList = () => {
@@ -209,17 +227,24 @@ const PatternList = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [createPatternPopup, setCreatePatternPopup] = useState(false);
     const [editPatternPopup, setEditPatternPopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
+
     const {
         editPath,
     } = window['GutenverseThemeBuilder'];
 
     const updateList = (result) => {
-        setPatternList(result);
+        setPatternList(result?.patterns);
+        setTotalData(result?.total_posts);
+        setTotalPage(result?.total_page);
     };
 
     useEffect(() => {
-        getPatternList({ paged: 1 }, updateList);
-    }, []);
+        getPatternListPagination({ paged: paged, num_post: num_post }, updateList);
+    }, [paged]);
 
     const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: 1 }, updateList);
     return (
@@ -238,7 +263,13 @@ const PatternList = () => {
         >
             <>
                 <Table
-                    heads={['ID', 'Slug', 'Title', 'Action',]}
+                    heads={['ID', 'Slug', 'Title', 'Category', 'Action']}
+                    length={patternList.length}
+                    paged={paged}
+                    setPaged={setPaged}
+                    numPost={num_post}
+                    totalData={totalData}
+                    totalPage={totalPage}
                 >
                     <>
                         {!isEmpty(patternList) && patternList.map((pattern, key) => {
@@ -246,10 +277,11 @@ const PatternList = () => {
                                 <td>{pattern?.ID}</td>
                                 <td>{pattern?.post_name}</td>
                                 <td>{pattern?.post_title}</td>
+                                <td>{pattern?.category.charAt(0).toUpperCase() + pattern?.category.slice(1)}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPatternPopup(pattern?.ID)}><EditIcon />Edit</a>
-                                        <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${pattern?.ID}&action=edit`}><EditIcon />Edit Content</a>
+                                        <a className="edit" onClick={() => setEditPatternPopup(pattern?.ID)}>Quick Edit</a>
+                                        <a className="edit" target="_blank" rel="noreferrer" href={`${editPath}?post=${pattern?.ID}&action=edit`}><EditIcon />Editor</a>
                                         <a className="delete" onClick={() => setDeletePopup(pattern?.ID)}><DeleteIcon />Delete</a>
                                     </div>
                                 </td>

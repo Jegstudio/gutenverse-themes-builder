@@ -194,6 +194,16 @@ export const getPatternList = (params, callback = def_callback) => {
     });
 };
 
+export const getPatternListPagination = (request, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/pattern/list', request),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 export const deletePattern = (params, callback = def_callback) => {
     apiFetch({
         method: 'POST',

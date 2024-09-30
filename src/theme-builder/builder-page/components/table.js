@@ -4,6 +4,12 @@ const Table = (props) => {
     const { heads, children, length, paged, totalPage, setPaged, numPost, totalData } = props;
     const tdRef = useRef(null);
     const [tdHeight, setTdHeight] = useState(0);
+
+    /**Delete when done */
+    useEffect(() => {
+        console.log(paged);
+        console.log(paged, totalPage)
+    },[paged])
     useEffect(() => {
         if(length < numPost){
             const tdElement = tdRef.current;
@@ -23,7 +29,7 @@ const Table = (props) => {
             observer.disconnect(); // Clean up when component unmounts
             };
         }
-      }, []);
+      }, [paged]);
 
     return (
         <table className="table">

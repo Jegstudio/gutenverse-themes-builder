@@ -29,7 +29,7 @@ const CreateTheme = ({ setMode, updateThemeList }) => {
 
     const updateCallback = (response) => {
         if (response?.status === 'success') {
-            updateThemeList(response?.data?.list);
+            updateThemeList();
             setMode('list');
         } else {
             setNoticeMessage(response?.data?.message);
@@ -80,7 +80,7 @@ const EditTheme = ({ themeId, setMode, updateThemeList }) => {
 
     const updateCallback = (response) => {
         if (response?.status === 'success') {
-            updateThemeList(response?.data?.list);
+            updateThemeList();
             setMode('list');
         } else {
             setNoticeMessage(response?.data?.message);
@@ -140,9 +140,14 @@ const ThemeList = () => {
         setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
     };
 
-    useEffect(()=>{
-        console.log(paged)
-    },[paged])
+    const handleChangeData = (result) => {
+        setPaged(1);
+        getThemeListPagination({
+            paged: 1,
+            num_post : num_post
+        },updateThemeList);
+    }
+
     useEffect(() => {
         getThemeListPagination({
             paged,
@@ -156,21 +161,21 @@ const ThemeList = () => {
     };
 
     const removeTheme = () => {
-        deleteTheme(deletePopup, updateThemeList);
+        deleteTheme(deletePopup, handleChangeData);
     };
 
     const updateActiveID = () => {
-        updateActiveTheme(switchPopup, updateThemeList);
+        updateActiveTheme(switchPopup, handleChangeData);
     };
 
     let Content = null;
 
     switch (mode) {
         case 'create':
-            Content = <CreateTheme themeId={themeId} setMode={setMode} updateThemeList={updateThemeList} />;
+            Content = <CreateTheme themeId={themeId} setMode={setMode} updateThemeList={handleChangeData} />;
             break;
         case 'edit':
-            Content = <EditTheme themeId={themeId} setMode={setMode} updateThemeList={updateThemeList} />;
+            Content = <EditTheme themeId={themeId} setMode={setMode} updateThemeList={handleChangeData} />;
             break;
         default:
             Content = <ContentWrapper

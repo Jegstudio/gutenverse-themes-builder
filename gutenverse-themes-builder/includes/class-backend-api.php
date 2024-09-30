@@ -372,6 +372,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'pattern/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_pattern_list_pagination' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'template/import',
 			array(
 				'methods'             => 'GET',
@@ -936,9 +946,6 @@ class Backend_Api {
 
 		return array(
 			'status' => 'success',
-			'data'   => array(
-				'list' => $this->get_theme_list(),
-			),
 		);
 	}
 
@@ -1054,9 +1061,6 @@ class Backend_Api {
 
 		return array(
 			'status' => 'success',
-			'data'   => array(
-				'list' => $this->get_theme_list(),
-			),
 		);
 	}
 
@@ -1204,7 +1208,7 @@ class Backend_Api {
 			$wpdb->query( 'COMMIT' );
 			// Reset post data to the original global $post object
 			wp_reset_postdata();
-			return $this->get_theme_list();
+			return array( 'status' => 'success' );
 			// If everything is successful, commit the transaction
 		} catch ( Exception $e ) {
 			// If something went wrong, roll back the transaction
@@ -1486,6 +1490,45 @@ class Backend_Api {
 		);
 
 		return $patterns->posts;
+	}
+
+	/**
+	 * Get Pattern List.
+	 *
+	 * @param object $request Request Object.
+	 *
+	 * @return object
+	 */
+	public function get_pattern_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$patterns = new \WP_Query(
+			array(
+				'post_type'      => 'gutenverse-pattern',
+				'paged'          => $paged,
+				'posts_per_page' => $num_post,
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_pattern_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
+		$posts    = array();
+		if ( $patterns->have_posts() ) {
+			foreach ( $patterns->posts as $pattern ) {
+				$pattern->category = get_post_meta( $pattern->ID, '_pattern_category', true );
+				$posts[]           = $pattern;
+			}
+		}
+		return (object) array(
+			'patterns'    => $posts,
+			'total_page'  => $patterns->max_num_pages,
+			'total_posts' => $patterns->found_posts,
+		);
 	}
 
 	/**
@@ -3106,7 +3149,7 @@ class Backend_Api {
 			);
 		}
 		if ( $theme_id ) {
-			$page = array(
+			$page    = array(
 				'ID'            => $id,
 				'post_title'    => $name,
 				'post_author'   => get_current_user_id(),
