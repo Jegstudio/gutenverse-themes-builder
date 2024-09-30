@@ -1378,71 +1378,71 @@ class Export_Theme {
 			}
 
 			// add blank and basic tempaltes.
-			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:post-content /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-<div class="guten-element guten-post-content guten-gwZ6H6"></div>
-<!-- /wp:gutenverse/post-content -->',
-						FS_CHMOD_FILE
-					);
-				}
-			}
-			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						'<!-- wp:template-part {"slug":"header"} /-->
+// 			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+// 			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+// 				if ( 'core' === $template['category'] ) {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/blank-canvas.html',
+// 						'<!-- wp:post-content /-->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				} else {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/blank-canvas.html',
+// 						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
+// <!-- /wp:gutenverse/post-content -->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				}
+// 			}
+// 			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+// 				if ( 'core' === $template['category'] ) {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/template-basic.html',
+// 						'<!-- wp:template-part {"slug":"header"} /-->
 
-<!-- wp:post-content /-->
+// <!-- wp:post-content /-->
 
-<!-- wp:template-part {"slug":"footer"} /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+// <!-- wp:template-part {"slug":"footer"} /-->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				} else {
+// 					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
 
-<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-<div class="guten-element guten-post-content guten-ReyA1K"></div>
-<!-- /wp:gutenverse/post-content -->
+// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+// <div class="guten-element guten-post-content guten-ReyA1K"></div>
+// <!-- /wp:gutenverse/post-content -->
 
-<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
 
-					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-					$header_slug = false;
-					$footer_slug = false;
-					foreach ( $headers as $header ) {
-						$header_slug = $header['to'];
-					}
-					foreach ( $footers as $footer ) {
-						$footer_slug = $footer['to'];
-					}
-					if ( $header_slug ) {
-						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
-					} else {
-						$content = preg_replace( "'--header_slug--'", 'header', $content );
-					}
-					if ( $footer_slug ) {
-						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-					} else {
-						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
-					}
+// 					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+// 					$header_slug = false;
+// 					$footer_slug = false;
+// 					foreach ( $headers as $header ) {
+// 						$header_slug = $header['to'];
+// 					}
+// 					foreach ( $footers as $footer ) {
+// 						$footer_slug = $footer['to'];
+// 					}
+// 					if ( $header_slug ) {
+// 						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
+// 					} else {
+// 						$content = preg_replace( "'--header_slug--'", 'header', $content );
+// 					}
+// 					if ( $footer_slug ) {
+// 						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
+// 					} else {
+// 						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
+// 					}
 
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						$content,
-						FS_CHMOD_FILE
-					);
-				}
-			}
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/template-basic.html',
+// 						$content,
+// 						FS_CHMOD_FILE
+// 					);
+// 				}
+// 			}
 		}
 	}
 
