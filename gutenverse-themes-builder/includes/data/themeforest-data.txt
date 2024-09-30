@@ -195,6 +195,8 @@ class Themeforest_Data {
 	 * Create Synced Pattern
 	 */
 	public function import_synced_patterns( $patterns ) {
+		$pattern_list = array();
+
 		foreach ( $patterns as $block_pattern ) {
 			$pattern_file = get_theme_file_path( '/inc/patterns/' . $block_pattern . '.php' );
 			$pattern_data = require $pattern_file;
@@ -216,20 +218,14 @@ class Themeforest_Data {
 
 					$pattern_data['content']  = '<!-- wp:block {"ref":' . $post_id . '} /-->';
 					$pattern_data['inserter'] = false;
+					$pattern_data['slug']     = $block_pattern;
 
-					$result = register_block_pattern(
-						'{{slug}}/' . $block_pattern,
-						$pattern_data
-					);
+					$pattern_list[] = $pattern_data;
 				}
-
-			} else {
-				register_block_pattern(
-					'{{slug}}/' . $block_pattern,
-					$pattern_data
-				);
 			}
 		}
+
+		update_option( '{{slug}}_synced_pattern_imported', $pattern_list );
 	}
 
 	/**
