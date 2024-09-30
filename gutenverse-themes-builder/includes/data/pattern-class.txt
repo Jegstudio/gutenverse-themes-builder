@@ -80,16 +80,44 @@ class Block_Patterns {
 		}
 
 		$block_patterns = apply_filters( '{{theme_slug}}_block_patterns', $block_patterns );
+		$pattern_list   = get_option( 'next_synced_pattern_imported', false );
+		if ( ! $pattern_list ) {
+			$pattern_list = array();
+		}
 
 		if ( function_exists( 'register_block_pattern' ) ) {
 			foreach ( $block_patterns as $block_pattern ) {
 				$pattern_file = get_theme_file_path( '/inc/patterns/' . $block_pattern . '.php' );
+				$pattern_data = require $pattern_file;
 
-				register_block_pattern(
-					'{{theme_slug}}/' . $block_pattern,
-					require $pattern_file
-				);
+				if ( (bool) $pattern_data['is_sync'] ) {
+					$post = get_page_by_path( $block_pattern . '-synced', OBJECT, 'wp_block' );
+					if ( empty( $post ) ) {
+						$post_id = wp_insert_post(
+							array(
+								'post_name'    => $block_pattern . '-synced',
+								'post_title'   => $pattern_data['title'],
+								'post_content' => $pattern_data['content'],
+								'post_status'  => 'publish',
+								'post_author'  => 1,
+								'post_type'    => 'wp_block',
+							)
+						);
+
+						$pattern_data['content']  = '<!-- wp:block {"ref":' . $post_id . '} /-->';
+						$pattern_data['inserter'] = false;
+						$pattern_data['slug']     = $block_pattern;
+
+						$pattern_list[] = $pattern_data;
+					}
+				} else {
+					register_block_pattern(
+						'next/' . $block_pattern,
+						require $pattern_file
+					);
+				}
 			}
+			update_option( 'next_synced_pattern_imported', $pattern_list );
 		}
 	}
 
