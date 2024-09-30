@@ -129,21 +129,26 @@ const ThemeList = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [switchPopup, setSwitchPopup] = useState(false);
     const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
 
     const updateThemeList = (result) => {
-        console.log(result);
         setThemeList(result?.data.list);
-        setTotalPage(parseInt(result?.data.total_data));
+        setTotalData(parseInt(result?.data.total_data));
         setActiveTheme(result?.active);
+        setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
     };
 
+    useEffect(()=>{
+        console.log(paged)
+    },[paged])
     useEffect(() => {
         getThemeListPagination({
             paged,
-            num_post : 10
+            num_post : num_post
         },updateThemeList);
-    }, []);
+    }, [paged]);
 
     const setEditTheme = (id) => {
         setMode('edit');
@@ -187,7 +192,9 @@ const ThemeList = () => {
                         length={themeList.length}
                         paged={paged}
                         setPaged={setPaged}
-                        totalPage={themeList.totalPage}
+                        numPost={num_post}
+                        totalData={totalData}
+                        totalPage={totalPage}
                     >
                         <>
                             {!isEmpty(themeList) && themeList.map((theme, key) => {

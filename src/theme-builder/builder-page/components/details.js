@@ -41,13 +41,15 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <TextControl
                     id={'slug'}
                     title={__('Slug', 'gutenverse-themes-builder')}
+                    description={__('Theme slug (use lowercase letter only)', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.slug}
                     onChange={updateDetails('slug')}
                     important={true}
                 />
                 <TextControl
                     id={'title'}
-                    title={__('Title', 'gutenverse-themes-builder')}
+                    title={__('Theme Title', 'gutenverse-themes-builder')}
+                    description={__('Theme name that will present on client', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.title}
                     onChange={updateDetails('title')}
                     important={true}
@@ -55,6 +57,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <TextControl
                     id={'author_name'}
                     title={__('Author Name', 'gutenverse-themes-builder')}
+                    description={__('Name of the theme\'s author', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.author_name}
                     onChange={updateDetails('author_name')}
                     important={true}
@@ -62,18 +65,21 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <TextControl
                     id={'author_uri'}
                     title={__('Author URI', 'gutenverse-themes-builder')}
+                    description={__('Author\'s website or profile link (optional)', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.author_uri}
                     onChange={updateDetails('author_uri')}
                 />
                 <TextControl
                     id={'theme_uri'}
                     title={__('Theme URI', 'gutenverse-themes-builder')}
+                    description={__('URL to a page about the theme (optional)', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.theme_uri}
                     onChange={updateDetails('theme_uri')}
                 />
                 <TextControl
                     id={'theme_version'}
                     title={__('Theme Version', 'gutenverse-themes-builder')}
+                    description={__('The current version of the theme', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.theme_version}
                     onChange={updateDetails('theme_version')}
                     important={true}
@@ -83,6 +89,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     title={__('Minimum WP Version', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.wp_min_version}
                     onChange={updateDetails('wp_min_version')}
+                    description={__('Minimum Compatible Version', 'gutenverse-themes-builder')}
                     important={true}
                 />
                 <TextControl
@@ -90,11 +97,13 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     title={__('Tested Up To WP', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.wp_tested_version}
                     onChange={updateDetails('wp_tested_version')}
+                    description={__('Minimum Compatible Version', 'gutenverse-themes-builder')}
                     important={true}
                 />
                 <TextControl
                     id={'php_version'}
                     title={__('PHP Version', 'gutenverse-themes-builder')}
+                    description={__('Minimum PHP version required', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.php_version}
                     onChange={updateDetails('php_version')}
                     important={true}
@@ -122,6 +131,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <SelectControl
                     id={'tags'}
                     title={__('Theme Tags', 'gutenverse-themes-builder')}
+                    description={__('Tags for categorizing the theme', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.tags}
                     options={TAGS}
                     isMulti={true}
@@ -130,6 +140,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <TextareaControl
                     id={'description'}
                     title={__('Description', 'gutenverse-themes-builder')}
+                    description={__('A description of the theme and its features', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.description}
                     onChange={updateDetails('description')}
                 />
