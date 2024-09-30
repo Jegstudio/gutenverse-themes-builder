@@ -195,7 +195,7 @@ class Themeforest_Data {
 	 * Create Synced Pattern
 	 */
 	public function import_synced_patterns( $patterns ) {
-		$pattern_list = get_option( '{{theme_slug}}_synced_pattern_imported', false );
+		$pattern_list = get_option( '{{slug}}_synced_pattern_imported', false );
 		if ( ! $pattern_list ) {
 			$pattern_list = array();
 		}
