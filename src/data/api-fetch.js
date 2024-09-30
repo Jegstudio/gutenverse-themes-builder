@@ -78,6 +78,16 @@ export const getThemeList = (callback = def_callback) => {
     });
 };
 
+export const getThemeListPagination = ( request, callback = def_callback ) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/themes/list', request),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+}
+
 export const getThemeData = (id, callback = def_callback) => {
     apiFetch({
         path: addQueryArgs('gtb-backend/v1/themes/data', {

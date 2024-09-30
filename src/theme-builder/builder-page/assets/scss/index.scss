@@ -14,11 +14,13 @@ body {
     --gtb-grey-soft: #E3E4E6;
     --gtb-light: #F8FBFF;
     --gtb-blue: #3B57F7;
+    --gtb-dark-blue: #2435ec;
     --gtb-blue-soft: #DBE7FF;
     --gtb-red: #E73030;
     --gtb-red-soft: #FBE4E4;
     --gtb-green: #5BBD96;
     --gtb-green-soft: #E4FBE6;
+    --gtb-blue-soft: #DBE7FF;
 }
 
 #wpcontent {
@@ -112,6 +114,26 @@ body {
             border-radius: 5px 5px 0 0;
         }
 
+        .footer{
+            .footer-content{
+                .footer-wrap{
+                    display: flex;
+                    justify-content: space-between;
+                    color: #99A2A9;
+
+                    .navigation{
+                        display: flex;
+                        gap: 30px;
+
+                        .active{
+                            color: #40505D;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
         th,
         td {
             padding: 20px;
@@ -197,11 +219,18 @@ body {
             .input-wrapper {
                 width: calc(50% - 25px);
 
+                .input-inner{
+                    display: block;
+                    span{
+                        display: block;
+                    }
+                }
                 &:nth-last-child(-n+2),
                 &:last-child {
                     flex-wrap: wrap;
                     width: 100%;
                 }
+
             }
         }
 
@@ -261,8 +290,8 @@ body {
 
         .edit,
         .delete {
-            padding: 4px 12px;
-            border-radius: 50px;
+            padding: 8px 14px;
+            border-radius: 5px;
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 400;
@@ -334,8 +363,12 @@ body {
                 background-color: var(--gtb-blue);
                 color: var(--gtb-white);
                 fill: var(--gtb-white);
-                border-radius: 50px;
+                border-radius: 5px;
                 border: none;
+                transition: all .5s;
+                &:hover{
+                    background-color: var(--gtb-dark-blue);
+                }
             }
 
             .button-wrapper {
@@ -346,24 +379,32 @@ body {
         .content-notice{
             padding: 12px 12px 12px 16px;
             border-radius: 5px;
-            border: solid 1px #ffdc5f;
-            background-color: #fff9e2;
+            border: solid 1px #FEC84B;
+            background-color: #FFFCF5;
             font-family: "Roboto", serif;
             font-size: 14px;
             font-weight: normal;
             font-stretch: normal;
             font-style: normal;
-            line-height: 1.4;
+            line-height: 22.4px;
             letter-spacing: normal;
             text-align: left;
             color: #40505d;
-            display: flex;
-            align-items: center;
             gap: 20px;
             margin: 25px 0;
-            color : #b38c03;
+            color : #826B1D;
+            display: flex;
             svg{
-                fill: #ffdc5f;
+                margin-top: 1em;
+                fill: #FEC84B;
+            }
+            a{
+                font-weight: 600;
+                color : #826B1D;
+            }
+            ul{
+                padding: 0px 10px !important;
+                margin: 0px;
             }
         }
     }
@@ -468,6 +509,15 @@ body {
                 >div {
                     border: 1px solid var(--gtb-grey-soft);
                     border-radius: 5px;
+                }
+
+                .tb-selector__multi-value{
+                    color: var(--gtb-blue);
+                    background-color: var(--gtb-blue-soft);
+
+                    .tb-selector__multi-value__label{
+                        color: var(--gtb-blue);
+                    }
                 }
 
                 span {
@@ -644,8 +694,10 @@ body {
                 th,
                 td {
                     padding: 15px 0;
+                    
                 }
 
+               
                 .template-delete {
                     cursor: pointer;
                     text-align: center;
@@ -680,7 +732,7 @@ body {
     .popup-content {
         position: absolute;
         left: 50%;
-        top: 50px;
+        top: 25%;
         width: 400px;
         transform: translate(-50%);
         margin: auto;
@@ -984,7 +1036,7 @@ body {
             color: var(--gtb-white);
             border: 1px solid var(--gtb-blue);
             border: none;
-            border-radius: 50px;
+            border-radius: 5px;
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 500;
@@ -993,6 +1045,7 @@ body {
             padding: 4px 24px;
             display: flex;
             align-items: center;
+            transition: all .5s ;
 
             &.cancel {
                 background-color: var(--gtb-white);
@@ -1010,7 +1063,23 @@ body {
                 background-color: var(--gtb-white);
                 color: var(--gtb-blue);
                 border: 1px solid var(--gtb-blue);
+                &:hover{
+                    background-color: var(--gtb-blue);
+                    border: 1px solid var(--gtb-blue);
+                    color: var(--gtb-white);
+                }
             }
+
+            &.create{
+                background-color: var(--gtb-blue);
+                color: var(--gtb-white);
+                border: 1px solid var(--gtb-blue);
+                &:hover{
+                    background-color: var(--gtb-dark-blue);
+                    border: 1px solid var(--gtb-dark-blue);
+                }
+            }
+            
         }
 
         .back-button {

@@ -117,6 +117,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'themes/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_theme_list_pagination' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'themes/data',
 			array(
 				'methods'             => 'GET',
@@ -949,6 +959,33 @@ class Backend_Api {
 		return array(
 			'active' => $active,
 			'data'   => $data,
+		);
+	}
+
+	/**
+	 * Get theme list Pagination
+	 *
+	 * @param object $request .
+	 */
+	public function get_theme_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$info_db = Database::instance()->theme_info;
+		$data    = $info_db->get_pagination_data( $offset, $num_post );
+		$active  = get_option( 'gtb_active_theme_id' );
+
+		foreach ( $data['list'] as &$theme ) {
+			if ( ! empty( $theme['theme_data'] ) ) {
+				$theme['theme_data'] = maybe_unserialize( $theme['theme_data'] );
+			}
+		}
+		$max_page = ceil( $data['count'] / $num_post );
+		return array(
+			'active'     => $active,
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 

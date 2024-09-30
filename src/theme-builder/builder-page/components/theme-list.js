@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { deleteTheme, getThemeList, updateActiveTheme } from '../../../data/api-fetch';
+import { deleteTheme, getThemeList, getThemeListPagination, updateActiveTheme } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
@@ -128,15 +128,27 @@ const ThemeList = () => {
     const [activeTheme, setActiveTheme] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
     const [switchPopup, setSwitchPopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
 
     const updateThemeList = (result) => {
-        setThemeList(result?.data);
+        setThemeList(result?.data.list);
+        setTotalData(parseInt(result?.data.total_data));
         setActiveTheme(result?.active);
+        setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
     };
 
+    useEffect(()=>{
+        console.log(paged)
+    },[paged])
     useEffect(() => {
-        getThemeList(updateThemeList);
-    }, []);
+        getThemeListPagination({
+            paged,
+            num_post : num_post
+        },updateThemeList);
+    }, [paged]);
 
     const setEditTheme = (id) => {
         setMode('edit');
@@ -177,6 +189,12 @@ const ThemeList = () => {
                 <>
                     <Table
                         heads={['Theme ID', 'Slug', 'Name', 'Status', 'Action',]}
+                        length={themeList.length}
+                        paged={paged}
+                        setPaged={setPaged}
+                        numPost={num_post}
+                        totalData={totalData}
+                        totalPage={totalPage}
                     >
                         <>
                             {!isEmpty(themeList) && themeList.map((theme, key) => {
@@ -186,7 +204,7 @@ const ThemeList = () => {
                                     <td>{theme?.theme_id}</td>
                                     <td>{theme?.slug}</td>
                                     <td>{theme?.theme_data?.title}</td>
-                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('Active', 'gutenverse-themes-builder') : __('Inactive', 'gutenverse-themes-builder')}</span></td>
+                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('ACTIVE', 'gutenverse-themes-builder') : __('INACTIVE', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {!active && <a className="edit" onClick={() => setSwitchPopup(theme?.theme_id)}>Set Active</a>}
