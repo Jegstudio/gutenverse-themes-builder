@@ -288,7 +288,7 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                     </select>
                 </div>
                 <div className="input-wrap pattern-sync">
-                    <label>{__('Pattern Sync', 'gutenverse-themes-builder')}</label>
+                    <label>{__('Export as Pattern Sync', 'gutenverse-themes-builder')}</label>
                     <div>
                         <input
                             type="checkbox"
