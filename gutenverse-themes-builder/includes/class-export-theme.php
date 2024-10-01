@@ -35,25 +35,46 @@ class Export_Theme {
 	public $fileresult;
 
 	/**
-	 * Core Patterns
+	 * Template Core Patterns
 	 *
 	 * @var array
 	 */
-	private $core_patterns;
+	private $template_core_patterns;
 
 	/**
-	 * Gutenverse Patterns
+	 * Template Gutenverse Patterns
 	 *
 	 * @var array
 	 */
-	private $gutenverse_patterns;
+	private $template_gutenverse_patterns;
 
 	/**
-	 * Pro Patterns
+	 * Template Pro Patterns
 	 *
 	 * @var array
 	 */
-	private $pro_patterns;
+	private $template_pro_patterns;
+
+	/**
+	 * Page Core Patterns
+	 *
+	 * @var array
+	 */
+	private $page_core_patterns;
+
+	/**
+	 * Page Gutenverse Patterns
+	 *
+	 * @var array
+	 */
+	private $page_gutenverse_patterns;
+
+	/**
+	 * Page Pro Patterns
+	 *
+	 * @var array
+	 */
+	private $page_pro_patterns;
 
 	/**
 	 * List of Images
@@ -96,9 +117,11 @@ class Export_Theme {
 		$this->create_function_php( $wp_filesystem, $data );
 		$this->create_autoload_php( $wp_filesystem, $data );
 		$this->create_init_php( $wp_filesystem, $data, $theme_id );
+		$this->create_upgrader_php( $wp_filesystem, $data );
 		$this->create_assets( $wp_filesystem, $data );
 		$this->create_themeforest_data( $wp_filesystem, $data );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
+		$this->create_pages( $wp_filesystem, $theme_id, $data );
 		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
@@ -109,6 +132,102 @@ class Export_Theme {
 		$other = maybe_unserialize( $data['other'] );
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$this->create_child_theme( $wp_filesystem, $data );
+		}
+	}
+
+	/**
+	 * Create Child Theme
+	 *
+	 * @param object $system .
+	 * @param string $theme_id .
+	 * @param array  $data .
+	 */
+	public function create_pages( $system, $theme_id, $data ) {
+		$pages      = new \WP_Query(
+			array(
+				'post_type'      => 'page',
+				'posts_per_page' => -1,
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_gtb_page_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
+		$custom_dir = gutenverse_themes_builder_theme_built_path() . '/gutenverse-pages';
+		if ( ! is_dir( $custom_dir ) ) {
+			wp_mkdir_p( $custom_dir );
+		}
+		foreach ( $pages->posts as $page ) {
+			/** Get the file mold */
+			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/page-json.txt' );
+
+			/** Add Template slug to mold */
+			$template = get_post_meta( $page->ID, '_wp_page_template', true );
+			$parts    = explode( '-', $template );
+			array_shift( $parts );
+			$template_slug = implode( '-', $parts );
+
+			$placeholder = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : $placeholder;
+
+			/** Add Page Title */
+			$placeholder = ! empty( $page->post_title ) ? str_replace( '{{page_title}}', $page->post_title, $placeholder ) : $placeholder;
+
+			/**Add Preview Url */
+			$preview     = get_post_meta( $page->ID, '_gtb_page_preview', true );
+			$placeholder = ! empty( $preview ) ? str_replace( '{{preview_url}}', $preview, $placeholder ) : $placeholder;
+
+			/**Add Image Path */
+			$image_id    = get_post_meta( $page->ID, '_gtb_page_image', true );
+			$file_path   = get_post_meta( $image_id, '_wp_attached_file', true );
+			$image_path  = 'assets/img/' . basename( $file_path );
+			$placeholder = ! empty( $file_path ) ? str_replace( '{{image_url}}', $image_path, $placeholder ) : $placeholder;
+
+			/**Add Is Homepage */
+			$is_homepage = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
+			if ( $is_homepage ) {
+				$is_homepage = 'true';
+			} else {
+				$is_homepage = 'false';
+			}
+			$placeholder = str_replace( '{{is_homepage}}', $is_homepage, $placeholder );
+
+			/**Add Content */
+			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
+			$content     = str_replace( "'", "\'", $content );
+			$content     = $this->extract_images( $content, $system, $data['slug'], true );
+			$content     = $this->fix_colors( $content );
+			$content     = $this->fix_core_navigation( $content );
+			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
+
+			/**Add Pattern */
+			if ( ! empty( $this->page_core_patterns ) ) {
+				$core_pattern_list = join( ', ', $this->page_core_patterns );
+			}
+			$placeholder = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
+			$this->page_core_patterns = array();
+
+			if ( ! empty( $this->page_gutenverse_patterns ) ) {
+				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
+			}
+			$placeholder = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
+			$this->page_gutenverse_patterns = array();
+
+			if ( ! empty( $this->page_pro_patterns ) ) {
+				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
+			}
+			$placeholder = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
+			$this->page_pro_patterns = array();
+
+			/**Create the file*/
+			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
+			$system->put_contents(
+				gutenverse_themes_builder_theme_built_path() . '/gutenverse-pages/' . $filename . '.json',
+				$placeholder,
+				FS_CHMOD_FILE
+			);
 		}
 	}
 
@@ -350,22 +469,9 @@ class Export_Theme {
 			return;
 		}
 
-		if ( ! empty( $other['dashboard']['templates'] ) ) {
-			foreach ( $other['dashboard']['templates'] as $template ) {
-				$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
-				$assigns[] = "array(
-					'title' => '{$template['name']}',
-					'page'  => '{$template['page_name']}',
-					'slug'  => '{$slug}',
-					'thumb' => '{$template['thumbnail']['url']}',
-				)";
-			}
-		}
-
 		$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/dashboard-fonts', gutenverse_themes_builder_theme_built_path() . 'assets/dashboard-fonts' );
 
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/themeforest-data.txt' );
-		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
@@ -474,7 +580,7 @@ class Export_Theme {
 			/** Create an associative array to store the color of colors */
 			$color_index = array();
 			foreach ( $colors as $color ) {
-				$color_index[ $color->color ] = true;
+				$color_index[ strtolower( $color->color ) ] = true;
 			}
 			$import_filtered = array_filter(
 				$imported_colors,
@@ -703,6 +809,52 @@ class Export_Theme {
 	}
 
 	/**
+	 * Create class-upgrader.php File
+	 *
+	 * @param object $system .
+	 * @param array  $data .
+	 */
+	public function create_upgrader_php( $system, $data ) {
+		$theme_data = maybe_unserialize( $data['theme_data'] );
+		$other      = maybe_unserialize( $data['other'] );
+		if ( ! isset( $other['notice'] ) || $this->is_serialized_block_empty( $other['notice'] ) ) {
+			return;
+		}
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/upgrader.txt' );
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
+		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
+		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
+		$placeholder = str_replace( '{{notice_message}}', $other['notice'], $placeholder );
+
+		$inc_dir = gutenverse_themes_builder_theme_built_path() . 'inc/class';
+		if ( ! is_dir( $inc_dir ) ) {
+			wp_mkdir_p( $inc_dir );
+		}
+
+		$system->put_contents(
+			$inc_dir . '/class-upgrader.php',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
+	}
+
+	/**
+	 * Check if block empty
+	 *
+	 * @param string $content .
+	 */
+	public function is_serialized_block_empty( $content ) {
+		if ( has_blocks( $content ) ) {
+			$blocks = parse_blocks( $content );
+			foreach ( $blocks as $block ) {
+				if ( ! empty( trim( strip_tags( $block['innerHTML'] ) ) ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	/**
 	 * Create class-init.php File
 	 *
 	 * @param object $system .
@@ -837,6 +989,7 @@ class Export_Theme {
 		$other      = maybe_unserialize( $data['other'] );
 		$add_class  = array();
 		$assigns    = array();
+		$data_page  = array();
 		$theme_logo = 'false';
 		$notice     = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
 			<div class="gutenverse-notice-inner">
@@ -953,27 +1106,69 @@ class Export_Theme {
 					FS_CHMOD_FILE
 				);
 			}
-
-			if ( ! empty( $other['dashboard']['templates'] ) ) {
-				foreach ( $other['dashboard']['templates'] as $template ) {
-					$image_data = wp_remote_get( $template['thumbnail']['url'], array( 'sslverify' => true ) );
-					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $template['thumbnail']['filename'];
-					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $template['thumbnail']['filename'] . "'";
-
+			$pages = new \WP_Query(
+				array(
+					'post_type'      => 'page',
+					'posts_per_page' => -1,
+					'meta_query' => array( //phpcs:ignore
+						array(
+							'key'     => '_gtb_page_theme_id',
+							'value'   => $theme_id,
+							'compare' => '===',
+						),
+					),
+				)
+			);
+			if ( $pages->have_posts() ) {
+				foreach ( $pages->posts as $post ) {
+					$image_id   = get_post_meta( $post->ID, '_gtb_page_image', true );
+					$image_url  = wp_get_attachment_url( $image_id );
+					$image_data = wp_remote_get( $image_url, array( 'sslverify' => true ) );
+					$file_path  = get_post_meta( $image_id, '_wp_attached_file', true );
+					$filename   = basename( $file_path );
+					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $filename;
+					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $filename . "'";
+					$post_demo  = get_post_meta( $post->ID, '_gtb_page_preview', true );
+					$template   = get_post_meta( $post->ID, '_wp_page_template', true );
+					$order      = get_post_meta( $post->ID, '_gtb_page_order', true );
+					$parts      = explode( '-', $template );
+					array_shift( $parts );
+					$template_slug = implode( '-', $parts );
 					if ( ! is_wp_error( $image_data ) ) {
 						$system->put_contents(
 							$thumbnail,
 							$image_data['body'],
 							FS_CHMOD_FILE
 						);
+						$data_page[] = (object) array(
+							'title' => $post->post_title,
+							'page'  => $post->post_title,
+							'demo'  => $post_demo,
+							'slug'  => $template_slug,
+							'thumb' => $thumb_url,
+							'order' => $order,
+						);
 					}
-					$slug      = strtolower( str_replace( ' ', '-', $template['name'] ) );
+				}
+				usort(
+					$data_page,
+					function ( $a, $b ) {
+						if ( 'string' === gettype( $a->order ) ) {
+							$a->order = (int) $a->order;
+						}
+						if ( 'string' === gettype( $b->order ) ) {
+							$b->order = (int) $b->order;
+						}
+						return $a->order - $b->order;
+					}
+				);
+				foreach ( $data_page as $dt ) {
 					$assigns[] = "array(
-						'title' => '{$template['name']}',
-						'page'  => '{$template['page_name']}',
-						'demo'  => '{$template['page_demo']}',
-						'slug'  => '{$slug}',
-						'thumb' => {$thumb_url},
+						'title' => '{$dt->title}',
+						'page'  => '{$dt->page}',
+						'demo'  => '{$dt->demo}',
+						'slug'  => '{$dt->slug}',
+						'thumb' => {$dt->thumb},
 					)";
 				}
 			}
@@ -999,11 +1194,15 @@ class Export_Theme {
 			$script = '';
 		}
 
+		if ( isset( $other['notice'] ) && ! $this->is_serialized_block_empty( $other['notice'] ) ) {
+			$add_class[] = 'new Upgrader();';
+		}
+
 		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );
 		$placeholder = str_replace( '{{dashboard_notice}}', $notice, $placeholder );
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
-		$placeholder = str_replace( '{{additional_class}}', join( ",\n\t\t\t\t", $add_class ), $placeholder );
+		$placeholder = str_replace( '{{additional_class}}', join( "\n\t\t\t\t", $add_class ), $placeholder );
 
 		$uri   = $this->get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
@@ -1153,9 +1352,11 @@ class Export_Theme {
 
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
-					$content = $this->fix_colors( $html_content[ $slug_key ] );
+					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->extract_images( $content, $system, $theme_slug );
+					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, false, 'template' );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -1177,71 +1378,71 @@ class Export_Theme {
 			}
 
 			// add blank and basic tempaltes.
-			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:post-content /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-<div class="guten-element guten-post-content guten-gwZ6H6"></div>
-<!-- /wp:gutenverse/post-content -->',
-						FS_CHMOD_FILE
-					);
-				}
-			}
-			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						'<!-- wp:template-part {"slug":"header"} /-->
+// 			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+// 			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+// 				if ( 'core' === $template['category'] ) {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/blank-canvas.html',
+// 						'<!-- wp:post-content /-->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				} else {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/blank-canvas.html',
+// 						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
+// <!-- /wp:gutenverse/post-content -->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				}
+// 			}
+// 			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+// 				if ( 'core' === $template['category'] ) {
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/template-basic.html',
+// 						'<!-- wp:template-part {"slug":"header"} /-->
 
-<!-- wp:post-content /-->
+// <!-- wp:post-content /-->
 
-<!-- wp:template-part {"slug":"footer"} /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+// <!-- wp:template-part {"slug":"footer"} /-->',
+// 						FS_CHMOD_FILE
+// 					);
+// 				} else {
+// 					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
 
-<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-<div class="guten-element guten-post-content guten-ReyA1K"></div>
-<!-- /wp:gutenverse/post-content -->
+// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+// <div class="guten-element guten-post-content guten-ReyA1K"></div>
+// <!-- /wp:gutenverse/post-content -->
 
-<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
 
-					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-					$header_slug = false;
-					$footer_slug = false;
-					foreach ( $headers as $header ) {
-						$header_slug = $header['to'];
-					}
-					foreach ( $footers as $footer ) {
-						$footer_slug = $footer['to'];
-					}
-					if ( $header_slug ) {
-						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
-					} else {
-						$content = preg_replace( "'--header_slug--'", 'header', $content );
-					}
-					if ( $footer_slug ) {
-						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-					} else {
-						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
-					}
+// 					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+// 					$header_slug = false;
+// 					$footer_slug = false;
+// 					foreach ( $headers as $header ) {
+// 						$header_slug = $header['to'];
+// 					}
+// 					foreach ( $footers as $footer ) {
+// 						$footer_slug = $footer['to'];
+// 					}
+// 					if ( $header_slug ) {
+// 						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
+// 					} else {
+// 						$content = preg_replace( "'--header_slug--'", 'header', $content );
+// 					}
+// 					if ( $footer_slug ) {
+// 						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
+// 					} else {
+// 						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
+// 					}
 
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						$content,
-						FS_CHMOD_FILE
-					);
-				}
-			}
+// 					$system->put_contents(
+// 						$canvas_target_dir . '/template-basic.html',
+// 						$content,
+// 						FS_CHMOD_FILE
+// 					);
+// 				}
+// 			}
 		}
 	}
 
@@ -1324,16 +1525,18 @@ class Export_Theme {
 	/**
 	 * Build Patterns
 	 *
-	 * @param string $html_content .
-	 * @param string $theme_id .
-	 * @param object $system .
-	 * @param string $theme_slug .
+	 * @param string  $html_content .
+	 * @param string  $theme_id .
+	 * @param object  $system .
+	 * @param string  $theme_slug .
+	 * @param boolean $only_get_content .
+	 * @param string  $place .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false, $place = 'template' ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
-		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 
+		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 		if ( ! is_dir( $pattern_dir ) ) {
 			wp_mkdir_p( $pattern_dir );
 		}
@@ -1342,10 +1545,8 @@ class Export_Theme {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
 				$pattern_before = serialize_block( $block );
 				$pattern_after  = '';
-
 				if ( ! empty( $block['attrs']['pattern']['value'] ) ) {
-					$pattern_name  = $block['attrs']['pattern']['value'];
-					$pattern_title = $block['attrs']['pattern']['label'];
+					$pattern_name = $block['attrs']['pattern']['value'];
 
 					$posts = get_posts(
 						array(
@@ -1356,22 +1557,60 @@ class Export_Theme {
 
 					if ( ! empty( $posts ) ) {
 						$pattern_theme_id = get_post_meta( $posts[0]->ID, '_pattern_theme_id', true );
-						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
+						$content          = str_replace( "'", "\'", $posts[0]->post_content );
+						$content          = $this->extract_images( $content, $system, $theme_slug );
+						$content          = $this->fix_colors( $content );
+						$content          = $this->fix_core_navigation( $content );
+						$pattern_name     = $posts[0]->post_name;
+						$pattern_title    = $posts[0]->post_title;
+						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
+						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
+
+						/** Create pattern php files */
 						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
 						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-						$content     = str_replace( "'", "\'", $posts[0]->post_content );
-						$content     = $this->extract_images( $content, $system, $theme_slug );
-						$content     = $this->fix_colors( $content );
-						$content     = $this->fix_core_navigation( $content );
 						$content     = $this->replace_template_part( $content, $theme_slug );
 						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
 						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
 						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
+
+						/**replace additional object with object sync */
+						if ( $pattern_sync ) {
+							$additional  = "'is_sync' => true,";
+						} else {
+							$additional  = "'is_sync' => false,";
+						}
+						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
+
+						/**Add pattern to class_block_pattern array to register pattern */
+						switch ( $pattern_category ) {
+							case 'pro':
+								if ( 'template' === $place ) {
+									$this->template_pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_pro_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+							case 'gutenverse':
+								if ( 'template' === $place ) {
+									$this->template_gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_gutenverse_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+							default:
+								if ( 'template' === $place ) {
+									$this->template_core_patterns[] = "'{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_core_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+						}
 
 						$system->put_contents(
 							$target_file,
@@ -1379,18 +1618,10 @@ class Export_Theme {
 							FS_CHMOD_FILE
 						);
 
-						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
-
-						switch ( $pattern_category ) {
-							case 'pro':
-								$this->pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							case 'gutenverse':
-								$this->gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								break;
-							default:
-								$this->core_patterns[] = "'{$pattern_name}'";
-								break;
+						if ( $only_get_content && ! $pattern_sync ) {
+							$pattern_after = $posts[0]->post_content;
+						} else {
+							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
 						}
 					}
 
@@ -1458,11 +1689,12 @@ class Export_Theme {
 	/**
 	 * Extract Images
 	 *
-	 * @param string $content .
-	 * @param object $system .
-	 * @param string $slug .
+	 * @param string  $content .
+	 * @param object  $system .
+	 * @param string  $slug .
+	 * @param boolean $is_outside_pattern_wrapper .
 	 */
-	private function extract_images( $content, $system, $slug ) {
+	private function extract_images( $content, $system, $slug, $is_outside_pattern_wrapper = false ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
@@ -1495,7 +1727,10 @@ class Export_Theme {
 					}
 				}
 				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-				$content    = str_replace( $image, $image_code, $content );
+				if ( $is_outside_pattern_wrapper ) {
+					$image_code = "{{home_url}}/assets/img/$image_name";
+				}
+				$content = str_replace( $image, $image_code, $content );
 			}
 		}
 		return $content;
@@ -1529,22 +1764,22 @@ class Export_Theme {
 		$gutenverse_pattern_list = '';
 		$pro_pattern_list        = '';
 
-		if ( ! empty( $this->core_patterns ) ) {
-			$core_pattern_list = join( ",\r\t\t\t", $this->core_patterns );
+		if ( ! empty( $this->template_core_patterns ) ) {
+			$core_pattern_list = join( ",\r\t\t\t", $this->template_core_patterns );
 			$core_pattern_list = "$core_pattern_list,";
 		}
 
 		$placeholder = str_replace( '{{core_patterns}}', $core_pattern_list, $placeholder );
 
-		if ( ! empty( $this->gutenverse_patterns ) ) {
-			$gutenverse_pattern_list = join( ";\r\t\t\t", $this->gutenverse_patterns );
+		if ( ! empty( $this->template_gutenverse_patterns ) ) {
+			$gutenverse_pattern_list = join( ";\r\t\t\t", $this->template_gutenverse_patterns );
 			$gutenverse_pattern_list = "$gutenverse_pattern_list;";
 		}
 
 		$placeholder = str_replace( '{{gutenverse_patterns}}', $gutenverse_pattern_list, $placeholder );
 
-		if ( ! empty( $this->pro_patterns ) ) {
-			$pro_pattern_list = join( ";\r\t\t\t", $this->pro_patterns );
+		if ( ! empty( $this->template_pro_patterns ) ) {
+			$pro_pattern_list = join( ";\r\t\t\t", $this->template_pro_patterns );
 			$pro_pattern_list = "$pro_pattern_list;";
 		}
 

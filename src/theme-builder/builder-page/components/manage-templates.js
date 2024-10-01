@@ -5,7 +5,7 @@ import SelectControl from '../controls/select-control';
 import TextControl from '../controls/text-control';
 import { CATEGORIES, NAMABLE_TEMPLATES, TEMPLATE_TYPES } from '../data/default';
 import { checkThemeMode } from '../data/helper';
-import { DeleteAltIcon } from '../data/icons';
+import { DeleteAltIcon, WarningIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
@@ -102,6 +102,22 @@ const ManageTemplates = () => {
                 buttonIcon: false,
                 buttonLoading: loading,
             }]}
+            showNotice={true}
+            notice = {{
+                icon : <WarningIcon/>,
+                message : () => {
+                    return <>
+                        <p><b>Warning:</b> You only need to make one of these options:</p>
+                        <ul style={{listStyle: 'circle', padding: '10px'}}>
+                            <li>Template Home</li>
+                            <li>Template FrontPage</li>
+                            <li>Page Homepage ( page that assign as homepage) </li>
+                        </ul>
+                        <p>If you already make one you don't need to make the other 2. For further explanation please read <a href='https://developer.wordpress.org/themes/basics/template-hierarchy/' target='_blank' >Wordpress hierarchy</a></p>
+                    </>
+                },
+            }}
+                
         >
             <div className="template-page-wrapper">
                 {fetching ? <div className="loader"></div> : (

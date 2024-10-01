@@ -47,33 +47,13 @@ const MediaSelect = ({ updateThumbnailData }) => {
 
 const ManageDashbaord = () => {
     const [dashboardData, setDashboardData] = useState({});
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         getThemeData(null, response => {
             const themeDataRes = response;
-
-            getTemplateList(response => {
-                const templateList = response?.data?.filter(template => template?.template_type === 'custom_template');
-                const dashboardTemplates = themeDataRes?.other?.dashboard?.templates || [];
-                const templateListIds = templateList.map(template => template.id);
-
-                const syncedTemplates = dashboardTemplates.filter(template =>
-                    templateListIds.includes(template.id)
-                );
-
-                templateList.forEach(template => {
-                    if (!syncedTemplates.some(dashboardTemplate => dashboardTemplate.id === template.id)) {
-                        syncedTemplates.push(template);
-                    }
-                });
-
-                const filteredCore = syncedTemplates.filter(template => template.category !== 'core')
-
-                setDashboardData({
-                    ...dashboardData,
-                    ...themeDataRes?.other?.dashboard,
-                    templates: filteredCore
-                });
+            setDashboardData({
+                ...dashboardData,
+                ...themeDataRes?.other?.dashboard,
             });
         });
     }, []);
@@ -86,13 +66,15 @@ const ManageDashbaord = () => {
     };
 
     const updateDashboardData = () => {
-        updateOtherData({
-            key: 'dashboard',
-            data: { ...dashboardData }
-        });
+        setLoading(true);
+        setInterval(() => {
+            updateOtherData({
+                key: 'dashboard',
+                data: { ...dashboardData }
+            });
+            setLoading(false)
+        }, 500);
     };
-
-    console.log(dashboardData);
 
     return (
         <ContentWrapper
@@ -104,7 +86,7 @@ const ManageDashbaord = () => {
                     buttonText: __('Save', 'gutenverse-themes-builder'),
                     buttonEvent: updateDashboardData,
                     buttonIcon: false,
-                    buttonLoading: false
+                    buttonLoading: loading
                 }
             ]}
         >
@@ -128,54 +110,6 @@ const ManageDashbaord = () => {
                             {dashboardData?.logo && <div className="image-wrapper">
                                 <img src={dashboardData?.logo?.url} />
                             </div>}
-                        </div>
-                        <br /><br />
-                        <div>
-                            <h3>{__('Importable Custom Template', 'gutenverse-themes-builder')}</h3>
-                            <div className="custom-templates">
-                                {dashboardData?.templates && dashboardData?.templates?.map((template, index) => {
-                                    const updateTemplateData = (index, key, value) => {
-                                        let templateArr = dashboardData?.templates ? dashboardData?.templates : [];
-
-                                        templateArr[index] = {
-                                            ...templateArr[index],
-                                            [key]: value,
-                                        };
-
-                                        updateData('templates', [...templateArr]);
-                                    };
-
-                                    return template?.template_type === 'custom_template' && <div className="template-import">
-                                        <h3>{template?.name}</h3>
-                                        <div>
-                                            <label htmlFor="page_name">
-                                                {__('Page Name', 'gutenverse-themes-builder')}
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="page_name"
-                                                value={template?.page_name}
-                                                onChange={e => updateTemplateData(index, 'page_name', e?.target?.value)}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="page_demo">
-                                                {__('Page Preview Url', 'gutenverse-themes-builder')}
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="page_demo"
-                                                value={template?.page_demo}
-                                                onChange={e => updateTemplateData(index, 'page_demo', e?.target?.value)}
-                                            />
-                                        </div>
-                                        <MediaSelect updateThumbnailData={value => updateTemplateData(index, 'thumbnail', value)} />
-                                        {template?.thumbnail && <div className="image-wrapper">
-                                            <img src={template?.thumbnail?.url} />
-                                        </div>}
-                                    </div>;
-                                })}
-                            </div>
                         </div>
                     </>}
                     {dashboardData?.mode?.value === 'lite' && <>

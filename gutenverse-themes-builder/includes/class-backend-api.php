@@ -1,4 +1,5 @@
 <?php
+
 /**
  * REST APIs class
  *
@@ -16,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Gutenverse_Themes_Builder\Database\Database;
 use Gutenverse\Framework\Global_Variable;
 use WP_Query;
+use WP_REST_Response;
 use ZipArchive;
 use WP_Theme_Json_Resolver;
 
@@ -25,6 +27,7 @@ use WP_Theme_Json_Resolver;
  * @package gutenverse-themes-builder
  */
 class Backend_Api {
+
 	/**
 	 * Endpoint Path
 	 *
@@ -108,6 +111,16 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_theme_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'themes/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_theme_list_pagination' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -272,6 +285,16 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_template_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'templates/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_template_list_search' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -445,6 +468,47 @@ class Backend_Api {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'import_images' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		/**Pages End Point */
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/create',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'create_pages' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/list',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_page_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/delete',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'delete_page' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'pages/update',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'update_page' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -909,6 +973,33 @@ class Backend_Api {
 	}
 
 	/**
+	 * Get theme list Pagination
+	 *
+	 * @param object $request .
+	 */
+	public function get_theme_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$info_db = Database::instance()->theme_info;
+		$data    = $info_db->get_pagination_data( $offset, $num_post );
+		$active  = get_option( 'gtb_active_theme_id' );
+
+		foreach ( $data['list'] as &$theme ) {
+			if ( ! empty( $theme['theme_data'] ) ) {
+				$theme['theme_data'] = maybe_unserialize( $theme['theme_data'] );
+			}
+		}
+		$max_page = ceil( $data['count'] / $num_post );
+		return array(
+			'active'     => $active,
+			'data'       => $data,
+			'total_page' => $max_page,
+		);
+	}
+
+	/**
 	 * Get theme data
 	 *
 	 * @param object $request .
@@ -1184,9 +1275,10 @@ class Backend_Api {
 		$theme_id = get_option( 'gtb_active_theme_id' );
 
 		if ( $theme_id ) {
-			$slug     = $request->get_param( 'slug' );
-			$category = $request->get_param( 'category' );
-			$name     = $request->get_param( 'name' );
+			$slug     = gutenverse_esc_data( $request->get_param( 'slug' ) );
+			$category = gutenverse_esc_data( $request->get_param( 'category' ) );
+			$name     = gutenverse_esc_data( $request->get_param( 'name' ) );
+			$sync     = gutenverse_esc_data( $request->get_param( 'sync' ), 'bool' );
 
 			$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
 
@@ -1197,12 +1289,12 @@ class Backend_Api {
 						'post_name'   => $slug,
 						'post_status' => 'publish',
 						'post_type'   => 'gutenverse-pattern',
-
 					)
 				);
 
 				add_post_meta( $post_id, '_pattern_category', $category );
 				add_post_meta( $post_id, '_pattern_theme_id', $theme_id );
+				add_post_meta( $post_id, '_pattern_sync', $sync );
 
 				return array(
 					'status' => 'success',
@@ -1237,13 +1329,13 @@ class Backend_Api {
 		$theme_id = get_option( 'gtb_active_theme_id' );
 
 		if ( $theme_id ) {
-			$id       = $request->get_param( 'id' );
-			$slug     = $request->get_param( 'slug' );
-			$category = $request->get_param( 'category' );
-			$name     = $request->get_param( 'name' );
+			$id       = gutenverse_esc_data( $request->get_param( 'id' ), 'int' );
+			$slug     = gutenverse_esc_data( $request->get_param( 'slug' ) );
+			$category = gutenverse_esc_data( $request->get_param( 'category' ) );
+			$name     = gutenverse_esc_data( $request->get_param( 'name' ) );
+			$sync     = gutenverse_esc_data( $request->get_param( 'sync' ), 'bool' );
 
 			$post_exists = get_page_by_path( $slug, OBJECT, 'gutenverse-pattern' );
-
 			if ( empty( $post_exists ) || $id === $post_exists->ID ) {
 				$post_id = wp_update_post(
 					array(
@@ -1257,6 +1349,7 @@ class Backend_Api {
 				);
 
 				update_post_meta( $post_id, '_pattern_category', $category );
+				update_post_meta( $post_id, '_pattern_sync', $sync );
 
 				return array(
 					'status' => 'success',
@@ -1357,10 +1450,12 @@ class Backend_Api {
 
 		if ( $post ) {
 			$pattern_category = get_post_meta( $id, '_pattern_category', true );
+			$pattern_sync     = get_post_meta( $id, '_pattern_sync', true );
 			return array(
 				'slug'     => $post->post_name,
 				'name'     => $post->post_title,
 				'category' => $pattern_category,
+				'sync'     => $pattern_sync,
 			);
 		} else {
 			return false;
@@ -2158,6 +2253,30 @@ class Backend_Api {
 	}
 
 	/**
+	 * Get template list search
+	 *
+	 * @param object $request .
+	 *
+	 * @return array
+	 */
+	public function get_template_list_search( $request ) {
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$search   = gutenverse_esc_data( $request->get_param( 'search' ), 'string' );
+		$category = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+
+		if ( $theme_id ) {
+			$templates_db   = Database::instance()->theme_templates;
+			$templates_data = $templates_db->get_data_on_search( $theme_id, $category, $search );
+			return array(
+				'data' => $templates_data,
+			);
+		}
+
+		return false;
+	}
+
+
+	/**
 	 * Create template
 	 *
 	 * @param object $request .
@@ -2221,8 +2340,8 @@ class Backend_Api {
 		$templates_data    = $templates_db->get_data( $theme_id );
 		$template_dir      = trailingslashit( wp_upload_dir()['basedir'] ) . '/gtb-' . $theme_id . '/';
 		$html_content      = array();
-		$templates_content = get_block_templates( array(), 'wp_template' ); // phpcs:ignore
-		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
+		$templates_content = get_block_templates(array(), 'wp_template'); // phpcs:ignore
+		$parts_content     = get_block_templates(array(), 'wp_template_part'); // phpcs:ignore
 
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
@@ -2588,7 +2707,6 @@ class Backend_Api {
 					"name": "' . $font['family'] . '",
 					"slug": "' . $slug . '"
 				}';
-
 			}
 		}
 
@@ -2830,5 +2948,215 @@ class Backend_Api {
 		$wp_filesystem->put_contents( $file_path, $body, FS_CHMOD_FILE );
 
 		return $headers;
+	}
+
+	/**
+	 * Get Page List
+	 */
+	public function get_page_list() {
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$pages    = new \WP_Query(
+			array(
+				'post_type'      => 'page',
+				'posts_per_page' => -1,
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_gtb_page_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
+		$data     = array();
+		if ( $pages->have_posts() ) {
+			foreach ( $pages->posts as $post ) {
+				$template          = get_post_meta( $post->ID, '_wp_page_template', true );
+				$page_preview      = get_post_meta( $post->ID, '_gtb_page_preview', true );
+				$page_image_id     = get_post_meta( $post->ID, '_gtb_page_image', true );
+				$is_homepage       = get_post_meta( $post->ID, '_gtb_page_is_homepage', true );
+				$order             = get_post_meta( $post->ID, '_gtb_page_order', true );
+				$page_image        = (object) array(
+					'url' => wp_get_attachment_url( $page_image_id ),
+					'id'  => $page_image_id,
+				);
+				$template_page_arr = explode( '-', $template );
+				$template_page     = '';
+				if ( 'gutenverse' === $template_page_arr[0] ) {
+					$sliced_array  = array_slice( $template_page_arr, 1 );
+					$template_page = implode( '-', $sliced_array );
+				} else {
+					$template_page = $template;
+				}
+				$data[] = array(
+					'ID'           => $post->ID,
+					'post_name'    => $post->post_name,
+					'post_title'   => $post->post_title,
+					'template'     => $template_page,
+					'page_preview' => $page_preview ? $page_preview : '',
+					'page_image'   => $page_image,
+					'is_homepage'  => $is_homepage,
+					'order'        => $order,
+				);
+			}
+		}
+		usort(
+			$data,
+			function ( $a, $b ) {
+				if ( 'string' === gettype( $a['order'] ) ) {
+					$a['order'] = (int) $a['order'];
+				}
+				if ( 'string' === gettype( $b['order'] ) ) {
+					$b['order'] = (int) $b['order'];
+				}
+				return $a['order'] - $b['order'];
+			}
+		);
+		return $data;
+	}
+
+	/**
+	 * Create Page
+	 *
+	 * @param object $request .
+	 */
+	public function create_pages( $request ) {
+		$name        = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template    = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category    = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
+		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
+		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$order       = gutenverse_esc_data( $request->get_param( 'order' ), 'int' );
+		$theme_id    = get_option( 'gtb_active_theme_id' );
+
+		if ( empty( $name ) || empty( $preview ) || empty( $image ) ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Creating Page Failed!',
+				),
+				400
+			);
+		}
+		if ( $theme_id ) {
+			$page    = array(
+				'post_type'    => 'page',
+				'post_title'   => $name,
+				'post_content' => '',
+				'post_status'  => 'publish',
+				'post_author'  => get_current_user_id(),
+				'meta_input'   => array(
+					'_wp_page_template'     => $template,
+					'_gtb_page_category'    => $category,
+					'_gtb_page_theme_id'    => $theme_id,
+					'_gtb_page_preview'     => $preview,
+					'_gtb_page_image'       => $image,
+					'_gtb_page_is_homepage' => $is_homepage,
+					'_gtb_page_order'       => $order,
+				),
+			);
+			$success = wp_insert_post( $page );
+			if ( ! $success ) {
+				return new WP_REST_Response(
+					array(
+						'status'  => 'failed',
+						'message' => 'Creating Page Failed!',
+					),
+					400
+				);
+			}
+			return new WP_REST_Response(
+				array(
+					'status' => 'success',
+					'data'   => $this->get_page_list(),
+				),
+				200
+			);
+		}
+	}
+
+	/**
+	 * Delete Page
+	 *
+	 * @param object $request .
+	 */
+	public function delete_page( $request ) {
+		$id         = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
+		$is_deleted = wp_delete_post( $id, true );
+		if ( ! $is_deleted ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Deleting Page Failed!',
+				),
+				400
+			);
+		}
+		return new WP_REST_Response(
+			array(
+				'status' => 'success',
+				'data'   => $this->get_page_list(),
+			),
+			200
+		);
+	}
+	/**
+	 * Update Page
+	 *
+	 * @param object $request .
+	 */
+	public function update_page( $request ) {
+		$name        = gutenverse_esc_data( $request->get_param( 'name' ), 'string' );
+		$template    = gutenverse_esc_data( $request->get_param( 'template' ), 'string' );
+		$category    = gutenverse_esc_data( $request->get_param( 'category' ), 'string' );
+		$id          = gutenverse_esc_data( $request->get_param( 'id' ), 'string' );
+		$preview     = gutenverse_esc_data( $request->get_param( 'pagePreview' ), 'string' );
+		$image       = gutenverse_esc_data( $request->get_param( 'pageImage' ), 'int' );
+		$is_homepage = gutenverse_esc_data( $request->get_param( 'isHomepage' ), 'boolean' );
+		$order       = gutenverse_esc_data( $request->get_param( 'order' ), 'int' );
+		$theme_id    = get_option( 'gtb_active_theme_id' );
+
+		if ( empty( $name ) ) {
+			return new WP_REST_Response(
+				array(
+					'status'  => 'failed',
+					'message' => 'Creating Page Failed!',
+				),
+				400
+			);
+		}
+		if ( $theme_id ) {
+			$page = array(
+				'ID'            => $id,
+				'post_title'    => $name,
+				'post_author'   => get_current_user_id(),
+				'page_template' => $template,
+				'meta_input'    => array(
+					'_gtb_page_category'    => $category,
+					'_gtb_page_preview'     => $preview,
+					'_gtb_page_image'       => $image,
+					'_gtb_page_is_homepage' => $is_homepage,
+					'_gtb_page_order'       => $order,
+				),
+			);
+			$success = wp_update_post( $page );
+			if ( ! $success ) {
+				return new WP_REST_Response(
+					array(
+						'status'  => 'failed',
+						'message' => 'Creating Page Failed!',
+					),
+					400
+				);
+			}
+			return new WP_REST_Response(
+				array(
+					'status' => 'success',
+					'data'   => $this->get_page_list(),
+				),
+				200
+			);
+		}
 	}
 }

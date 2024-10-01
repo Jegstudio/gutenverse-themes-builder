@@ -73,6 +73,22 @@ class Themes_Template_Db extends Database_Abstract {
 	}
 
 	/**
+	 * Get List Template on Search
+	 *
+	 * @param int    $id : data id.
+	 * @param string $category : category data template.
+	 * @param string $search : search key.
+	 * @param int    $limit : data amount.
+	 *
+	 * @return array|object|null
+	 */
+	public function get_data_on_search( $id, $category = '', $search = '', $limit = 20 ) {
+		$table = $this->get_table_name();
+		$query = $this->wpdb->prepare( "SELECT * FROM $table WHERE theme_id =  %s AND category LIKE %s AND name LIKE %s LIMIT %d ", $id, '%' . $this->wpdb->esc_like( $category ) . '%', '%' . $this->wpdb->esc_like( $search ) . '%', $limit ); // phpcs:ignore
+		return $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
+	}
+
+	/**
 	 * Create new data data.
 	 *
 	 * @param array $data : data data.

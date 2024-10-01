@@ -221,6 +221,7 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
     const [patternName, setPatternName] = useState('');
     const [patternSlug, setPatternSlug] = useState('');
     const [patternCategory, setPatternCategory] = useState('core');
+    const [patternSync, setPatternSync] = useState(false);
     const [noticeMessage, setNoticeMessage] = useState('');
     const { replaceInnerBlocks } = dispatch('core/block-editor');
 
@@ -234,7 +235,8 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                 data: {
                     name: patternName,
                     slug: patternSlug,
-                    category: patternCategory
+                    category: patternCategory,
+                    sync: patternSync
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -284,6 +286,19 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                         <option value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
                         <option value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                     </select>
+                </div>
+                <div className="input-wrap pattern-sync">
+                    <label>{__('Export as Pattern Sync', 'gutenverse-themes-builder')}</label>
+                    <div>
+                        <input
+                            type="checkbox"
+                            onChange={() => setPatternSync(!patternSync)}
+                            checked={patternSync}
+                            hidden
+                        />
+                        <p className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</p>
+                    </div>
+                    
                 </div>
                 <div className="buttons end top">
                     <div className="back-button" onClick={() => setMode('')}>
