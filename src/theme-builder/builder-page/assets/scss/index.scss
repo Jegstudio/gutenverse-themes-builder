@@ -253,9 +253,13 @@ body {
 
         th,
         td {
-            padding: 20px;
+            padding: 20px 20px 20px 24px;
             border: none;
             text-align: left;
+        }
+
+        td {
+            padding: 16px 20px 16px 24px;
         }
 
         th {
@@ -515,7 +519,7 @@ body {
             letter-spacing: normal;
             text-align: left;
             color: #40505d;
-            gap: 20px;
+            gap: 10px;
             margin: 25px 0;
             color : #826B1D;
             display: flex;

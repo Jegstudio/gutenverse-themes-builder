@@ -30,30 +30,42 @@ const Table = (props) => {
             observer.disconnect(); // Clean up when component unmounts
             };
         }
-      }, [paged]);
+    }, [paged]);
 
-    return (
-        <table className="table">
-            <tr className="head">
-                {heads.map((head, i) => <th key={i}>{head}</th>)}
-            </tr>
-            {children}
-            {
-                length < numPost && <tr><td colSpan={heads.length} style={{height: tdHeight * (numPost - length)}}></td></tr>
-            }
-            <tr ref={tdRef} className="footer">
-                <td  className="footer-content" colSpan={heads.length}>
-                    <div className="footer-wrap"> 
-                        <div>{totalData} results</div>
-                        <div className="navigation">
-                            <div className={`${paged === 1 ? '' : 'active'}`} onClick={() => paged > 1 && setPaged(paged - 1)}>Prev</div>
-                            <div className={`${parseInt(paged) === parseInt(totalPage) || totalPage === 0 ? '' : 'active'}`} onClick={() => parseInt(paged) < parseInt(totalPage) && setPaged(paged + 1)}>Next</div>
+    const ButtonElement = () => {
+        return headingButtons.map(button => {
+            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
+                <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+        })
+    }
+    return <>
+        {
+            length === 0 ? <div className='table'>
+                <h3>{emptyTitle}</h3>
+                <p>{emptySubtitle}</p>
+                <ButtonElement/>
+            </div> : <table className="table">
+                <tr className="head">
+                    {heads.map((head, i) => <th key={i}>{head}</th>)}
+                </tr>
+                {children}
+                {
+                    length < numPost && <tr><td colSpan={heads.length} style={{height: tdHeight * (numPost - length)}}></td></tr>
+                }
+                <tr ref={tdRef} className="footer">
+                    <td  className="footer-content" colSpan={heads.length}>
+                        <div className="footer-wrap"> 
+                            <div>{totalData} results</div>
+                            <div className="navigation">
+                                <div className={`${paged === 1 ? '' : 'active'}`} onClick={() => paged > 1 && setPaged(paged - 1)}>Prev</div>
+                                <div className={`${parseInt(paged) === parseInt(totalPage) || totalPage === 0 ? '' : 'active'}`} onClick={() => parseInt(paged) < parseInt(totalPage) && setPaged(paged + 1)}>Next</div>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    );
+                    </td>
+                </tr>
+            </table>
+        }
+    </>
 };
 
 export default Table;
