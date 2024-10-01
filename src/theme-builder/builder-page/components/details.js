@@ -103,6 +103,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     id={'theme_mode'}
                     title={__('Theme Mode', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.theme_mode}
+                    description={__('Tags for categorizing the theme', 'gutenverse-themes-builder')}
                     options={THEME_MODE}
                     onChange={updateDetails('theme_mode')}
                     important={true}
@@ -110,12 +111,14 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                 <TextControl
                     id={'core_content_width'}
                     title={__('Content Width', 'gutenverse-themes-builder')}
+                    description={__('Width of the content area (in pixels).', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.core_content_width}
                     onChange={updateDetails('core_content_width')}
                 />
                 <TextControl
                     id={'core_wide_width'}
                     title={__('Wide Size', 'gutenverse-themes-builder')}
+                    description={__('Width for wide layouts or media (in pixels).', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.core_wide_width}
                     onChange={updateDetails('core_wide_width')}
                 />
