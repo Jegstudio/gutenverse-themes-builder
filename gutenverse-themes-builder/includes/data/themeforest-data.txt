@@ -218,6 +218,12 @@ class Themeforest_Data {
 							'post_type'    => 'wp_block',
 						)
 					);
+					if ( ! is_wp_error( $post_id ) ) {
+						$pattern_category = $pattern_data['categories'];
+						foreach( $pattern_category as $category ){
+							wp_set_object_terms( $post_id, $category, 'wp_pattern_category' );
+						}
+					}
 
 					$pattern_data['content']  = '<!-- wp:block {"ref":' . $post_id . '} /-->';
 					$pattern_data['inserter'] = false;
