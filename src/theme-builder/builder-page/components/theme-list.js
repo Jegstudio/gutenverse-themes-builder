@@ -140,9 +140,6 @@ const ThemeList = () => {
         setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
     };
 
-    useEffect(()=>{
-        console.log(paged)
-    },[paged])
     useEffect(() => {
         getThemeListPagination({
             paged,
