@@ -10,6 +10,7 @@ const Table = (props) => {
         console.log(paged);
         console.log(paged, totalPage)
     },[paged])
+
     useEffect(() => {
         if(length < numPost){
             const tdElement = tdRef.current;
@@ -46,7 +47,7 @@ const Table = (props) => {
                         <div>{totalData} results</div>
                         <div className="navigation">
                             <div className={`${paged === 1 ? '' : 'active'}`} onClick={() => paged > 1 && setPaged(paged - 1)}>Prev</div>
-                            <div className={`${parseInt(paged) === parseInt(totalPage) ? '' : 'active'}`} onClick={() => parseInt(paged) < parseInt(totalPage) && setPaged(paged + 1)}>Next</div>
+                            <div className={`${parseInt(paged) === parseInt(totalPage) || totalPage === 0 ? '' : 'active'}`} onClick={() => parseInt(paged) < parseInt(totalPage) && setPaged(paged + 1)}>Next</div>
                         </div>
                     </div>
                 </td>

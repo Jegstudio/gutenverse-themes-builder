@@ -71,6 +71,26 @@ class Themes_Global_Db extends Database_Abstract {
 	}
 
 	/**
+	 * Get Pagination Data
+	 *
+	 * @param integer $offset .
+	 * @param integer $per_page .
+	 * @return array|object|null
+	 */
+	public function get_pagination_data( $offset, $per_page ) {
+		$table       = $this->get_table_name();
+		$query       = $this->wpdb->prepare( "SELECT * FROM {$table} LIMIT {$offset}, {$per_page}" );
+		$data        = $this->wpdb->get_results( $query, ARRAY_A );
+		$query_count = $this->wpdb->prepare( "SELECT COUNT(*) as total FROM {$table}" );
+		$count       = $this->wpdb->get_results( $query_count, ARRAY_A )[0]['total'];
+
+		return array(
+			'list'       => $data,
+			'total_data' => $count,
+		);
+	}
+
+	/**
 	 * Get single data.
 	 *
 	 * @param int $id : data id.

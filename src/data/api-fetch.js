@@ -158,9 +158,10 @@ export const deleteTemplate = (params, callback = def_callback) => {
 };
 
 /* Page */
-export const getPageList = (callback = def_callback) => {
+export const getPageListPagination = (request, callback = def_callback) => {
     apiFetch({
-        path: addQueryArgs('gtb-backend/v1/pages/list'),
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/pages/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -393,6 +394,16 @@ export const getPluginList = (search = '', callback = def_callback) => {
 export const getGlobalList = (callback = def_callback) => {
     apiFetch({
         path: addQueryArgs('gtb-backend/v1/globalstyles/list'),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const getGlobalListPagination = (request, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyles/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {

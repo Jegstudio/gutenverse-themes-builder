@@ -83,20 +83,20 @@ class Builder_Page {
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
-			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
+			esc_html__( 'Pages', 'gutenverse-themes-builder' ),
+			esc_html__( 'Pages', 'gutenverse-themes-builder' ),
 			'manage_options',
-			$path . 'manage-patterns',
+			$path . 'manage-pages',
 			array( $this, 'theme_builder_page' ),
 			2
 		);
 
 		add_submenu_page(
 			self::TYPE,
-			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
-			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
+			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
+			esc_html__( 'Patterns', 'gutenverse-themes-builder' ),
 			'manage_options',
-			$path . 'manage-assets',
+			$path . 'manage-patterns',
 			array( $this, 'theme_builder_page' ),
 			3
 		);
@@ -108,7 +108,17 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-global',
 			array( $this, 'theme_builder_page' ),
-			3
+			4
+		);
+
+		add_submenu_page(
+			self::TYPE,
+			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
+			esc_html__( 'Assets', 'gutenverse-themes-builder' ),
+			'manage_options',
+			$path . 'manage-assets',
+			array( $this, 'theme_builder_page' ),
+			5
 		);
 
 		add_submenu_page(
@@ -118,7 +128,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-fonts',
 			array( $this, 'theme_builder_page' ),
-			4
+			6
 		);
 
 		add_submenu_page(
@@ -128,7 +138,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-font-sizes',
 			array( $this, 'theme_builder_page' ),
-			5
+			7
 		);
 
 		add_submenu_page(
@@ -138,7 +148,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-plugins',
 			array( $this, 'theme_builder_page' ),
-			6
+			8
 		);
 
 		add_submenu_page(
@@ -148,7 +158,17 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-dashboard',
 			array( $this, 'theme_builder_page' ),
-			7
+			9
+		);
+
+		add_submenu_page(
+			self::TYPE,
+			esc_html__( 'Manage Theme Notice', 'gutenverse-themes-builder' ),
+			esc_html__( 'Manage Theme Notice', 'gutenverse-themes-builder' ),
+			'manage_options',
+			$path . 'notice-editor',
+			array( $this, 'theme_builder_page' ),
+			10
 		);
 
 		add_submenu_page(
@@ -158,7 +178,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'manage-screenshots',
 			array( $this, 'theme_builder_page' ),
-			8
+			11
 		);
 
 		add_submenu_page(
@@ -168,7 +188,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'readme-editor',
 			array( $this, 'theme_builder_page' ),
-			9
+			12
 		);
 
 		add_submenu_page(
@@ -178,7 +198,7 @@ class Builder_Page {
 			'manage_options',
 			$path . 'export-theme',
 			array( $this, 'theme_builder_page' ),
-			10
+			13
 		);
 	}
 
