@@ -8,6 +8,7 @@ import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
+import SelectControl from '../controls/select-control';
 
 export const CreatePatternPopup = ({ onClose, updateList }) => {
     const [patternName, setPatternName] = useState('');
@@ -64,15 +65,26 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                         <input type="text" value={patternName} onChange={e => setPatternName(e.target.value)} />
                         <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
                     </div>
-                    <div className="input-wrap pattern-category">
-                        <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
-                        <select onChange={e => { setPatternCategory(e.target.value); }}>
-                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
-                        </select>
-                        <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
-                    </div>
+                    <SelectControl
+                        id={'pattern-category'}
+                        title={__('Pattern Category', 'gutenverse-themes-builder')}
+                        options={[
+                            {
+                                value: 'core',
+                                label: __('Core', 'gutenverse-themes-builder')
+                            },
+                            {
+                                value: 'gutenverse',
+                                label: __('Gutenverse', 'gutenverse-themes-builder')
+                            },
+                            {
+                                value: 'pro',
+                                label: __('Pro', 'gutenverse-themes-builder')
+                            },
+                        ]}
+                        onChange={value => { setPatternCategory(value)}}
+                        description={__('Select your pattern category.', 'gutenverse-themes-builder')}
+                    />
                     <div className="input-wrap pattern-sync">
                         <input
                             type="checkbox"
@@ -188,15 +200,27 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                         <input type="text" value={patternName} onChange={e => { setPatternName(e.target.value); setIsEdited(true)}} />
                         <span className="description">{__('The name for your pattern', 'gutenverse-themes-builder')}</span>
                     </div>
-                    <div className="input-wrap pattern-category">
-                        <label>{__('Pattern Category', 'gutenverse-themes-builder')}</label>
-                        <select onChange={e => { setPatternCategory(e.target.value); setIsEdited(true)}}>
-                            <option selected={patternCategory === 'core'} value="core">{__('Core', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'gutenverse'} value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
-                            <option selected={patternCategory === 'pro'} value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
-                        </select>
-                        <span className="description">{__('Select your pattern category.', 'gutenverse-themes-builder')}</span>
-                    </div>
+                    <SelectControl
+                        id={'pattern-category'}
+                        title={__('Pattern Category', 'gutenverse-themes-builder')}
+                        value={patternCategory}
+                        options={[
+                            {
+                                value: 'core',
+                                label: __('Core', 'gutenverse-themes-builder')
+                            },
+                            {
+                                value: 'gutenverse',
+                                label: __('Gutenverse', 'gutenverse-themes-builder')
+                            },
+                            {
+                                value: 'pro',
+                                label: __('Pro', 'gutenverse-themes-builder')
+                            },
+                        ]}
+                        onChange={value => { setPatternCategory(value); setIsEdited(true)}}
+                        description={__('Select your pattern category.', 'gutenverse-themes-builder')}
+                    />
                     <div className="input-wrap pattern-sync">
                         <input
                             type="checkbox"
@@ -254,7 +278,7 @@ const PatternList = () => {
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText: __('Add New', 'gutenverse-themes-builder'),
+                    buttonText: __('Create Pattern', 'gutenverse-themes-builder'),
                     buttonEvent: () => setCreatePatternPopup(true),
                     buttonIcon: <PlusIcon />,
                     buttonLoading: false
@@ -270,6 +294,15 @@ const PatternList = () => {
                     numPost={num_post}
                     totalData={totalData}
                     totalPage={totalPage}
+                    emptyTitle = {__('You Haven’t Created Any Patterns Yet', 'gutenverse-themes-builder')} 
+                    emptySubtitle = {__('Click \'Create Pattern\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                    showButton = {true}
+                    buttons = {[
+                        {
+                            buttonElement : () => <div className="button create" onClick={() => setCreatePatternPopup(true)}><PlusIcon fill={'white'}/> {__('Create Pattern', 'gutenverse-themes-builder')}</div>,
+                            buttonLoading : false
+                        }
+                    ]}
                 >
                     <>
                         {!isEmpty(patternList) && patternList.map((pattern, key) => {
@@ -277,7 +310,7 @@ const PatternList = () => {
                                 <td>{pattern?.ID}</td>
                                 <td>{pattern?.post_name}</td>
                                 <td>{pattern?.post_title}</td>
-                                <td>{pattern?.category.charAt(0).toUpperCase() + pattern?.category.slice(1)}</td>
+                                <td width={'10%'}>{pattern?.category.charAt(0).toUpperCase() + pattern?.category.slice(1)}</td>
                                 <td>
                                     <div className="actions">
                                         <a className="edit" onClick={() => setEditPatternPopup(pattern?.ID)}>Quick Edit</a>

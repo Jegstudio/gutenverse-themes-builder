@@ -222,9 +222,10 @@ export const deletePattern = (params, callback = def_callback) => {
 
 /* Assets */
 
-export const getAssetList = (callback = def_callback) => {
+export const getAssetList = (request, callback = def_callback) => {
     apiFetch({
-        path: addQueryArgs('gtb-backend/v1/assets/list'),
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/assets/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {

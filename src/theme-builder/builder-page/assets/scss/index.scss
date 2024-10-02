@@ -225,6 +225,17 @@ body {
             justify-content: center;
             align-items: center;
             text-align: center;
+            min-height: 350px;
+            .buttons{
+                display: flex;
+                justify-content: center;
+                .button{
+                    padding: 10px 18px;
+                    svg{
+                        margin-right: 5px;
+                    }
+                }
+            }
         }
         tr {
             border: 1px solid var(--gtb-grey-soft);
@@ -264,6 +275,7 @@ body {
             padding: 20px 20px 20px 24px;
             border: none;
             text-align: left;
+            min-width: fit-content;
         }
 
         td {
@@ -1056,6 +1068,13 @@ body {
 
                 &.code-editor {
                     display: block;
+                    span{
+                        font-size: 12px;
+                        color: gray;
+                        font-style: italic;
+                        padding: 6px 0;
+                        display: block;
+                    }
                 }
             }
         }

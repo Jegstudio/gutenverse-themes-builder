@@ -45,11 +45,12 @@ const Table = (props) => {
 
     const ButtonElement = () => {
         return buttons.map(button => {
+            let ElButton = button.buttonElement;
             return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
-                <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+                <ElButton/>
         })
     }
-    
+    console.log(totalPage)
     return <>
         {
             length === 0 ? <div className='table empty'>
@@ -57,7 +58,7 @@ const Table = (props) => {
                     <h3>{emptyTitle}</h3>
                     <p>{emptySubtitle}</p>
                     {
-                        showButton && <ButtonElement/>
+                        showButton && <div className='buttons'><ButtonElement/></div>
                     }
                 </div>
             </div> : <table className="table">

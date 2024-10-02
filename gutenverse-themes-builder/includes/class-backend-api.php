@@ -150,7 +150,7 @@ class Backend_Api {
 			self::ENDPOINT,
 			'assets/list',
 			array(
-				'methods'             => 'GET',
+				'methods'             => 'POST',
 				'callback'            => array( $this, 'get_asset_list' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
@@ -1895,14 +1895,27 @@ class Backend_Api {
 
 	/**
 	 * Get Asset List.
+	 *
+	 * @param object $request .
+	 *
+	 * @return object
 	 */
-	public function get_asset_list() {
+	public function get_asset_list( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
 		$assets_db = Database::instance()->theme_assets;
 		$active    = get_option( 'gtb_active_theme_id' );
-		$data      = $assets_db->get_all_assets( $active );
+		$data      = $assets_db->get_pagination_data( $active, $offset, $num_post );
 
+		
+		$max_page = ceil( $data['total_data'] / $num_post );
 		return array(
-			'data' => $data,
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 
@@ -1936,7 +1949,7 @@ class Backend_Api {
 		);
 
 		$this->write_asset( $media_type, $type, $handler, $content );
-		return $this->get_asset_list();
+		return $this->get_asset_list( $request );
 	}
 
 	/**
@@ -1968,7 +1981,7 @@ class Backend_Api {
 
 		if ( $result ) {
 			$this->write_asset( $media_type, $type, $handler, $content );
-			return $this->get_asset_list();
+			return $this->get_asset_list( $request );
 		} else {
 			return false;
 		}
@@ -2018,7 +2031,7 @@ class Backend_Api {
 			array( 'id' => $id )
 		);
 
-		return $this->get_asset_list();
+		return $this->get_asset_list( $request );
 	}
 
 	/**
@@ -3027,7 +3040,7 @@ class Backend_Api {
 		$num_post = empty( $num_post ) ? 10 : $num_post;
 		$theme_id = get_option( 'gtb_active_theme_id' );
 
-		$pages    = new \WP_Query(
+		$pages = new \WP_Query(
 			array(
 				'post_type'      => 'page',
 				'paged'          => $paged,
@@ -3042,7 +3055,7 @@ class Backend_Api {
 			)
 		);
 
-		$data     = array();
+		$data = array();
 		if ( $pages->have_posts() ) {
 			foreach ( $pages->posts as $post ) {
 				$template          = get_post_meta( $post->ID, '_wp_page_template', true );
@@ -3088,7 +3101,7 @@ class Backend_Api {
 			}
 		);
 		return (object) array(
-			'pages'    => $data,
+			'pages'       => $data,
 			'total_page'  => $pages->max_num_pages,
 			'total_posts' => $pages->found_posts,
 		);

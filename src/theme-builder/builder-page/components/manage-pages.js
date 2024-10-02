@@ -309,7 +309,6 @@ const ManagePages = () => {
     const [totalData, setTotalData] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     let num_post = 10;
-    
 
     const {
         editPath,
@@ -320,7 +319,6 @@ const ManagePages = () => {
     } = window['GutenverseDashboard'];
 
     const updateList = (result) => {
-        console.log(result)
         setPageList(result?.pages);
         setTotalData(result?.total_posts);
         setTotalPage(result?.total_page);
@@ -363,7 +361,7 @@ const ManagePages = () => {
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText: __('Add New', 'gutenverse-themes-builder'),
+                    buttonText: __('Create Page', 'gutenverse-themes-builder'),
                     buttonEvent: () => setCreatePagePopup(true),
                     buttonIcon: <PlusIcon />,
                     buttonLoading: false
@@ -394,13 +392,22 @@ const ManagePages = () => {
                     numPost={num_post}
                     totalData={totalData}
                     totalPage={totalPage}
+                    emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 
+                    emptySubtitle = {__('Click \'Create Page\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                    showButton = {true}
+                    buttons = {[
+                        {
+                            buttonElement : () => <div className="button create" onClick={() => setCreatePagePopup(true)}><PlusIcon fill={'white'}/> {__('Create Page', 'gutenverse-themes-builder')}</div>,
+                            buttonLoading : false
+                        }
+                    ]}
                 >
                     <>
                         {!isEmpty(pageList) && pageList.map((page, key) => {
                             return <tr key={key}>
-                                <td>{page?.order}</td>
-                                <td>{page?.post_name}</td>
-                                <td>{page?.post_title}</td>
+                                <td width={'5%'}>{page?.order}</td>
+                                <td >{page?.post_name}</td>
+                                <td >{page?.post_title}</td>
                                 <td>
                                     <div className="actions">
                                         <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>

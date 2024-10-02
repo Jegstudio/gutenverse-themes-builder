@@ -219,7 +219,7 @@ const ManageGlobal = () => {
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonText: __('Create Global Style', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
                         buttonLoading: false
@@ -241,6 +241,15 @@ const ManageGlobal = () => {
                         numPost={num_post}
                         totalData={totalData}
                         totalPage={totalPage}
+                        emptyTitle = {__('You Haven’t Created Any Global Style Yet', 'gutenverse-themes-builder')} 
+                        emptySubtitle = {__('Click \'Create Global Style\' and get things moving.', 'gutenverse-themes-builder')}
+                        showButton = {true}
+                        buttons = {[
+                            {
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Create Global Style', 'gutenverse-themes-builder')}</div>,
+                                buttonLoading : false
+                            }
+                        ]}
                     >
                         <>
                             {!isEmpty(globalList) && globalList.map((global, key) => {
