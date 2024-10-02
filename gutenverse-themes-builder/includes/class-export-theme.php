@@ -1567,7 +1567,7 @@ class Export_Theme {
 						$pattern_name     = $posts[0]->post_name;
 						$pattern_title    = $posts[0]->post_title;
 						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+						$pattern_category = empty( $pattern_category ) ? 'core' : $pattern_category;
 						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 
 						/** Create pattern php files */
