@@ -1656,7 +1656,7 @@ class Export_Theme {
 							} elseif ( 'footer' === $part_name ) {
 								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
 							}
-							$content = preg_replace( $match[0], $replace, $content );
+							$content = str_replace( $match[0], $replace, $content );
 						}
 					}
 				}
