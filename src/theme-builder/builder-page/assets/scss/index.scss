@@ -218,6 +218,14 @@ body {
         margin-top: 40px;
         border-collapse: collapse;
 
+        &.empty{
+            background-color: white;
+            border: 1px solid #E3E4E6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
         tr {
             border: 1px solid var(--gtb-grey-soft);
             background-color: var(--gtb-white);

@@ -1,7 +1,21 @@
 import { useRef, useState, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 const Table = (props) => {
-    const { heads, children, length, paged, totalPage, setPaged, numPost, totalData } = props;
+    const { 
+        heads,
+        children, 
+        length, 
+        paged, 
+        totalPage, 
+        setPaged, 
+        numPost, 
+        totalData, 
+        emptyTitle = __('No Data Found', 'gutenverse-themes-builder'), 
+        emptySubtitle = __('Please Create a Data', 'gutenverse-themes-builder'),
+        showButton = false,
+        buttons
+    } = props;
     const tdRef = useRef(null);
     const [tdHeight, setTdHeight] = useState(0);
 
@@ -10,18 +24,15 @@ const Table = (props) => {
         console.log(paged);
         console.log(paged, totalPage)
     },[paged])
-
     useEffect(() => {
         if(length < numPost){
             const tdElement = tdRef.current;
-    
             if (!tdElement) return;
-        
             const observer = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                const { height } = entry.contentRect;
-                setTdHeight(height); // Update state when height changes
-            }
+                for (let entry of entries) {
+                    const { height } = entry.contentRect;
+                    setTdHeight(height); // Update state when height changes
+                }
             });
         
             observer.observe(tdElement); // Start observing
@@ -30,20 +41,25 @@ const Table = (props) => {
             observer.disconnect(); // Clean up when component unmounts
             };
         }
-    }, [paged]);
+    }, [paged, length]);
 
     const ButtonElement = () => {
-        return headingButtons.map(button => {
+        return buttons.map(button => {
             return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
                 <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
         })
     }
+    
     return <>
         {
-            length === 0 ? <div className='table'>
-                <h3>{emptyTitle}</h3>
-                <p>{emptySubtitle}</p>
-                <ButtonElement/>
+            length === 0 ? <div className='table empty'>
+                <div className='empty-content'>
+                    <h3>{emptyTitle}</h3>
+                    <p>{emptySubtitle}</p>
+                    {
+                        showButton && <ButtonElement/>
+                    }
+                </div>
             </div> : <table className="table">
                 <tr className="head">
                     {heads.map((head, i) => <th key={i}>{head}</th>)}
