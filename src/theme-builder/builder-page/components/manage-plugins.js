@@ -63,6 +63,10 @@ const ManagePlugins = () => {
         });
     }, []);
 
+    useEffect(()=> {
+        updatePluginData();
+    },[plugins])
+
     const updatePluginData = () => {
         setLoading(true);
         updateOtherData({
@@ -93,7 +97,6 @@ const ManagePlugins = () => {
 
     const deletePlugin = slug => {
         const update = plugins.filter(plugin => plugin.value !== slug);
-
         setPlugins([
             ...update
         ]);
@@ -114,7 +117,6 @@ const ManagePlugins = () => {
         let arrCopy = [...plugins];
 
         arrCopy[index] = value;
-
         setPlugins([
             ...arrCopy
         ]);
@@ -128,7 +130,7 @@ const ManagePlugins = () => {
             headingButtons={[
                 {
                     buttonText: __('Save Plugin', 'gutenverse-themes-builder'),
-                    buttonEvent: () => updatePluginData(true),
+                    buttonEvent: () => updatePluginData(),
                     buttonIcon: false,
                     buttonLoading: false
                 }
@@ -157,8 +159,8 @@ const ManagePlugins = () => {
                                 <td>{plugin?.version}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPopup(global)}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
-                                        <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
+                                        <a className="edit" onClick={() => setEditPopup({plugin : plugin, key})}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
+                                        <a className="delete" onClick={() => setDeletePopup(plugin)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                     </div>
                                 </td>
                             </tr>;
@@ -168,53 +170,46 @@ const ManagePlugins = () => {
                 <div className="buttons margin-top-25 end">
                     {
                         loading ? <div className="button button-loading" disabled>Loading... </div> :
-                        <div className="button create padding-12-28" onClick={() => updatePluginData(true)}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
+                        <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
                     }
                 </div>
                 
                 {editPopup && <FormPopup
-                    onClose={() => setEditPopup(false)}
-                    data={editPopup}
-                    showFooterButton={false}
+                    onClose={() =>   setEditPopup(false)}
+                    initialData={editPopup}
+                    onSubmit={(updateData) => {
+                        updatePluginValue(updateData.plugin, updateData.key )
+                        setEditPopup(false)
+                    }}
                 >
-                    <TextControl
-                        id={'label'}
-                        title={__('Plugin Name', 'gutenverse-themes-builder')}
-                        value={data.label}
-                        onChange={value => updatePluginValue({ ...plugin, label: value})}
-                        important={true}
-                    />
-                    <TextControl
-                        id={'version'}
-                        title={__('Title', 'gutenverse-themes-builder')}
-                        value={data.version}
-                        onChange={value => updatePluginValue({ ...plugin, version: value})}
-                        important={true}
-                    />
+                    {
+                        ({data, updateData, setIsEdited}) => {
+                            return <>
+                                <TextControl
+                                    id={'label'}
+                                    title={__('Plugin Name', 'gutenverse-themes-builder')}
+                                    value={data.plugin.label}
+                                    onChange={(value) => { updateData('label',value); setIsEdited(true);}}
+                                    important={true}
+                                />
+                                <TextControl
+                                    id={'version'}
+                                    title={__('Title', 'gutenverse-themes-builder')}
+                                    value={data.plugin.version}
+                                    onChange={(value) => { updateData('version',value); setIsEdited(true);}}
+                                    important={true}
+                                />
+                            </>
+                        }
+                    }
                 </FormPopup>
                 }
 
                 {deletePopup && <WarningPopup
                     title={__('Are you sure want to delete this plugin requirement?', 'gutenverse-themes-builder')}
-                    onProceed={() => deletePlugin(plugin?.value)}
+                    onProceed={() => deletePlugin(deletePopup.value)}
                     onClose={() => setDeletePopup(false)}
                 />}
-                <ul>
-                    {plugins.map((plugin, key) => {
-                        return <li className="plugin-req" key={key}>
-                            <textarea value={plugin?.label} onChange={e => updatePluginValue({
-                                ...plugin,
-                                label: e.target.value
-                            }, key)} />
-                            <p className="type">{plugin?.type}</p>
-                            <input type="text" value={plugin?.version} onChange={e => updatePluginValue({
-                                ...plugin,
-                                version: e.target.value
-                            }, key)} />
-                            {!defaultPlugins.includes(plugin?.value) && <div className="icon" onClick={() => deletePlugin(plugin?.value)}><CloseIcon /></div>}
-                        </li>;
-                    })}
-                </ul>
             </>}
         </ContentWrapper>
     );

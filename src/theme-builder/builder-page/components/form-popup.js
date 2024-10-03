@@ -1,17 +1,32 @@
 import { CloseIcon } from "../data/icons";
 import { WarningPopup } from "./warning-popup";
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+
 
 export const FormPopup = (props) => {
     const {
         onClose,
         onSubmit,
-        children,
-        showFooterButton,
-        data
+        children: FormInput,
+        showFooterButton = true,
+        initialData
     } = props;
 
     const [isEdited, setIsEdited] = useState(false);
     const [closeWhenEdited, setCloseWhenEdited] = useState(false);
+    const [data, setData] = useState(initialData);
+
+    // Function to update specific plugin details in data
+    const updateData = (key, value) => {
+        setData(prevData => ({
+        ...prevData,
+        plugin: {
+            ...prevData.plugin,
+            [key]: value,
+        },
+        }));
+    };
 
     const handleOnClose = () => {
         if(isEdited){
@@ -40,14 +55,13 @@ export const FormPopup = (props) => {
                         </div>
                     </div>
                     <div className="popup-body">
-                    {React.Children.map(children, child => 
-                        React.cloneElement(child, { data })
-                    )}
+                    <children/>
+                    <FormInput data={data} setIsEdited={setIsEdited} updateData={updateData}/>
                     </div>
                     <div className="popup-footer">
                         {
                             showFooterButton && <div className="buttons end">
-                                <div className="button" onClick={onSubmit}>
+                                <div className="button" onClick={() => onSubmit(data)}>
                                     {__('Submit', 'gutenverse-themes-builder')}
                                 </div>
                             </div>
