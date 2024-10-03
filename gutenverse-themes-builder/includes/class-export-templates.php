@@ -1579,17 +1579,28 @@ class Export_Templates {
 		$zip = new ZipArchive();
 		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
 
-		// Create recursive directory iterator.
+		$target_directory = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/';
+		error_log($target_directory);
 		$files = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/' ),
+			new RecursiveDirectoryIterator( $target_directory ),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
 		foreach ( $files as $name => $file ) {
 			if ( ! $file->isDir() ) {
 				$file_path     = $file->getRealPath();
-				$relative_path = substr( $file_path, strlen( trailingslashit( wp_upload_dir()['basedir'] ) ) );
-				$zip->addFile( $file_path, $relative_path );
+				$relative_path = substr( $file_path, strlen( $target_directory ) );
+
+				if ( pathinfo( $file_path, PATHINFO_EXTENSION ) === 'html' ) {
+
+					$file_content = file_get_contents( $file_path );
+
+					$modified_content = $this->replace_global_variables( $file_content );
+
+					$zip->addFromString( $relative_path, $modified_content );
+				} else {
+					$zip->addFile( $file_path, $relative_path );
+				}
 			}
 		}
 
@@ -1600,6 +1611,86 @@ class Export_Templates {
 			'filepath' => $zip_path,
 			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
 		);
+	}
+
+	public function replace_global_variables( $pattern ) {
+		// First match that only have two content: type and id.
+		preg_match_all( '/{"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/', $pattern, $matches );
+		if ( ! empty( $matches ) ) {
+			$color_arr = $this->get_theme_colors();
+			$font_arr  = $this->get_theme_fonts();
+			foreach ( $matches[1] as $variable ) {
+				$variable_pattern = '/{"type":"variable","id":"' . $variable . '"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/';
+				// Replace colors.
+				if ( isset( $color_arr[ $variable ] ) ) {
+					$color_replace = $color_arr[ $variable ];
+					$pattern       = preg_replace( $variable_pattern, $color_replace, $pattern );
+				}
+
+				// Replace fonts.
+				if ( isset( $font_arr[ $variable ] ) ) {
+					$font_replace = $font_arr[ $variable ];
+					$pattern      = preg_replace( $variable_pattern, $font_replace, $pattern );
+				}
+			}
+		}
+		return $pattern;
+	}
+
+	/**
+	 * Get Theme Fonts
+	 *
+	 * @return array
+	 */
+	public function get_theme_fonts() {
+		$fonts    = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), array() );
+		$font_arr = array();
+
+		foreach ( $fonts as $value ) {
+			$font_arr[ $value['id'] ] = wp_json_encode( $value['font'] );
+		}
+
+		return $font_arr;
+	}
+
+	/**
+	 * Get theme colors
+	 */
+	public function get_theme_colors() {
+		$theme_dir = get_template_directory() . '/theme.json';
+		$config    = array();
+
+		if ( $theme_dir ) {
+			$decoded_file = wp_json_file_decode( $theme_dir, array( 'associative' => true ) );
+			if ( is_array( $decoded_file ) ) {
+				$config = $decoded_file;
+			}
+		}
+
+		if ( ! empty( $config['settings']['color']['palette'] ) ) {
+			$new_arr = array();
+
+			// Manually add default colors for now.
+			$new_arr['black']                 = hex2rgb( '#000000' );
+			$new_arr['cyan-bluish-gray']      = hex2rgb( '#abb8c3' );
+			$new_arr['white']                 = hex2rgb( '#ffffff' );
+			$new_arr['pale-pink']             = hex2rgb( '#f78da7' );
+			$new_arr['vivid-red']             = hex2rgb( '#cf2e2e' );
+			$new_arr['luminous-vivid-orange'] = hex2rgb( '#ff6900' );
+			$new_arr['luminous-vivid-amber']  = hex2rgb( '#fcb900' );
+			$new_arr['light-green-cyan']      = hex2rgb( '#7bdcb5' );
+			$new_arr['vivid-green-cyan']      = hex2rgb( '#00d084' );
+			$new_arr['pale-cyan-blue']        = hex2rgb( '#8ed1fc' );
+			$new_arr['vivid-cyan-blue']       = hex2rgb( '#0693e3' );
+			$new_arr['vivid-purple']          = hex2rgb( '#9b51e0' );
+
+			foreach ( $config['settings']['color']['palette'] as $color ) {
+				$new_arr[ $color['slug'] ] = hex2rgb( $color['color'] );
+			}
+			return $new_arr;
+		}
+
+		return null;
 	}
 
 	/**
