@@ -1599,18 +1599,19 @@ class Export_Templates {
 
 					$modified_content = $this->replace_global_variables( $file_content );
 
-					$extracted_data = $this->extractor_extract_image_to_array( $modified_content, $global_image_index );
+					// $extracted_data = $this->extractor_extract_image_to_array( $modified_content, $global_image_index );
 
-					$global_image_index += count( $extracted_data['images'] );
+					// $global_image_index += count( $extracted_data['images'] );
 
-					foreach ( $extracted_data['images'] as $index => $image_url ) {
-						$image_data[] = array(
-							'original_url' => $image_url,
-							'placeholder'  => '{{{image:' . ( $index + $global_image_index - count( $extracted_data['images'] ) ) . ':url}}}',
-						);
-					}
+					// foreach ( $extracted_data['images'] as $index => $image_url ) {
+					// 	$image_data[] = array(
+					// 		'original_url' => $image_url,
+					// 		'placeholder'  => '{{{image:' . ( $index + $global_image_index - count( $extracted_data['images'] ) ) . ':url}}}',
+					// 	);
+					// }
 
-					$zip->addFromString( $relative_path, $extracted_data['contents'] );
+					// $zip->addFromString( $relative_path, $extracted_data['contents'] );
+					$zip->addFromString( $relative_path, $modified_content );
 				} else {
 					$zip->addFile( $file_path, $relative_path );
 				}
@@ -1666,6 +1667,34 @@ class Export_Templates {
 		return $data;
 	}
 
+	/**
+	 * Replace image with pattern.
+	 *
+	 * @param string $pattern pattern.
+	 * @param array  $images array.
+	 * @param array  $image_index image index.
+	 * @param number $global_index global image index.
+	 *
+	 * @return string
+	 */
+	public function extractor_replace_image( $pattern, $images, $image_index, $global_index = 0 ) {
+		foreach ( $images as $i => $image ) {
+			$index       = $global_index + $i;
+			$replacement = "{{{image:${index}:url}}}";
+			$pattern     = str_replace( $image, $replacement, $pattern );
+		}
+
+		return $pattern;
+	}
+
+	/**
+	 * Build Valid Import from pattern.
+	 *
+	 * @param string $pattern string.
+	 * @param number $global_index global image index.
+	 *
+	 * @return array
+	 */
 	public function extractor_extract_image_to_array( $pattern, $global_index = 0 ) {
 		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
 		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
@@ -1681,16 +1710,11 @@ class Export_Templates {
 		return $array;
 	}
 
-	public function extractor_replace_image( $pattern, $images, $image_index, $global_index = 0 ) {
-		foreach ( $images as $i => $image ) {
-			$index       = $global_index + $i;
-			$replacement = "{{{image:${index}:url}}}";
-			$pattern     = str_replace( $image, $replacement, $pattern );
-		}
-
-		return $pattern;
-	}
-
+	/**
+	 * Replace global variable
+	 *
+	 * @param string $pattern .
+	 */
 	public function replace_global_variables( $pattern ) {
 		// First match that only have two content: type and id.
 		preg_match_all( '/{"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/', $pattern, $matches );
@@ -1749,26 +1773,46 @@ class Export_Templates {
 			$new_arr = array();
 
 			// Manually add default colors for now.
-			$new_arr['black']                 = hex2rgb( '#000000' );
-			$new_arr['cyan-bluish-gray']      = hex2rgb( '#abb8c3' );
-			$new_arr['white']                 = hex2rgb( '#ffffff' );
-			$new_arr['pale-pink']             = hex2rgb( '#f78da7' );
-			$new_arr['vivid-red']             = hex2rgb( '#cf2e2e' );
-			$new_arr['luminous-vivid-orange'] = hex2rgb( '#ff6900' );
-			$new_arr['luminous-vivid-amber']  = hex2rgb( '#fcb900' );
-			$new_arr['light-green-cyan']      = hex2rgb( '#7bdcb5' );
-			$new_arr['vivid-green-cyan']      = hex2rgb( '#00d084' );
-			$new_arr['pale-cyan-blue']        = hex2rgb( '#8ed1fc' );
-			$new_arr['vivid-cyan-blue']       = hex2rgb( '#0693e3' );
-			$new_arr['vivid-purple']          = hex2rgb( '#9b51e0' );
+			$new_arr['black']                 = $this->hex2rgb( '#000000' );
+			$new_arr['cyan-bluish-gray']      = $this->hex2rgb( '#abb8c3' );
+			$new_arr['white']                 = $this->hex2rgb( '#ffffff' );
+			$new_arr['pale-pink']             = $this->hex2rgb( '#f78da7' );
+			$new_arr['vivid-red']             = $this->hex2rgb( '#cf2e2e' );
+			$new_arr['luminous-vivid-orange'] = $this->hex2rgb( '#ff6900' );
+			$new_arr['luminous-vivid-amber']  = $this->hex2rgb( '#fcb900' );
+			$new_arr['light-green-cyan']      = $this->hex2rgb( '#7bdcb5' );
+			$new_arr['vivid-green-cyan']      = $this->hex2rgb( '#00d084' );
+			$new_arr['pale-cyan-blue']        = $this->hex2rgb( '#8ed1fc' );
+			$new_arr['vivid-cyan-blue']       = $this->hex2rgb( '#0693e3' );
+			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
 
 			foreach ( $config['settings']['color']['palette'] as $color ) {
-				$new_arr[ $color['slug'] ] = hex2rgb( $color['color'] );
+				$new_arr[ $color['slug'] ] = $this->hex2rgb( $color['color'] );
 			}
 			return $new_arr;
 		}
 
 		return null;
+	}
+
+	/**
+	 * Hex to RGB
+	 *
+	 * @param string $hex .
+	 */
+	public function hex2rgb( $hex ) {
+		$hex = str_replace( '#', '', $hex );
+
+		$r = hexdec( substr( $hex, 0, 2 ) );
+		$g = hexdec( substr( $hex, 2, 2 ) );
+		$b = hexdec( substr( $hex, 4, 2 ) );
+		$a = 1;
+
+		if ( strlen( $hex ) === 8 ) {
+			$a = hexdec( substr( $hex, 6, 2 ) ) / 255;
+		}
+
+		return '{"r":' . $r . ',"g":' . $g . ',"b":' . $b . ',"a":' . $a . '}';
 	}
 
 	/**
