@@ -169,7 +169,7 @@ class Themeforest_Data {
 				} else {
 					$new_page = array(
 						'post_title'    => $value['pagetitle'],
-						'post_content'  => $content,
+						'post_content'  => wp_slash( $content ),
 						'post_status'   => 'publish',
 						'post_type'     => 'page',
 						'page_template' => $value['template'],
@@ -212,7 +212,7 @@ class Themeforest_Data {
 						array(
 							'post_name'    => $block_pattern . '-synced',
 							'post_title'   => $pattern_data['title'],
-							'post_content' => $pattern_data['content'],
+							'post_content' => wp_slash( $pattern_data['content'] ),
 							'post_status'  => 'publish',
 							'post_author'  => 1,
 							'post_type'    => 'wp_block',
