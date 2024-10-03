@@ -248,7 +248,6 @@ const ManageAssets = () => {
     };
 
     const updateAssetList = (result) => {
-        console.log(result)
         setAssetList(result?.data.list);
         setTotalData(parseInt(result?.data.total_data));
         setTotalPage(parseInt(result?.total_page));
@@ -296,7 +295,8 @@ const ManageAssets = () => {
                         buttonText: __('Add New', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     }
                 ]}
                 headingButton={true}

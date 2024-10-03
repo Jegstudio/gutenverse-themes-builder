@@ -50,7 +50,6 @@ const Table = (props) => {
                 <ElButton/>
         })
     }
-    console.log(totalPage)
     return <>
         {
             length === 0 ? <div className='table empty'>

@@ -281,7 +281,8 @@ const PatternList = () => {
                     buttonText: __('Create Pattern', 'gutenverse-themes-builder'),
                     buttonEvent: () => setCreatePatternPopup(true),
                     buttonIcon: <PlusIcon />,
-                    buttonLoading: false
+                    buttonLoading: false,
+                    buttonHide : totalData === 0
                 }
             ]}
         >

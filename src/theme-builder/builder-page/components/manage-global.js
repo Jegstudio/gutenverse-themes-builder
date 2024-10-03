@@ -222,7 +222,8 @@ const ManageGlobal = () => {
                         buttonText: __('Create Global Style', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     },
                     {
                         buttonText: __('Import Color', 'gutenverse-themes-builder'),

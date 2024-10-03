@@ -199,6 +199,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'fonts/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_font_list_pagination' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'font/update',
 			array(
 				'methods'             => 'POST',
@@ -232,8 +242,8 @@ class Backend_Api {
 			self::ENDPOINT,
 			'fontsizes/list',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'get_fontsize_list' ),
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_fontsize_list_pagination' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -2059,6 +2069,37 @@ class Backend_Api {
 	}
 
 	/**
+	 * Get Font List Pagination.
+	 * 
+	 * @param object $request .
+	 *
+	 * @return object
+	 */
+	public function get_font_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$fonts_db = Database::instance()->theme_fonts;
+		$active   = get_option( 'gtb_active_theme_id' );
+		$data     = $fonts_db->get_pagination_data( $active, $offset, $num_post );
+
+		foreach ( $data['list'] as &$font ) {
+			$font['style']   = maybe_unserialize( $font['style'] );
+			$font['weights'] = maybe_unserialize( $font['weights'] );
+		}
+
+		$max_page = ceil( $data['total_data'] / $num_post );
+
+		return (object) array(
+			'data'       => $data,
+			'total_page' => $max_page,
+		);
+	}
+
+	/**
 	 * Update theme data
 	 *
 	 * @param object $request .
@@ -2084,7 +2125,7 @@ class Backend_Api {
 		$this->generate_fonts( $family, $style, $weights );
 		$this->update_theme_json();
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 	/**
@@ -2111,7 +2152,7 @@ class Backend_Api {
 		$this->generate_fonts( $family, $style, $weights );
 		$this->update_theme_json();
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 	/**
@@ -2154,11 +2195,10 @@ class Backend_Api {
 		if ( ! empty( $family ) ) {
 			$slug   = strtolower( str_replace( ' ', '-', $family ) );
 			$folder = gutenverse_themes_builder_theme_folder_path() . '/assets/fonts/' . $slug;
-			$weight = $this->get_font_params( $style, $weights );
 
 			$this->check_directory( $folder );
 
-			$download_url = "https://gwfh.mranftl.com/api/fonts/{$slug}?download=zip&variants={$weight}&formats=woff2";
+			$download_url = "https://gwfh.mranftl.com/api/fonts/{$slug}?download=zip&variants=regular&formats=woff2";
 			$get_file     = wp_remote_get( $download_url );
 			$file_path    = $folder . '/' . $slug . '.zip';
 
@@ -2206,7 +2246,7 @@ class Backend_Api {
 			$wp_filesystem->rmdir( $font_folder, true );
 		}
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 
@@ -2226,6 +2266,32 @@ class Backend_Api {
 
 		return array(
 			'data' => $data,
+		);
+	}
+
+	/**
+	 * Get Font List pagination.
+	 * 
+	 * @param object $request .
+	 *
+	 * @return object
+	 */
+	public function get_fontsize_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$sizes_db = Database::instance()->theme_fontsizes;
+		$active   = get_option( 'gtb_active_theme_id' );
+		$data     = $sizes_db->get_pagination_data( $active, $offset, $num_post );
+
+		$max_page = ceil( $data['total_data'] / $num_post );
+
+		return (object) array(
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 
@@ -2254,7 +2320,7 @@ class Backend_Api {
 
 		$this->update_theme_json();
 
-		return $this->get_fontsize_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 	/**
@@ -2280,7 +2346,7 @@ class Backend_Api {
 
 		$this->update_theme_json();
 
-		return $this->get_fontsize_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 	/**
@@ -2297,7 +2363,7 @@ class Backend_Api {
 			array( 'id' => $id )
 		);
 
-		return $this->get_font_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 

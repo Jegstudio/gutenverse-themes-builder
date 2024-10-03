@@ -187,7 +187,8 @@ const ThemeList = () => {
                         buttonText: __('Create Theme', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     }
                 ]}
             >

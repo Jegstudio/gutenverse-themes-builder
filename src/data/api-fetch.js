@@ -274,9 +274,11 @@ export const deleteAsset = (params, callback = def_callback) => {
 
 /* Fonts */
 
-export const getFontList = (callback = def_callback) => {
+export const getFontList = (request, callback = def_callback) => {
     apiFetch({
+        method: 'POST',
         path: addQueryArgs('gtb-backend/v1/fonts/list'),
+        data: request
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -326,9 +328,11 @@ export const deleteFont = (params, callback = def_callback) => {
 
 /* Fontsize */
 
-export const getFontsizeList = (callback = def_callback) => {
+export const getFontsizeList = (request, callback = def_callback) => {
     apiFetch({
+        method: 'POST',
         path: addQueryArgs('gtb-backend/v1/fontsizes/list'),
+        data: request
     }).then((response) => {
         callback(response);
     }).catch(() => {

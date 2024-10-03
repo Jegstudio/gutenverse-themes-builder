@@ -364,7 +364,8 @@ const ManagePages = () => {
                     buttonText: __('Create Page', 'gutenverse-themes-builder'),
                     buttonEvent: () => setCreatePagePopup(true),
                     buttonIcon: <PlusIcon />,
-                    buttonLoading: false
+                    buttonLoading: false,
+                    buttonHide : totalData === 0
                 }
             ]}
             showNotice={true}
