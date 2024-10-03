@@ -619,6 +619,7 @@ class Init {
 			'dashboardData'=> array(
 				{{dashboard_data}}
 			),
+			{{additional_config}}
 		);
 
 		if ( isset( $config['assign'] ) && $config['assign'] ) {

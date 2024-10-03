@@ -879,6 +879,13 @@ class Export_Theme {
 		$placeholder = str_replace( '{{description}}', str_replace( "'", "\'", $theme_data['description'] ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
+		
+		$other = maybe_unserialize( $data['other'] );
+		$is_themeforest = '';
+		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
+			$is_themeforest = '"isThemeforest" => true,';
+		}
+		$placeholder = str_replace( '{{additional_config}}', $is_themeforest, $placeholder );
 
 		// Build dashboard.
 
