@@ -151,7 +151,7 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                                 }}
                             />
                         </div>
-                        <span>{__('Theme slug (use lowercase letter only)', 'gutenverse-themes-builder')}</span>
+                        <span>{__('Add custom code to modify the theme’s design or functionality.', 'gutenverse-themes-builder')}</span>
                     </div>}
                 </>
             }

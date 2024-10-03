@@ -4,6 +4,9 @@ import { __ } from '@wordpress/i18n';
 import { getPluginList, getThemeData, updateOtherData } from '../../../data/api-fetch';
 import SelectSearchControl from '../controls/select-search-control';
 import { CloseIcon } from '../data/icons';
+import Table from './table';
+import { isEmpty } from 'lodash';
+
 
 const defaultPlugins = [
     'gutenverse',
@@ -119,7 +122,7 @@ const ManagePlugins = () => {
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText: __('Save', 'gutenverse-themes-builder'),
+                    buttonText: __('Save Plugin', 'gutenverse-themes-builder'),
                     buttonEvent: () => updatePluginData(true),
                     buttonIcon: false,
                     buttonLoading: false
@@ -136,6 +139,25 @@ const ManagePlugins = () => {
                     onSearch={searchPlugin}
                 />
                 <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
+                <Table
+                    heads={['Plugin Name', 'Hosted', 'Version', 'Actions',]}
+                >
+                    <>
+                        {!isEmpty(plugins) && plugins.map((plugin, key) => {
+                            return <tr key={key}>
+                                <td>{plugin?.label}</td>
+                                <td>{__('Wordpress.org', 'gutenverse-themes-builder')}</td>
+                                <td>{plugin?.version}</td>
+                                <td>
+                                    <div className="actions">
+                                        {/* <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
+                                        <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a> */}
+                                    </div>
+                                </td>
+                            </tr>;
+                        })}
+                    </>
+                </Table>
                 <ul>
                     {plugins.map((plugin, key) => {
                         return <li className="plugin-req" key={key}>
