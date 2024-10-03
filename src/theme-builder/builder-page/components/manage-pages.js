@@ -334,9 +334,12 @@ const ManagePages = () => {
             }
         }).then((response) => {
             let data = response.data.map(el => {
+                let label = el.name.toLowerCase();
+                let value = label?.replace(' ', '-');
+
                 return {
-                    label: el.name.toLowerCase(),
-                    value: el.name.toLowerCase()
+                    label,
+                    value
                 };
             });
             resolve(data);
