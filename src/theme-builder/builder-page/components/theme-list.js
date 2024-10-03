@@ -137,12 +137,9 @@ const ThemeList = () => {
         setThemeList(result?.data.list);
         setTotalData(parseInt(result?.data.total_data));
         setActiveTheme(result?.active);
-        setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
+        setTotalPage(result?.total_page);
     };
 
-    useEffect(()=>{
-        console.log(paged)
-    },[paged])
     useEffect(() => {
         getThemeListPagination({
             paged,
