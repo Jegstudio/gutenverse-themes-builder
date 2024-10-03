@@ -1580,11 +1580,13 @@ class Export_Templates {
 		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
 
 		$target_directory = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/';
-		error_log($target_directory);
-		$files = new RecursiveIteratorIterator(
+		$files            = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator( $target_directory ),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
+
+		$image_data         = array();
+		$global_image_index = 0;
 
 		foreach ( $files as $name => $file ) {
 			if ( ! $file->isDir() ) {
@@ -1597,12 +1599,27 @@ class Export_Templates {
 
 					$modified_content = $this->replace_global_variables( $file_content );
 
-					$zip->addFromString( $relative_path, $modified_content );
+					$extracted_data = $this->extractor_extract_image_to_array( $modified_content, $global_image_index );
+
+					$global_image_index += count( $extracted_data['images'] );
+
+					foreach ( $extracted_data['images'] as $index => $image_url ) {
+						$image_data[] = array(
+							'original_url' => $image_url,
+							'placeholder'  => '{{{image:' . ( $index + $global_image_index - count( $extracted_data['images'] ) ) . ':url}}}',
+						);
+					}
+
+					$zip->addFromString( $relative_path, $extracted_data['contents'] );
 				} else {
 					$zip->addFile( $file_path, $relative_path );
 				}
 			}
 		}
+
+		$image_json_content = json_encode( $image_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+		$zip->addFromString( 'image.json', $image_json_content );
 
 		$zip->close();
 
@@ -1611,6 +1628,67 @@ class Export_Templates {
 			'filepath' => $zip_path,
 			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
 		);
+	}
+
+	/**
+	 * Only include unresized image.
+	 *
+	 * @param array $images list of image.
+	 *
+	 * @return array
+	 */
+	public function extractor_filter_image( $images ) {
+		$container = array();
+
+		foreach ( $images as $image ) {
+			preg_match( '/\d+x\d+\.(?:png|jpg|svg|jpeg|gif|webp)$/i', $image, $matches );
+
+			if ( empty( $matches ) ) {
+				$container[] = $image;
+			}
+		}
+
+		return $container;
+	}
+
+	/**
+	 * Normalize Array Key
+	 *
+	 * @param array $arrays array.
+	 */
+	public function extractor_normalize_array( $arrays ) {
+		$data = array();
+
+		foreach ( $arrays as $item ) {
+			$data[] = $item;
+		}
+
+		return $data;
+	}
+
+	public function extractor_extract_image_to_array( $pattern, $global_index = 0 ) {
+		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
+		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
+		$images  = $this->extractor_filter_image( $matches );
+
+		$pattern = $this->extractor_replace_image( $pattern, $matches, $images, $global_index );
+
+		$array = array(
+			'images'   => $images,
+			'contents' => $pattern,
+		);
+
+		return $array;
+	}
+
+	public function extractor_replace_image( $pattern, $images, $image_index, $global_index = 0 ) {
+		foreach ( $images as $i => $image ) {
+			$index       = $global_index + $i;
+			$replacement = "{{{image:${index}:url}}}";
+			$pattern     = str_replace( $image, $replacement, $pattern );
+		}
+
+		return $pattern;
 	}
 
 	public function replace_global_variables( $pattern ) {
