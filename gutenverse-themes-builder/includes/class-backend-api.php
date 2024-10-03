@@ -981,7 +981,7 @@ class Backend_Api {
 				$theme['theme_data'] = maybe_unserialize( $theme['theme_data'] );
 			}
 		}
-		$max_page = ceil( $data['count'] / $num_post );
+		$max_page = ceil( $data['total_data'] / $num_post );
 		return array(
 			'active'     => $active,
 			'data'       => $data,

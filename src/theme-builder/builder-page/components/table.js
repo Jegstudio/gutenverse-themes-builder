@@ -2,28 +2,6 @@ import { useRef, useState, useEffect } from '@wordpress/element';
 
 const Table = (props) => {
     const { heads, children, length, paged, totalPage, setPaged, numPost, totalData } = props;
-    const tdRef = useRef(null);
-    const [tdHeight, setTdHeight] = useState(0);
-    useEffect(() => {
-        if(length < numPost){
-            const tdElement = tdRef.current;
-    
-            if (!tdElement) return;
-        
-            const observer = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                const { height } = entry.contentRect;
-                setTdHeight(height); // Update state when height changes
-            }
-            });
-        
-            observer.observe(tdElement); // Start observing
-        
-            return () => {
-            observer.disconnect(); // Clean up when component unmounts
-            };
-        }
-      }, []);
 
     return (
         <table className="table">
@@ -31,10 +9,7 @@ const Table = (props) => {
                 {heads.map((head, i) => <th key={i}>{head}</th>)}
             </tr>
             {children}
-            {
-                length < numPost && <tr><td colSpan={heads.length} style={{height: tdHeight * (numPost - length)}}></td></tr>
-            }
-            <tr ref={tdRef} className="footer">
+            <tr className="footer">
                 <td  className="footer-content" colSpan={heads.length}>
                     <div className="footer-wrap"> 
                         <div>{totalData} results</div>
