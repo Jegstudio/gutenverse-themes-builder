@@ -3,9 +3,12 @@ import ContentWrapper from './content-wrapper';
 import { __ } from '@wordpress/i18n';
 import { getPluginList, getThemeData, updateOtherData } from '../../../data/api-fetch';
 import SelectSearchControl from '../controls/select-search-control';
-import { CloseIcon } from '../data/icons';
+import { CloseIcon, DeleteIcon } from '../data/icons';
 import Table from './table';
 import { isEmpty } from 'lodash';
+import { FormPopup } from './form-popup';
+import TextControl from '../controls/text-control';
+import { WarningPopup } from './warning-popup';
 
 
 const defaultPlugins = [
@@ -16,6 +19,8 @@ const defaultPlugins = [
 const ManagePlugins = () => {
     const [plugins, setPlugins] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [deletePopup, setDeletePopup] = useState(false);
+    const [editPopup, setEditPopup] = useState(false);
 
     useEffect(() => {
         getThemeData(null, response => {
@@ -130,14 +135,16 @@ const ManagePlugins = () => {
             ]}
         >
             {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> : <>
-                <SelectSearchControl
-                    id={'search'}
-                    title={__('WP.org Plugins', 'gutenverse-themes-builder')}
-                    description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
-                    value={''}
-                    onChange={updatePluginList}
-                    onSearch={searchPlugin}
-                />
+                <div className="plugin-search-wrapper">
+                    <SelectSearchControl
+                        id={'search'}
+                        description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
+                        value={''}
+                        onChange={updatePluginList}
+                        onSearch={searchPlugin}
+                    />
+                </div>
+                
                 <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
                 <Table
                     heads={['Plugin Name', 'Hosted', 'Version', 'Actions',]}
@@ -150,14 +157,48 @@ const ManagePlugins = () => {
                                 <td>{plugin?.version}</td>
                                 <td>
                                     <div className="actions">
-                                        {/* <a className="edit" onClick={() => setEditGlobal(global)}><EditIcon />{__('Edit', 'gutenverse-themes-builder')}</a>
-                                        <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a> */}
+                                        <a className="edit" onClick={() => setEditPopup(global)}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
+                                        <a className="delete" onClick={() => setDeletePopup(global?.id)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                     </div>
                                 </td>
                             </tr>;
                         })}
                     </>
                 </Table>
+                <div className="buttons margin-top-25 end">
+                    {
+                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        <div className="button create padding-12-28" onClick={() => updatePluginData(true)}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
+                    }
+                </div>
+                
+                {editPopup && <FormPopup
+                    onClose={() => setEditPopup(false)}
+                    data={editPopup}
+                    showFooterButton={false}
+                >
+                    <TextControl
+                        id={'label'}
+                        title={__('Plugin Name', 'gutenverse-themes-builder')}
+                        value={data.label}
+                        onChange={value => updatePluginValue({ ...plugin, label: value})}
+                        important={true}
+                    />
+                    <TextControl
+                        id={'version'}
+                        title={__('Title', 'gutenverse-themes-builder')}
+                        value={data.version}
+                        onChange={value => updatePluginValue({ ...plugin, version: value})}
+                        important={true}
+                    />
+                </FormPopup>
+                }
+
+                {deletePopup && <WarningPopup
+                    title={__('Are you sure want to delete this plugin requirement?', 'gutenverse-themes-builder')}
+                    onProceed={() => deletePlugin(plugin?.value)}
+                    onClose={() => setDeletePopup(false)}
+                />}
                 <ul>
                     {plugins.map((plugin, key) => {
                         return <li className="plugin-req" key={key}>

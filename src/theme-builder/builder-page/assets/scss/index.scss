@@ -570,6 +570,13 @@ body {
         }
     }
 
+    .plugin-search-wrapper{
+        .input-wrapper{
+            flex-direction: column;
+        }
+    }
+    
+
     /* Controls */
     .input-wrapper {
         display: flex;
@@ -1180,6 +1187,12 @@ body {
             width: auto;
         }
 
+        &.margin-top{
+            &-25{
+                margin-top: 25px;
+            }
+        }
+
         &.end {
             justify-content: flex-end;
         }
@@ -1238,6 +1251,12 @@ body {
                 }
             }
             
+            &.padding{
+                &-12-28{
+                    padding: 12px 28px;
+                }
+                
+            }
         }
 
         .back-button {
