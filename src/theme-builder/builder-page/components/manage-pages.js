@@ -393,7 +393,6 @@ const ManagePages = () => {
                     length={pageList.length}
                     paged={paged}
                     setPaged={setPaged}
-                    numPost={num_post}
                     totalData={totalData}
                     totalPage={totalPage}
                     emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 

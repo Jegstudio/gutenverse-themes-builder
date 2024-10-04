@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import { getTemplateList, updateOtherData, getThemeData } from '../../../data/api-fetch';
+import { updateOtherData, getThemeData } from '../../../data/api-fetch';
 import ContentWrapper from './content-wrapper';
 import { Select } from 'gutenverse-core/components';
 
@@ -42,7 +42,7 @@ const MediaSelect = ({ updateThumbnailData }) => {
         }
     };
 
-    return <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
+    return <button className='button' onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
 };
 
 const ManageDashbaord = () => {
@@ -80,36 +80,31 @@ const ManageDashbaord = () => {
         <ContentWrapper
             title={__('Manage Dashboard', 'gutenverse-themes-builder')}
             description={__('This is a place to manage your theme Dashboard.', 'gutenverse-themes-builder')}
-            headingButton={true}
-            headingButtons={[
-                {
-                    buttonText: __('Save', 'gutenverse-themes-builder'),
-                    buttonEvent: updateDashboardData,
-                    buttonIcon: false,
-                    buttonLoading: loading
-                }
-            ]}
         >
             {/* <ContentPreview /> */}
             <div className="manage-dashboard">
-                <p>{__('Select your dashboard mode:', 'gutenverse-themes-builder')}</p>
                 <div>
-                    <Select
-                        value={dashboardData?.mode}
-                        options={[
-                            { value: 'default', label: 'Default Dashboard' },
-                            { value: 'lite', label: 'Lite Dashboard' },
-                            { value: 'themeforest', label: 'Themeforest Dashboard' },
-                        ]}
-                        onChange={value => updateData('mode', value)}
-                    />
+                    <div className="input-wrapper se">
+                        <Select
+                            value={dashboardData?.mode}
+                            options={[
+                                { value: 'default', label: 'Default Dashboard' },
+                                { value: 'lite', label: 'Lite Dashboard' },
+                                { value: 'themeforest', label: 'Themeforest Dashboard' },
+                            ]}
+                            onChange={value => updateData('mode', value)}
+                        />
+                        <span>{__('Select your dashboard mode', 'gutenverse-themes-builder')}</span>
+                    </div>
+                    
                     {dashboardData?.mode?.value === 'themeforest' && <>
-                        <div>
+                        <div className='media-input-wrapper'>
                             <h3>{__('Your Theme Logo', 'gutenverse-themes-builder')}</h3>
-                            <MediaSelect updateThumbnailData={value => updateData('logo', value)} />
+                            <p>{__('Upload a logo of your theme', 'gutenverse-themes-builder')}</p>
                             {dashboardData?.logo && <div className="image-wrapper">
                                 <img src={dashboardData?.logo?.url} />
                             </div>}
+                            <MediaSelect updateThumbnailData={value => updateData('logo', value)} />
                         </div>
                     </>}
                     {dashboardData?.mode?.value === 'lite' && <>
@@ -250,6 +245,12 @@ const ManageDashbaord = () => {
                             <br/>
                         </div>
                     </>}
+                </div>
+                <div className="buttons margin-top-25 end">
+                    {
+                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        <div className="button create padding-12-28" onClick={() => updateDashboardData()}>{__('Save Changes', 'gutenverse-themes-builder')}</div>
+                    }
                 </div>
             </div>
         </ContentWrapper>

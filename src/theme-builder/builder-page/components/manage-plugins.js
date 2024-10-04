@@ -21,6 +21,11 @@ const ManagePlugins = () => {
     const [loading, setLoading] = useState(false);
     const [deletePopup, setDeletePopup] = useState(false);
     const [editPopup, setEditPopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [num_post] = useState(10);
+    const indexOfLastItem = paged * num_post;
+    const indexOfFirstItem = indexOfLastItem - num_post;
+    const paginationData = plugins.slice(indexOfFirstItem, indexOfLastItem);
 
     useEffect(() => {
         getThemeData(null, response => {
@@ -100,6 +105,7 @@ const ManagePlugins = () => {
         setPlugins([
             ...update
         ]);
+        setPaged(1);
     };
 
     const updatePluginList = (value) => {
@@ -114,6 +120,7 @@ const ManagePlugins = () => {
     };
 
     const updatePluginValue = (value, index) => {
+        console.log(index);
         let arrCopy = [...plugins];
 
         arrCopy[index] = value;
@@ -126,15 +133,6 @@ const ManagePlugins = () => {
         <ContentWrapper
             title={__('Manage Plugins', 'gutenverse-themes-builder')}
             description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
-            headingButton={true}
-            headingButtons={[
-                {
-                    buttonText: __('Save Plugin', 'gutenverse-themes-builder'),
-                    buttonEvent: () => updatePluginData(),
-                    buttonIcon: false,
-                    buttonLoading: false
-                }
-            ]}
         >
             {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> : <>
                 <div className="plugin-search-wrapper">
@@ -150,16 +148,21 @@ const ManagePlugins = () => {
                 <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
                 <Table
                     heads={['Plugin Name', 'Hosted', 'Version', 'Actions',]}
+                    length={paginationData.length}
+                    paged={paged}
+                    setPaged={setPaged}
+                    totalData={plugins.length}
+                    totalPage={Math.ceil(plugins.length/num_post)}
                 >
                     <>
-                        {!isEmpty(plugins) && plugins.map((plugin, key) => {
+                        {!isEmpty(plugins) && paginationData.map((plugin, key) => {
                             return <tr key={key}>
                                 <td>{plugin?.label}</td>
                                 <td>{__('Wordpress.org', 'gutenverse-themes-builder')}</td>
                                 <td>{plugin?.version}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPopup({plugin : plugin, key})}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
+                                        <a className="edit" onClick={() => setEditPopup( {plugin : plugin, key: (((paged-1) * num_post) + parseInt(key) )} )}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
                                         <a className="delete" onClick={() => setDeletePopup(plugin)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                     </div>
                                 </td>

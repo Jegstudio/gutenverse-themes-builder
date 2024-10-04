@@ -9,6 +9,7 @@ const ManageScreenshots = () => {
     const [dashboard, setDashboard] = useState(null);
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
     const [screenshotFrame, setScreenshotFrame] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const firstFrame = wp?.media({
@@ -79,44 +80,52 @@ const ManageScreenshots = () => {
     };
 
     const updateScreenshotData = () => {
-        updateOtherData({
-            key: 'screenshots',
-            data: {
-                thumbnail,
-                dashboard
-            }
-        });
+        setLoading(true);
+        setInterval(() => {
+            updateOtherData({
+                key: 'screenshots',
+                data: {
+                    thumbnail,
+                    dashboard
+                }
+            });
+            setLoading(false)
+        }, 500);
+        
     };
 
     return <ContentWrapper
         title={__('Manage Screenshots', 'gutenverse-themes-builder')}
         description={__('This is the place to manage all screenshots that represent your themes. From theme thumbnail to theme dashboard.', 'gutenverse-themes-builder')}
-        headingButton={true}
-        headingButtons={[
-            {
-                buttonText: __('Save', 'gutenverse-themes-builder'),
-                buttonEvent: updateScreenshotData,
-                buttonIcon: false,
-                buttonLoading: false
-            }
-        ]}
     >
         <>
-            <div>
-                <h3>{__('Screenshot for Thumbnail', 'gutenverse-themes-builder')}</h3>
-                <p>{__('Make sure the thumbnail is a representation of your theme layout.', 'gutenverse-themes-builder')}</p>
-                <div>
-                    {thumbnail && <img className="image-preview" src={thumbnail?.url} />}
+            <div >
+                <br/>
+                <div className='media-input-wrapper'>
+                    <h3>{__('Screenshot for Thumbnail', 'gutenverse-themes-builder')}</h3>
+                    <p>{__('Make sure the thumbnail is a representation of your theme layout.', 'gutenverse-themes-builder')}</p>
+                    <div>
+                        {thumbnail && <img className="image-preview" src={thumbnail?.url} />}
+                    </div><br/>
+                    <button className='button' onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>
                 </div>
-                <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>
-                <h3>{__('Screenshots for Dashboard', 'gutenverse-themes-builder')}</h3>
-                <p>{__('Make sure each screenshot size is smaller than 500KB to reduce the theme file size', 'gutenverse-themes-builder')}</p>
-                <div>
-                    {dashboard && dashboard.map(screenshot => {
-                        return <img className="image-preview" key={screenshot?.id} src={screenshot?.url} />;
-                    })}
+                <br/>
+                <div className='media-input-wrapper'>
+                    <h3>{__('Screenshots for Dashboard', 'gutenverse-themes-builder')}</h3>
+                    <p>{__('Make sure each screenshot size is smaller than 500KB to reduce the theme file size', 'gutenverse-themes-builder')}</p>
+                    <div className='image-wrapper'>
+                        {dashboard && dashboard.map(screenshot => {
+                            return <img className="image-preview" key={screenshot?.id} src={screenshot?.url} />;
+                        })}
+                    </div><br/>
+                    <button className='button' onClick={() => selectItem(screenshotFrame)}>{__('Choose Images', 'gutenverse-themes-builder')}</button>
                 </div>
-                <button onClick={() => selectItem(screenshotFrame)}>{__('Choose Images', 'gutenverse-themes-builder')}</button>
+                <div className="buttons margin-top-25 end">
+                    {
+                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        <div className="button create padding-12-28" onClick={() => updateScreenshotData()}>{__('Save Changes', 'gutenverse-themes-builder')}</div>
+                    }
+                </div>
             </div>
         </>
     </ContentWrapper>;
