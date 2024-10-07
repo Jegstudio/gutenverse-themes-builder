@@ -432,6 +432,248 @@ class Export_Templates {
 		return implode( ', ', $formatted_array );
 	}
 
+
+	/**
+	 * Send File to User.
+	 *
+	 * @param array $data .
+	 */
+	public function extractor_send_file( $data ) {
+		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-demos' . '.zip';
+
+		$zip = new ZipArchive();
+		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+
+		$target_directory = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/';
+		$files            = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator( $target_directory ),
+			RecursiveIteratorIterator::LEAVES_ONLY
+		);
+
+		foreach ( $files as $name => $file ) {
+			if ( ! $file->isDir() ) {
+				$file_path     = $file->getRealPath();
+				$relative_path = substr( $file_path, strlen( $target_directory ) );
+
+				if ( pathinfo( $file_path, PATHINFO_EXTENSION ) === 'html' ) {
+
+					$file_content = file_get_contents( $file_path );
+
+					$modified_content = $this->replace_global_variables( $file_content );
+
+					$zip->addFromString( $relative_path, $modified_content );
+				} else {
+					$zip->addFile( $file_path, $relative_path );
+				}
+			}
+		}
+
+		$zip->close();
+
+		$this->fileresult = array(
+			'filename' => $data['slug'] . '-demos' . '.zip',
+			'filepath' => $zip_path,
+			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
+		);
+	}
+
+	/**
+	 * Replace global variable
+	 *
+	 * @param string $pattern .
+	 */
+	public function replace_global_variables( $pattern ) {
+		// First match that only have two content: type and id.
+		preg_match_all( '/{"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/', $pattern, $matches );
+		if ( ! empty( $matches ) ) {
+			$color_arr = $this->get_theme_colors();
+			$font_arr  = $this->get_theme_fonts();
+			foreach ( $matches[1] as $variable ) {
+				$variable_pattern = '/{"type":"variable","id":"' . $variable . '"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/';
+				// Replace colors.
+				if ( isset( $color_arr[ $variable ] ) ) {
+					$color_replace = $color_arr[ $variable ];
+					$pattern       = preg_replace( $variable_pattern, $color_replace, $pattern );
+				}
+
+				// Replace fonts.
+				if ( isset( $font_arr[ $variable ] ) ) {
+					$font_replace = $font_arr[ $variable ];
+					$pattern      = preg_replace( $variable_pattern, $font_replace, $pattern );
+				}
+			}
+		}
+		return $pattern;
+	}
+
+	/**
+	 * Get Theme Fonts
+	 *
+	 * @return array
+	 */
+	public function get_theme_fonts() {
+		$fonts    = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), array() );
+		$font_arr = array();
+
+		foreach ( $fonts as $value ) {
+			$font_arr[ $value['id'] ] = wp_json_encode( $value['font'] );
+		}
+
+		return $font_arr;
+	}
+
+	/**
+	 * Get theme colors
+	 */
+	public function get_theme_colors() {
+		$theme_dir = get_template_directory() . '/theme.json';
+		$config    = array();
+
+		if ( $theme_dir ) {
+			$decoded_file = wp_json_file_decode( $theme_dir, array( 'associative' => true ) );
+			if ( is_array( $decoded_file ) ) {
+				$config = $decoded_file;
+			}
+		}
+
+		if ( ! empty( $config['settings']['color']['palette'] ) ) {
+			$new_arr = array();
+
+			// Manually add default colors for now.
+			$new_arr['black']                 = $this->hex2rgb( '#000000' );
+			$new_arr['cyan-bluish-gray']      = $this->hex2rgb( '#abb8c3' );
+			$new_arr['white']                 = $this->hex2rgb( '#ffffff' );
+			$new_arr['pale-pink']             = $this->hex2rgb( '#f78da7' );
+			$new_arr['vivid-red']             = $this->hex2rgb( '#cf2e2e' );
+			$new_arr['luminous-vivid-orange'] = $this->hex2rgb( '#ff6900' );
+			$new_arr['luminous-vivid-amber']  = $this->hex2rgb( '#fcb900' );
+			$new_arr['light-green-cyan']      = $this->hex2rgb( '#7bdcb5' );
+			$new_arr['vivid-green-cyan']      = $this->hex2rgb( '#00d084' );
+			$new_arr['pale-cyan-blue']        = $this->hex2rgb( '#8ed1fc' );
+			$new_arr['vivid-cyan-blue']       = $this->hex2rgb( '#0693e3' );
+			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
+
+			foreach ( $config['settings']['color']['palette'] as $color ) {
+				$new_arr[ $color['slug'] ] = $this->hex2rgb( $color['color'] );
+			}
+			return $new_arr;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Hex to RGB
+	 *
+	 * @param string $hex .
+	 */
+	public function hex2rgb( $hex ) {
+		$hex = str_replace( '#', '', $hex );
+
+		$r = hexdec( substr( $hex, 0, 2 ) );
+		$g = hexdec( substr( $hex, 2, 2 ) );
+		$b = hexdec( substr( $hex, 4, 2 ) );
+		$a = 1;
+
+		if ( strlen( $hex ) === 8 ) {
+			$a = hexdec( substr( $hex, 6, 2 ) ) / 255;
+		}
+
+		return '{"r":' . $r . ',"g":' . $g . ',"b":' . $b . ',"a":' . $a . '}';
+	}
+
+	/**
+	 * Build Valid Import from pattern.
+	 *
+	 * @param string $pattern string.
+	 *
+	 * @return array
+	 */
+	public function extractor_extract_image_to_array( $pattern ) {
+		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
+		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
+		$images  = $this->extractor_filter_image( $matches );
+
+		$pattern = $this->extractor_replace_image( $pattern, $matches, $images );
+
+		$array = array(
+			'images'   => $images,
+			'contents' => $pattern,
+		);
+
+		return $array;
+	}
+
+	/**
+	 * Normalize Array Key
+	 *
+	 * @param array $arrays array.
+	 */
+	public function extractor_normalize_array( $arrays ) {
+		$data = array();
+
+		foreach ( $arrays as $item ) {
+			$data[] = $item;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Only include unresized image.
+	 *
+	 * @param array $images list of image.
+	 *
+	 * @return array
+	 */
+	public function extractor_filter_image( $images ) {
+		$container = array();
+
+		foreach ( $images as $image ) {
+			preg_match( '/\d+x\d+\.(?:png|jpg|svg|jpeg|gif|webp)$/i', $image, $matches );
+
+			if ( empty( $matches ) ) {
+				$container[] = $image;
+			}
+		}
+
+		return $container;
+	}
+
+	/**
+	 * Replace image with pattern.
+	 *
+	 * @param string $pattern pattern.
+	 * @param array  $images array.
+	 * @param array  $image_index image index.
+	 *
+	 * @return string
+	 */
+	public function extractor_replace_image( $pattern, $images, $image_index ) {
+		foreach ( $images as $image ) {
+			$index       = $this->extractor_get_image_index( $image, $image_index );
+			$replacement = "{{{image:${index}:url}}}";
+			$pattern     = str_replace( $image, $replacement, $pattern );
+		}
+
+		return $pattern;
+	}
+
+	/**
+	 * Replace index of resized image into normal image.
+	 *
+	 * @param string $needle pattern.
+	 * @param array  $haystack array.
+	 *
+	 * @return string
+	 */
+	public function extractor_get_image_index( $needle, $haystack ) {
+		$test     = preg_replace( '/-\d+x\d+/', '', $needle );
+		$haystack = array_flip( $haystack );
+
+		return isset( $haystack[ $test ] ) ? $haystack[ $test ] : 0;
+	}
+
 	// ----------------------------------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------------
@@ -1678,250 +1920,6 @@ class Export_Templates {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Send File to User.
-	 *
-	 * @param array $data .
-	 */
-	public function extractor_send_file( $data ) {
-		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-demos' . '.zip';
-
-		$zip = new ZipArchive();
-		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
-
-		$target_directory = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/';
-		$files            = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( $target_directory ),
-			RecursiveIteratorIterator::LEAVES_ONLY
-		);
-
-		$image_data         = array();
-		$global_image_index = 0;
-
-		foreach ( $files as $name => $file ) {
-			if ( ! $file->isDir() ) {
-				$file_path     = $file->getRealPath();
-				$relative_path = substr( $file_path, strlen( $target_directory ) );
-
-				if ( pathinfo( $file_path, PATHINFO_EXTENSION ) === 'html' ) {
-
-					$file_content = file_get_contents( $file_path );
-
-					$modified_content = $this->replace_global_variables( $file_content );
-
-					$zip->addFromString( $relative_path, $modified_content );
-				} else {
-					$zip->addFile( $file_path, $relative_path );
-				}
-			}
-		}
-
-		$zip->close();
-
-		$this->fileresult = array(
-			'filename' => $data['slug'] . '-demos' . '.zip',
-			'filepath' => $zip_path,
-			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
-		);
-	}
-
-	/**
-	 * Only include unresized image.
-	 *
-	 * @param array $images list of image.
-	 *
-	 * @return array
-	 */
-	public function extractor_filter_image( $images ) {
-		$container = array();
-
-		foreach ( $images as $image ) {
-			preg_match( '/\d+x\d+\.(?:png|jpg|svg|jpeg|gif|webp)$/i', $image, $matches );
-
-			if ( empty( $matches ) ) {
-				$container[] = $image;
-			}
-		}
-
-		return $container;
-	}
-
-	/**
-	 * Normalize Array Key
-	 *
-	 * @param array $arrays array.
-	 */
-	public function extractor_normalize_array( $arrays ) {
-		$data = array();
-
-		foreach ( $arrays as $item ) {
-			$data[] = $item;
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Replace image with pattern.
-	 *
-	 * @param string $pattern pattern.
-	 * @param array  $images array.
-	 * @param array  $image_index image index.
-	 *
-	 * @return string
-	 */
-	public function extractor_replace_image( $pattern, $images, $image_index ) {
-		foreach ( $images as $image ) {
-			$index       = $this->extractor_get_image_index( $image, $image_index );
-			$replacement = "{{{image:${index}:url}}}";
-			$pattern     = str_replace( $image, $replacement, $pattern );
-		}
-
-		return $pattern;
-	}
-
-	/**
-	 * Replace index of resized image into normal image.
-	 *
-	 * @param string $needle pattern.
-	 * @param array  $haystack array.
-	 *
-	 * @return string
-	 */
-	public function extractor_get_image_index( $needle, $haystack ) {
-		$test     = preg_replace( '/-\d+x\d+/', '', $needle );
-		$haystack = array_flip( $haystack );
-
-		return isset( $haystack[ $test ] ) ? $haystack[ $test ] : 0;
-	}
-
-	/**
-	 * Build Valid Import from pattern.
-	 *
-	 * @param string $pattern string.
-	 *
-	 * @return array
-	 */
-	public function extractor_extract_image_to_array( $pattern ) {
-		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
-		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
-		$images  = $this->extractor_filter_image( $matches );
-
-		$pattern = $this->extractor_replace_image( $pattern, $matches, $images );
-
-		$array = array(
-			'images'   => $images,
-			'contents' => $pattern,
-		);
-
-		return $array;
-	}
-
-	/**
-	 * Replace global variable
-	 *
-	 * @param string $pattern .
-	 */
-	public function replace_global_variables( $pattern ) {
-		// First match that only have two content: type and id.
-		preg_match_all( '/{"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/', $pattern, $matches );
-		if ( ! empty( $matches ) ) {
-			$color_arr = $this->get_theme_colors();
-			$font_arr  = $this->get_theme_fonts();
-			foreach ( $matches[1] as $variable ) {
-				$variable_pattern = '/{"type":"variable","id":"' . $variable . '"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/';
-				// Replace colors.
-				if ( isset( $color_arr[ $variable ] ) ) {
-					$color_replace = $color_arr[ $variable ];
-					$pattern       = preg_replace( $variable_pattern, $color_replace, $pattern );
-				}
-
-				// Replace fonts.
-				if ( isset( $font_arr[ $variable ] ) ) {
-					$font_replace = $font_arr[ $variable ];
-					$pattern      = preg_replace( $variable_pattern, $font_replace, $pattern );
-				}
-			}
-		}
-		return $pattern;
-	}
-
-	/**
-	 * Get Theme Fonts
-	 *
-	 * @return array
-	 */
-	public function get_theme_fonts() {
-		$fonts    = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), array() );
-		$font_arr = array();
-
-		foreach ( $fonts as $value ) {
-			$font_arr[ $value['id'] ] = wp_json_encode( $value['font'] );
-		}
-
-		return $font_arr;
-	}
-
-	/**
-	 * Get theme colors
-	 */
-	public function get_theme_colors() {
-		$theme_dir = get_template_directory() . '/theme.json';
-		$config    = array();
-
-		if ( $theme_dir ) {
-			$decoded_file = wp_json_file_decode( $theme_dir, array( 'associative' => true ) );
-			if ( is_array( $decoded_file ) ) {
-				$config = $decoded_file;
-			}
-		}
-
-		if ( ! empty( $config['settings']['color']['palette'] ) ) {
-			$new_arr = array();
-
-			// Manually add default colors for now.
-			$new_arr['black']                 = $this->hex2rgb( '#000000' );
-			$new_arr['cyan-bluish-gray']      = $this->hex2rgb( '#abb8c3' );
-			$new_arr['white']                 = $this->hex2rgb( '#ffffff' );
-			$new_arr['pale-pink']             = $this->hex2rgb( '#f78da7' );
-			$new_arr['vivid-red']             = $this->hex2rgb( '#cf2e2e' );
-			$new_arr['luminous-vivid-orange'] = $this->hex2rgb( '#ff6900' );
-			$new_arr['luminous-vivid-amber']  = $this->hex2rgb( '#fcb900' );
-			$new_arr['light-green-cyan']      = $this->hex2rgb( '#7bdcb5' );
-			$new_arr['vivid-green-cyan']      = $this->hex2rgb( '#00d084' );
-			$new_arr['pale-cyan-blue']        = $this->hex2rgb( '#8ed1fc' );
-			$new_arr['vivid-cyan-blue']       = $this->hex2rgb( '#0693e3' );
-			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
-
-			foreach ( $config['settings']['color']['palette'] as $color ) {
-				$new_arr[ $color['slug'] ] = $this->hex2rgb( $color['color'] );
-			}
-			return $new_arr;
-		}
-
-		return null;
-	}
-
-	/**
-	 * Hex to RGB
-	 *
-	 * @param string $hex .
-	 */
-	public function hex2rgb( $hex ) {
-		$hex = str_replace( '#', '', $hex );
-
-		$r = hexdec( substr( $hex, 0, 2 ) );
-		$g = hexdec( substr( $hex, 2, 2 ) );
-		$b = hexdec( substr( $hex, 4, 2 ) );
-		$a = 1;
-
-		if ( strlen( $hex ) === 8 ) {
-			$a = hexdec( substr( $hex, 6, 2 ) ) / 255;
-		}
-
-		return '{"r":' . $r . ',"g":' . $g . ',"b":' . $b . ',"a":' . $a . '}';
 	}
 
 	/**
