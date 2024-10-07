@@ -44,6 +44,49 @@ class Export_Templates {
 	 */
 	private $gutenverse_patterns;
 
+
+	/**
+	 * Template Core Patterns
+	 *
+	 * @var array
+	 */
+	private $template_core_patterns;
+
+	/**
+	 * Template Gutenverse Patterns
+	 *
+	 * @var array
+	 */
+	private $template_gutenverse_patterns;
+
+	/**
+	 * Template Pro Patterns
+	 *
+	 * @var array
+	 */
+	private $template_pro_patterns;
+
+	/**
+	 * Page Pro Patterns
+	 *
+	 * @var array
+	 */
+	private $page_pro_patterns;
+
+	/**
+	 * Page Core Patterns
+	 *
+	 * @var array
+	 */
+	private $page_core_patterns;
+
+	/**
+	 * Page Gutenverse Patterns
+	 *
+	 * @var array
+	 */
+	private $page_gutenverse_patterns;
+
 	/**
 	 * Pro Patterns
 	 *
@@ -269,16 +312,18 @@ class Export_Templates {
 	/**
 	 * Build Patterns
 	 *
-	 * @param string $html_content .
-	 * @param string $theme_id .
-	 * @param object $system .
-	 * @param string $theme_slug .
+	 * @param string  $html_content .
+	 * @param string  $theme_id .
+	 * @param object  $system .
+	 * @param string  $theme_slug .
+	 * @param boolean $only_get_content .
+	 * @param string  $place .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false, $place = 'template' ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
-		$pattern_dir = gutenverse_themes_builder_theme_built_path() . '/inc/patterns/';
 
+		$pattern_dir = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/patterns/';
 		if ( ! is_dir( $pattern_dir ) ) {
 			wp_mkdir_p( $pattern_dir );
 		}
@@ -287,7 +332,6 @@ class Export_Templates {
 			if ( 'gutenverse-themes-builder/pattern-wrapper' === $block['blockName'] ) {
 				$pattern_before = serialize_block( $block );
 				$pattern_after  = '';
-
 				if ( ! empty( $block['attrs']['pattern']['value'] ) ) {
 					$pattern_name = $block['attrs']['pattern']['value'];
 
@@ -300,16 +344,76 @@ class Export_Templates {
 
 					if ( ! empty( $posts ) ) {
 						$pattern_theme_id = get_post_meta( $posts[0]->ID, '_pattern_theme_id', true );
-						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						$pattern_after = str_replace( "'", "\'", $posts[0]->post_content );
-						// $pattern_after = $this->extract_images( $pattern_after, $system, $theme_slug );
-						$pattern_after = $this->fix_colors( $pattern_after );
-						$pattern_after = $this->fix_core_navigation( $pattern_after );
-						$pattern_after = $this->replace_template_part( $pattern_after, $theme_slug );
+						$content          = str_replace( "'", "\'", $posts[0]->post_content );
+						$content          = $this->extractor_extract_image_to_array( $content );
+						$images           = $content['images'];
+						$content          = $content['contents'];
+						$content          = $this->fix_colors( $content );
+						$content          = $this->fix_core_navigation( $content );
+						$pattern_name     = $posts[0]->post_name;
+						$pattern_title    = $posts[0]->post_title;
+						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
+						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
+
+						/** Create pattern php files */
+						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
+						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
+						$content     = $this->replace_template_part( $content, $theme_slug );
+						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
+						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
+						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
+						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
+
+						/**replace additional object with object sync */
+						if ( $pattern_sync ) {
+							$additional = "'is_sync' => true,
+							'images' => array(" . $this->format_image_array( $images ) . ')';
+						} else {
+							$additional = "'is_sync' => false,
+							'images' => array(" . $this->format_image_array( $images ) . ')';
+						}
+						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
+
+						/**Add pattern to class_block_pattern array to register pattern */
+						switch ( $pattern_category ) {
+							case 'pro':
+								if ( 'template' === $place ) {
+									$this->template_pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_pro_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+							case 'gutenverse':
+								if ( 'template' === $place ) {
+									$this->template_gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_gutenverse_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+							default:
+								if ( 'template' === $place ) {
+									$this->template_core_patterns[] = "'{$pattern_name}'";
+								} elseif ( 'page' === $place ) {
+									$this->page_core_patterns[] = '"' . $pattern_name . '"';
+								}
+								break;
+						}
+
+						$system->put_contents(
+							$target_file,
+							$placeholder,
+							FS_CHMOD_FILE
+						);
+
+						if ( $only_get_content && ! $pattern_sync ) {
+							$pattern_after = $posts[0]->post_content;
+						} else {
+							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
+						}
 					}
 
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
@@ -318,6 +422,23 @@ class Export_Templates {
 		}
 
 		return $html_content;
+	}
+
+	/**
+	 * Format images array for use in PHP array string.
+	 *
+	 * @param array $images Array of images.
+	 * @return string
+	 */
+	private function format_image_array( $images ) {
+		$formatted_array = array();
+
+		foreach ( $images as $key => $value ) {
+			$formatted_array[] = "'$key' => '$value'";
+		}
+
+		// Join the array elements into a string.
+		return implode( ', ', $formatted_array );
 	}
 
 	// ----------------------------------------------------------------------------------------------------
@@ -1599,28 +1720,12 @@ class Export_Templates {
 
 					$modified_content = $this->replace_global_variables( $file_content );
 
-					// $extracted_data = $this->extractor_extract_image_to_array( $modified_content, $global_image_index );
-
-					// $global_image_index += count( $extracted_data['images'] );
-
-					// foreach ( $extracted_data['images'] as $index => $image_url ) {
-					// 	$image_data[] = array(
-					// 		'original_url' => $image_url,
-					// 		'placeholder'  => '{{{image:' . ( $index + $global_image_index - count( $extracted_data['images'] ) ) . ':url}}}',
-					// 	);
-					// }
-
-					// $zip->addFromString( $relative_path, $extracted_data['contents'] );
 					$zip->addFromString( $relative_path, $modified_content );
 				} else {
 					$zip->addFile( $file_path, $relative_path );
 				}
 			}
 		}
-
-		$image_json_content = json_encode( $image_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-
-		$zip->addFromString( 'image.json', $image_json_content );
 
 		$zip->close();
 
@@ -1673,13 +1778,12 @@ class Export_Templates {
 	 * @param string $pattern pattern.
 	 * @param array  $images array.
 	 * @param array  $image_index image index.
-	 * @param number $global_index global image index.
 	 *
 	 * @return string
 	 */
-	public function extractor_replace_image( $pattern, $images, $image_index, $global_index = 0 ) {
-		foreach ( $images as $i => $image ) {
-			$index       = $global_index + $i;
+	public function extractor_replace_image( $pattern, $images, $image_index ) {
+		foreach ( $images as $image ) {
+			$index       = $this->extractor_get_image_index( $image, $image_index );
 			$replacement = "{{{image:${index}:url}}}";
 			$pattern     = str_replace( $image, $replacement, $pattern );
 		}
@@ -1688,19 +1792,33 @@ class Export_Templates {
 	}
 
 	/**
+	 * Replace index of resized image into normal image.
+	 *
+	 * @param string $needle pattern.
+	 * @param array  $haystack array.
+	 *
+	 * @return string
+	 */
+	public function extractor_get_image_index( $needle, $haystack ) {
+		$test     = preg_replace( '/-\d+x\d+/', '', $needle );
+		$haystack = array_flip( $haystack );
+
+		return isset( $haystack[ $test ] ) ? $haystack[ $test ] : 0;
+	}
+
+	/**
 	 * Build Valid Import from pattern.
 	 *
 	 * @param string $pattern string.
-	 * @param number $global_index global image index.
 	 *
 	 * @return array
 	 */
-	public function extractor_extract_image_to_array( $pattern, $global_index = 0 ) {
+	public function extractor_extract_image_to_array( $pattern ) {
 		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
 		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
 		$images  = $this->extractor_filter_image( $matches );
 
-		$pattern = $this->extractor_replace_image( $pattern, $matches, $images, $global_index );
+		$pattern = $this->extractor_replace_image( $pattern, $matches, $images );
 
 		$array = array(
 			'images'   => $images,
