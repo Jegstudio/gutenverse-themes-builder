@@ -2,5 +2,5 @@
     "template" : "{{template}}",
     "pagetitle": "{{page_title}}",
     "content" : {{content}},
-    "is_homepage" : {{is_homepage}},
+    "is_homepage" : {{is_homepage}}
 }
