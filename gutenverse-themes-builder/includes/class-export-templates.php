@@ -350,7 +350,7 @@ class Export_Templates {
 						$content          = str_replace( "'", "\'", $posts[0]->post_content );
 						$content          = $this->extractor_extract_image_to_array( $content );
 						$images           = $content['images'];
-						$content          = $content['contents'];
+						$content          = $this->replace_global_variables( $content['contents'] );
 						$content          = $this->fix_colors( $content );
 						$content          = $this->fix_core_navigation( $content );
 						$pattern_name     = $posts[0]->post_name;
