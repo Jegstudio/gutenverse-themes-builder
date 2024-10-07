@@ -69,6 +69,8 @@ class Init {
 
 		add_filter( 'gutenverse_stylesheet_directory', array( $this, 'change_stylesheet_directory' ) );
 		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+
+		{{additional_filter}}
 	}
 
 	/**

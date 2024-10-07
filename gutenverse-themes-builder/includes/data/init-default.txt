@@ -67,6 +67,8 @@ class Init {
 
 		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 2 );
 		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+
+		{{additional_filter}}
 	}
 
 	/**

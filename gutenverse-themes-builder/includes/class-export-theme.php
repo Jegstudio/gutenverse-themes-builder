@@ -206,19 +206,19 @@ class Export_Theme {
 			if ( ! empty( $this->page_core_patterns ) ) {
 				$core_pattern_list = join( ', ', $this->page_core_patterns );
 			}
-			$placeholder = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
+			$placeholder              = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
 			$this->page_core_patterns = array();
 
 			if ( ! empty( $this->page_gutenverse_patterns ) ) {
 				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
 			}
-			$placeholder = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
+			$placeholder                    = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
 			$this->page_gutenverse_patterns = array();
 
 			if ( ! empty( $this->page_pro_patterns ) ) {
 				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
 			}
-			$placeholder = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
+			$placeholder             = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
 			$this->page_pro_patterns = array();
 
 			/**Create the file*/
@@ -879,16 +879,18 @@ class Export_Theme {
 		$placeholder = str_replace( '{{description}}', str_replace( "'", "\'", $theme_data['description'] ), $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
-		
-		$other = maybe_unserialize( $data['other'] );
-		$is_themeforest = '';
+
+		$other             = maybe_unserialize( $data['other'] );
+		$config            = array();
+		$additional_filter = array();
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
-			$is_themeforest = '"isThemeforest" => true,';
+			$config[]            = "'isThemeforest' => true,";
+			$additional_filter[] = "add_filter( 'gutenverse_show_theme_list', '__return_false' );";
 		}
-		$placeholder = str_replace( '{{additional_config}}', $is_themeforest, $placeholder );
+		$placeholder = str_replace( '{{additional_config}}', join( "\n\t\t\t", $config ), $placeholder );
+		$placeholder = str_replace( '{{additional_filter}}', join( "\n\t\t", $additional_filter ), $placeholder );
 
 		// Build dashboard.
-
 		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/js' ) ) {
 			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/js' );
 		}
@@ -1385,71 +1387,71 @@ class Export_Theme {
 			}
 
 			// add blank and basic tempaltes.
-// 			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-// 			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-// 				if ( 'core' === $template['category'] ) {
-// 					$system->put_contents(
-// 						$canvas_target_dir . '/blank-canvas.html',
-// 						'<!-- wp:post-content /-->',
-// 						FS_CHMOD_FILE
-// 					);
-// 				} else {
-// 					$system->put_contents(
-// 						$canvas_target_dir . '/blank-canvas.html',
-// 						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
-// <!-- /wp:gutenverse/post-content -->',
-// 						FS_CHMOD_FILE
-// 					);
-// 				}
-// 			}
-// 			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-// 				if ( 'core' === $template['category'] ) {
-// 					$system->put_contents(
-// 						$canvas_target_dir . '/template-basic.html',
-// 						'<!-- wp:template-part {"slug":"header"} /-->
+			// $canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+			// if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+			// if ( 'core' === $template['category'] ) {
+			// $system->put_contents(
+			// $canvas_target_dir . '/blank-canvas.html',
+			// '<!-- wp:post-content /-->',
+			// FS_CHMOD_FILE
+			// );
+			// } else {
+			// $system->put_contents(
+			// $canvas_target_dir . '/blank-canvas.html',
+			// '<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+			// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
+			// <!-- /wp:gutenverse/post-content -->',
+			// FS_CHMOD_FILE
+			// );
+			// }
+			// }
+			// if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+			// if ( 'core' === $template['category'] ) {
+			// $system->put_contents(
+			// $canvas_target_dir . '/template-basic.html',
+			// '<!-- wp:template-part {"slug":"header"} /-->
 
-// <!-- wp:post-content /-->
+			// <!-- wp:post-content /-->
 
-// <!-- wp:template-part {"slug":"footer"} /-->',
-// 						FS_CHMOD_FILE
-// 					);
-// 				} else {
-// 					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+			// <!-- wp:template-part {"slug":"footer"} /-->',
+			// FS_CHMOD_FILE
+			// );
+			// } else {
+			// $content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
 
-// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-// <div class="guten-element guten-post-content guten-ReyA1K"></div>
-// <!-- /wp:gutenverse/post-content -->
+			// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+			// <div class="guten-element guten-post-content guten-ReyA1K"></div>
+			// <!-- /wp:gutenverse/post-content -->
 
-// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+			// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
 
-// 					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-// 					$header_slug = false;
-// 					$footer_slug = false;
-// 					foreach ( $headers as $header ) {
-// 						$header_slug = $header['to'];
-// 					}
-// 					foreach ( $footers as $footer ) {
-// 						$footer_slug = $footer['to'];
-// 					}
-// 					if ( $header_slug ) {
-// 						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
-// 					} else {
-// 						$content = preg_replace( "'--header_slug--'", 'header', $content );
-// 					}
-// 					if ( $footer_slug ) {
-// 						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-// 					} else {
-// 						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
-// 					}
+			// $content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+			// $header_slug = false;
+			// $footer_slug = false;
+			// foreach ( $headers as $header ) {
+			// $header_slug = $header['to'];
+			// }
+			// foreach ( $footers as $footer ) {
+			// $footer_slug = $footer['to'];
+			// }
+			// if ( $header_slug ) {
+			// $content = preg_replace( "'--header_slug--'", $header_slug, $content );
+			// } else {
+			// $content = preg_replace( "'--header_slug--'", 'header', $content );
+			// }
+			// if ( $footer_slug ) {
+			// $content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
+			// } else {
+			// $content = preg_replace( "'--footer_slug--'", 'footer', $content );
+			// }
 
-// 					$system->put_contents(
-// 						$canvas_target_dir . '/template-basic.html',
-// 						$content,
-// 						FS_CHMOD_FILE
-// 					);
-// 				}
-// 			}
+			// $system->put_contents(
+			// $canvas_target_dir . '/template-basic.html',
+			// $content,
+			// FS_CHMOD_FILE
+			// );
+			// }
+			// }
 		}
 	}
 
@@ -1574,7 +1576,7 @@ class Export_Theme {
 						$pattern_name     = $posts[0]->post_name;
 						$pattern_title    = $posts[0]->post_title;
 						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
+						$pattern_category = empty( $pattern_category ) ? 'core' : $pattern_category;
 						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 
 						/** Create pattern php files */
@@ -1588,9 +1590,9 @@ class Export_Theme {
 
 						/**replace additional object with object sync */
 						if ( $pattern_sync ) {
-							$additional  = "'is_sync' => true,";
+							$additional = "'is_sync' => true,";
 						} else {
-							$additional  = "'is_sync' => false,";
+							$additional = "'is_sync' => false,";
 						}
 						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 
@@ -1663,7 +1665,7 @@ class Export_Theme {
 							} elseif ( 'footer' === $part_name ) {
 								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
 							}
-							$content = preg_replace( $match[0], $replace, $content );
+							$content = str_replace( $match[0], $replace, $content );
 						}
 					}
 				}
