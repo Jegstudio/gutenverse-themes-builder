@@ -369,7 +369,7 @@ class Export_Templates {
 
 						/**replace additional object with object sync */
 
-						$additional = "'pattern_slug' => false,
+						$additional  = "'pattern_slug' => '" . $theme_slug . '/' . $pattern_name . "',
 						'images' => array(" . $this->format_image_array( $images ) . ')';
 						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 
