@@ -170,7 +170,7 @@ const ManagePlugins = () => {
                         })}
                     </>
                 </Table>
-                <div className="buttons margin-top-25 end">
+                <div className="buttons margin-top-32 end">
                     {
                         loading ? <div className="button button-loading" disabled>Loading... </div> :
                         <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
