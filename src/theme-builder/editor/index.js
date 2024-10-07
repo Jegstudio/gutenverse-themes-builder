@@ -247,8 +247,8 @@ const ExtraComponent = () => {
                                 </div>
                             </div>}
                             <p>
-                                <strong>{__('Import ', '--gctd--')}</strong>
-                                {__('Template', '--gctd--')}
+                                <strong>{__('Import From', '--gctd--')}</strong>
+                                {__(' Template Kit', '--gctd--')}
                             </p>
                         </div>
                     </div>;
