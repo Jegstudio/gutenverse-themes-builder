@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ContentWrapper from './content-wrapper';
 import { useDropzone } from 'react-dropzone';
-import { createGlobal, deleteGlobal, getGlobalList, importGlobaStyle, updateActiveGlobal, updateGlobal } from '../../../data/api-fetch';
+import { createGlobal, deleteGlobal, getGlobalListPagination, updateActiveGlobal, updateGlobal } from '../../../data/api-fetch';
 import Table from './table';
 import isEmpty from 'lodash/isEmpty';
 import { WarningPopup } from './warning-popup';
@@ -159,6 +159,10 @@ const ManageGlobal = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [switchPopup, setSwitchPopup] = useState(false);
     const [importLoad, setImportLoad] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
 
     const setEditGlobal = (data) => {
         setData(data);
@@ -166,7 +170,9 @@ const ManageGlobal = () => {
     };
 
     const updateGlobalList = (result) => {
-        setGlobalList(result?.data);
+        setGlobalList(result?.data.list);
+        setTotalData(parseInt(result?.data.total_data));
+        setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
         setActiveGlobal(result?.active);
     };
 
@@ -175,8 +181,11 @@ const ManageGlobal = () => {
     };
 
     useEffect(() => {
-        getGlobalList(updateGlobalList);
-    }, []);
+        getGlobalListPagination({
+            paged,
+            num_post : num_post
+        }, updateGlobalList);
+    }, [paged]);
 
     const updateActiveID = () => {
         updateActiveGlobal(switchPopup, updateGlobalList);
@@ -210,10 +219,11 @@ const ManageGlobal = () => {
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonText: __('Create Global Style', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     },
                     {
                         buttonText: __('Import Color', 'gutenverse-themes-builder'),
@@ -224,7 +234,24 @@ const ManageGlobal = () => {
                 ]}
             >
                 <>
-                    <Table heads={['ID', 'Global Title', 'Status', 'Actions',]}>
+                    <Table 
+                        heads={['ID', 'Global Title', 'Status', 'Actions',]}
+                        length={globalList.length}
+                        paged={paged}
+                        setPaged={setPaged}
+                        numPost={num_post}
+                        totalData={totalData}
+                        totalPage={totalPage}
+                        emptyTitle = {__('You Haven’t Created Any Global Style Yet', 'gutenverse-themes-builder')} 
+                        emptySubtitle = {__('Click \'Create Global Style\' and get things moving.', 'gutenverse-themes-builder')}
+                        showButton = {true}
+                        buttons = {[
+                            {
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Create Global Style', 'gutenverse-themes-builder')}</div>,
+                                buttonLoading : false
+                            }
+                        ]}
+                    >
                         <>
                             {!isEmpty(globalList) && globalList.map((global, key) => {
                                 return <tr key={key}>

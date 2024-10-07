@@ -1,14 +1,13 @@
 import { useState, useEffect } from '@wordpress/element';
-import { deletePage, getPageList } from '../../../data/api-fetch';
+import { deletePage, getPageListPagination } from '../../../data/api-fetch';
 import { isEmpty } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import Table from './table';
-import { DeleteIcon, EditIcon, PlusIcon, WarningIcon } from '../data/icons';
+import { CloseIcon, DeleteIcon, EditIcon, PlusIcon, WarningIcon } from '../data/icons';
 import { WarningPopup } from './warning-popup';
 import ContentWrapper from './content-wrapper';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
-import { ArrowLeft } from 'react-feather';
 import AsyncSelect from 'react-select/async';
 
 const MediaSelect = ({ updateThumbnailData }) => {
@@ -96,6 +95,9 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Create Page')}</span>
+                    <div className="close-button" onClick={onClose}>
+                        <CloseIcon />
+                    </div>
                 </div>
                 <div className="popup-body">
                     <div className="input-wrap">
@@ -152,11 +154,7 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                     </div>
                 </div>
                 <div className="popup-footer">
-                    <div className="buttons spaced">
-                        <div className="back-button" onClick={onClose}>
-                            <ArrowLeft size={14} />
-                            {__('Back', 'gutenverse-themes-builder')}
-                        </div>
+                    <div className="buttons end">
                         <div className="button" onClick={pageSubmit}>
                             {__('Submit', 'gutenverse-themes-builder')}
                         </div>
@@ -175,6 +173,8 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
     const [isHomepage, setIsHomepage] = useState(page?.is_homepage);
     const [order, setOrder] = useState(page?.order);
     const pageCategory = 'gutenverse';
+    const [isEdited, setIsEdited] = useState(false);
+    const [closeWhenEdited, setCloseWhenEdited] = useState(false);
 
     const pageSubmit = () => {
         if (pageName !== '') {
@@ -206,81 +206,98 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
             });
         }
     };
+
+    const handleOnClose = () => {
+        if(isEdited){
+            setCloseWhenEdited(true);
+        }else{
+            onClose();
+        }
+    }
     
-    return (
-        <div className="popup-container" onClick={onClose}>
-            <div className="popup-content" onClick={e => e.stopPropagation()}>
-                <div className="popup-header">
-                    <span className="title pattern">{__('Edit Page')}</span>
-                </div>
-                <div className="popup-body">
-                    <div className="input-wrap">
-                        <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
-                        <input type="text" value={pageName} onChange={e => setPageName(e.target.value)} />
-                        <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
-                    </div>
-                    <div className="input-wrap">
-                        <label>{__('Page Order', 'gutenverse-themes-builder')}</label>
-                        <input type="number" min="1" value={order} onChange={e => setOrder(e.target.value)} />
-                        <span className="description">{__('Set Your Page Order in Wizard. Page order cannot be duplicate. Each Page must have different order.', 'gutenverse-themes-builder')}</span>
-                    </div>
-                    <div className='input-wrap'>
-                        <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
-                        <AsyncSelect
-                            id={"template-selector"}
-                            className={"async-select-container"}
-                            classNamePrefix={"async-select"}
-                            isMulti={false}
-                            noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
-                            onChange={(value)=> setTemplateSlug(value.value)}
-                            loadOptions={input => onSearch(input)}
-                            value={{id: templateSlug, label: templateSlug}}
-                        />
-                    </div>
-                    <div className='input-wrap'>
-                        <input
-                            type="checkbox"
-                            onChange={() => setIsHomepage(!isHomepage)}
-                            checked={isHomepage}
-                            hidden
-                        />
-                        <label>{__('Assign as Homepage', 'gutenverse-themes-builder')}</label>
-                    </div>
-                    <div className='input-wrap'>
-                        <label>
-                            {__('Page Preview Url', 'gutenverse-themes-builder')}
-                        </label>
-                        <input
-                            type="text"
-                            name="page_demo"
-                            value={pagePreview}
-                            onChange={e => setPagePreview(e.target.value)}
-                        />
-                    </div>
-                    <div className='input-wrap media-wrap'>
-                        <label>
-                            {__('Page Image', 'gutenverse-themes-builder')}
-                        </label>
-                        <MediaSelect updateThumbnailData={value => setPageImage(value)} />
-                        {pageImage?.url && <div className="image-wrapper">
-                            <img src={pageImage?.url}/>
-                        </div>}
-                    </div>
-                </div>
-                <div className="popup-footer">
-                    <div className="buttons spaced">
-                        <div className="back-button" onClick={onClose}>
-                            <ArrowLeft size={14} />
-                            {__('Back', 'gutenverse-themes-builder')}
+    return <>
+        {
+            closeWhenEdited ? <WarningPopup 
+                title={__('Are you sure want to leave this menu ?', 'gutenverse-themes-builder')}
+                detail={__('Changes you made may not be saved.', 'gutenverse-themes-builder')}
+                onProceed={onClose}
+                onClose={() => setCloseWhenEdited(false)}
+                actionText={__('Leave', 'gutenverse-themes-builder')}
+                buttonFill='#3B57F7'
+                svgFill='#FFC908'
+            /> : <div className="popup-container" onClick={handleOnClose}>
+                <div className="popup-content" onClick={e => e.stopPropagation()}>
+                    <div className="popup-header">
+                        <span className="title pattern">{__('Edit Page')}</span>
+                        <div className="close-button" onClick={handleOnClose}>
+                            <CloseIcon />
                         </div>
-                        <div className="button" onClick={pageSubmit}>
-                            {__('Submit', 'gutenverse-themes-builder')}
+                    </div>
+                    <div className="popup-body">
+                        <div className="input-wrap">
+                            <label>{__('Page Name', 'gutenverse-themes-builder')}</label>
+                            <input type="text" value={pageName} onChange={e => { setPageName(e.target.value); setIsEdited(true); }} />
+                            <span className="description">{__('The name for your page', 'gutenverse-themes-builder')}</span>
+                        </div>
+                        <div className="input-wrap">
+                            <label>{__('Page Order', 'gutenverse-themes-builder')}</label>
+                            <input type="number" min="1" value={order} onChange={e => { setOrder(e.target.value); setIsEdited(true);}} />
+                            <span className="description">{__('Set Your Page Order in Wizard. Page order cannot be duplicate. Each Page must have different order.', 'gutenverse-themes-builder')}</span>
+                        </div>
+                        <div className='input-wrap'>
+                            <label>{__('Template', 'gutenverse-themes-builder')}</label><br/>
+                            <AsyncSelect
+                                id={"template-selector"}
+                                className={"async-select-container"}
+                                classNamePrefix={"async-select"}
+                                isMulti={false}
+                                noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
+                                onChange={(value)=> { setTemplateSlug(value.value); setIsEdited(true); }}
+                                loadOptions={input => onSearch(input)}
+                                value={{id: templateSlug, label: templateSlug}}
+                            />
+                        </div>
+                        <div className='input-wrap'>
+                            <input
+                                type="checkbox"
+                                onChange={() => { setIsHomepage(!isHomepage); setIsEdited(true); }}
+                                checked={isHomepage}
+                                hidden
+                            />
+                            <label>{__('Assign as Homepage', 'gutenverse-themes-builder')}</label>
+                        </div>
+                        <div className='input-wrap'>
+                            <label>
+                                {__('Page Preview Url', 'gutenverse-themes-builder')}
+                            </label>
+                            <input
+                                type="text"
+                                name="page_demo"
+                                value={pagePreview}
+                                onChange={e => { setPagePreview(e.target.value); setIsEdited(true); }}
+                            />
+                        </div>
+                        <div className='input-wrap media-wrap'>
+                            <label>
+                                {__('Page Image', 'gutenverse-themes-builder')}
+                            </label>
+                            <MediaSelect updateThumbnailData={value => { setPageImage(value); setIsEdited(true);}} />
+                            {pageImage?.url && <div className="image-wrapper">
+                                <img src={pageImage?.url}/>
+                            </div>}
+                        </div>
+                    </div>
+                    <div className="popup-footer">
+                        <div className="buttons end">
+                            <div className="button" onClick={pageSubmit}>
+                                {__('Submit', 'gutenverse-themes-builder')}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        }
+    </>
 };
 
 const ManagePages = () => {
@@ -288,16 +305,25 @@ const ManagePages = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [createPagePopup, setCreatePagePopup] = useState(false);
     const [editPagePopup, setEditPagePopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
+
     const {
         editPath,
     } = window['GutenverseThemeBuilder'];
+
     const {
        url
     } = window['GutenverseDashboard'];
 
     const updateList = (result) => {
-        setPageList(result);
+        setPageList(result?.pages);
+        setTotalData(result?.total_posts);
+        setTotalPage(result?.total_page);
     };
+
     const onSearch = (input) => new Promise(resolve => {
         apiFetch({
             method: 'POST',
@@ -323,8 +349,12 @@ const ManagePages = () => {
     });
 
     useEffect(() => {
-        getPageList(updateList);
-    }, []);
+        getPageListPagination({
+            paged,
+            num_post
+        },updateList);
+    }, [paged]);
+
     const removePage = () => deletePage({ id: deletePopup }, updateList);
 
     return (
@@ -334,10 +364,11 @@ const ManagePages = () => {
             headingButton={true}
             headingButtons={[
                 {
-                    buttonText: __('Add New', 'gutenverse-themes-builder'),
+                    buttonText: __('Create Page', 'gutenverse-themes-builder'),
                     buttonEvent: () => setCreatePagePopup(true),
                     buttonIcon: <PlusIcon />,
-                    buttonLoading: false
+                    buttonLoading: false,
+                    buttonHide : totalData === 0
                 }
             ]}
             showNotice={true}
@@ -359,13 +390,27 @@ const ManagePages = () => {
             <>
                 <Table
                     heads={['Order', 'Slug', 'Title', 'Action',]}
+                    length={pageList.length}
+                    paged={paged}
+                    setPaged={setPaged}
+                    totalData={totalData}
+                    totalPage={totalPage}
+                    emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 
+                    emptySubtitle = {__('Click \'Create Page\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                    showButton = {true}
+                    buttons = {[
+                        {
+                            buttonElement : () => <div className="button create" onClick={() => setCreatePagePopup(true)}><PlusIcon fill={'white'}/> {__('Create Page', 'gutenverse-themes-builder')}</div>,
+                            buttonLoading : false
+                        }
+                    ]}
                 >
                     <>
                         {!isEmpty(pageList) && pageList.map((page, key) => {
                             return <tr key={key}>
-                                <td>{page?.order}</td>
-                                <td>{page?.post_name}</td>
-                                <td>{page?.post_title}</td>
+                                <td width={'5%'}>{page?.order}</td>
+                                <td >{page?.post_name}</td>
+                                <td >{page?.post_title}</td>
                                 <td>
                                     <div className="actions">
                                         <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>

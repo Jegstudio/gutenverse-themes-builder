@@ -31,17 +31,16 @@ const ExportTheme = () => {
     }
 
     return (
-        <ContentWrapper
-            title={__('Export Theme', 'gutenverse-themes-builder')}
-            description={__('Export your current active theme as zip file.', 'gutenverse-themes-builder')}
-        >
-            <>
+        <div className='table empty margin-top-0'>
+            <div className='empty-content'>
+                <h3>{__('Ready to export your themes ?', 'gutenverse-themes-builder')}</h3>
+                <p className='export-paragraph'>{__('Explore the unlimited possibilities of Gutenberg and Full Site Editing using Gutenverse.', 'gutenverse-themes-builder')}</p>
                 <div className="buttons">
-                    { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export Theme', 'gutenverse-themes-builder')}</div>}
+                    { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export Themes', 'gutenverse-themes-builder')}</div>}
                     { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExportTemplate}>{__('Export Template', 'gutenverse-themes-builder')}</div>}
                 </div>
-            </>
-        </ContentWrapper>
+            </div>
+        </div>
     );
 };
 

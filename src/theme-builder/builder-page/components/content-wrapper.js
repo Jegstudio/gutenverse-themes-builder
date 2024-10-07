@@ -24,8 +24,10 @@ const ContentWrapper = (props) => {
 
     const ButtonElement = () => {
         return headingButtons.map(button => {
-            return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
+            if(!button.buttonHide){
+                return button.buttonLoading ? <div className="button button-loading" disabled>Loading... </div> :
                 <div className="button" onClick={button.buttonEvent}>{button.buttonIcon && button.buttonIcon}{button.buttonText}</div>
+            }
         })
     }
     return (

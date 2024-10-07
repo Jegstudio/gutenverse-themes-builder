@@ -151,6 +151,7 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                                 }}
                             />
                         </div>
+                        <span>{__('Add custom code to modify the theme’s design or functionality.', 'gutenverse-themes-builder')}</span>
                     </div>}
                 </>
             }
@@ -231,6 +232,10 @@ const ManageAssets = () => {
     const [assetList, setAssetList] = useState([]);
     const [data, setData] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
     const themeSlug = window['GutenverseThemeBuilder']['themeSlug'];
     const presetStyles = {
         css: PRESET_CSS.replaceAll('{{theme_slug}}', themeSlug),
@@ -243,7 +248,9 @@ const ManageAssets = () => {
     };
 
     const updateAssetList = (result) => {
-        setAssetList(result?.data);
+        setAssetList(result?.data.list);
+        setTotalData(parseInt(result?.data.total_data));
+        setTotalPage(parseInt(result?.total_page));
     };
 
     const removeAsset = () => {
@@ -251,8 +258,11 @@ const ManageAssets = () => {
     };
 
     useEffect(() => {
-        getAssetList(updateAssetList);
-    }, []);
+        getAssetList({
+            paged,
+            num_post
+        }, updateAssetList);
+    }, [paged]);
 
     let Content = null;
 
@@ -285,13 +295,31 @@ const ManageAssets = () => {
                         buttonText: __('Add New', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     }
                 ]}
                 headingButton={true}
             >
                 <>
-                    <Table heads={['Handler Name', 'Type', 'Media Type', 'Action',]}>
+                    <Table 
+                        heads={['Handler Name', 'Type', 'Media Type', 'Action',]}
+                        length={assetList.length}
+                        paged={paged}
+                        setPaged={setPaged}
+                        numPost={num_post}
+                        totalData={totalData}
+                        totalPage={totalPage}
+                        emptyTitle = {__('You Haven’t Created Any Assets Yet', 'gutenverse-themes-builder')} 
+                        emptySubtitle = {__('Click \'Create Asset\' start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                        showButton = {true}
+                        buttons = {[
+                            {
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Create Assets', 'gutenverse-themes-builder')}</div>,
+                                buttonLoading : false
+                            }
+                        ]}
+                    >
                         <>
                             {!isEmpty(assetList) && assetList.map((asset, key) => {
                                 return <tr key={key}>

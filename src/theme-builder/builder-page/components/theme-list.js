@@ -29,7 +29,7 @@ const CreateTheme = ({ setMode, updateThemeList }) => {
 
     const updateCallback = (response) => {
         if (response?.status === 'success') {
-            updateThemeList(response?.data?.list);
+            updateThemeList();
             setMode('list');
         } else {
             setNoticeMessage(response?.data?.message);
@@ -49,7 +49,7 @@ const CreateTheme = ({ setMode, updateThemeList }) => {
     </div>;
 
     const actionButton = <div className="buttons end">
-        <button className="button data create" onClick={onCreateTheme}>{__('Create Now', 'gutenverse-themes-builder')}</button>
+        <button className="button data create" onClick={onCreateTheme}>{__('Create Theme', 'gutenverse-themes-builder')}</button>
     </div>;
 
     const notice = !isEmpty(noticeMessage) && <div className="gtb-notice">
@@ -80,7 +80,7 @@ const EditTheme = ({ themeId, setMode, updateThemeList }) => {
 
     const updateCallback = (response) => {
         if (response?.status === 'success') {
-            updateThemeList(response?.data?.list);
+            updateThemeList();
             setMode('list');
         } else {
             setNoticeMessage(response?.data?.message);
@@ -137,8 +137,16 @@ const ThemeList = () => {
         setThemeList(result?.data.list);
         setTotalData(parseInt(result?.data.total_data));
         setActiveTheme(result?.active);
-        setTotalPage(Math.ceil(parseInt(result?.data.total_data)/num_post));
+        setTotalPage(result?.total_page);
     };
+
+    const handleChangeData = (result) => {
+        setPaged(1);
+        getThemeListPagination({
+            paged: 1,
+            num_post : num_post
+        },updateThemeList);
+    }
 
     useEffect(() => {
         getThemeListPagination({
@@ -153,21 +161,21 @@ const ThemeList = () => {
     };
 
     const removeTheme = () => {
-        deleteTheme(deletePopup, updateThemeList);
+        deleteTheme(deletePopup, handleChangeData);
     };
 
     const updateActiveID = () => {
-        updateActiveTheme(switchPopup, updateThemeList);
+        updateActiveTheme(switchPopup, handleChangeData);
     };
 
     let Content = null;
 
     switch (mode) {
         case 'create':
-            Content = <CreateTheme themeId={themeId} setMode={setMode} updateThemeList={updateThemeList} />;
+            Content = <CreateTheme themeId={themeId} setMode={setMode} updateThemeList={handleChangeData} />;
             break;
         case 'edit':
-            Content = <EditTheme themeId={themeId} setMode={setMode} updateThemeList={updateThemeList} />;
+            Content = <EditTheme themeId={themeId} setMode={setMode} updateThemeList={handleChangeData} />;
             break;
         default:
             Content = <ContentWrapper
@@ -176,10 +184,11 @@ const ThemeList = () => {
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonText: __('Create Theme', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     }
                 ]}
             >
@@ -192,16 +201,25 @@ const ThemeList = () => {
                         numPost={num_post}
                         totalData={totalData}
                         totalPage={totalPage}
+                        emptyTitle = {__('You Haven’t Created Any Theme Yet', 'gutenverse-themes-builder')} 
+                        emptySubtitle = {__('Click \'Create Theme\' to start designing your very first theme and get things moving.', 'gutenverse-themes-builder')}
+                        showButton = {true}
+                        buttons = {[
+                            {
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Create Theme', 'gutenverse-themes-builder')}</div>,
+                                buttonLoading : false
+                            }
+                        ]}
                     >
                         <>
                             {!isEmpty(themeList) && themeList.map((theme, key) => {
                                 const active = activeTheme === theme?.theme_id;
 
                                 return <tr key={key}>
-                                    <td>{theme?.theme_id}</td>
-                                    <td>{theme?.slug}</td>
-                                    <td>{theme?.theme_data?.title}</td>
-                                    <td><span className={`status ${active ? 'active' : ''}`}>{active ? __('ACTIVE', 'gutenverse-themes-builder') : __('INACTIVE', 'gutenverse-themes-builder')}</span></td>
+                                    <td width={'10%'}>{theme?.theme_id}</td>
+                                    <td >{theme?.slug}</td>
+                                    <td >{theme?.theme_data?.title}</td>
+                                    <td width={'10%'}><span className={`status ${active ? 'active' : ''}`}>{active ? __('ACTIVE', 'gutenverse-themes-builder') : __('INACTIVE', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {!active && <a className="edit" onClick={() => setSwitchPopup(theme?.theme_id)}>Set Active</a>}

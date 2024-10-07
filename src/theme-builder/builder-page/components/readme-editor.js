@@ -47,8 +47,9 @@ const ReadmeEditor = () => {
                     fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
                 }}
             />
+            <br/>
             {!loading && <div className="data-footer">
-                <div className="buttons inline">
+                <div className="buttons end">
                     <button className="button create" onClick={saveReadme}>{__('Save Readme', 'gutenverse-themes-builder')}</button>
                 </div>
             </div>}

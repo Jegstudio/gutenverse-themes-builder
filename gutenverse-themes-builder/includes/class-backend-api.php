@@ -160,7 +160,7 @@ class Backend_Api {
 			self::ENDPOINT,
 			'assets/list',
 			array(
-				'methods'             => 'GET',
+				'methods'             => 'POST',
 				'callback'            => array( $this, 'get_asset_list' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
@@ -209,6 +209,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'fonts/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_font_list_pagination' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'font/update',
 			array(
 				'methods'             => 'POST',
@@ -242,8 +252,8 @@ class Backend_Api {
 			self::ENDPOINT,
 			'fontsizes/list',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'get_fontsize_list' ),
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_fontsize_list_pagination' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -382,6 +392,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'pattern/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_pattern_list_pagination' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'template/import',
 			array(
 				'methods'             => 'GET',
@@ -418,6 +438,16 @@ class Backend_Api {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_global_list' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'globalstyles/list',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'get_global_list_pagination' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
@@ -487,7 +517,7 @@ class Backend_Api {
 			self::ENDPOINT,
 			'pages/list',
 			array(
-				'methods'             => 'GET',
+				'methods'             => 'POST',
 				'callback'            => array( $this, 'get_page_list' ),
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
@@ -733,6 +763,35 @@ class Backend_Api {
 	}
 
 	/**
+	 * Get theme list Pagination
+	 *
+	 * @param object $request .
+	 *
+	 * @return object
+	 */
+	public function get_global_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$global_db = Database::instance()->theme_globals;
+		$data      = $global_db->get_pagination_data( $offset, $num_post );
+		foreach ( $data as &$global ) {
+			if ( ! empty( $global['file'] ) ) {
+				$global['file'] = maybe_unserialize( $global['file'] );
+			}
+		}
+		$max_page = ceil( $data['total_data'] / $num_post );
+		return array(
+			'active'     => $this->get_active_global_id(),
+			'data'       => $data,
+			'total_page' => $max_page,
+		);
+	}
+
+	/**
 	 * Get Active Global ID
 	 *
 	 * @return int|false
@@ -757,8 +816,8 @@ class Backend_Api {
 	 * @return array
 	 */
 	public function create_globalstyle( $request ) {
-		$title     = $request->get_param( 'title' );
-		$filedata  = $request->get_param( 'file' );
+		$title     = gutenverse_esc_data( $request->get_param( 'title' ) );
+		$filedata  = gutenverse_esc_data( $request->get_param( 'file' ), 'array' );
 		$imported  = $this->global_style_import( $filedata );
 		$global_db = Database::instance()->theme_globals;
 		$data      = array(
@@ -770,7 +829,7 @@ class Backend_Api {
 
 		$global_db->create_data( $data );
 
-		return $this->get_global_list();
+		return $this->get_global_list_pagination( $request );
 	}
 
 	/**
@@ -781,15 +840,15 @@ class Backend_Api {
 	 * @return array
 	 */
 	public function update_globalstyle( $request ) {
-		$id        = $request->get_param( 'id' );
-		$title     = $request->get_param( 'title' );
-		$filedata  = $request->get_param( 'file' );
+		$id        = gutenverse_esc_data( $request->get_param( 'id' ) );
+		$title     = gutenverse_esc_data( $request->get_param( 'title' ) );
+		$filedata  = gutenverse_esc_data( $request->get_param( 'file' ), 'array' );
 		$global_db = Database::instance()->theme_globals;
 		$previous  = $global_db->get_data( $id );
 
 		if ( ! empty( $previous ) ) {
-			$decode = maybe_unserialize( $previous[0]['file'] );
-
+			$decode   = maybe_unserialize( $previous[0]['file'] );
+			$filedata = maybe_unserialize( $filedata );
 			if ( ! empty( $decode ) && (int) $decode['id'] !== (int) $filedata['id'] ) {
 				$replace  = (int) $this->get_active_global_id() === (int) $id;
 				$imported = $this->global_style_import( $filedata, $replace );
@@ -811,7 +870,7 @@ class Backend_Api {
 
 		$global_db->update_data( $data, $where );
 
-		return $this->get_global_list();
+		return $this->get_global_list_pagination( $request );
 	}
 
 	/**
@@ -827,7 +886,7 @@ class Backend_Api {
 			array( 'id' => $id )
 		);
 
-		return $this->get_global_list();
+		return $this->get_global_list_pagination( $request );
 	}
 
 	/**
@@ -903,7 +962,7 @@ class Backend_Api {
 			),
 			$theme_id
 		);
-		return $this->get_global_list();
+		return $this->get_global_list_pagination( $request );
 	}
 
 	/**
@@ -946,9 +1005,6 @@ class Backend_Api {
 
 		return array(
 			'status' => 'success',
-			'data'   => array(
-				'list' => $this->get_theme_list(),
-			),
 		);
 	}
 
@@ -991,7 +1047,7 @@ class Backend_Api {
 				$theme['theme_data'] = maybe_unserialize( $theme['theme_data'] );
 			}
 		}
-		$max_page = ceil( $data['count'] / $num_post );
+		$max_page = ceil( $data['total_data'] / $num_post );
 		return array(
 			'active'     => $active,
 			'data'       => $data,
@@ -1064,9 +1120,6 @@ class Backend_Api {
 
 		return array(
 			'status' => 'success',
-			'data'   => array(
-				'list' => $this->get_theme_list(),
-			),
 		);
 	}
 
@@ -1214,7 +1267,7 @@ class Backend_Api {
 			$wpdb->query( 'COMMIT' );
 			// Reset post data to the original global $post object
 			wp_reset_postdata();
-			return $this->get_theme_list();
+			return array( 'status' => 'success' );
 			// If everything is successful, commit the transaction
 		} catch ( Exception $e ) {
 			// If something went wrong, roll back the transaction
@@ -1299,7 +1352,7 @@ class Backend_Api {
 				return array(
 					'status' => 'success',
 					'data'   => array(
-						'list' => $this->get_pattern_list( $request ),
+						'list' => $this->get_pattern_list_pagination( $request ),
 					),
 				);
 			} else {
@@ -1354,7 +1407,7 @@ class Backend_Api {
 				return array(
 					'status' => 'success',
 					'data'   => array(
-						'list' => $this->get_pattern_list( $request ),
+						'list' => $this->get_pattern_list_pagination( $request ),
 					),
 				);
 			} else {
@@ -1507,6 +1560,47 @@ class Backend_Api {
 		);
 
 		return $patterns->posts;
+	}
+
+	/**
+	 * Get Pattern List.
+	 *
+	 * @param object $request Request Object.
+	 *
+	 * @return object
+	 */
+	public function get_pattern_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$patterns = new \WP_Query(
+			array(
+				'post_type'      => 'gutenverse-pattern',
+				'paged'          => $paged,
+				'posts_per_page' => $num_post,
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_pattern_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
+		$posts    = array();
+		if ( $patterns->have_posts() ) {
+			foreach ( $patterns->posts as $pattern ) {
+				$pattern->category = get_post_meta( $pattern->ID, '_pattern_category', true );
+				$posts[]           = $pattern;
+			}
+		}
+		return (object) array(
+			'patterns'    => $posts,
+			'total_page'  => $patterns->max_num_pages,
+			'total_posts' => $patterns->found_posts,
+		);
 	}
 
 	/**
@@ -1821,7 +1915,7 @@ class Backend_Api {
 			wp_delete_post( $pattern_id, true );
 		}
 
-		return $this->get_pattern_list( $request );
+		return $this->get_pattern_list_pagination( $request );
 	}
 
 	/**
@@ -1832,14 +1926,27 @@ class Backend_Api {
 
 	/**
 	 * Get Asset List.
+	 *
+	 * @param object $request .
+	 *
+	 * @return object
 	 */
-	public function get_asset_list() {
+	public function get_asset_list( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
 		$assets_db = Database::instance()->theme_assets;
 		$active    = get_option( 'gtb_active_theme_id' );
-		$data      = $assets_db->get_all_assets( $active );
+		$data      = $assets_db->get_pagination_data( $active, $offset, $num_post );
 
+		
+		$max_page = ceil( $data['total_data'] / $num_post );
 		return array(
-			'data' => $data,
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 
@@ -1873,7 +1980,7 @@ class Backend_Api {
 		);
 
 		$this->write_asset( $media_type, $type, $handler, $content );
-		return $this->get_asset_list();
+		return $this->get_asset_list( $request );
 	}
 
 	/**
@@ -1905,7 +2012,7 @@ class Backend_Api {
 
 		if ( $result ) {
 			$this->write_asset( $media_type, $type, $handler, $content );
-			return $this->get_asset_list();
+			return $this->get_asset_list( $request );
 		} else {
 			return false;
 		}
@@ -1955,7 +2062,7 @@ class Backend_Api {
 			array( 'id' => $id )
 		);
 
-		return $this->get_asset_list();
+		return $this->get_asset_list( $request );
 	}
 
 	/**
@@ -1979,6 +2086,37 @@ class Backend_Api {
 
 		return array(
 			'data' => $data,
+		);
+	}
+
+	/**
+	 * Get Font List Pagination.
+	 * 
+	 * @param object $request .
+	 *
+	 * @return object
+	 */
+	public function get_font_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$fonts_db = Database::instance()->theme_fonts;
+		$active   = get_option( 'gtb_active_theme_id' );
+		$data     = $fonts_db->get_pagination_data( $active, $offset, $num_post );
+
+		foreach ( $data['list'] as &$font ) {
+			$font['style']   = maybe_unserialize( $font['style'] );
+			$font['weights'] = maybe_unserialize( $font['weights'] );
+		}
+
+		$max_page = ceil( $data['total_data'] / $num_post );
+
+		return (object) array(
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 
@@ -2008,7 +2146,7 @@ class Backend_Api {
 		$this->generate_fonts( $family, $style, $weights );
 		$this->update_theme_json();
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 	/**
@@ -2035,7 +2173,7 @@ class Backend_Api {
 		$this->generate_fonts( $family, $style, $weights );
 		$this->update_theme_json();
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 	/**
@@ -2078,11 +2216,10 @@ class Backend_Api {
 		if ( ! empty( $family ) ) {
 			$slug   = strtolower( str_replace( ' ', '-', $family ) );
 			$folder = gutenverse_themes_builder_theme_folder_path() . '/assets/fonts/' . $slug;
-			$weight = $this->get_font_params( $style, $weights );
 
 			$this->check_directory( $folder );
 
-			$download_url = "https://gwfh.mranftl.com/api/fonts/{$slug}?download=zip&variants={$weight}&formats=woff2";
+			$download_url = "https://gwfh.mranftl.com/api/fonts/{$slug}?download=zip&variants=regular&formats=woff2";
 			$get_file     = wp_remote_get( $download_url );
 			$file_path    = $folder . '/' . $slug . '.zip';
 
@@ -2130,7 +2267,7 @@ class Backend_Api {
 			$wp_filesystem->rmdir( $font_folder, true );
 		}
 
-		return $this->get_font_list();
+		return $this->get_font_list_pagination( $request );
 	}
 
 
@@ -2150,6 +2287,32 @@ class Backend_Api {
 
 		return array(
 			'data' => $data,
+		);
+	}
+
+	/**
+	 * Get Font List pagination.
+	 * 
+	 * @param object $request .
+	 *
+	 * @return object
+	 */
+	public function get_fontsize_list_pagination( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
+		$offset   = ( $paged - 1 ) * $num_post;
+
+		$sizes_db = Database::instance()->theme_fontsizes;
+		$active   = get_option( 'gtb_active_theme_id' );
+		$data     = $sizes_db->get_pagination_data( $active, $offset, $num_post );
+
+		$max_page = ceil( $data['total_data'] / $num_post );
+
+		return (object) array(
+			'data'       => $data,
+			'total_page' => $max_page,
 		);
 	}
 
@@ -2178,7 +2341,7 @@ class Backend_Api {
 
 		$this->update_theme_json();
 
-		return $this->get_fontsize_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 	/**
@@ -2204,7 +2367,7 @@ class Backend_Api {
 
 		$this->update_theme_json();
 
-		return $this->get_fontsize_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 	/**
@@ -2221,7 +2384,7 @@ class Backend_Api {
 			array( 'id' => $id )
 		);
 
-		return $this->get_font_list();
+		return $this->get_fontsize_list_pagination( $request );
 	}
 
 
@@ -2952,13 +3115,23 @@ class Backend_Api {
 
 	/**
 	 * Get Page List
+	 *
+	 * @param object $request .
+	 *
+	 * @return object
 	 */
-	public function get_page_list() {
+	public function get_page_list( $request ) {
+		$paged    = gutenverse_esc_data( $request->get_param( 'paged' ), 'int' );
+		$paged    = empty( $paged ) ? 1 : $paged;
+		$num_post = gutenverse_esc_data( $request->get_param( 'num_post' ), 'integer' );
+		$num_post = empty( $num_post ) ? 10 : $num_post;
 		$theme_id = get_option( 'gtb_active_theme_id' );
-		$pages    = new \WP_Query(
+
+		$pages = new \WP_Query(
 			array(
 				'post_type'      => 'page',
-				'posts_per_page' => -1,
+				'paged'          => $paged,
+				'posts_per_page' => $num_post,
 				'meta_query' => array( //phpcs:ignore
 					array(
 						'key'     => '_gtb_page_theme_id',
@@ -2968,7 +3141,8 @@ class Backend_Api {
 				),
 			)
 		);
-		$data     = array();
+
+		$data = array();
 		if ( $pages->have_posts() ) {
 			foreach ( $pages->posts as $post ) {
 				$template          = get_post_meta( $post->ID, '_wp_page_template', true );
@@ -3000,6 +3174,7 @@ class Backend_Api {
 				);
 			}
 		}
+
 		usort(
 			$data,
 			function ( $a, $b ) {
@@ -3012,7 +3187,11 @@ class Backend_Api {
 				return $a['order'] - $b['order'];
 			}
 		);
-		return $data;
+		return (object) array(
+			'pages'       => $data,
+			'total_page'  => $pages->max_num_pages,
+			'total_posts' => $pages->found_posts,
+		);
 	}
 
 	/**
@@ -3069,7 +3248,7 @@ class Backend_Api {
 			return new WP_REST_Response(
 				array(
 					'status' => 'success',
-					'data'   => $this->get_page_list(),
+					'data'   => $this->get_page_list( $request ),
 				),
 				200
 			);
@@ -3096,7 +3275,7 @@ class Backend_Api {
 		return new WP_REST_Response(
 			array(
 				'status' => 'success',
-				'data'   => $this->get_page_list(),
+				'data'   => $this->get_page_list( $request ),
 			),
 			200
 		);
@@ -3127,7 +3306,7 @@ class Backend_Api {
 			);
 		}
 		if ( $theme_id ) {
-			$page = array(
+			$page    = array(
 				'ID'            => $id,
 				'post_title'    => $name,
 				'post_author'   => get_current_user_id(),
@@ -3153,7 +3332,7 @@ class Backend_Api {
 			return new WP_REST_Response(
 				array(
 					'status' => 'success',
-					'data'   => $this->get_page_list(),
+					'data'   => $this->get_page_list( $request ),
 				),
 				200
 			);

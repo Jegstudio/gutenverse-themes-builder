@@ -169,9 +169,10 @@ export const deleteTemplate = (params, callback = def_callback) => {
 };
 
 /* Page */
-export const getPageList = (callback = def_callback) => {
+export const getPageListPagination = (request, callback = def_callback) => {
     apiFetch({
-        path: addQueryArgs('gtb-backend/v1/pages/list'),
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/pages/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -205,6 +206,16 @@ export const getPatternList = (params, callback = def_callback) => {
     });
 };
 
+export const getPatternListPagination = (request, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/pattern/list', request),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 export const deletePattern = (params, callback = def_callback) => {
     apiFetch({
         method: 'POST',
@@ -222,9 +233,10 @@ export const deletePattern = (params, callback = def_callback) => {
 
 /* Assets */
 
-export const getAssetList = (callback = def_callback) => {
+export const getAssetList = (request, callback = def_callback) => {
     apiFetch({
-        path: addQueryArgs('gtb-backend/v1/assets/list'),
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/assets/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -273,9 +285,11 @@ export const deleteAsset = (params, callback = def_callback) => {
 
 /* Fonts */
 
-export const getFontList = (callback = def_callback) => {
+export const getFontList = (request, callback = def_callback) => {
     apiFetch({
+        method: 'POST',
         path: addQueryArgs('gtb-backend/v1/fonts/list'),
+        data: request
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -325,9 +339,11 @@ export const deleteFont = (params, callback = def_callback) => {
 
 /* Fontsize */
 
-export const getFontsizeList = (callback = def_callback) => {
+export const getFontsizeList = (request, callback = def_callback) => {
     apiFetch({
+        method: 'POST',
         path: addQueryArgs('gtb-backend/v1/fontsizes/list'),
+        data: request
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -394,6 +410,16 @@ export const getPluginList = (search = '', callback = def_callback) => {
 export const getGlobalList = (callback = def_callback) => {
     apiFetch({
         path: addQueryArgs('gtb-backend/v1/globalstyles/list'),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const getGlobalListPagination = (request, callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/globalstyles/list', request),
     }).then((response) => {
         callback(response);
     }).catch(() => {

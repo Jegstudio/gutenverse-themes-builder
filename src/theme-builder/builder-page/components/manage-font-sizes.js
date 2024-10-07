@@ -140,6 +140,10 @@ const ManageFontSizes = () => {
     const [fontList, setFontList] = useState([]);
     const [data, setData] = useState(null);
     const [deletePopup, setDeletePopup] = useState(false);
+    const [paged,setPaged] = useState(1);
+    const [totalData, setTotalData] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    let num_post = 10;
 
     const setEditFont = (data) => {
         setData(data);
@@ -147,7 +151,9 @@ const ManageFontSizes = () => {
     };
 
     const updateFontList = (result) => {
-        setFontList(result?.data);
+        setFontList(result?.data.list);
+        setTotalData(parseInt(result?.data.total_data));
+        setTotalPage(parseInt(result?.total_page));
     };
 
     const removeFont = () => {
@@ -155,8 +161,11 @@ const ManageFontSizes = () => {
     };
 
     useEffect(() => {
-        getFontsizeList(updateFontList);
-    }, []);
+        getFontsizeList({
+            paged,
+            num_post
+        },updateFontList);
+    }, [paged]);
 
     let Content = null;
 
@@ -174,15 +183,33 @@ const ManageFontSizes = () => {
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText: __('Add New', 'gutenverse-themes-builder'),
+                        buttonText: __('Add Font Size', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
-                        buttonLoading: false
+                        buttonLoading: false,
+                        buttonHide : totalData === 0
                     }
                 ]}
             >
                 <>
-                    <Table heads={['ID', 'Slug', 'Title', 'Size', 'Actions',]}>
+                    <Table 
+                        heads={['ID', 'Slug', 'Title', 'Size', 'Actions',]}
+                        length={fontList.length}
+                        paged={paged}
+                        setPaged={setPaged}
+                        numPost={num_post}
+                        totalData={totalData}
+                        totalPage={totalPage}
+                        emptyTitle = {__('You Haven’t Add Any Fonts Size Yet', 'gutenverse-themes-builder')} 
+                        emptySubtitle = {__('Click \'Add Font Size\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                        showButton = {true}
+                        buttons = {[
+                            {
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Add Font Size', 'gutenverse-themes-builder')}</div>,
+                                buttonLoading : false
+                            }
+                        ]}
+                    >
                         <>
                             {!isEmpty(fontList) && fontList.map((font, key) => {
                                 return <tr key={key}>

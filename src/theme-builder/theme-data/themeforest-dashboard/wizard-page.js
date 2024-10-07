@@ -555,7 +555,7 @@ const WizardPage = () => {
                 </div>
                 <div className={`progress ${progress === 'importTemplate' ? 'active' : ''} ${progressCount >= 1 ? 'done' : ''}`}>
                     <p className='number'>2</p>
-                    <h3 className='progress-title'>{__('Assign Templates', '--gtb-theme-namespace--')}</h3>
+                    <h3 className='progress-title'>{__('Import Demo', '--gtb-theme-namespace--')}</h3>
                 </div>
                 <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
                     <p className='number'>3</p>
