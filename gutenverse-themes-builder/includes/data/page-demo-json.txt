@@ -1,0 +1,9 @@
+{
+    "template" : "{{template}}",
+    "pagetitle": "{{page_title}}",
+    "content" : {{content}},
+    "is_homepage" : {{is_homepage}},
+    "core-patterns" : [{{core_pattern}}],
+    "pro-patterns" : [{{pro_pattern}}],
+    "gutenverse-patterns" : [{{gutenverse_pattern}}]
+}

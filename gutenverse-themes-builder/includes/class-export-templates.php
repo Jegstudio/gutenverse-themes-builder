@@ -130,23 +130,93 @@ class Export_Templates {
 
 		wp_mkdir_p( $theme_dir );
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
+		$this->create_pages( $wp_filesystem, $theme_id, $data );
 		$this->extractor_send_file( $data );
+	}
 
-		// $this->create_readme( $wp_filesystem, $data );
-		// $this->create_style_css( $wp_filesystem, $data );
-		// $this->create_theme_json( $wp_filesystem, $data );
-		// $this->create_autoload_php( $wp_filesystem, $data );
-		// $this->create_init_php( $wp_filesystem, $data, $theme_id );
-		// $this->create_assets( $wp_filesystem, $data );
-		// $this->create_themeforest_data( $wp_filesystem, $data );
-		// $this->register_patterns( $wp_filesystem, $data );
-		// $this->export_all_images( $wp_filesystem );
+	/**
+	 * Create Pages
+	 *
+	 * @param object $system .
+	 * @param string $theme_id .
+	 * @param array  $data .
+	 */
+	public function create_pages( $system, $theme_id, $data ) {
+		$pages = new \WP_Query(
+			array(
+				'post_type'      => 'page',
+				'posts_per_page' => -1,
+				'meta_query' => array( //phpcs:ignore
+					array(
+						'key'     => '_gtb_page_theme_id',
+						'value'   => $theme_id,
+						'compare' => '===',
+					),
+				),
+			)
+		);
 
-		// // child theme .
-		// $other = maybe_unserialize( $data['other'] );
-		// if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
-		// $this->create_child_theme( $wp_filesystem, $data );
-		// }
+		$custom_dir = rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/gutenverse-pages';
+		if ( ! is_dir( $custom_dir ) ) {
+			wp_mkdir_p( $custom_dir );
+		}
+
+		foreach ( $pages->posts as $page ) {
+			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/page-demo-json.txt' );
+
+			$template = get_post_meta( $page->ID, '_wp_page_template', true );
+			$parts    = explode( '-', $template );
+			array_shift( $parts );
+			$template_slug = implode( '-', $parts );
+
+			$placeholder = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : $placeholder;
+
+			/** Add Page Title */
+			$placeholder = ! empty( $page->post_title ) ? str_replace( '{{page_title}}', $page->post_title, $placeholder ) : $placeholder;
+
+			/**Add Is Homepage */
+			$is_homepage = get_post_meta( $page->ID, '_gtb_page_is_homepage', true );
+			if ( $is_homepage ) {
+				$is_homepage = 'true';
+			} else {
+				$is_homepage = 'false';
+			}
+			$placeholder = str_replace( '{{is_homepage}}', $is_homepage, $placeholder );
+
+			/**Add Content */
+			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
+			$content     = str_replace( "'", "\'", $content );
+			$content     = $this->fix_colors( $content );
+			$content     = $this->fix_core_navigation( $content );
+			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
+
+			/**Add Pattern */
+			if ( ! empty( $this->page_core_patterns ) ) {
+				$core_pattern_list = join( ', ', $this->page_core_patterns );
+			}
+			$placeholder              = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
+			$this->page_core_patterns = array();
+
+			if ( ! empty( $this->page_gutenverse_patterns ) ) {
+				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
+			}
+			$placeholder                    = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
+			$this->page_gutenverse_patterns = array();
+
+			if ( ! empty( $this->page_pro_patterns ) ) {
+				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
+			}
+			$placeholder             = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
+			$this->page_pro_patterns = array();
+
+			/**Create the file*/
+			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
+			$system->put_contents(
+				rtrim( gutenverse_themes_builder_theme_built_path(), '/' ) . '-demos/gutenverse-pages/' . $filename . '.json',
+				$placeholder,
+				FS_CHMOD_FILE
+			);
+		}
 	}
 
 	/**
