@@ -1,4 +1,3 @@
-import { useRef, useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 const Table = (props) => {
@@ -15,12 +14,6 @@ const Table = (props) => {
         showButton = false,
         buttons
     } = props;
-
-    /**Delete when done */
-    useEffect(() => {
-        console.log(paged);
-        console.log(paged, totalPage)
-    },[paged])
 
     const ButtonElement = () => {
         return buttons.map(button => {
