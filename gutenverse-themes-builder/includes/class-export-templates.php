@@ -357,7 +357,6 @@ class Export_Templates {
 						$pattern_title    = $posts[0]->post_title;
 						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
 						$pattern_category = empty( $pattern_category ) ? 'basic' : $pattern_category;
-						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 
 						/** Create pattern php files */
 						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
@@ -369,13 +368,9 @@ class Export_Templates {
 						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 
 						/**replace additional object with object sync */
-						if ( $pattern_sync ) {
-							$additional = "'is_sync' => true,
-							'images' => array(" . $this->format_image_array( $images ) . ')';
-						} else {
-							$additional = "'is_sync' => false,
-							'images' => array(" . $this->format_image_array( $images ) . ')';
-						}
+
+						$additional = "'pattern_slug' => false,
+						'images' => array(" . $this->format_image_array( $images ) . ')';
 						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 
 						/**Add pattern to class_block_pattern array to register pattern */
@@ -409,11 +404,7 @@ class Export_Templates {
 							FS_CHMOD_FILE
 						);
 
-						if ( $only_get_content && ! $pattern_sync ) {
-							$pattern_after = $posts[0]->post_content;
-						} else {
-							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
-						}
+						$pattern_after = '<!-- wp:block {"ref":{{' . $theme_slug . '/' . $pattern_name . '}}} /-->';
 					}
 
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
