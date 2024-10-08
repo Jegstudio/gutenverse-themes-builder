@@ -169,7 +169,7 @@ class Export_Templates {
 			array_shift( $parts );
 			$template_slug = implode( '-', $parts );
 
-			$placeholder = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : $placeholder;
+			$placeholder = ! empty( $template_slug ) ? str_replace( '{{template}}', $template_slug, $placeholder ) : str_replace( '{{template}}', 'page', $placeholder );
 
 			/** Add Page Title */
 			$placeholder = ! empty( $page->post_title ) ? str_replace( '{{page_title}}', $page->post_title, $placeholder ) : $placeholder;
