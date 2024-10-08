@@ -48,6 +48,18 @@ export const GOOGLE_FONTS = [
         label: "Advent Pro"
     },
     {
+        value: "Afacad",
+        label: "Afacad"
+    },
+    {
+        value: "Afacad Flux",
+        label: "Afacad Flux"
+    },
+    {
+        value: "Agbalumo",
+        label: "Agbalumo"
+    },
+    {
         value: "Agdasima",
         label: "Agdasima"
     },
@@ -292,12 +304,20 @@ export const GOOGLE_FONTS = [
         label: "Angkor"
     },
     {
+        value: "Annapurna SIL",
+        label: "Annapurna SIL"
+    },
+    {
         value: "Annie Use Your Telescope",
         label: "Annie Use Your Telescope"
     },
     {
         value: "Anonymous Pro",
         label: "Anonymous Pro"
+    },
+    {
+        value: "Anta",
+        label: "Anta"
     },
     {
         value: "Antic",
@@ -316,6 +336,10 @@ export const GOOGLE_FONTS = [
         label: "Anton"
     },
     {
+        value: "Anton SC",
+        label: "Anton SC"
+    },
+    {
         value: "Antonio",
         label: "Antonio"
     },
@@ -330,6 +354,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Aoboshi One",
         label: "Aoboshi One"
+    },
+    {
+        value: "AR One Sans",
+        label: "AR One Sans"
     },
     {
         value: "Arapey",
@@ -390,6 +418,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Arsenal",
         label: "Arsenal"
+    },
+    {
+        value: "Arsenal SC",
+        label: "Arsenal SC"
     },
     {
         value: "Artifika",
@@ -636,6 +668,10 @@ export const GOOGLE_FONTS = [
         label: "Bebas Neue"
     },
     {
+        value: "Beiruti",
+        label: "Beiruti"
+    },
+    {
         value: "Belanosima",
         label: "Belanosima"
     },
@@ -804,6 +840,10 @@ export const GOOGLE_FONTS = [
         label: "Bodoni Moda"
     },
     {
+        value: "Bodoni Moda SC",
+        label: "Bodoni Moda SC"
+    },
+    {
         value: "Bokor",
         label: "Bokor"
     },
@@ -904,6 +944,10 @@ export const GOOGLE_FONTS = [
         label: "Bungee Spice"
     },
     {
+        value: "Bungee Tint",
+        label: "Bungee Tint"
+    },
+    {
         value: "Butcherman",
         label: "Butcherman"
     },
@@ -922,6 +966,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Cabin Sketch",
         label: "Cabin Sketch"
+    },
+    {
+        value: "Cactus Classical Serif",
+        label: "Cactus Classical Serif"
     },
     {
         value: "Caesar Dressing",
@@ -1336,6 +1384,10 @@ export const GOOGLE_FONTS = [
         label: "Dancing Script"
     },
     {
+        value: "Danfo",
+        label: "Danfo"
+    },
+    {
         value: "Dangrek",
         label: "Dangrek"
     },
@@ -1506,6 +1558,18 @@ export const GOOGLE_FONTS = [
     {
         value: "Eczar",
         label: "Eczar"
+    },
+    {
+        value: "Edu AU VIC WA NT Dots",
+        label: "Edu AU VIC WA NT Dots"
+    },
+    {
+        value: "Edu AU VIC WA NT Guides",
+        label: "Edu AU VIC WA NT Guides"
+    },
+    {
+        value: "Edu AU VIC WA NT Hand",
+        label: "Edu AU VIC WA NT Hand"
     },
     {
         value: "Edu NSW ACT Foundation",
@@ -1808,6 +1872,10 @@ export const GOOGLE_FONTS = [
         label: "Freehand"
     },
     {
+        value: "Freeman",
+        label: "Freeman"
+    },
+    {
         value: "Fresca",
         label: "Fresca"
     },
@@ -1828,8 +1896,20 @@ export const GOOGLE_FONTS = [
         label: "Fuggles"
     },
     {
+        value: "Fustat",
+        label: "Fustat"
+    },
+    {
         value: "Fuzzy Bubbles",
         label: "Fuzzy Bubbles"
+    },
+    {
+        value: "Ga Maamli",
+        label: "Ga Maamli"
+    },
+    {
+        value: "Gabarito",
+        label: "Gabarito"
     },
     {
         value: "Gabriela",
@@ -2392,6 +2472,30 @@ export const GOOGLE_FONTS = [
         label: "Itim"
     },
     {
+        value: "Jacquard 12",
+        label: "Jacquard 12"
+    },
+    {
+        value: "Jacquard 12 Charted",
+        label: "Jacquard 12 Charted"
+    },
+    {
+        value: "Jacquard 24",
+        label: "Jacquard 24"
+    },
+    {
+        value: "Jacquard 24 Charted",
+        label: "Jacquard 24 Charted"
+    },
+    {
+        value: "Jacquarda Bastarda 9",
+        label: "Jacquarda Bastarda 9"
+    },
+    {
+        value: "Jacquarda Bastarda 9 Charted",
+        label: "Jacquarda Bastarda 9 Charted"
+    },
+    {
         value: "Jacques Francois",
         label: "Jacques Francois"
     },
@@ -2400,8 +2504,52 @@ export const GOOGLE_FONTS = [
         label: "Jacques Francois Shadow"
     },
     {
+        value: "Jaini",
+        label: "Jaini"
+    },
+    {
+        value: "Jaini Purva",
+        label: "Jaini Purva"
+    },
+    {
         value: "Jaldi",
         label: "Jaldi"
+    },
+    {
+        value: "Jaro",
+        label: "Jaro"
+    },
+    {
+        value: "Jersey 10",
+        label: "Jersey 10"
+    },
+    {
+        value: "Jersey 10 Charted",
+        label: "Jersey 10 Charted"
+    },
+    {
+        value: "Jersey 15",
+        label: "Jersey 15"
+    },
+    {
+        value: "Jersey 15 Charted",
+        label: "Jersey 15 Charted"
+    },
+    {
+        value: "Jersey 20",
+        label: "Jersey 20"
+    },
+    {
+        value: "Jersey 20 Charted",
+        label: "Jersey 20 Charted"
+    },
+    {
+        value: "Jersey 25",
+        label: "Jersey 25"
+    },
+    {
+        value: "Jersey 25 Charted",
+        label: "Jersey 25 Charted"
     },
     {
         value: "JetBrains Mono",
@@ -2512,6 +2660,14 @@ export const GOOGLE_FONTS = [
         label: "Kalam"
     },
     {
+        value: "Kalnia",
+        label: "Kalnia"
+    },
+    {
+        value: "Kalnia Glaze",
+        label: "Kalnia Glaze"
+    },
+    {
         value: "Kameron",
         label: "Kameron"
     },
@@ -2606,6 +2762,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Kodchasan",
         label: "Kodchasan"
+    },
+    {
+        value: "Kode Mono",
+        label: "Kode Mono"
     },
     {
         value: "Koh Santepheap",
@@ -2960,6 +3120,14 @@ export const GOOGLE_FONTS = [
         label: "Luxurious Script"
     },
     {
+        value: "LXGW WenKai Mono TC",
+        label: "LXGW WenKai Mono TC"
+    },
+    {
+        value: "LXGW WenKai TC",
+        label: "LXGW WenKai TC"
+    },
+    {
         value: "M PLUS 1",
         label: "M PLUS 1"
     },
@@ -3000,6 +3168,10 @@ export const GOOGLE_FONTS = [
         label: "Mada"
     },
     {
+        value: "Madimi One",
+        label: "Madimi One"
+    },
+    {
         value: "Magra",
         label: "Magra"
     },
@@ -3026,6 +3198,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Mallanna",
         label: "Mallanna"
+    },
+    {
+        value: "Maname",
+        label: "Maname"
     },
     {
         value: "Mandali",
@@ -3102,6 +3278,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Mate SC",
         label: "Mate SC"
+    },
+    {
+        value: "Matemasie",
+        label: "Matemasie"
     },
     {
         value: "Material Icons",
@@ -3208,6 +3388,14 @@ export const GOOGLE_FONTS = [
         label: "Michroma"
     },
     {
+        value: "Micro 5",
+        label: "Micro 5"
+    },
+    {
+        value: "Micro 5 Charted",
+        label: "Micro 5 Charted"
+    },
+    {
         value: "Milonga",
         label: "Milonga"
     },
@@ -3262,6 +3450,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Modern Antiqua",
         label: "Modern Antiqua"
+    },
+    {
+        value: "Moderustic",
+        label: "Moderustic"
     },
     {
         value: "Mogra",
@@ -3424,6 +3616,10 @@ export const GOOGLE_FONTS = [
         label: "Nabla"
     },
     {
+        value: "Namdhinggo",
+        label: "Namdhinggo"
+    },
+    {
         value: "Nanum Brush Script",
         label: "Nanum Brush Script"
     },
@@ -3462,6 +3658,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Neuton",
         label: "Neuton"
+    },
+    {
+        value: "New Amsterdam",
+        label: "New Amsterdam"
     },
     {
         value: "New Rocker",
@@ -3928,6 +4128,10 @@ export const GOOGLE_FONTS = [
         label: "Noto Sans NKo"
     },
     {
+        value: "Noto Sans NKo Unjoined",
+        label: "Noto Sans NKo Unjoined"
+    },
+    {
         value: "Noto Sans Nushu",
         label: "Noto Sans Nushu"
     },
@@ -4280,6 +4484,10 @@ export const GOOGLE_FONTS = [
         label: "Noto Serif NP Hmong"
     },
     {
+        value: "Noto Serif Old Uyghur",
+        label: "Noto Serif Old Uyghur"
+    },
+    {
         value: "Noto Serif Oriya",
         label: "Noto Serif Oriya"
     },
@@ -4402,6 +4610,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Oi",
         label: "Oi"
+    },
+    {
+        value: "Ojuju",
+        label: "Ojuju"
     },
     {
         value: "Old Standard TT",
@@ -4632,8 +4844,16 @@ export const GOOGLE_FONTS = [
         label: "Pirata One"
     },
     {
+        value: "Pixelify Sans",
+        label: "Pixelify Sans"
+    },
+    {
         value: "Plaster",
         label: "Plaster"
+    },
+    {
+        value: "Platypi",
+        label: "Platypi"
     },
     {
         value: "Play",
@@ -4656,12 +4876,224 @@ export const GOOGLE_FONTS = [
         label: "Playfair Display SC"
     },
     {
+        value: "Playpen Sans",
+        label: "Playpen Sans"
+    },
+    {
+        value: "Playwrite AR",
+        label: "Playwrite AR"
+    },
+    {
+        value: "Playwrite AT",
+        label: "Playwrite AT"
+    },
+    {
+        value: "Playwrite AU NSW",
+        label: "Playwrite AU NSW"
+    },
+    {
+        value: "Playwrite AU QLD",
+        label: "Playwrite AU QLD"
+    },
+    {
+        value: "Playwrite AU SA",
+        label: "Playwrite AU SA"
+    },
+    {
+        value: "Playwrite AU TAS",
+        label: "Playwrite AU TAS"
+    },
+    {
+        value: "Playwrite AU VIC",
+        label: "Playwrite AU VIC"
+    },
+    {
+        value: "Playwrite AU VLG",
+        label: "Playwrite AU VLG"
+    },
+    {
+        value: "Playwrite AU WAL",
+        label: "Playwrite AU WAL"
+    },
+    {
+        value: "Playwrite BR",
+        label: "Playwrite BR"
+    },
+    {
+        value: "Playwrite CA",
+        label: "Playwrite CA"
+    },
+    {
+        value: "Playwrite CL",
+        label: "Playwrite CL"
+    },
+    {
+        value: "Playwrite CO",
+        label: "Playwrite CO"
+    },
+    {
+        value: "Playwrite CU",
+        label: "Playwrite CU"
+    },
+    {
+        value: "Playwrite CZ",
+        label: "Playwrite CZ"
+    },
+    {
+        value: "Playwrite DE Grund",
+        label: "Playwrite DE Grund"
+    },
+    {
+        value: "Playwrite DE LA",
+        label: "Playwrite DE LA"
+    },
+    {
+        value: "Playwrite DE SAS",
+        label: "Playwrite DE SAS"
+    },
+    {
+        value: "Playwrite DE VA",
+        label: "Playwrite DE VA"
+    },
+    {
+        value: "Playwrite DK Loopet",
+        label: "Playwrite DK Loopet"
+    },
+    {
+        value: "Playwrite DK Uloopet",
+        label: "Playwrite DK Uloopet"
+    },
+    {
+        value: "Playwrite ES",
+        label: "Playwrite ES"
+    },
+    {
+        value: "Playwrite ES Deco",
+        label: "Playwrite ES Deco"
+    },
+    {
+        value: "Playwrite FR Moderne",
+        label: "Playwrite FR Moderne"
+    },
+    {
+        value: "Playwrite FR Trad",
+        label: "Playwrite FR Trad"
+    },
+    {
+        value: "Playwrite GB J",
+        label: "Playwrite GB J"
+    },
+    {
+        value: "Playwrite GB S",
+        label: "Playwrite GB S"
+    },
+    {
+        value: "Playwrite HR",
+        label: "Playwrite HR"
+    },
+    {
+        value: "Playwrite HR Lijeva",
+        label: "Playwrite HR Lijeva"
+    },
+    {
+        value: "Playwrite HU",
+        label: "Playwrite HU"
+    },
+    {
+        value: "Playwrite ID",
+        label: "Playwrite ID"
+    },
+    {
+        value: "Playwrite IE",
+        label: "Playwrite IE"
+    },
+    {
+        value: "Playwrite IN",
+        label: "Playwrite IN"
+    },
+    {
+        value: "Playwrite IS",
+        label: "Playwrite IS"
+    },
+    {
+        value: "Playwrite IT Moderna",
+        label: "Playwrite IT Moderna"
+    },
+    {
+        value: "Playwrite IT Trad",
+        label: "Playwrite IT Trad"
+    },
+    {
+        value: "Playwrite MX",
+        label: "Playwrite MX"
+    },
+    {
+        value: "Playwrite NG Modern",
+        label: "Playwrite NG Modern"
+    },
+    {
+        value: "Playwrite NL",
+        label: "Playwrite NL"
+    },
+    {
+        value: "Playwrite NO",
+        label: "Playwrite NO"
+    },
+    {
+        value: "Playwrite NZ",
+        label: "Playwrite NZ"
+    },
+    {
+        value: "Playwrite PE",
+        label: "Playwrite PE"
+    },
+    {
+        value: "Playwrite PL",
+        label: "Playwrite PL"
+    },
+    {
+        value: "Playwrite PT",
+        label: "Playwrite PT"
+    },
+    {
+        value: "Playwrite RO",
+        label: "Playwrite RO"
+    },
+    {
+        value: "Playwrite SK",
+        label: "Playwrite SK"
+    },
+    {
+        value: "Playwrite TZ",
+        label: "Playwrite TZ"
+    },
+    {
+        value: "Playwrite US Modern",
+        label: "Playwrite US Modern"
+    },
+    {
+        value: "Playwrite US Trad",
+        label: "Playwrite US Trad"
+    },
+    {
+        value: "Playwrite VN",
+        label: "Playwrite VN"
+    },
+    {
+        value: "Playwrite ZA",
+        label: "Playwrite ZA"
+    },
+    {
         value: "Plus Jakarta Sans",
         label: "Plus Jakarta Sans"
     },
     {
         value: "Podkova",
         label: "Podkova"
+    },
+    {
+        value: "Poetsen One",
+        label: "Poetsen One"
     },
     {
         value: "Poiret One",
@@ -4746,6 +5178,22 @@ export const GOOGLE_FONTS = [
     {
         value: "Prosto One",
         label: "Prosto One"
+    },
+    {
+        value: "Protest Guerilla",
+        label: "Protest Guerilla"
+    },
+    {
+        value: "Protest Revolution",
+        label: "Protest Revolution"
+    },
+    {
+        value: "Protest Riot",
+        label: "Protest Riot"
+    },
+    {
+        value: "Protest Strike",
+        label: "Protest Strike"
     },
     {
         value: "Proza Libre",
@@ -4838,6 +5286,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Radio Canada",
         label: "Radio Canada"
+    },
+    {
+        value: "Radio Canada Big",
+        label: "Radio Canada Big"
     },
     {
         value: "Radley",
@@ -4936,6 +5388,18 @@ export const GOOGLE_FONTS = [
         label: "Redacted Script"
     },
     {
+        value: "Reddit Mono",
+        label: "Reddit Mono"
+    },
+    {
+        value: "Reddit Sans",
+        label: "Reddit Sans"
+    },
+    {
+        value: "Reddit Sans Condensed",
+        label: "Reddit Sans Condensed"
+    },
+    {
         value: "Redressed",
         label: "Redressed"
     },
@@ -4962,6 +5426,10 @@ export const GOOGLE_FONTS = [
     {
         value: "REM",
         label: "REM"
+    },
+    {
+        value: "Rethink sSans",
+        label: "Rethink sSans"
     },
     {
         value: "Revalia",
@@ -5029,7 +5497,7 @@ export const GOOGLE_FONTS = [
     },
     {
         value: "RocknRoll One",
-        label: "RocknRoll One"
+        label: "RocknRoll One" 
     },
     {
         value: "Rokkitt",
@@ -5076,6 +5544,10 @@ export const GOOGLE_FONTS = [
         label: "Rubik Beastly"
     },
     {
+        value: "Rubik Broken Fax",
+        label: "Rubik Broken Fax"
+    },
+    {
         value: "Rubik Bubbles",
         label: "Rubik Bubbles"
     },
@@ -5092,6 +5564,14 @@ export const GOOGLE_FONTS = [
         label: "Rubik Distressed"
     },
     {
+        value: "Rubik Doodle Shadow",
+        label: "Rubik Doodle Shadow"
+    },
+    {
+        value: "Rubik Doodle Triangles",
+        label: "Rubik Doodle Triangles"
+    },
+    {
         value: "Rubik Gemstones",
         label: "Rubik Gemstones"
     },
@@ -5100,8 +5580,20 @@ export const GOOGLE_FONTS = [
         label: "Rubik Glitch"
     },
     {
+        value: "Rubik Glitch Pop",
+        label: "Rubik Glitch Pop"
+    },
+    {
         value: "Rubik Iso",
         label: "Rubik Iso"
+    },
+    {
+        value: "Rubik Lines",
+        label: "Rubik Lines"
+    },
+    {
+        value: "Rubik Maps",
+        label: "Rubik Maps"
     },
     {
         value: "Rubik Marker Hatch",
@@ -5130,6 +5622,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Rubik Puddles",
         label: "Rubik Puddles"
+    },
+    {
+        value: "Rubik Scribble",
+        label: "Rubik Scribble"
     },
     {
         value: "Rubik Spray Paint",
@@ -5232,6 +5728,10 @@ export const GOOGLE_FONTS = [
         label: "Sancreek"
     },
     {
+        value: "Sankofa Display",
+        label: "Sankofa Display"
+    },
+    {
         value: "Sansita",
         label: "Sansita"
     },
@@ -5298,6 +5798,14 @@ export const GOOGLE_FONTS = [
     {
         value: "Secular One",
         label: "Secular One"
+    },
+    {
+        value: "Sedan",
+        label: "Sedan"
+    },
+    {
+        value: "Sedan SC",
+        label: "Sedan SC"
     },
     {
         value: "Sedgwick Ave",
@@ -5724,6 +6232,10 @@ export const GOOGLE_FONTS = [
         label: "Syne Tactile"
     },
     {
+        value: "Tac One",
+        label: "Tac One"
+    },
+    {
         value: "Tai Heritage Pro",
         label: "Tai Heritage Pro"
     },
@@ -5750,6 +6262,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Taviraj",
         label: "Taviraj"
+    },
+    {
+        value: "Teachers",
+        label: "Teachers"
     },
     {
         value: "Teko",
@@ -5818,6 +6334,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Tinos",
         label: "Tinos"
+    },
+    {
+        value: "Tiny5",
+        label: "Tiny5"
     },
     {
         value: "Tiro Bangla",
@@ -5926,6 +6446,14 @@ export const GOOGLE_FONTS = [
     {
         value: "Ubuntu Mono",
         label: "Ubuntu Mono"
+    },
+    {
+        value: "Ubuntu Sans",
+        label: "Ubuntu Sans"
+    },
+    {
+        value: "Ubuntu Sans Mono",
+        label: "Ubuntu Sans Mono"
     },
     {
         value: "Uchen",
@@ -6112,6 +6640,10 @@ export const GOOGLE_FONTS = [
         label: "Wire One"
     },
     {
+        value: "Wittgenstein",
+        label: "Wittgenstein"
+    },
+    {
         value: "Wix Madefor Display",
         label: "Wix Madefor Display"
     },
@@ -6122,6 +6654,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Work Sans",
         label: "Work Sans"
+    },
+    {
+        value: "Workbench",
+        label: "Workbench"
     },
     {
         value: "Xanh Mono",
@@ -6138,6 +6674,26 @@ export const GOOGLE_FONTS = [
     {
         value: "Yantramanav",
         label: "Yantramanav"
+    },
+    {
+        value: "Yatra One",
+        label: "Yatra One"
+    },
+    {
+        value: "Yarndings 12",
+        label: "Yarndings 12"
+    },
+    {
+        value: "Yarndings 12 Charted",
+        label: "Yarndings 12 Charted"
+    },
+    {
+        value: "Yarndings 20",
+        label: "Yarndings 20"
+    },
+    {
+        value: "Yarndings 20 Charted",
+        label: "Yarndings 20 Charted"
     },
     {
         value: "Yatra One",
@@ -6206,6 +6762,10 @@ export const GOOGLE_FONTS = [
     {
         value: "Yusei Magic",
         label: "Yusei Magic"
+    },
+    {
+        value: "Zain",
+        label: "Zain"
     },
     {
         value: "ZCOOL KuaiLe",
