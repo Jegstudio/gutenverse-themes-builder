@@ -16,12 +16,6 @@ const Table = (props) => {
         buttons
     } = props;
 
-    /**Delete when done */
-    useEffect(() => {
-        console.log(paged);
-        console.log(paged, totalPage)
-    },[paged])
-
     const ButtonElement = () => {
         return buttons.map(button => {
             let ElButton = button.buttonElement;
