@@ -1,4 +1,3 @@
-import { useRef, useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 const Table = (props) => {
