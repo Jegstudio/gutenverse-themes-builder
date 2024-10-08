@@ -67,6 +67,8 @@ class Init {
 
 		add_filter( 'gutenverse_themes_template', array( $this, 'add_template' ), 10, 2 );
 		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+
+		{{additional_filter}}
 	}
 
 	/**
@@ -455,7 +457,21 @@ class Init {
 			$initial_font = get_option( 'gutenverse-font-init-' . $theme_name );
 
 			if ( ! $initial_font ) {
-				$config['globalVariable']['fonts'] = array_merge( $config['globalVariable']['fonts'], $this->default_font_variable() );
+				$result = array();
+				$array1 = $config['globalVariable']['fonts'];
+				$array2 = $this->default_font_variable();
+				foreach ( $array1 as $item ) {
+					$result[ $item['id'] ] = $item;
+				}
+				foreach ( $array2 as $item ) {
+					$result[ $item['id'] ] = $item;
+				}
+				$fonts = array();
+				foreach ( $result as $key => $font ) {
+					$fonts[] = $font;
+				}
+				$config['globalVariable']['fonts'] = $fonts;
+
 				update_option( 'gutenverse-font-init-' . $theme_name, true );
 			}
 		}
@@ -541,27 +557,29 @@ class Init {
 		}
 
 		$config = array(
-			'home_url'     => home_url(),
-			'version'      => {{constant}}_VERSION,
-			'images'       => {{constant}}_URI . '/assets/img/',
-			'title'        => esc_html__( '{{title}}', '{{slug}}' ),
-			'description'  => esc_html__( '{{description}}', '{{slug}}' ),
-			'pluginTitle'  => esc_html__( 'Plugin Requirement', '{{slug}}' ),
-			'pluginDesc'   => esc_html__( 'This theme require some plugins. Please make sure all the plugin below are installed and activated.', '{{slug}}' ),
-			'note'         => esc_html__( '', '{{slug}}' ),
-			'note2'        => esc_html__( '', '{{slug}}' ),
-			'demo'         => esc_html__( '', '{{slug}}' ),
-			'demoUrl'      => esc_url( 'https://gutenverse.com/demo?name={{slug}}' ),
-			'install'      => '',
-			'installText'  => esc_html__( 'Install Gutenverse Plugin', '{{slug}}' ),
-			'activateText' => esc_html__( 'Activate Gutenverse Plugin', '{{slug}}' ),
-			'doneText'     => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
-			'dashboardPage'=> admin_url( 'themes.php?page={{slug}}-dashboard' ),
-			'logo'         => {{theme_logo}},
-			'upgradePro'   => 'https://gutenverse.com/pro',
-			'supportLink'  => 'https://support.jegtheme.com',
-			'libraryApi'   => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
-			'pages'        => array(
+			'home_url'      => home_url(),
+			'version'       => {{constant}}_VERSION,
+			'images'        => {{constant}}_URI . '/assets/img/',
+			'title'         => esc_html__( '{{title}}', '{{slug}}' ),
+			'description'   => esc_html__( '{{description}}', '{{slug}}' ),
+			'pluginTitle'   => esc_html__( 'Plugin Requirement', '{{slug}}' ),
+			'pluginDesc'    => esc_html__( 'This theme require some plugins. Please make sure all the plugin below are installed and activated.', '{{slug}}' ),
+			'note'          => esc_html__( '', '{{slug}}' ),
+			'note2'         => esc_html__( '', '{{slug}}' ),
+			'demo'          => esc_html__( '', '{{slug}}' ),
+			'demoUrl'       => esc_url( 'https://gutenverse.com/demo?name={{slug}}' ),
+			'install'       => '',
+			'installText'   => esc_html__( 'Install Gutenverse Plugin', '{{slug}}' ),
+			'activateText'  => esc_html__( 'Activate Gutenverse Plugin', '{{slug}}' ),
+			'doneText'      => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
+			'dashboardPage' => admin_url( 'themes.php?page={{slug}}-dashboard' ),
+			'logo'          => {{theme_logo}},
+			'slug'          => '{{slug}}',
+			'upgradePro'    => 'https://gutenverse.com/pro',
+			'supportLink'   => 'https://support.jegtheme.com/forums/forum/fse-themes/',
+			'libraryApi'    => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
+			'docsLink'      => 'https://support.jegtheme.com/theme/fse-themes/',
+			'pages'         => array(
 				{{page_list}}
 			),
 			'plugins'      => array(
@@ -570,6 +588,10 @@ class Init {
 			'assign'       => array(
 				{{assign_templates}}
 			),
+			'dashboardData'=> array(
+				{{dashboard_data}}
+			),
+			{{additional_config}}
 		);
 
 		if ( isset( $config['assign'] ) && $config['assign'] ) {

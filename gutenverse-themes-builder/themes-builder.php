@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Gutenverse Themes Builder
+ * Requires Plugins: gutenverse
  * Description: Build advance themes that fit for wp.org and any other marketplace.
  * Plugin URI: https://gutenverse.com/
  * Author: Jegstudio
@@ -12,6 +13,10 @@
  * @package gutenverse-themes-builder
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 defined( 'GUTENVERSE_THEMES_BUILDER' ) || define( 'GUTENVERSE_THEMES_BUILDER', 'gutenverse-themes-builder' );
 defined( 'GUTENVERSE_THEMES_BUILDER_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_VERSION', '1.0.1' );
 defined( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION', '1.0.0' );
@@ -22,6 +27,9 @@ defined( 'GUTENVERSE_THEMES_BUILDER_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER
 defined( 'GUTENVERSE_THEMES_BUILDER_CLASS_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER_CLASS_DIR', GUTENVERSE_THEMES_BUILDER_DIR . 'includes/' );
 defined( 'GUTENVERSE_THEMES_BUILDER_LANG_DIR' ) || define( 'GUTENVERSE_THEMES_BUILDER_LANG_DIR', GUTENVERSE_THEMES_BUILDER_DIR . 'languages' );
 defined( 'GUTENVERSE_THEMES_BUILDER_PATH' ) || define( 'GUTENVERSE_THEMES_BUILDER_PATH', plugin_basename( __FILE__ ) );
+
+// This constant has been deprecated as of Gutenverse Core v1.0.6 and Gutenverse Themes Builder v1.0.1.
+// Use GUTENVERSE_FRAMEWORK_URL_PATH instead.
 defined( 'GUTENVERSE_FRAMEWORK_URL' ) || define( 'GUTENVERSE_FRAMEWORK_URL', plugins_url( GUTENVERSE_THEMES_BUILDER ) . '/lib/framework' );
 
 require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/autoload.php';

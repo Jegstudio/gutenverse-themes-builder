@@ -11,6 +11,10 @@ const SelectSearchControl = (props) => {
         values,
         onChange,
         onSearch,
+        className = 'select-search',
+        classNamePrefix = 'async-select',
+        isMulti = false,
+        noOptionsMessage = () => __('Not Found', 'gutenverse')
     } = props;
 
     return (
@@ -21,7 +25,10 @@ const SelectSearchControl = (props) => {
                     <AsyncSelect
                         id={id}
                         placeholder={__('Search...', 'gutenverse')}
-                        noOptionsMessage={() => __('Not Found', 'gutenverse')}
+                        noOptionsMessage={noOptionsMessage}
+                        className={className}
+                        classNamePrefix={classNamePrefix}
+                        isMulti={isMulti}
                         styles={{
                             control: (styles) => ({
                                 ...styles,

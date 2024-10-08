@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 
 /**
@@ -62,7 +66,7 @@ class Init {
 	 * Load custom theme Json
 	 */
 	public function load_custom_theme_json() {
-		$theme_dir = gtb_theme_folder_path();
+		$theme_dir = gutenverse_themes_builder_theme_folder_path();
 		$json_path = $theme_dir . 'theme.json';
 
 		if ( file_exists( $json_path ) && strpos( get_stylesheet(), 'gutenverse-basic' ) !== false ) {
@@ -170,6 +174,7 @@ class Init {
 	 */
 	public function load_framework() {
 		if ( $this->can_load_framework() ) {
+			defined( 'GUTENVERSE_FRAMEWORK_URL_PATH' ) || define( 'GUTENVERSE_FRAMEWORK_URL_PATH', plugins_url( GUTENVERSE_THEMES_BUILDER ) . '/lib/framework' );
 			require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
 		}
 	}
@@ -210,6 +215,7 @@ class Init {
 			add_action( 'wp_ajax_gtb_install_plugin', array( $this, 'gtb_plugin_manager_ajax' ) );
 			add_action( 'wp_ajax_gtb_plugin_notice_close', array( $this, 'plugin_notice_close' ) );
 		}
+		add_filter( 'display_post_states', array( $this, 'add_custom_post_state' ), 10, 2 );
 
 		/* TODO : Remove this later! */
 		add_action( 'init', array( $this, 'alter_table' ) );
@@ -398,27 +404,6 @@ class Init {
 	 */
 	public function dashboard_notice() {
 		?>
-			<style>
-				.gtb-notice-action .install-action {
-					color: #fff;
-					background: #1B67A5;
-					border-radius: 3px;
-					cursor: pointer;
-					padding: 7px 15px;
-					text-decoration: none;
-					box-shadow: none;
-				}
-
-				.gtb-notice-action .install-action.process {
-					background: #ccc;
-					color: #666;
-					pointer-events: none;
-				}
-
-				.gtb-notice-action .install-action.success {
-					background: #4CAF50;
-				}
-			</style>
 			<div class="notice gutenverse-upgrade-notice page-content-upgrade plugin-notice">
 				<div class="notice-logo">
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -438,44 +423,6 @@ class Init {
 					</div>
 				</div>
 			</div>
-			<script>
-				(function($) {
-					$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice .close-notif').on('click', function() {
-						$.post( ajaxurl, {
-							action: 'gtb_plugin_notice_close'
-						} );
-
-						$('.gutenverse-upgrade-notice.page-content-upgrade.plugin-notice').fadeOut();
-					});
-				})(jQuery);
-			</script>
-			<script>
-				jQuery(document).ready(function($) {
-					$('.gtb-notice-action a').on('click', function(e) {
-						e.preventDefault();
-						$(this).prop('disabled', true);
-						$(this).off('click');
-						$(this).text('Loading').addClass('process');
-						$.ajax({
-							url: gtb_ajax_obj.ajax_url,
-							type: 'post',
-							data: {
-								action: 'gtb_install_plugin',
-								nonce: gtb_ajax_obj.nonce
-							},
-							success: function(response) {
-								if (response.success) {
-									$('.gtb-notice-action a').text('Activated').removeClass('process').addClass('success');
-									location.reload();
-								} else {
-									$('.gtb-notice-action a').text('Install Gutenverse').removeClass('process');
-									location.reload();
-								}
-							}
-						});
-					});
-				});
-			</script>
 		<?php
 	}
 
@@ -483,6 +430,21 @@ class Init {
 	 * Dashboard Notice .
 	 */
 	public function dashboard_enqueue_scripts() {
+		wp_enqueue_style(
+			'gtb-admin-notice',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/css/admin.css',
+			array(),
+			GUTENVERSE_THEMES_BUILDER_VERSION
+		);
+
+		wp_enqueue_script(
+			'gtb-admin-notice',
+			GUTENVERSE_THEMES_BUILDER_URL . '/assets/js/admin.js',
+			array(),
+			GUTENVERSE_THEMES_BUILDER_VERSION,
+			true
+		);
+
 		wp_enqueue_script( 'jquery' );
 		$dashboard_notice = sprintf(
 			'var gtb_ajax_obj = {
@@ -564,5 +526,16 @@ class Init {
 	 */
 	public function plugin_notice_close() {
 		update_option( 'gtb_plugin_notice_flag', 0 );
+	}
+
+	/**
+	 * Add Custom Post State
+	 */
+	public function add_custom_post_state( $post_states, $post ) {
+		$is_gtb_page = get_post_meta( $post->ID, '_gtb_page_theme_id', true );
+		if ( $is_gtb_page ) {
+			$post_states['gutenverse_page'] = 'Gutenverse Page';
+		}
+		return $post_states;
 	}
 }

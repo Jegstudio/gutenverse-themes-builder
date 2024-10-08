@@ -10,7 +10,8 @@ const SelectControl = (props) => {
         options,
         onChange,
         isMulti = false,
-        important = false
+        important = false,
+        classNamePrefix = 'tb-selector'
     } = props;
 
     const onSelectChange = obj => isMulti && Array.isArray(obj) ? onChange(obj.map(o => o?.value)) : onChange(obj?.value);
@@ -30,6 +31,7 @@ const SelectControl = (props) => {
                                 border: '1px solid var(--gtb-border)'
                             })
                         }}
+                        classNamePrefix={classNamePrefix}
                         value={options.filter(obj => isMulti ? value.includes(obj.value) : value === obj.value)}
                         options={options}
                         onChange={onSelectChange}

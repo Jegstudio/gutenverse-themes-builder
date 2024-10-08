@@ -24,6 +24,11 @@ const Navigation = ({ location }) => {
             path: 'manage-templates',
         },
         {
+            name: __('Page', 'gutenverse'),
+            slug: pageSlug,
+            path: 'manage-pages',
+        },
+        {
             name: __('Patterns', 'gutenverse'),
             slug: pageSlug,
             path: 'manage-patterns',
@@ -59,6 +64,11 @@ const Navigation = ({ location }) => {
             path: 'manage-dashboard',
         },
         {
+            name: __('Manage Theme Notice', 'gutenverse'),
+            slug: pageSlug,
+            path: 'notice-editor',
+        },
+        {
             name: __('Screenshots', 'gutenverse'),
             slug: pageSlug,
             path: 'manage-screenshots',
@@ -68,6 +78,7 @@ const Navigation = ({ location }) => {
             slug: pageSlug,
             path: 'readme-editor',
         },
+        
         {
             name: __('Export Theme', 'gutenverse'),
             slug: pageSlug,

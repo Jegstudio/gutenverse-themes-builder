@@ -7,20 +7,24 @@
  * @package gutenverse-themes-builder
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Gutenverse_Themes_Builder\Database\Database;
 
-if ( ! function_exists( 'is_image_url' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 	/**
 	 * Check if the url is an image url
 	 */
-	function is_image_url( $url ) {
+	function gutenverse_themes_builder_is_image_url( $url ) {
 		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
 		$path             = wp_parse_url( $url, PHP_URL_PATH );
 		$extension        = pathinfo( $path, PATHINFO_EXTENSION );
 		return in_array( strtolower( $extension ), $image_extensions );
 	}
 }
-if ( ! function_exists( 'gtb_to_unicode_escape' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_to_unicode_escape' ) ) {
 	/**
 	 * escape to unicode
 	 *
@@ -28,7 +32,7 @@ if ( ! function_exists( 'gtb_to_unicode_escape' ) ) {
 	 *
 	 * @return string
 	 */
-	function gtb_to_unicode_escape( $str ) {
+	function gutenverse_themes_builder_to_unicode_escape( $str ) {
 		$unicode_escape = '';
 		$length         = mb_strlen( $str, 'UTF-8' );
 
@@ -40,7 +44,7 @@ if ( ! function_exists( 'gtb_to_unicode_escape' ) ) {
 		return $unicode_escape;
 	}
 }
-if ( ! function_exists( 'get_image_without_resolution' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution' ) ) {
 	/**
 	 * Get Image Without Resolution
 	 *
@@ -48,7 +52,7 @@ if ( ! function_exists( 'get_image_without_resolution' ) ) {
 	 *
 	 * @return array
 	 */
-	function get_image_without_resolution( $image ) {
+	function gutenverse_themes_builder_get_image_without_resolution( $image ) {
 		// Capture image url that has resolution inside double quotes.
 		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image, $matches );
 
@@ -64,11 +68,11 @@ if ( ! function_exists( 'get_image_without_resolution' ) ) {
 		);
 	}
 }
-if ( ! function_exists( 'gtb_parts' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_parts' ) ) {
 	/**
 	 * Template Parts categories.
 	 */
-	function gtb_parts() {
+	function gutenverse_themes_builder_parts() {
 		return array(
 			'header',
 			'footer',
@@ -77,16 +81,16 @@ if ( ! function_exists( 'gtb_parts' ) ) {
 	}
 }
 
-if ( ! function_exists( 'gtb_check_theme' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_check_theme' ) ) {
 	/**
 	 * Check if current theme is correct.
 	 */
-	function gtb_check_theme() {
+	function gutenverse_themes_builder_check_theme() {
 		return 'gutenverse-basic' === get_option( 'stylesheet' );
 	}
 }
 
-if ( ! function_exists( 'gtb_theme_folder_path' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_theme_folder_path' ) ) {
 	/**
 	 * Get Theme Folder path.
 	 *
@@ -95,7 +99,7 @@ if ( ! function_exists( 'gtb_theme_folder_path' ) ) {
 	 *
 	 * @return string
 	 */
-	function gtb_theme_folder_path( $theme_id = null, $url = false ) {
+	function gutenverse_themes_builder_theme_folder_path( $theme_id = null, $url = false ) {
 		if ( null === $theme_id ) {
 			$theme_id = get_option( 'gtb_active_theme_id' );
 		}
@@ -108,7 +112,7 @@ if ( ! function_exists( 'gtb_theme_folder_path' ) ) {
 	}
 }
 
-if ( ! function_exists( 'gtb_theme_built_path' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_theme_built_path' ) ) {
 	/**
 	 * Get Theme Built path.
 	 *
@@ -117,7 +121,7 @@ if ( ! function_exists( 'gtb_theme_built_path' ) ) {
 	 *
 	 * @return string
 	 */
-	function gtb_theme_built_path( $theme_id = null, $url = false ) {
+	function gutenverse_themes_builder_theme_built_path( $theme_id = null, $url = false, $child = false ) {
 		if ( null === $theme_id ) {
 			$theme_id = get_option( 'gtb_active_theme_id' );
 		}
@@ -127,14 +131,14 @@ if ( ! function_exists( 'gtb_theme_built_path' ) ) {
 		$theme   = $result[0];
 
 		if ( $url ) {
-			return trailingslashit( wp_upload_dir()['baseurl'] . '/' . $theme['slug'] );
+			return trailingslashit( wp_upload_dir()['baseurl'] . '/' . $theme['slug'] . ( $child ? '-child' : '' ) );
 		}
 
-		return trailingslashit( wp_upload_dir()['basedir'] . '/' . $theme['slug'] );
+		return trailingslashit( wp_upload_dir()['basedir'] . '/' . $theme['slug'] . ( $child ? '-child' : '' ) );
 	}
 }
 
-if ( ! function_exists( 'gtb_get_theme_mode' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_get_theme_mode' ) ) {
 	/**
 	 * Get Theme Mode
 	 *
@@ -142,7 +146,7 @@ if ( ! function_exists( 'gtb_get_theme_mode' ) ) {
 	 *
 	 * @return string|null
 	 */
-	function gtb_get_theme_mode( $theme_id = null ) {
+	function gutenverse_themes_builder_get_theme_mode( $theme_id = null ) {
 		$theme_id = $theme_id ? $theme_id : get_option( 'gtb_active_theme_id' );
 		$info_db  = Database::instance()->theme_info;
 		$data     = $info_db->get_theme_data( $theme_id );
@@ -156,7 +160,7 @@ if ( ! function_exists( 'gtb_get_theme_mode' ) ) {
 }
 
 
-if ( ! function_exists( 'gtb_check_theme_mode' ) ) {
+if ( ! function_exists( 'gutenverse_themes_builder_check_theme_mode' ) ) {
 	/**
 	 * Check theme mode
 	 *
@@ -165,9 +169,9 @@ if ( ! function_exists( 'gtb_check_theme_mode' ) ) {
 	 *
 	 * @return array
 	 */
-	function gtb_check_theme_mode( $category, $theme_id = null ) {
+	function gutenverse_themes_builder_check_theme_mode( $category, $theme_id = null ) {
 		$theme_id   = $theme_id ? $theme_id : get_option( 'gtb_active_theme_id' );
-		$theme_mode = gtb_get_theme_mode( $theme_id );
+		$theme_mode = gutenverse_themes_builder_get_theme_mode( $theme_id );
 
 		switch ( $theme_mode ) {
 			case 'core-gutenverse':

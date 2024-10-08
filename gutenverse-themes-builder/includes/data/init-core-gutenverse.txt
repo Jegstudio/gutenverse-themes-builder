@@ -69,6 +69,8 @@ class Init {
 
 		add_filter( 'gutenverse_stylesheet_directory', array( $this, 'change_stylesheet_directory' ) );
 		add_filter( 'gutenverse_themes_override_mechanism', '__return_true' );
+
+		{{additional_filter}}
 	}
 
 	/**
@@ -439,7 +441,21 @@ class Init {
 			$initial_font = get_option( 'gutenverse-font-init-' . $theme_name );
 
 			if ( ! $initial_font ) {
-				$config['globalVariable']['fonts'] = array_merge( $config['globalVariable']['fonts'], $this->default_font_variable() );
+				$result = array();
+				$array1 = $config['globalVariable']['fonts'];
+				$array2 = $this->default_font_variable();
+				foreach ( $array1 as $item ) {
+					$result[ $item['id'] ] = $item;
+				}
+				foreach ( $array2 as $item ) {
+					$result[ $item['id'] ] = $item;
+				}
+				$fonts = array();
+				foreach ( $result as $key => $font ) {
+					$fonts[] = $font;
+				}
+				$config['globalVariable']['fonts'] = $fonts;
+
 				update_option( 'gutenverse-font-init-' . $theme_name, true );
 			}
 		}
@@ -588,9 +604,11 @@ class Init {
 			'doneText'     => esc_html__( 'Gutenverse Plugin Installed', '{{slug}}' ),
 			'dashboardPage'=> admin_url( 'themes.php?page={{slug}}-dashboard' ),
 			'logo'         => {{theme_logo}},
+			'slug'         => '{{slug}}',
 			'upgradePro'   => 'https://gutenverse.com/pro',
-			'supportLink'  => 'https://support.jegtheme.com',
+			'supportLink'  => 'https://support.jegtheme.com/forums/forum/fse-themes/',
 			'libraryApi'   => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
+			'docsLink'     => 'https://support.jegtheme.com/theme/fse-themes/',
 			'pages'        => array(
 				{{page_list}}
 			),
@@ -600,6 +618,10 @@ class Init {
 			'assign'       => array(
 				{{assign_templates}}
 			),
+			'dashboardData'=> array(
+				{{dashboard_data}}
+			),
+			{{additional_config}}
 		);
 
 		if ( isset( $config['assign'] ) && $config['assign'] ) {

@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { CloseIcon, WarningIcon } from '../data/icons';
 
-export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', onProceed, onClose }) => {
+export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', onProceed, onClose, svgFill='inherit', buttonFill='#E73030' }) => {
     const proceedAction = () => {
         onProceed();
         onClose();
@@ -12,7 +12,7 @@ export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', o
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <div className="title">
-                        <WarningIcon />
+                        <WarningIcon fill={svgFill} />
                         <span>{__('Warning', 'gutenverse-themes-builder')}</span>
                     </div>
                     <div className="close-button" onClick={onClose}>
@@ -25,7 +25,7 @@ export const WarningPopup = ({ title = '', detail = '', actionText = 'Delete', o
                 </div>
                 <div className="popup-footer">
                     <div className="buttons end">
-                        <div className="button proceed" onClick={proceedAction}>{actionText}</div>
+                        <div className="button proceed" style={{backgroundColor: buttonFill}} onClick={proceedAction}>{actionText}</div>
                         <div className="button cancel" onClick={onClose}>{__('Cancel', 'gutenverse-themes-builder')}</div>
                     </div>
                 </div>

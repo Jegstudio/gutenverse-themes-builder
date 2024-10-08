@@ -78,6 +78,26 @@ class Themes_Info_Db extends Database_Abstract {
 	}
 
 	/**
+	 * Get pagination data.
+	 *
+	 * @param integer $offset .
+	 * @param integer $per_page .
+	 * @return array|object|null
+	 */
+	public function get_pagination_data( $offset, $per_page ) {
+		$table       = $this->get_table_name();
+		$query       = $this->wpdb->prepare( "SELECT * FROM {$table} ORDER BY slug ASC LIMIT {$offset}, {$per_page}" ); // phpcs:ignore
+		$data        = $this->wpdb->get_results( $query, ARRAY_A );
+		$query_count = $this->wpdb->prepare( "SELECT COUNT(*) as total FROM {$table}" );
+		$count       = $this->wpdb->get_results( $query_count, ARRAY_A )[0]['total'];
+
+		return array(
+			'list'       => $data,
+			'total_data' => $count,
+		); // phpcs:ignore
+	}
+
+	/**
 	 * Get single data.
 	 *
 	 * @param int $id : theme id.

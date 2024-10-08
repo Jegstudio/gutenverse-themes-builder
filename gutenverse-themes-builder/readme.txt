@@ -50,6 +50,10 @@ Join our communities and share your experiences with us.
 - <a href="https://www.instagram.com/gutenverse/" target="_blank" rel="">Follow us on Instagram!</a>
 - <a href="https://www.tiktok.com/@gutenverse/" target="_blank" rel="">Check our TikTok!</a>
 
+== REPOSOTORY ==
+
+Check out our repository at <a href="https://github.com/Jegstudio/gutenverse-themes-builder" target="_blank" rel="norefferer">GitHub</a>.
+You're welcome to report bugs or request features.
 
 == Installation ==
 
@@ -72,7 +76,10 @@ For additional information and assistance, please visit our extensive <a href="h
 == Changelog ==
 
 = 1.0.1 =
-* Add new themes dashboard builder
+* Add dashboard generator for themes
+* Add manage pages for themes
+* Fix themes builder dashboard displays
+* Fix export theme issue
 
-= 1.0.0 - 2024-08-17 =
+= 1.0.0 =
 * Initial Release

@@ -1,0 +1,13 @@
+/**
+ * Theme Name:     {{title}} Child
+ * Author:         {{author_name}}
+ * Template:       {{slug}}
+ * Text Domain:	   {{slug}}-child
+ * Description:    {{description}}
+ * Theme URI:      {{theme_uri}}
+ * Author URI:     {{author_uri}}
+ * Version:        1.0.0
+ * License:        GNU General Public License v3 or later.
+ * License URI:    https://www.gnu.org/licenses/gpl-3.0.html
+ * Tags:           {{tags}}
+ */

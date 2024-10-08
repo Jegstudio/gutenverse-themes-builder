@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder\Block;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Pattern Wrapper
  *

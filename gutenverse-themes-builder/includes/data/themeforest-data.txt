@@ -1,6 +1,6 @@
 <?php
 /**
- * REST APIs class
+ * Themeforest Data class
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -11,7 +11,7 @@ namespace {{namespace}};
 /**
  * Class Api
  *
- * @package gutenverse-themes-builder
+ * @package {{slug}}
  */
 class Themeforest_Data {
 	/**
@@ -118,41 +118,68 @@ class Themeforest_Data {
 	 * @return int|string
 	 */
 	public function handle_pages( $request ) {
-		$title = $request->get_param( 'title' );
-
-		$templates = array(
-			{{assign_templates}}
-		);
-
+		global $wp_filesystem;
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		WP_Filesystem();
+		$title        = $request->get_param( 'title' );
+		$active_theme = wp_get_theme();
+		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$files        = glob( $theme_dir . '/gutenverse-pages/*' );
+		$templates    = array();
+		foreach( $files as $file ){
+			$json_file_data = $wp_filesystem->get_contents( $file );
+			$templates[]    = json_decode( $json_file_data, true );
+		}
+		$theme_url = get_template_directory_uri();
 		foreach ( $templates as $value ) {
-			if ( ! $title || $title === $value['title'] ) {
+			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
+			$page_id = null;
+
+			if ( ! empty( $value['core-patterns'] ) ) {
+				$this->import_synced_patterns( $value['core-patterns'] );
+			}
+
+			if ( ! empty( $value['pro-patterns'] ) ) {
+				$this->import_synced_patterns( $value['pro-patterns'] );
+			}
+
+			if ( ! empty( $value['gutenverse-patterns'] ) ) {
+				$this->import_synced_patterns( $value['gutenverse-patterns'] );
+			}
+
+			if ( ! $title || $title === $value['pagetitle'] ) {
 				$query = new \WP_Query(
 					array(
 						'post_type'      => 'page',
 						'post_status'    => 'publish',
-						'title'          => '' !== $value['page'] ? $value['page'] : $value['title'],
+						'title'          => $value['pagetitle'],
 						'posts_per_page' => 1,
 					)
 				);
 
 				if ( $query->have_posts() ) {
 					$existing_page = $query->posts[0];
+					$page_id = $existing_page->ID;
 					wp_update_post(
 						array(
 							'ID'            => $existing_page->ID,
-							'page_template' => $value['slug'],
+							'page_template' => $value['template'],
 						)
 					);
 				} else {
 					$new_page = array(
-						'post_title'    => '' !== $value['page'] ? $value['page'] : $value['title'],
-						'post_content'  => '',
+						'post_title'    => $value['pagetitle'],
+						'post_content'  => wp_slash( $content ),
 						'post_status'   => 'publish',
 						'post_type'     => 'page',
-						'page_template' => $value['slug'],
+						'page_template' => $value['template'],
 					);
-
 					$page_id = wp_insert_post( $new_page );
+				}
+
+				if( $value['is_homepage'] && $page_id ){
+					update_option( 'show_on_front', 'page' );
+					update_option( 'page_on_front', $page_id );
 				}
 
 				if ( $title ) {
@@ -165,19 +192,58 @@ class Themeforest_Data {
 	}
 
 	/**
+	 * Create Synced Pattern
+	 */
+	public function import_synced_patterns( $patterns ) {
+		$pattern_list = get_option( '{{slug}}_synced_pattern_imported', false );
+		if ( ! $pattern_list ) {
+			$pattern_list = array();
+		}
+
+		foreach ( $patterns as $block_pattern ) {
+			$pattern_file = get_theme_file_path( '/inc/patterns/' . $block_pattern . '.php' );
+			$pattern_data = require $pattern_file;
+
+			if ( !! $pattern_data['is_sync'] ) {
+				$post = get_page_by_path( $block_pattern . '-synced', OBJECT, 'wp_block' );
+
+				if ( empty( $post ) ) {
+					$post_id = wp_insert_post(
+						array(
+							'post_name'    => $block_pattern . '-synced',
+							'post_title'   => $pattern_data['title'],
+							'post_content' => wp_slash( $pattern_data['content'] ),
+							'post_status'  => 'publish',
+							'post_author'  => 1,
+							'post_type'    => 'wp_block',
+						)
+					);
+					if ( ! is_wp_error( $post_id ) ) {
+						$pattern_category = $pattern_data['categories'];
+						foreach( $pattern_category as $category ){
+							wp_set_object_terms( $post_id, $category, 'wp_pattern_category' );
+						}
+					}
+
+					$pattern_data['content']  = '<!-- wp:block {"ref":' . $post_id . '} /-->';
+					$pattern_data['inserter'] = false;
+					$pattern_data['slug']     = $block_pattern;
+
+					$pattern_list[] = $pattern_data;
+				}
+			}
+		}
+
+		update_option( '{{slug}}_synced_pattern_imported', $pattern_list );
+	}
+
+	/**
 	 * Enqueue Backend Font
 	 */
 	public function enqueue_backend() {
 		wp_enqueue_style(
 			'{{slug}}-inter-font',
 			{{constant}}_URI . '/assets/dashboard-fonts/inter/inter.css',
-			array(),
-			{{constant}}_VERSION
-		);
-
-		wp_enqueue_style(
-			'{{slug}}-roboto-font',
-			{{constant}}_URI . '/assets/dashboard-fonts/roboto/roboto.css',
 			array(),
 			{{constant}}_VERSION
 		);

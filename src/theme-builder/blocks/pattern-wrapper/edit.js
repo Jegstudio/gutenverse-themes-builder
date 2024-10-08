@@ -14,6 +14,7 @@ import { BlockControls, BlockPreview } from '@wordpress/block-editor';
 import { ToolbarGroup } from '@wordpress/components';
 import { ArrowLeft } from 'react-feather';
 import { CreatePatternIcon, UsePatternIcon } from '../block-icons';
+import { IconSearchSVG } from 'gutenverse-core/icons';
 
 const PatternWrapper = ({ blockProps }) => {
     return (
@@ -68,7 +69,6 @@ const PatternPreview = ({ setAttributes, clientId, patterns }) => {
             clientId
         });
     };
-
     return !isEmpty(patterns) &&
         <div className="pattern-collection">
             <div className="masonry-content">
@@ -132,14 +132,21 @@ const PatternInput = ({ search, setSearch, paged, setMode, setPatterns, setTotal
         <div className="buttons bottom">
             <div onClick={() => setMode('')} className="back-button"><ArrowLeft size={14} />{__('Back', 'gutenverse-themes-builder')}</div>
         </div>
-        <input type="text" placeholder={__('Search pattern', 'gutenverse-themes-builder')} className="pattern-input" value={search.search} onChange={e => {
-            setSearch({
-                ...search,
-                search: e.target.value
-            });
-        }} />
+        <div className="search-wrapper">
+            {
+                isEmpty(search.search) && <div className="search-placeholder">
+                    <span>{__('Search Pattern', 'gutenverse-themes-builder')}</span>
+                    <IconSearchSVG/>
+                </div>
+            }
+            <input type="text" className="pattern-input" value={search.search} onChange={e => {
+                setSearch({
+                    ...search,
+                    search: e.target.value
+                });
+            }} />
+        </div>
         <div className="categories">
-            <div className={`category ${search?.category === '' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: '' })}>{__('All Patterns', 'gutenverse-themes-builder')}</div>
             <div className={`category ${search?.category === 'core' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'core' })}>{__('Core Patterns', 'gutenverse-themes-builder')}</div>
             <div className={`category ${search?.category === 'gutenverse' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'gutenverse' })}>{__('Gutenverse Patterns', 'gutenverse-themes-builder')}</div>
             <div className={`category ${search?.category === 'pro' ? 'active' : ''}`} onClick={() => setSearch({ ...search, category: 'pro' })}>{__('Gutenverse PRO Patterns', 'gutenverse-themes-builder')}</div>
@@ -149,7 +156,7 @@ const PatternInput = ({ search, setSearch, paged, setMode, setPatterns, setTotal
 
 const Pagination = ({ total, paged, setPaged }) => {
     return total > 1 && <ul className="pagination">
-        {paged > 1 && <li key={'prev'} className="nav prev" onClick={() => setPaged(paged - 1)}>{__('Prev', 'gutenverse-themes-builder')}</li>}
+        <li key={'prev'} className={` prev ${paged > 1 ? 'active' : ''}`} onClick={() => setPaged(paged - 1)}>{__('Prev', 'gutenverse-themes-builder')}</li>
         <li className={`${1 === paged ? 'active' : ''}`} onClick={() => setPaged(1)}>{1}</li>
         {paged > 3 && total > 5 && <div className="space">...</div>}
         {[...Array(total).keys()].map(key => {
@@ -182,14 +189,14 @@ const Pagination = ({ total, paged, setPaged }) => {
         })}
         {paged < total - 2 && total > 5 && <div className="space">...</div>}
         {total > 1 && <li className={`${total === paged ? 'active' : ''}`} onClick={() => setPaged(total)}>{total}</li>}
-        {paged < total && <li key={'next'} className="nav next" onClick={() => setPaged(paged + 1)}>{__('Next', 'gutenverse-themes-builder')}</li>}
+        <li key={'next'} className={` next ${paged < total ? 'active' : ''}`} onClick={() => setPaged(paged + 1)}>{__('Next', 'gutenverse-themes-builder')}</li>
     </ul>;
 };
 
 const UsePattern = ({ setAttributes, setMode, clientId }) => {
     const [search, setSearch] = useState({
         search: '',
-        category: ''
+        category: 'core'
     });
     const [patterns, setPatterns] = useState([]);
     const [paged, setPaged] = useState(1);
@@ -221,6 +228,7 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
     const [patternName, setPatternName] = useState('');
     const [patternSlug, setPatternSlug] = useState('');
     const [patternCategory, setPatternCategory] = useState('core');
+    const [patternSync, setPatternSync] = useState(false);
     const [noticeMessage, setNoticeMessage] = useState('');
     const { replaceInnerBlocks } = dispatch('core/block-editor');
 
@@ -234,7 +242,8 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                 data: {
                     name: patternName,
                     slug: patternSlug,
-                    category: patternCategory
+                    category: patternCategory,
+                    sync: patternSync
                 }
             }).then(result => {
                 const { status, data } = result;
@@ -264,11 +273,12 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
         </div>;
     } else {
         return <div className="pattern-container">
-            <h2>{__('Create Pattern')}</h2>
-            {!isEmpty(noticeMessage) && <div className="pattern-notice">
-                {noticeMessage}
-            </div>}
+            
             <div className="pattern-content create">
+                <h2>{__('Create Pattern')}</h2>
+                {!isEmpty(noticeMessage) && <div className="pattern-notice">
+                    {noticeMessage}
+                </div>}
                 <div className="input-wrap pattern-slug">
                     <label>{__('Pattern Slug', 'gutenverse-themes-builder')}</label>
                     <input type="text" value={patternSlug} onChange={e => setPatternSlug(e.target.value)} />
@@ -284,6 +294,18 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                         <option value="gutenverse">{__('Gutenverse', 'gutenverse-themes-builder')}</option>
                         <option value="pro">{__('Pro', 'gutenverse-themes-builder')}</option>
                     </select>
+                </div>
+                <div className="input-wrap pattern-sync control-checkbox">
+                    <label>{__('Export as Pattern Sync', 'gutenverse-themes-builder')}</label>
+                    <div className="select-inner">
+                        <input
+                            type="checkbox"
+                            checked={patternSync}
+                            hidden
+                        />
+                        <span className="switch" onClick={() => setPatternSync(!patternSync)}/><br/><br/>
+                        <p className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</p>
+                    </div>
                 </div>
                 <div className="buttons end top">
                     <div className="back-button" onClick={() => setMode('')}>

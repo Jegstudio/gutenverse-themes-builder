@@ -9,6 +9,10 @@
 
 namespace Gutenverse_Themes_Builder\Database;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Database Abstract
  *

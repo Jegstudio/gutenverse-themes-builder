@@ -176,7 +176,7 @@ const UpgradePro = ({ updateProgress }) => {
             </p>
             <div className='upgrade-pro-button' onClick={() => window.open(upgradePro, '_blank')}>
                 <span>{__('Upgrade To PRO', '--gtb-theme-namespace--')}</span>
-                <svg width={16} height={16} viewBox="0 0 15 15" fill={'white'} transform={'translate(0,0)'} xmlns="http://www.w3.org/2000/svg">
+                <svg width={18} height={18} viewBox="0 0 15 15" fill={'white'} transform={'translate(0,0)'} xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill={'white'} />
                 </svg>
             </div>
@@ -530,7 +530,7 @@ const WizardPage = () => {
                     </div>
                     <div className='final-detail'>
                         <h3 className='final-title'>{__('Congratulations All Set 🤩', '--gtb-theme-namespace--')}</h3>
-                        <p className='final-desc'>{__('Gutenverse is a powerful and lightweight Gutenberg blocks and page builder plugin for WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
+                        <p className='final-desc'>{__('This theme is built with Gutenverse, a powerful and lightweight Gutenberg blocks and page builder plugin for the WordPress Site Editor.', '--gtb-theme-namespace--')}</p>
                         <div onClick={() => {
                             window.location.href = `${window['GutenThemeConfig']['dashboardPage']}&wizard_setup_done=yes`
                         }} className='button-visit'>{__('Visit Dashboard', '--gtb-theme-namespace--')}</div>
@@ -555,7 +555,7 @@ const WizardPage = () => {
                 </div>
                 <div className={`progress ${progress === 'importTemplate' ? 'active' : ''} ${progressCount >= 1 ? 'done' : ''}`}>
                     <p className='number'>2</p>
-                    <h3 className='progress-title'>{__('Assign Templates', '--gtb-theme-namespace--')}</h3>
+                    <h3 className='progress-title'>{__('Import Demo', '--gtb-theme-namespace--')}</h3>
                 </div>
                 <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
                     <p className='number'>3</p>
