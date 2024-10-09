@@ -304,7 +304,7 @@ const CreatePattern = ({ setAttributes, clientId, setMode }) => {
                             hidden
                         />
                         <span className="switch" onClick={() => setPatternSync(!patternSync)}/><br/><br/>
-                        <p className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</p>
+                        <p className="description">{__('Sync pattern when exported. Used for categorizing exported patterns.', 'gutenverse-themes-builder')}</p>
                     </div>
                 </div>
                 <div className="buttons end top">

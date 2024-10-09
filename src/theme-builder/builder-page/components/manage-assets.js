@@ -311,7 +311,7 @@ const ManageAssets = () => {
                         totalData={totalData}
                         totalPage={totalPage}
                         emptyTitle = {__('You Haven’t Created Any Assets Yet', 'gutenverse-themes-builder')} 
-                        emptySubtitle = {__('Click \'Create Asset\' start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                        emptySubtitle = {__('Click \'Create Assets\' to add and manage your theme\'s custom JS and CSS files.', 'gutenverse-themes-builder')}
                         showButton = {true}
                         buttons = {[
                             {

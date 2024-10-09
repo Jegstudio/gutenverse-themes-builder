@@ -262,7 +262,7 @@ const ManageFonts = () => {
                         totalData={totalData}
                         totalPage={totalPage}
                         emptyTitle = {__('You Haven’t Add Any Fonts Yet', 'gutenverse-themes-builder')} 
-                        emptySubtitle = {__('Click \'Add Font\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                        emptySubtitle = {__('Click \'Add Font\' to manage and customize the fonts for your theme.', 'gutenverse-themes-builder')}
                         showButton = {true}
                         buttons = {[
                             {

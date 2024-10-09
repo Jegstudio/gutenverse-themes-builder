@@ -219,7 +219,7 @@ const ManageGlobal = () => {
                 headingButton={true}
                 headingButtons={[
                     {
-                        buttonText: __('Create Global Style', 'gutenverse-themes-builder'),
+                        buttonText: __('Add Style', 'gutenverse-themes-builder'),
                         buttonEvent: () => setMode('create'),
                         buttonIcon: <PlusIcon />,
                         buttonLoading: false,
@@ -243,11 +243,11 @@ const ManageGlobal = () => {
                         totalData={totalData}
                         totalPage={totalPage}
                         emptyTitle = {__('You Haven’t Created Any Global Style Yet', 'gutenverse-themes-builder')} 
-                        emptySubtitle = {__('Click \'Create Global Style\' and get things moving.', 'gutenverse-themes-builder')}
+                        emptySubtitle = {__('Click \'Add Style\' to start creating your first global style and personalize the overall look of your theme.', 'gutenverse-themes-builder')}
                         showButton = {true}
                         buttons = {[
                             {
-                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Create Global Style', 'gutenverse-themes-builder')}</div>,
+                                buttonElement : () => <div className="button create" onClick={() => setMode('create')}><PlusIcon fill={'white'}/> {__('Add Style', 'gutenverse-themes-builder')}</div>,
                                 buttonLoading : false
                             }
                         ]}

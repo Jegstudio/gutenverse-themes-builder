@@ -202,7 +202,7 @@ const ThemeList = () => {
                         totalData={totalData}
                         totalPage={totalPage}
                         emptyTitle = {__('You Haven’t Created Any Theme Yet', 'gutenverse-themes-builder')} 
-                        emptySubtitle = {__('Click \'Create Theme\' to start designing your very first theme and get things moving.', 'gutenverse-themes-builder')}
+                        emptySubtitle = {__('Click \'Create Theme\' to create and manage your theme projects.', 'gutenverse-themes-builder')}
                         showButton = {true}
                         buttons = {[
                             {

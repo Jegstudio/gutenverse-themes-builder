@@ -84,6 +84,13 @@ class Export_Theme {
 	private $image_list;
 
 	/**
+	 * List of Menus
+	 *
+	 * @var array
+	 */
+	private $menu_list;
+
+	/**
 	 * Init constructor.
 	 */
 	public function __construct() {
@@ -441,7 +448,7 @@ class Export_Theme {
 
 			switch ( $asset['enqueue'] ) {
 				case 'both':
-					$queue .= "\t\t{$string}\n";
+					$queue      .= "\t\t{$string}\n";
 					$adminqueue .= "\t\t{$string}\n";
 					break;
 				case 'backend':
@@ -451,7 +458,6 @@ class Export_Theme {
 					$queue .= "\t\t{$string}\n";
 					break;
 			}
-
 		}
 
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/asset-enqueue.txt' );
@@ -1309,6 +1315,19 @@ class Export_Theme {
 		);
 	}
 
+	public function extract_menus( $content, $system ) {
+		preg_match_all( '/"menuId":(\d+)/', $content, $matches );
+		gutenverse_rlog($content);
+		if ( ! empty( $matches[0] ) ) {
+			foreach ( $matches as $match ) {
+				$menu_id = $match[1];
+				$menu_items = wp_get_nav_menu_items($menu_id);
+				gutenverse_rlog($menu_items);
+			}
+		}
+		return $content;
+	}
+
 	/**
 	 * Create Template Files
 	 *
@@ -1324,7 +1343,6 @@ class Export_Theme {
 		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
 		$headers           = array();
 		$footers           = array();
-		$template_parts    = array();
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
 		}
@@ -1376,6 +1394,7 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->extract_menus( $content, $system );
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
