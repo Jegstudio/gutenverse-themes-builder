@@ -108,6 +108,26 @@ class Themeforest_Data {
 				},
 			)
 		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'import/menus',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_menus' ),
+				'permission_callback' => function () {
+					if ( ! current_user_can( 'manage_options' ) ) {
+						return new WP_Error(
+							'forbidden_permission',
+							esc_html__( 'Forbidden Access', '--gctd--' ),
+							array( 'status' => 403 )
+						);
+					}
+
+					return true;
+				},
+			)
+		);
 	}
 
 	/**
@@ -188,6 +208,60 @@ class Themeforest_Data {
 			}
 		}
 
+		return true;
+	}
+
+	/**
+	 * Create menus.
+	 *
+	 * @param object $request .
+	 *
+	 * @return int|string
+	 */
+	public function handle_menus(){
+		global $wp_filesystem;
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		WP_Filesystem();
+		$active_theme   = wp_get_theme();
+		$theme_dir      = $active_theme->get_stylesheet_directory();
+		$menus = (object) json_decode( $wp_filesystem->get_contents( $theme_dir . '/assets/misc/menu.json' ) );
+		foreach($menus as $key => $menu){
+			$menu_name = get_option('stylesheet') . ' ' . intval( $key ) + 1;
+			$menu_exists = wp_get_nav_menu_object($menu_name);
+			if( !$menu_exists ){
+				$menu_id = wp_create_nav_menu($menu_name);
+				$parent_id = array();
+				foreach( $menu->menu_data as $key => $data ){
+					$menu_parent = 0;
+					$url 		 = $data->url;
+					if( $data->parent ){
+						foreach( $parent_id as $pr_id ){
+							if( $pr_id['idx'] === $data->parent ){
+								$menu_parent = $pr_id['menu_id'];
+							}
+						}
+					}
+					if( $data->object_slug && ( 'page' === $data->type ) ) {
+						$page = get_page_by_path( $data->object_slug, OBJECT, 'page' );
+						if($page){
+							$url  = get_permalink($page->ID);
+						}
+					}
+					$menu_id = wp_update_nav_menu_item($menu_id, 0, array(
+						'menu-item-title' => $data->title,
+						'menu-item-url' => $url,
+						'menu-item-status' => 'publish',
+						'menu-item-parent-id' => $menu_parent,
+					));
+					if( $data->have_child ){
+						$parent_id[] = array(
+							'idx' => $key,
+							'menu_id' => $menu_id,
+						);
+					}
+				}
+			}
+		}
 		return true;
 	}
 

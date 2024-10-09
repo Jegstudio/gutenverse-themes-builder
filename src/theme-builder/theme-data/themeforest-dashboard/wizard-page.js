@@ -185,7 +185,7 @@ const UpgradePro = ({ updateProgress }) => {
             <img className='upgrade-image' src={images + '/upgrade-content.png'} />
         </div>
         <div className='upgrade-pro-actions'>
-            <div onClick={() => updateProgress('importTemplate', -1)} className='button-back'>
+            <div onClick={() => updateProgress('importMenu', -1)} className='button-back'>
                 <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
                 </svg>
@@ -195,10 +195,48 @@ const UpgradePro = ({ updateProgress }) => {
         </div>
     </div>;
 }
+const ImportMenu = ({updateProgress}) => {
+    const [loading, setLoading] = useState(false);
+    const [isImported, setIsImported] = useState(false);
+
+    const handleImportMenu = () => {
+        setLoading(true);
+        wp?.apiFetch({
+            path: `gtb-themes-backend/v1/import/menus`,
+            method: 'GET',
+        }).then(() => {
+            console.log('masuk')
+            setLoading(false);
+            setIsImported(true);
+        }).catch(() => {
+        })
+    }
+    return <div className='import-menu-wrapper'>
+        <div className='title-wrapper'>
+            <h1 className='content-title'>{__('Import Menu', '--gtb-theme-namespace--')}</h1>
+        </div>
+        <div className='content-wrapper'>
+            {
+                loading ? <div className="load"></div> : isImported ? <div className="menu-imported">
+                    <h1>{__('Menu Imported!', '--gtb-theme-namespace--')}</h1>
+                    <p>{__('Proceed to the next step.', '--gtb-theme-namespace--')}</p>
+                </div> : <div onClick={() => handleImportMenu()} className='import-button'>{__('Import Menu', '--gtb-theme-namespace--')}</div>
+            }
+        </div>
+        <div className='footer-wrapper'>
+            <div onClick={() => updateProgress('importTemplate', -1)} className='button-back'>
+                <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
+                </svg>
+                {__('Back', '--gtb-theme-namespace--')}
+            </div>
+            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
+        </div>
+    </div>
+}
 
 const ImportTemplates = ({ updateProgress }) => {
     const { assign } = window['GutenThemeConfig'];
-
     const [allImported, setAllImported] = useState(false);
     const [templateList, setTemplateList] = useState(assign);
     const [importerStep, setImporterStep] = useState([
@@ -376,7 +414,7 @@ const ImportTemplates = ({ updateProgress }) => {
                 </svg>
                 {__('Back', '--gtb-theme-namespace--')}
             </div>
-            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
+            <div onClick={() => updateProgress('importMenu', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
         </div>
     </div>
 }
@@ -542,6 +580,8 @@ const WizardPage = () => {
                 return <UpgradePro updateProgress={updateProgress} />;
             case 'importTemplate':
                 return <ImportTemplates updateProgress={updateProgress} />;
+            case 'importMenu':
+                return <ImportMenu updateProgress={updateProgress} />;
             case 'installPlugin':
             default:
                 return <InstallPlugin updateProgress={updateProgress} action={action} setAction={setAction} />;
@@ -559,12 +599,16 @@ const WizardPage = () => {
                     <p className='number'>2</p>
                     <h3 className='progress-title'>{__('Import Demo', '--gtb-theme-namespace--')}</h3>
                 </div>
-                <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
+                <div className={`progress ${progress === 'importMenu' ? 'active' : ''} ${progressCount >= 2 ? 'done' : ''}`}>
                     <p className='number'>3</p>
+                    <h3 className='progress-title'>{__('Import Menu', '--gtb-theme-namespace--')}</h3>
+                </div>
+                <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 3 ? 'done' : ''}`}>
+                    <p className='number'>4</p>
                     <h3 className='progress-title'>{__('Upgrade Your Site', '--gtb-theme-namespace--')}</h3>
                 </div>
-                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 3 ? 'done' : ''}`}>
-                    <p className='number'>4</p>
+                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 4 ? 'done' : ''}`}>
+                    <p className='number'>5</p>
                     <h3 className='progress-title'>{__('Finalizing', '--gtb-theme-namespace--')}</h3>
                 </div>
             </div>
