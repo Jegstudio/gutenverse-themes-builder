@@ -593,7 +593,7 @@ class Export_Templates {
 			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
 
 			foreach ( $colors as $color ) {
-				$new_arr[ $color['slug'] ] = $this->hex2rgb( $color['color'] );
+				$new_arr[ $color->slug ] = $this->hex2rgb( $color->color );
 			}
 			return $new_arr;
 		}
