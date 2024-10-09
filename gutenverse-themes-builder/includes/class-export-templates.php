@@ -577,17 +577,8 @@ class Export_Templates {
 	 * Get theme colors
 	 */
 	public function get_theme_colors() {
-		$theme_dir = get_template_directory() . '/theme.json';
-		$config    = array();
-
-		if ( $theme_dir ) {
-			$decoded_file = wp_json_file_decode( $theme_dir, array( 'associative' => true ) );
-			if ( is_array( $decoded_file ) ) {
-				$config = $decoded_file;
-			}
-		}
-
-		if ( ! empty( $config['settings']['color']['palette'] ) ) {
+		$colors = $this->get_color_settings();
+		if ( ! empty( $colors ) ) {
 			$new_arr = array();
 
 			// Manually add default colors for now.
@@ -604,7 +595,7 @@ class Export_Templates {
 			$new_arr['vivid-cyan-blue']       = $this->hex2rgb( '#0693e3' );
 			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
 
-			foreach ( $config['settings']['color']['palette'] as $color ) {
+			foreach ( $colors as $color ) {
 				$new_arr[ $color['slug'] ] = $this->hex2rgb( $color['color'] );
 			}
 			return $new_arr;
