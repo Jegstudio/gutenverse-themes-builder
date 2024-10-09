@@ -186,7 +186,6 @@ class Export_Templates {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
-			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
 
@@ -268,8 +267,7 @@ class Export_Templates {
 
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
-					$content = $this->fix_colors( $html_content[ $slug_key ] );
-					$content = $this->fix_core_navigation( $content );
+					$content = $this->fix_core_navigation( $html_content[ $slug_key ] );
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
@@ -402,7 +400,6 @@ class Export_Templates {
 						$content          = $this->extractor_extract_image_to_array( $content );
 						$images           = $content['images'];
 						$content          = $this->replace_global_variables( $content['contents'] );
-						$content          = $this->fix_colors( $content );
 						$content          = $this->fix_core_navigation( $content );
 						$pattern_name     = $posts[0]->post_name;
 						$pattern_title    = $posts[0]->post_title;
@@ -714,28 +711,6 @@ class Export_Templates {
 		$haystack = array_flip( $haystack );
 
 		return isset( $haystack[ $test ] ) ? $haystack[ $test ] : 0;
-	}
-
-	/**
-	 * Fix colors names
-	 *
-	 * @param string $content template content .
-	 */
-	private function fix_colors( $content ) {
-		$colors          = $this->get_color_settings();
-		$theme_id        = get_option( 'gtb_active_theme_id' );
-		$theme_db        = Database::instance()->theme_info;
-		$theme_info      = $theme_db->get_theme_data( $theme_id );
-		$theme_slug      = $theme_info[0]['slug'];
-		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_slug );
-		// change colors slug into lowercase to prevent errors.
-		foreach ( $colors as $index => $color ) {
-			$new_slug = 'theme-' . $index;
-			$content  = str_replace( $color->slug, $new_slug, $content );
-			$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
-		}
-
-		return $content;
 	}
 
 	/**
