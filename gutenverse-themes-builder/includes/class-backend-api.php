@@ -3139,6 +3139,9 @@ class Backend_Api {
 						'compare' => '===',
 					),
 				),
+				'meta_key' => '_gtb_page_order',          // Replace 'meta_id' with the actual meta key
+				'orderby'  => 'meta_value_num',   // Use 'meta_value_num' if the meta value is numeric
+				'order'    => 'ASC',  
 			)
 		);
 
@@ -3175,18 +3178,6 @@ class Backend_Api {
 			}
 		}
 
-		usort(
-			$data,
-			function ( $a, $b ) {
-				if ( 'string' === gettype( $a['order'] ) ) {
-					$a['order'] = (int) $a['order'];
-				}
-				if ( 'string' === gettype( $b['order'] ) ) {
-					$b['order'] = (int) $b['order'];
-				}
-				return $a['order'] - $b['order'];
-			}
-		);
 		return (object) array(
 			'pages'       => $data,
 			'total_page'  => $pages->max_num_pages,

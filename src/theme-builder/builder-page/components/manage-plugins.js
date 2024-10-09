@@ -109,7 +109,8 @@ const ManagePlugins = () => {
     };
 
     const updatePluginList = (value) => {
-        if (!defaultPlugins.includes(value?.value)) {
+        let checkIndex = plugins.indexOf(el => el.value = value?.value);
+        if (!defaultPlugins.includes(value?.value) || -1 === checkIndex) {
             const update = plugins.filter(plugin => plugin.value !== value.value);
 
             setPlugins([
@@ -163,7 +164,10 @@ const ManagePlugins = () => {
                                 <td>
                                     <div className="actions">
                                         <a className="edit" onClick={() => setEditPopup( {plugin : plugin, key: (((paged-1) * num_post) + parseInt(key) )} )}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
-                                        <a className="delete" onClick={() => setDeletePopup(plugin)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
+                                        {
+                                            !defaultPlugins.includes(plugin?.value) && <a className="delete" onClick={() => setDeletePopup(plugin)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
+                                        }
+                                        
                                     </div>
                                 </td>
                             </tr>;
