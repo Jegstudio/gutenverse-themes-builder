@@ -47,7 +47,7 @@ const MediaSelect = ({ updateThumbnailData }) => {
         }
     };
 
-    return <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
+    return <button className="button" onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
 };
 export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [pageName, setPageName] = useState('');

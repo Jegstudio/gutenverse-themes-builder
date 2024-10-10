@@ -441,6 +441,7 @@ body {
 
     .actions {
         display: flex;
+        flex-wrap: wrap;
         gap: 16px;
 
         .edit,
@@ -1414,6 +1415,9 @@ body {
                 width: 100%;
             }
         }
+    }
+    .data-footer{
+        margin-top: 32px;
     }
 }
 
