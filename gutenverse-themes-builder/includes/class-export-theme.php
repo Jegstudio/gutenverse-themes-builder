@@ -225,7 +225,7 @@ class Export_Theme {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
-			$content 	 = $this->extract_menus( $content, $system );
+			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
@@ -1365,7 +1365,7 @@ class Export_Theme {
 					if ( 'page' === $item->object || 'post' === $item->object ) {
 						$url         = '#';
 						$post        = get_post( $item->object_id );
-						$object_slug = str_replace( ' ', '-', strtolower( $post->page_title ) );
+						$object_slug = str_replace( ' ', '-', strtolower( $post->post_title ) );
 					}
 					if ( 0 !== intval( $item->menu_item_parent ) ) {
 						$parent_id  = intval( $item->menu_item_parent );
@@ -1382,11 +1382,14 @@ class Export_Theme {
 						'id'          => $item->ID,
 						'title'       => $item->title,
 						'url'         => $url,
-						'parent'      => $parent_idx,
+						'parent'      => strval( $parent_idx ),
 						'type'        => $item->object,
 						'object_slug' => $object_slug,
-						'have_child'  => $parent_idx ? true : false,
+						'have_child'  => false,
 					);
+					if ( null !== $parent_idx ) {
+						$arr_menu[ $parent_idx ]['have_child'] = true;
+					}
 					$parent_idx = null;
 				}
 				$this->add_menus(
@@ -1395,7 +1398,6 @@ class Export_Theme {
 						'menu_data' => $arr_menu,
 					)
 				);
-				gutenverse_rlog( $this->menu_list );
 			}
 		}
 		return $content;
