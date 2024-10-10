@@ -441,14 +441,16 @@ class Export_Theme {
 
 			switch ( $asset['enqueue'] ) {
 				case 'both':
-					$queue .= "\t\t{$string}\n";
-					$adminqueue .= "\t\t{$string}\n";
+					$queue      .= "\t\t{$string}\n";
 					break;
 				case 'backend':
-					$adminqueue .= "\t\t{$string}\n";
+					$queue .= "\t\t{$string}\n";
 					break;
 				case 'frontend':
 					$queue .= "\t\t{$string}\n";
+					break;
+				case 'admin' :
+					$adminqueue .= "\t\t{$string}\n";
 					break;
 			}
 
