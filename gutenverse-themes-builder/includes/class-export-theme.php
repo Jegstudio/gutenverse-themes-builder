@@ -402,6 +402,7 @@ class Export_Theme {
 		$assets_db  = Database::instance()->theme_assets;
 		$assets     = $assets_db->get_all_assets( $active );
 		$queue      = '';
+		$adminqueue = '';
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$theme_slug = $this->get_constant_name( $theme_data['slug'] );
 
@@ -438,7 +439,21 @@ class Export_Theme {
 					break;
 			}
 
-			$queue .= "\t\t{$string}\n";
+			switch ( $asset['enqueue'] ) {
+				case 'both':
+					$queue      .= "\t\t{$string}\n";
+					break;
+				case 'backend':
+					$queue .= "\t\t{$string}\n";
+					break;
+				case 'frontend':
+					$queue .= "\t\t{$string}\n";
+					break;
+				case 'admin' :
+					$adminqueue .= "\t\t{$string}\n";
+					break;
+			}
+
 		}
 
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/asset-enqueue.txt' );
@@ -446,6 +461,7 @@ class Export_Theme {
 		$placeholder = str_replace( '{{theme_slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{style_script_enqueue}}', $queue, $placeholder );
+		$placeholder = str_replace( '{{admin_style_script_enqueue}}', $adminqueue, $placeholder );
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 
 		$system->put_contents(
