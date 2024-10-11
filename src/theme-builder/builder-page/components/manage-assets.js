@@ -38,16 +38,20 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
                         options={[
                             {
                                 value: 'both',
-                                label: __('Backend & Frontend', 'gutenverse-themes-builder')
+                                label: __('Backend (Editor) & Frontend', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'backend',
-                                label: __('Backend Only', 'gutenverse-themes-builder')
+                                label: __('Backend (Editor) Only', 'gutenverse-themes-builder')
                             },
                             {
                                 value: 'frontend',
                                 label: __('Frontend Only', 'gutenverse-themes-builder')
                             },
+                            {
+                                value: 'admin',
+                                label: __('Admin Only', 'gutenverse-themes-builder')
+                            }
                         ]}
                         onChange={value => updateDetails('enqueue', value)}
                     />
