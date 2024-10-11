@@ -1681,6 +1681,7 @@ class Export_Theme {
 					if ( $theme_id === $pattern_theme_id ) {
 						$content          = str_replace( "'", "\'", $posts[0]->post_content );
 						$content          = $this->extract_images( $content, $system, $theme_slug );
+						$content          = $this->extract_menus( $content, $system );
 						$content          = $this->fix_colors( $content );
 						$content          = $this->fix_core_navigation( $content );
 						$pattern_name     = $posts[0]->post_name;
