@@ -1,13 +1,13 @@
 
-const TextareaControl = (props) => {
+const NumberControl = (props) => {
     const {
         id,
-        title = 'Textarea Title',
+        title = 'Number Title',
         placeholder = '',
         description,
         value,
-        onChange,
-        important= false,
+        important = false,
+        onChange
     } = props;
 
     const onTextChange = e => onChange(e.target.value);
@@ -16,17 +16,18 @@ const TextareaControl = (props) => {
         <div className="input-wrapper">
             <label name={id}>{title}{important && <span>&nbsp;*</span>}</label>
             <div className="input-inner">
-                <textarea
+                <input
                     id={id}
-                    className="control-input-textarea"
+                    type="number"
+                    className="control-input-number"
                     placeholder={placeholder}
                     value={value}
                     onChange={onTextChange}
-                /><br/>
+                />
                 {description && <span>{description}</span>}
             </div>
         </div>
     );
 };
 
-export default TextareaControl;
+export default NumberControl;

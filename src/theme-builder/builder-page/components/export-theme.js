@@ -23,7 +23,7 @@ const ExportTheme = () => {
         <div className='table empty margin-top-0'>
             <div className='empty-content'>
                 <h3>{__('Ready to export your themes ?', 'gutenverse-themes-builder')}</h3>
-                <p className='export-paragraph'>{__('Explore the unlimited possibilities of Gutenberg and Full Site Editing using Gutenverse.', 'gutenverse-themes-builder')}</p>
+                <p className='export-paragraph'>{__('Click \'Export Themes\' to generate a ZIP file of your theme. This package includes all theme files, ready for installation or sharing.', 'gutenverse-themes-builder')}</p>
                 <div className="buttons">
                     { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export Themes', 'gutenverse-themes-builder')}</div>}
                 </div>

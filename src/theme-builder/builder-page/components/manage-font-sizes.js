@@ -201,7 +201,7 @@ const ManageFontSizes = () => {
                         totalData={totalData}
                         totalPage={totalPage}
                         emptyTitle = {__('You Haven’t Add Any Fonts Size Yet', 'gutenverse-themes-builder')} 
-                        emptySubtitle = {__('Click \'Add Font Size\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                        emptySubtitle = {__('Click \'Add Font Size\' to manage and customize the font Size for your theme.', 'gutenverse-themes-builder')}
                         showButton = {true}
                         buttons = {[
                             {

@@ -84,6 +84,13 @@ class Export_Theme {
 	private $image_list;
 
 	/**
+	 * List of Menus
+	 *
+	 * @var array
+	 */
+	private $menu_list;
+
+	/**
 	 * Init constructor.
 	 */
 	public function __construct() {
@@ -126,6 +133,7 @@ class Export_Theme {
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
+		$this->create_menus( $wp_filesystem );
 		$this->extractor_send_file( $data );
 
 		// child theme .
@@ -133,6 +141,26 @@ class Export_Theme {
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$this->create_child_theme( $wp_filesystem, $data );
 		}
+	}
+
+	/**
+	 * Create Menus
+	 *
+	 * @param object $system .
+	 */
+	public function create_menus( $system ) {
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/menu-json.txt' );
+		$custom_dir  = gutenverse_themes_builder_theme_built_path() . '/assets/misc';
+		if ( ! is_dir( $custom_dir ) ) {
+			wp_mkdir_p( $custom_dir );
+		}
+		$content     = json_encode( $this->menu_list );
+		$placeholder = ! empty( $this->menu_list ) ? str_replace( '{{menus}}', $content, $placeholder ) : '{}';
+		$system->put_contents(
+			gutenverse_themes_builder_theme_built_path() . '/assets/misc/menu.json',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
 	}
 
 	/**
@@ -197,6 +225,7 @@ class Export_Theme {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
+			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
@@ -1311,6 +1340,72 @@ class Export_Theme {
 	}
 
 	/**
+	 * Add Menu
+	 *
+	 * @param string $menus .
+	 */
+	public function add_menus( $menus ) {
+		$this->menu_list[] = $menus;
+	}
+
+	/**
+	 * Extract Menu
+	 *
+	 * @param string $content .
+	 * @param object $system .
+	 */
+	public function extract_menus( $content, $system ) {
+		preg_match_all( '/"menuId":(\d+)/', $content, $matches );
+		if ( ! empty( $matches[0] ) ) {
+			foreach ( $matches[1] as $match ) {
+				$menu_id    = $match;
+				$menu_items = wp_get_nav_menu_items( $menu_id );
+				$arr_menu   = array();
+				foreach ( $menu_items as $item ) {
+					$url         = $item->url;
+					$object_slug = null;
+					if ( 'page' === $item->object || 'post' === $item->object ) {
+						$url         = '#';
+						$post        = get_post( $item->object_id );
+						$object_slug = str_replace( ' ', '-', strtolower( $post->post_title ) );
+					}
+					if ( 0 !== intval( $item->menu_item_parent ) ) {
+						$parent_id  = intval( $item->menu_item_parent );
+						$parent_idx = null;
+						foreach ( $arr_menu as $key => $parent ) {
+							if ( intval( $parent['id'] ) === $parent_id ) {
+								$parent_idx = $key;
+								break;
+							}
+						}
+					}
+
+					$arr_menu[] = array(
+						'id'          => $item->ID,
+						'title'       => $item->title,
+						'url'         => $url,
+						'parent'      => strval( $parent_idx ),
+						'type'        => $item->object,
+						'object_slug' => $object_slug,
+						'have_child'  => false,
+					);
+					if ( null !== $parent_idx ) {
+						$arr_menu[ $parent_idx ]['have_child'] = true;
+					}
+					$parent_idx = null;
+				}
+				$this->add_menus(
+					array(
+						'menu_id'   => $menu_id,
+						'menu_data' => $arr_menu,
+					)
+				);
+			}
+		}
+		return $content;
+	}
+
+	/**
 	 * Create Template Files
 	 *
 	 * @param object $system .
@@ -1325,7 +1420,6 @@ class Export_Theme {
 		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
 		$headers           = array();
 		$footers           = array();
-		$template_parts    = array();
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
 		}
@@ -1377,6 +1471,7 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->extract_menus( $content, $system );
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
