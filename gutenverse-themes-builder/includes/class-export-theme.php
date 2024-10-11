@@ -84,6 +84,13 @@ class Export_Theme {
 	private $image_list;
 
 	/**
+	 * List of Menus
+	 *
+	 * @var array
+	 */
+	private $menu_list;
+
+	/**
 	 * Init constructor.
 	 */
 	public function __construct() {
@@ -126,6 +133,7 @@ class Export_Theme {
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
+		$this->create_menus( $wp_filesystem );
 		$this->extractor_send_file( $data );
 
 		// child theme .
@@ -133,6 +141,26 @@ class Export_Theme {
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$this->create_child_theme( $wp_filesystem, $data );
 		}
+	}
+
+	/**
+	 * Create Menus
+	 *
+	 * @param object $system .
+	 */
+	public function create_menus( $system ) {
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/menu-json.txt' );
+		$custom_dir  = gutenverse_themes_builder_theme_built_path() . '/assets/misc';
+		if ( ! is_dir( $custom_dir ) ) {
+			wp_mkdir_p( $custom_dir );
+		}
+		$content     = json_encode( $this->menu_list );
+		$placeholder = ! empty( $this->menu_list ) ? str_replace( '{{menus}}', $content, $placeholder ) : '{}';
+		$system->put_contents(
+			gutenverse_themes_builder_theme_built_path() . '/assets/misc/menu.json',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
 	}
 
 	/**
@@ -197,6 +225,7 @@ class Export_Theme {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
+			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
@@ -205,20 +234,20 @@ class Export_Theme {
 			/**Add Pattern */
 			if ( ! empty( $this->page_core_patterns ) ) {
 				$core_pattern_list = join( ', ', $this->page_core_patterns );
+				$placeholder              = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
 			}
-			$placeholder              = str_replace( '{{core_pattern}}', $core_pattern_list, $placeholder );
 			$this->page_core_patterns = array();
 
 			if ( ! empty( $this->page_gutenverse_patterns ) ) {
 				$gutenverse_pattern_list = join( ', ', $this->page_gutenverse_patterns );
+				$placeholder                    = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
 			}
-			$placeholder                    = str_replace( '{{gutenverse_pattern}}', $gutenverse_pattern_list, $placeholder );
 			$this->page_gutenverse_patterns = array();
 
 			if ( ! empty( $this->page_pro_patterns ) ) {
 				$pro_pattern_list = join( ', ', $this->page_pro_patterns );
+				$placeholder             = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
 			}
-			$placeholder             = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
 			$this->page_pro_patterns = array();
 
 			/**Create the file*/
@@ -441,7 +470,7 @@ class Export_Theme {
 
 			switch ( $asset['enqueue'] ) {
 				case 'both':
-					$queue      .= "\t\t{$string}\n";
+					$queue .= "\t\t{$string}\n";
 					break;
 				case 'backend':
 					$queue .= "\t\t{$string}\n";
@@ -449,11 +478,10 @@ class Export_Theme {
 				case 'frontend':
 					$queue .= "\t\t{$string}\n";
 					break;
-				case 'admin' :
+				case 'admin':
 					$adminqueue .= "\t\t{$string}\n";
 					break;
 			}
-
 		}
 
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/asset-enqueue.txt' );
@@ -881,6 +909,10 @@ class Export_Theme {
 		$theme_data     = maybe_unserialize( $data['theme_data'] );
 		$templates_db   = Database::instance()->theme_templates;
 		$templates_data = $templates_db->get_data( $theme_id );
+		$class_dir      = gutenverse_themes_builder_theme_built_path() . 'inc/class';
+		if ( ! is_dir( $class_dir ) ) {
+			wp_mkdir_p( $class_dir );
+		}
 
 		// Take which placeholder.
 		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
@@ -892,7 +924,7 @@ class Export_Theme {
 		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
 		$placeholder = str_replace( '{{slug}}', $theme_data['slug'], $placeholder );
 		$placeholder = str_replace( '{{title}}', $theme_data['title'], $placeholder );
-		$placeholder = str_replace( '{{description}}', str_replace( "'", "\'", $theme_data['description'] ), $placeholder );
+		$placeholder = str_replace( '{{description}}', isset( $theme_data['description'] ) ? str_replace( "'", "\'", $theme_data['description'] ) : '', $placeholder );
 		$placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder );
 		$placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $placeholder );
 
@@ -1016,102 +1048,8 @@ class Export_Theme {
 		$assigns    = array();
 		$data_page  = array();
 		$theme_logo = 'false';
-		$notice     = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
-			<div class="gutenverse-notice-inner">
-				<div class="gutenverse-notice-content">
-					<div class="gutenverse-notice-text">
-						<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
-						<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
-						<div class="gutenverse-bottom">
-							<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
-								<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
-							</a>
-						</div>
-					</div>
-					<div class="gutenverse-notice-image">
-						<img src="<?php echo esc_url( ' . $this->get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse-2.png\' ); ?>"/>
-					</div>
-				</div>
-			</div>
-		</div>';
-		$script     = "<script>
-		var promises = [];
-		var actions = <?php echo wp_json_encode( \$actions ); ?>;
 
-		function sequenceInstall (plugins, index = 0) {
-			if (plugins[index]) {
-				var plugin = plugins[index];
-
-				switch (actions[plugin?.slug]) {
-					case 'active':
-						break;
-					case 'inactive':
-						var path = plugin?.slug + '/' + plugin?.slug;
-						promises.push(
-							wp.apiFetch({
-								path: 'wp/v2/plugins/plugin?plugin=' + path,									
-								method: 'POST',
-								data: {
-									status: 'active'
-								}
-							}).then(() => {
-								sequenceInstall(plugins, index + 1);
-							}).catch((error) => {
-							})
-						);
-						break;
-					default:
-						promises.push(
-							wp.apiFetch({
-								path: 'wp/v2/plugins',
-								method: 'POST',
-								data: {
-									slug: plugin?.slug,
-									status: 'active'
-								}
-							}).then(() => {
-								sequenceInstall(plugins, index + 1);
-							}).catch((error) => {
-							})
-						);
-						break;
-				}
-			}
-
-			return;
-		};
-
-		jQuery( function( $ ) {
-			$( 'div.notice.install-gutenverse-plugin-notice' ).on( 'click', 'button.notice-dismiss', function( event ) {
-				event.preventDefault();
-				$.post( ajaxurl, {
-					action: '{{slug}}_set_admin_notice_viewed',
-					nonce: '<?php echo esc_html( wp_create_nonce( '{{slug}}_admin_notice' ) ); ?>',
-				} );
-			} );
-
-			$('#gutenverse-install-plugin').on('click', function(e) {
-				var hasFinishClass = $(this).hasClass('finished');
-				var hasLoaderClass = $(this).hasClass('loader');
-
-				if(!hasFinishClass) {
-					e.preventDefault();
-				}
-
-				if(!hasLoaderClass && !hasFinishClass) {
-					promises = [];
-					var plugins = <?php echo wp_json_encode( \$plugins ); ?>;
-					$(this).addClass('loader').text('');
-
-					sequenceInstall(plugins);
-					Promise.all(promises).then(() => {						
-						window.location.reload();
-						$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
-					});
-				}
-			});
-		} );
-		</script>";
+		/**Create Notice */
 
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$add_class[] = 'new Themeforest_Data();';
@@ -1197,16 +1135,23 @@ class Export_Theme {
 					)";
 				}
 			}
+		} else {
+			$plugin_notice_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/plugin-notice.txt' );
+			$plugin_notice_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $plugin_notice_placeholder );
+			$plugin_notice_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $plugin_notice_placeholder );
+			$plugin_notice_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $plugin_notice_placeholder );
+			$plugin_notice_placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $plugin_notice_placeholder );
+			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
-			$notice = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+			$notice                    = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
-							<h3><?php esc_html_e( \'Complete Setup to Activate All \', \'' . $theme_data['slug'] . '\' ); ?> <span>' . $theme_data['title'] . ' Features!</span></h3> 
-							<p><?php esc_html_e( \'Complete the setup process to unlock all features and customization options. Maximize the potential of your ' . $theme_data['title'] . ' theme and get the most out of your website design.\', \'' . $theme_data['slug'] . '\' ); ?></p>
+							<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
+							<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
 							<div class="gutenverse-bottom">
-								<a class="gutenverse-button" id="gutenverse-wizard-setup" href="<?php echo esc_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-wizard\' ) ); ?>">
-									<?php echo esc_html( __( \'Complete Wizard Setup\', \'' . $theme_data['slug'] . '\' ) ); ?>
+								<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
+									<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
 								</a>
 							</div>
 						</div>
@@ -1216,15 +1161,98 @@ class Export_Theme {
 					</div>
 				</div>
 			</div>';
-			$script = '';
+			$script                    = "<script>
+			var promises = [];
+			var actions = <?php echo wp_json_encode( \$actions ); ?>;
+
+			function sequenceInstall (plugins, index = 0) {
+				if (plugins[index]) {
+					var plugin = plugins[index];
+
+					switch (actions[plugin?.slug]) {
+						case 'active':
+							break;
+						case 'inactive':
+							var path = plugin?.slug + '/' + plugin?.slug;
+							promises.push(
+								wp.apiFetch({
+									path: 'wp/v2/plugins/plugin?plugin=' + path,									
+									method: 'POST',
+									data: {
+										status: 'active'
+									}
+								}).then(() => {
+									sequenceInstall(plugins, index + 1);
+								}).catch((error) => {
+								})
+							);
+							break;
+						default:
+							promises.push(
+								wp.apiFetch({
+									path: 'wp/v2/plugins',
+									method: 'POST',
+									data: {
+										slug: plugin?.slug,
+										status: 'active'
+									}
+								}).then(() => {
+									sequenceInstall(plugins, index + 1);
+								}).catch((error) => {
+								})
+							);
+							break;
+					}
+				}
+
+				return;
+			};
+
+			jQuery( function( $ ) {
+				$( 'div.notice.install-gutenverse-plugin-notice' ).on( 'click', 'button.notice-dismiss', function( event ) {
+					event.preventDefault();
+					$.post( ajaxurl, {
+						action: '{{slug}}_set_admin_notice_viewed',
+						nonce: '<?php echo esc_html( wp_create_nonce( '{{slug}}_admin_notice' ) ); ?>',
+					} );
+				} );
+
+				$('#gutenverse-install-plugin').on('click', function(e) {
+					var hasFinishClass = $(this).hasClass('finished');
+					var hasLoaderClass = $(this).hasClass('loader');
+
+					if(!hasFinishClass) {
+						e.preventDefault();
+					}
+
+					if(!hasLoaderClass && !hasFinishClass) {
+						promises = [];
+						var plugins = <?php echo wp_json_encode( \$plugins ); ?>;
+						$(this).addClass('loader').text('');
+
+						sequenceInstall(plugins);
+						Promise.all(promises).then(() => {						
+							window.location.reload();
+							$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
+						});
+					}
+				});
+			} );
+			</script>";
+			$plugin_notice_placeholder = str_replace( '{{dashboard_script}}', $script, $plugin_notice_placeholder );
+			$plugin_notice_placeholder = str_replace( '{{dashboard_notice}}', $notice, $plugin_notice_placeholder );
+			$add_class[]               = 'new Plugin_Notice();';
+			$system->put_contents(
+				$class_dir . '/class-plugin-notice.php',
+				$plugin_notice_placeholder,
+				FS_CHMOD_FILE
+			);
 		}
 
 		if ( isset( $other['notice'] ) && ! $this->is_serialized_block_empty( $other['notice'] ) ) {
 			$add_class[] = 'new Upgrader();';
 		}
 
-		$placeholder = str_replace( '{{dashboard_script}}', $script, $placeholder );
-		$placeholder = str_replace( '{{dashboard_notice}}', $notice, $placeholder );
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{additional_class}}', join( "\n\t\t\t\t", $add_class ), $placeholder );
@@ -1298,17 +1326,80 @@ class Export_Theme {
 		}
 
 		$placeholder = str_replace( '{{theme_fonts}}', $fonts, $placeholder );
-		$class_dir   = gutenverse_themes_builder_theme_built_path() . 'inc/class';
 
-		if ( ! is_dir( $class_dir ) ) {
-			wp_mkdir_p( $class_dir );
-		}
+		
 
 		$system->put_contents(
 			$class_dir . '/class-init.php',
 			$placeholder,
 			FS_CHMOD_FILE
 		);
+	}
+
+	/**
+	 * Add Menu
+	 *
+	 * @param string $menus .
+	 */
+	public function add_menus( $menus ) {
+		$this->menu_list[] = $menus;
+	}
+
+	/**
+	 * Extract Menu
+	 *
+	 * @param string $content .
+	 * @param object $system .
+	 */
+	public function extract_menus( $content, $system ) {
+		preg_match_all( '/"menuId":(\d+)/', $content, $matches );
+		if ( ! empty( $matches[0] ) ) {
+			foreach ( $matches[1] as $match ) {
+				$menu_id    = $match;
+				$menu_items = wp_get_nav_menu_items( $menu_id );
+				$arr_menu   = array();
+				foreach ( $menu_items as $item ) {
+					$url         = $item->url;
+					$object_slug = null;
+					if ( 'page' === $item->object || 'post' === $item->object ) {
+						$url         = '#';
+						$post        = get_post( $item->object_id );
+						$object_slug = str_replace( ' ', '-', strtolower( $post->post_title ) );
+					}
+					if ( 0 !== intval( $item->menu_item_parent ) ) {
+						$parent_id  = intval( $item->menu_item_parent );
+						$parent_idx = null;
+						foreach ( $arr_menu as $key => $parent ) {
+							if ( intval( $parent['id'] ) === $parent_id ) {
+								$parent_idx = $key;
+								break;
+							}
+						}
+					}
+
+					$arr_menu[] = array(
+						'id'          => $item->ID,
+						'title'       => $item->title,
+						'url'         => $url,
+						'parent'      => strval( $parent_idx ),
+						'type'        => $item->object,
+						'object_slug' => $object_slug,
+						'have_child'  => false,
+					);
+					if ( null !== $parent_idx ) {
+						$arr_menu[ $parent_idx ]['have_child'] = true;
+					}
+					$parent_idx = null;
+				}
+				$this->add_menus(
+					array(
+						'menu_id'   => $menu_id,
+						'menu_data' => $arr_menu,
+					)
+				);
+			}
+		}
+		return $content;
 	}
 
 	/**
@@ -1326,7 +1417,6 @@ class Export_Theme {
 		$parts_content     = get_block_templates( array(), 'wp_template_part' ); // phpcs:ignore
 		$headers           = array();
 		$footers           = array();
-		$template_parts    = array();
 		foreach ( $templates_content as $template ) {
 			$html_content[ $template->slug ] = $template->content;
 		}
@@ -1378,6 +1468,7 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->extract_menus( $content, $system );
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );

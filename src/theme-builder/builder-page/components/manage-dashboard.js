@@ -3,6 +3,9 @@ import { useEffect, useState } from '@wordpress/element';
 import { updateOtherData, getThemeData } from '../../../data/api-fetch';
 import ContentWrapper from './content-wrapper';
 import { Select } from 'gutenverse-core/components';
+import TextControl from '../controls/text-control';
+import TextareaControl from '../controls/textarea-control';
+import NumberControl from '../controls/number-control';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
@@ -108,142 +111,166 @@ const ManageDashbaord = () => {
                         </div>
                     </>}
                     {dashboardData?.mode?.value === 'lite' && <>
-                        <div>
-                            <h3>{__('Names and Description', 'gutenverse-themes-builder')}</h3>
-                            <label>{__('Core Theme Name :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="text"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        name_core: e.target.value
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.name_core}
-                            />
-                            <br/>
-                            <label>{__('Lite Theme Name :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="text"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        name_lite: e.target.value
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.name_lite}
-                            />
-                            <br/>
-                            <label>{__('Pro Theme Name :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="text"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        name_pro: e.target.value
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.name_pro}
-                            />
-                            <br/>
-                            <label>{__('Comparison Description :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <textarea
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        description: e.target.value
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.description}
-                            />
-                            <br/>
-                            <h3>{__('Theme Comparison Features', 'gutenverse-themes-builder')}</h3>
-                            <label>{__('Core Theme Template Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        core_template_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.core_template_count}
-                            />
-                            <br/>
-                            <label>{__('Lite Theme Template Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        lite_theme_template_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.lite_theme_template_count}
-                            />
-                            <br/>
-                            <label>{__('Lite Gutenverse Block Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        lite_block_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.lite_block_count}
-                            />
-                            <br/>
-                            <label>{__('Lite Template Library Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        lite_template_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.lite_template_count}
-                            />
-                            <br/>
-                            <label>{__('Pro Theme Template Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        pro_theme_template_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.pro_theme_template_count}
-                            />
-                            <br/>
-                            <label>{__('Pro Gutenverse Block Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        pro_block_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.pro_block_count}
-                            />
-                            <br/>
-                            <label>{__('Pro Template Library Count :', 'gutenverse-themes-builder')}</label>
-                            <br/>
-                            <input type="number"
-                                onChange={(e) => {
-                                    updateData('comparison', {
-                                        ...dashboardData?.comparison,
-                                        pro_template_count: parseInt(e.target.value)
-                                    });
-                                }}
-                                value={dashboardData?.comparison?.pro_template_count}
-                            />
-                            <br/>
+                    <div className="lite-wrapper">
+                        <div className='names-desc-wrapper'>
+                            <div className="header">
+                                <h3>{__('Names and Description', 'gutenverse-themes-builder')}</h3>
+                            </div>
+                            <div className="content">
+                                <TextControl
+                                    id={'core-theme-name'}
+                                    title={__('Core Theme Name', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            name_core: e.target.value
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.name_core}
+                                    important={true}
+                                    description={__('The name of the core theme', 'gutenverse-themes-builder')}
+                                />
+                                <TextControl
+                                    id={'lite-theme-name'}
+                                    title={__('Lite Theme Name', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            name_lite: e.target.value
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.name_lite}
+                                    important={true}
+                                    description={__('The name of the lite version', 'gutenverse-themes-builder')}
+                                />
+                                <TextControl
+                                    id={'pro-theme-name'}
+                                    title={__('Pro Theme Name', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            name_pro: e.target.value
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.name_pro}
+                                    important={true}
+                                    description={__('The name of the pro version', 'gutenverse-themes-builder')}
+                                />
+                                <TextareaControl
+                                    id={'comparison-desc'}
+                                    title={__('Comparison Description', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            description: e.target.value
+                                        });
+                                    }}
+                                    description={__('Describe the key differences between the themes', 'gutenverse-themes-builder')}
+                                    value={dashboardData?.comparison?.description}
+                                    important={true}
+                                />
+                            </div>
                         </div>
+                        <div className='comparison-wrapper'>
+                            <div className="header">
+                                <h3>{__('Theme Comparison Features', 'gutenverse-themes-builder')}</h3>
+                            </div>
+                            <div className="content">
+                                <NumberControl
+                                    id={'core-template-count'}
+                                    title={__('Core Theme Template Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            core_template_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.core_template_count}
+                                    important={true}
+                                    description={__('Number of templates in the core theme', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'lite-template-count'}
+                                    title={__('Lite Theme Template Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            lite_theme_template_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.lite_theme_template_count}
+                                    important={true}
+                                    description={__('Number of templates in the lite version', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'lite-gtv-block-count'}
+                                    title={__('Lite Gutenverse Block Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            lite_block_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.lite_block_count}
+                                    important={true}
+                                    description={__('Number of Gutenverse blocks in the lite version', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'lite-template-library-count'}
+                                    title={__('Lite Template Library Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            lite_template_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.lite_template_count}
+                                    important={true}
+                                    description={__('Total templates in the lite library', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'pro-template-count'}
+                                    title={__('Pro Theme Template Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            pro_theme_template_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.pro_theme_template_count}
+                                    important={true}
+                                    description={__('Number of templates in the pro version', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'pro-gtv-block-count'}
+                                    title={__('Pro Gutenverse Block Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            pro_block_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.pro_block_count}
+                                    important={true}
+                                    description={__('Number of Gutenverse blocks in the pro version', 'gutenverse-themes-builder')}
+                                />
+                                <NumberControl
+                                    id={'pro-template-library-count'}
+                                    title={__('Pro Template Library Count', 'gutenverse-themes-builder')}
+                                    onChange={(e) => {
+                                        updateData('comparison', {
+                                            ...dashboardData?.comparison,
+                                            pro_template_count: parseInt(e.target.value)
+                                        });
+                                    }}
+                                    value={dashboardData?.comparison?.pro_template_count}
+                                    important={true}
+                                    description={__('Total templates in the pro library', 'gutenverse-themes-builder')}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                        
                     </>}
                 </div>
                 <div className="buttons margin-top-32 end">

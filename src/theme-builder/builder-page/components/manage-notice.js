@@ -113,8 +113,8 @@ const ManageNotice = () => {
                 </div>
             </div>
             {!loading && <div className="data-footer">
-                <div className="buttons inline">
-                    <button className="button create" onClick={saveNotice}>{__('Save Notice', 'gutenverse-themes-builder')}</button>
+                <div className="buttons end">
+                    <button className="button create padding-12-28" onClick={saveNotice}>{__('Save Notice', 'gutenverse-themes-builder')}</button>
                 </div>
             </div>}
         </ContentWrapper>

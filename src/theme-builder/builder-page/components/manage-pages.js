@@ -47,7 +47,7 @@ const MediaSelect = ({ updateThumbnailData }) => {
         }
     };
 
-    return <button onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
+    return <button className="button" onClick={() => selectItem(thumbnailFrame)}>{__('Choose Image', 'gutenverse-themes-builder')}</button>;
 };
 export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     const [pageName, setPageName] = useState('');
@@ -396,7 +396,7 @@ const ManagePages = () => {
                     totalData={totalData}
                     totalPage={totalPage}
                     emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 
-                    emptySubtitle = {__('Click \'Create Page\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
+                    emptySubtitle = {__('Click \'Create Page\' to add and manage pages that will be included as demos when exporting your theme.', 'gutenverse-themes-builder')}
                     showButton = {true}
                     buttons = {[
                         {

@@ -154,6 +154,7 @@ body {
             }
         }
     }
+    
 
     .title {
         font-family: 'Roboto', serif;
@@ -220,6 +221,7 @@ body {
         width: 100%;
         margin-top: 40px;
         border-collapse: collapse;
+        table-layout: fixed;
 
         &.empty{
             background-color: white;
@@ -439,6 +441,7 @@ body {
 
     .actions {
         display: flex;
+        flex-wrap: wrap;
         gap: 16px;
 
         .edit,
@@ -634,6 +637,13 @@ body {
                     line-height: 2.7em;
                     width: 100%;
                     box-sizing: border-box;
+                }
+
+                textarea{
+                    width: 100%;
+                    border: 1px solid var(--gtb-grey-soft);
+                    border-radius: 5px;
+                    height: 100px;
                 }
 
                 >span {
@@ -1327,6 +1337,36 @@ body {
     }
 
     .manage-dashboard {
+        .lite-wrapper{
+            display: flex;
+            gap: 20px;
+            .names-desc-wrapper, 
+            .comparison-wrapper{
+                background: white;
+                border: 1px solid #E3E4E6;
+                border-radius: 5px;
+                width: 50%;
+                .header{
+                    border-bottom: 1px solid #E3E4E6;
+                    padding: 0px 24px;
+                }
+                .content{
+                    padding: 0px 24px;
+                    .input-wrapper{
+                        label{
+                            text-wrap: nowrap;
+                        }
+                    }
+                    .input-inner{
+                        display: block;
+                    }
+                }
+            }
+            .input-wrapper{
+                display: grid;
+                grid-template-columns: 40% 60%;
+            }
+        }
         .input-wrapper{
             display: block;
             span{
@@ -1369,11 +1409,15 @@ body {
             width: 300px;
             max-height: 600px;
             overflow: hidden;
+            margin-bottom: 20px;
 
             img {
                 width: 100%;
             }
         }
+    }
+    .data-footer{
+        margin-top: 32px;
     }
 }
 
