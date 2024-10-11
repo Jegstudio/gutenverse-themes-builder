@@ -1060,15 +1060,16 @@ class Export_Theme {
 				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
 				$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
 				$theme_logo = "{$theme_slug}_URI . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
+
+				if ( ! is_wp_error( $image_data ) ) {
+					$system->put_contents(
+						$thumbnail,
+						$image_data['body'],
+						FS_CHMOD_FILE
+					);
+				}
 			}
 
-			if ( ! is_wp_error( $image_data ) ) {
-				$system->put_contents(
-					$thumbnail,
-					$image_data['body'],
-					FS_CHMOD_FILE
-				);
-			}
 			$pages = new \WP_Query(
 				array(
 					'post_type'      => 'page',
