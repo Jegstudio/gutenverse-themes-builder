@@ -629,7 +629,7 @@ class Export_Templates {
 	 * @return array
 	 */
 	public function extractor_extract_image_to_array( $pattern ) {
-		preg_match_all( '/http.\S*.(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/U', $pattern, $matches );
+		preg_match_all( '/https?:\/\/[^"\s]+(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp)/', $pattern, $matches );
 		$matches = $this->extractor_normalize_array( array_unique( $matches[0] ) );
 		$images  = $this->extractor_filter_image( $matches );
 
