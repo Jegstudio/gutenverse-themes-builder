@@ -91,7 +91,7 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     };
     
     return (
-        <div className="popup-container" onClick={onClose}>
+        <div className="popup-container manage-page" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Create Page')}</span>
@@ -121,6 +121,7 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                             noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
                             onChange={(value)=> setTemplateSlug(value.value)}
                             loadOptions={input => onSearch(input)}
+                            defaultOptions
                         />
                     </div>
                     <div className='input-wrap'>
@@ -225,7 +226,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                 actionText={__('Leave', 'gutenverse-themes-builder')}
                 buttonFill='#3B57F7'
                 svgFill='#FFC908'
-            /> : <div className="popup-container" onClick={handleOnClose}>
+            /> : <div className="popup-container manage-page" onClick={handleOnClose}>
                 <div className="popup-content" onClick={e => e.stopPropagation()}>
                     <div className="popup-header">
                         <span className="title pattern">{__('Edit Page')}</span>

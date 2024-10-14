@@ -945,6 +945,11 @@ body {
             }
         }
     }
+    .manage-page{
+        .media-wrap{
+            margin: 22px 0px
+        }
+    }
 
     /* Popup */
     .popup-container {
@@ -1020,11 +1025,17 @@ body {
             .input-wrapper{
                 flex-direction: column;
             }
+            
             .input-wrap {
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-
+                
+                &.pattern-sync{
+                    label{
+                        margin-bottom: 14px;
+                    }
+                }
                 .select-inner{
                     margin: 12px 0px;
                 }
@@ -1055,8 +1066,17 @@ body {
                 }
 
                 &>input[type=checkbox]{
-                    width: 17px;
-                    height: 17px;
+                    width: 17px !important;
+                    height: 17px !important;
+                    &::before{
+                        width: 1.3rem !important;
+                        height: 1.3rem !important;
+                        margin: -.13rem -.2125rem !important;
+                    }
+
+                    &:checked{
+                        border: 1px solid #3B57F7;
+                    }
                 }
 
                 label {

@@ -168,6 +168,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
             onClose();
         }
     }
+    console.log(patternSync);
 
     return <>
         {
@@ -225,7 +226,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     <div className="input-wrap pattern-sync">
                         <input
                             type="checkbox"
-                            onChange={() => { setPatternSync(e.target.value); setIsEdited(true)}}
+                            onChange={() => { setPatternSync(!patternSync); setIsEdited(true)}}
                             checked={patternSync}
                             hidden
                         />
