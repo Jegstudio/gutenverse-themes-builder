@@ -1216,8 +1216,8 @@ class Export_Theme {
 				$( 'div.notice.install-gutenverse-plugin-notice' ).on( 'click', 'button.notice-dismiss', function( event ) {
 					event.preventDefault();
 					$.post( ajaxurl, {
-						action: '{{slug}}_set_admin_notice_viewed',
-						nonce: '<?php echo esc_html( wp_create_nonce( '{{slug}}_admin_notice' ) ); ?>',
+						action: '" . $theme_data['slug'] . "_set_admin_notice_viewed',
+						nonce: '<?php echo esc_html( wp_create_nonce( '" . $theme_data['slug'] . "_admin_notice' ) ); ?>',
 					} );
 				} );
 
