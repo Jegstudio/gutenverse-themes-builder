@@ -377,7 +377,7 @@ const ManagePages = () => {
                 message : () => {
                     return <>
                         <p><b>Warning:</b> You only need to make one of these options:</p>
-                        <ul style={{listStyle: 'circle', padding: '10px'}}>
+                        <ul style={{listStyle: 'disc', padding: '10px'}}>
                             <li>Template Home</li>
                             <li>Template FrontPage</li>
                             <li>Page Homepage ( page that assign as homepage) </li>
@@ -413,10 +413,10 @@ const ManagePages = () => {
                                 <td >{page?.post_title}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>
-                                        <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit Content</a>
-                                        <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
+                                        <a className="edit" onClick={() => setEditPagePopup(page)}>Quick Edit</a>
+                                        <a className="edit" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit</a>
                                         <a className="edit" target="_blank" rel="noreferrer" href={`${url}/${page?.post_name}`}>View</a>
+                                        <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
                                     </div>
                                 </td>
                             </tr>;

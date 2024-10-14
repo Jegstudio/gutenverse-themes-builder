@@ -83,6 +83,7 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                             },
                         ]}
                         onChange={value => { setPatternCategory(value)}}
+                        value = {patternCategory}
                         description={__('Select your pattern category.', 'gutenverse-themes-builder')}
                     />
                     <div className="input-wrap pattern-sync">
