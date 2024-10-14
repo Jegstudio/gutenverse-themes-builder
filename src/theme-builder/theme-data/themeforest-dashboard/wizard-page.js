@@ -429,24 +429,37 @@ const ImportTemplates = ({ updateProgress }) => {
     </div>
 }
 
-export const ImporterModal = ({
-    importerStep = [
-        "Fetching Data",
-        "Importing Assets",
-        "Deploying Content"
-    ],
-    importerNotice = __('Importing “Home” demo in progress...', '--gtb-theme-namespace--'),
-    importerCurrent = 2,
-    importerStatus = __('Import: Demo Home....', '--gtb-theme-namespace--'),
-    headerText = __('Important Notice', '--gtb-theme-namespace--'),
-    warnText = __('Please do not refresh or close the page while importing data is in progress.', '--gtb-theme-namespace--'),
-    completeTitle = __('Install Demo Completed', '--gtb-theme-namespace--'),
-    completeSubtitle = __('All Demo is successfully imported!', '--gtb-theme-namespace--'),
-    done = false,
-    close = () => { }
-}) => {
+export const ImporterModal = (props) => {
+
+    const {
+        importerStep = [
+            "Fetching Data",
+            "Importing Assets",
+            "Deploying Content"
+        ],
+        importerNotice = __('Importing “Home” demo in progress...', '--gtb-theme-namespace--'),
+        importerCurrent = 2,
+        importerStatus = __('Import: Demo Home....', '--gtb-theme-namespace--'),
+        headerText = __('Important Notice', '--gtb-theme-namespace--'),
+        warnText = __('Please do not refresh or close the page while importing data is in progress.', '--gtb-theme-namespace--'),
+        completeTitle = __('Install Demo Completed', '--gtb-theme-namespace--'),
+        completeSubtitle = __('All Demo is successfully imported!', '--gtb-theme-namespace--'),
+        done = false,
+        close = () => { },
+    } = props;
+
+    const [modalCurrent, setModalCurrent] = useState(1);
+    const [isCreateMenu, setIsCreateMenu] = useState(false);
+
+    const modalContent = () => {
+        if( 1 === modalCurrent ){
+            
+        }
+    }
+
     return <div className='gutenverse-importer-wrapper-modal-wizzard'>
         <div className='importer-modal'>
+
             {done ? <>
                 <div className='import-complete'>
                     <div className="auth-icon-status-wrapper">
