@@ -210,6 +210,7 @@ const ImportTemplates = ({ updateProgress }) => {
     const [importerStatus, setImporterStatus] = useState(0);
     const [done, setDone] = useState(false);
     const [completeSubtitle, setCompleteSubtitle] = useState(null);
+    const [importMode, setImportMode] = useState('');
 
     const updateTemplateStatus = (title) => {
         setTemplateList(prevTemplateList =>
@@ -228,92 +229,11 @@ const ImportTemplates = ({ updateProgress }) => {
         );
     };
 
-    const importTemplates = template => {
-        setImporterStep([
-            "Creating Pages",
-            "Assigning Templates",
-            "Importing Menu"
-        ])
-        setImporterNotice(`Creating “${template.title}” page in progress...`);
-        setImporterStatus(`Create Page: ${template.page}....`)
-        setImporterCurrent(1);
-        setDone(false);
+    const openImportModal = (value) => {
         setModal(true);
-
-        wp?.apiFetch({
-            path: `gtb-themes-backend/v1/pages/assign`,
-            method: 'POST',
-            data: {
-                title: template.title
-            }
-        }).then(() => {
-            setImporterStatus(`Assigning Templates: ${template.page}....`)
-            setImporterCurrent(2);
-            updateTemplateStatus(template.title);
-            setTimeout(() => {
-                setImporterStatus(`Importing Menu....`)
-                setImporterCurrent(3);
-                wp?.apiFetch({
-                    path: `gtb-themes-backend/v1/import/menus`,
-                    method: 'GET',
-                }).then(() => {
-                    setTimeout(() => {
-                        setImporterStatus(`Done...`);
-                        setImporterCurrent(4);
-                        setDone(true);
-                        setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
-                    }, 500)
-                }).catch(() => {
-                })
-                
-            }, 500)
-        }).catch(() => {
-        })
+        setDone(false);
+        setImportMode(value);
     }
-
-    const importAll = async () => {
-        const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
-
-        const steps = filteredTemplateList.map(element => element.title);
-        setImporterStep(steps);
-        setDone(false);
-        setModal(true);
-
-        for (let i = 0; i < filteredTemplateList.length; i++) {
-            const template = filteredTemplateList[i];
-
-            try {
-                setImporterNotice(`Creating “${template.title}” page in progress...`);
-                setImporterStatus(`Create Page: ${template.page}....`);
-
-                await wp?.apiFetch({
-                    path: `gtb-themes-backend/v1/pages/assign`,
-                    method: 'POST',
-                    data: {
-                        title: template.title
-                    }
-                });
-
-                updateTemplateStatus(template.title);
-                setImporterStatus(`Assigning Templates: ${template.page}....`);
-                setImporterCurrent(i + 1);
-
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-            } catch (error) {
-                console.error(`Failed to assign template for page: ${template.page}`, error);
-            }
-        }
-
-        setTimeout(() => {
-            setImporterStatus(`Done....`);
-            setImporterCurrent(filteredTemplateList.length + 1);
-            setTimeout(() => {
-                setDone(true);
-                setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
-            }, 500);
-        }, 500);
-    };
 
     useEffect(() => {
         if (templateList?.length > 0) {
@@ -336,18 +256,32 @@ const ImportTemplates = ({ updateProgress }) => {
             completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
+            setImporterStep = {setImporterStep}
+            setImporterNotice = {setImporterNotice}
+            setImporterStatus = {setImporterStatus}
+            setImporterCurrent = {setImporterCurrent}
+            setDone = {setDone}
+            updateTemplateStatus = {updateTemplateStatus}
+            setCompleteSubtitle = {setCompleteSubtitle}
+            importMode ={importMode}
+            templateList = {templateList}
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
             <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
-                if (!allImported) {
-                    importAll();
-                }
+                openImportModal('all');
+
+                //uncomment this if done
+                // if (!allImported) {
+                //     openImportModal('all');
+                // }
             }}>
-                {!allImported && <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Uncomment this if done */}
+                {/* {!allImported && <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.00033 13.3327C3.63366 13.3327 3.31966 13.202 3.05833 12.9407C2.79699 12.6793 2.66655 12.3656 2.66699 11.9993V9.99935H4.00033V11.9993H12.0003V9.99935H13.3337V11.9993C13.3337 12.366 13.203 12.68 12.9417 12.9413C12.6803 13.2027 12.3665 13.3331 12.0003 13.3327H4.00033ZM8.00033 10.666L4.66699 7.33268L5.60033 6.36602L7.33366 8.09935V2.66602H8.66699V8.09935L10.4003 6.36602L11.3337 7.33268L8.00033 10.666Z" fill="white" />
                 </svg>}
-                {allImported ? __('All Pages Imported', '--gtb-theme-namespace--') : __('Import All Pages', '--gtb-theme-namespace--')}
+                {allImported ? __('All Pages Imported', '--gtb-theme-namespace--') : __('Import All Pages', '--gtb-theme-namespace--')} */}
+                {__('Import All Pages', '--gtb-theme-namespace--')}
             </div>
         </div>
         <div className='template-list'>
@@ -357,15 +291,26 @@ const ImportTemplates = ({ updateProgress }) => {
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
-                            <div
+                            {/* Uncomment this if done */}
+                            {/* <div
                                 className={`button-import-page ${template?.status?.exists
                                     ? (template?.status?.using_template ? 'imported' : 'switch')
                                     : 'import'
                                     }`}
                                 onClick={() => {
                                     if (!template.status.using_template) {
-                                        importTemplates(template)
+                                        openImportModal(template);
                                     }
+                                }}
+                            >
+                                {template?.status?.exists
+                                    ? (template?.status?.using_template ? __('Imported', '--gtb-theme-namespace--') : __('Switch Template', '--gtb-theme-namespace--'))
+                                    : __('Import Page', '--gtb-theme-namespace--')}
+                            </div> */}
+                            <div
+                                className={`button-import-page`}
+                                onClick={() => {
+                                    openImportModal(template);
                                 }}
                             >
                                 {template?.status?.exists
@@ -407,77 +352,218 @@ export const ImporterModal = (props) => {
         completeSubtitle = __('All Demo is successfully imported!', '--gtb-theme-namespace--'),
         done = false,
         close = () => { },
+        setImporterStep,
+        setImporterNotice,
+        setImporterStatus,
+        setImporterCurrent,
+        setDone,
+        updateTemplateStatus,
+        setCompleteSubtitle,
+        importMode,
+        templateList
     } = props;
 
     const [modalCurrent, setModalCurrent] = useState(1);
     const [isCreateMenu, setIsCreateMenu] = useState(false);
 
-    const modalContent = () => {
-        if( 1 === modalCurrent ){
+    const importTemplates = template => {
+        if(isCreateMenu){
+            setImporterStep([
+                "Creating Pages",
+                "Assigning Templates",
+                "Importing Menu"
+            ])
+        }else{
+            setImporterStep([
+                "Creating Pages",
+                "Assigning Templates",
+            ])
+        }
+        setImporterNotice(`Creating “${template.title}” page in progress...`);
+        setImporterStatus(`Create Page: ${template.page}....`)
+        setImporterCurrent(1);
+        setDone(false);
+
+        wp?.apiFetch({
+            path: `gtb-themes-backend/v1/pages/assign`,
+            method: 'POST',
+            data: {
+                title: template.title
+            }
+        }).then(() => {
+            setImporterStatus(`Assigning Templates: ${template.page}....`)
+            setImporterCurrent(2);
+            updateTemplateStatus(template.title);
+            if(isCreateMenu){
+                setTimeout(() => {
+                    setImporterStatus(`Importing Menu....`)
+                    setImporterCurrent(3);
+    
+                    wp?.apiFetch({
+                        path: `gtb-themes-backend/v1/import/menus`,
+                        method: 'GET',
+                    }).then(() => {
+                        setTimeout(() => {
+                            setImporterStatus(`Done...`);
+                            setImporterCurrent(4);
+                            setDone(true);
+                            setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
+                        }, 500)
+                    }).catch(() => {
+                    })
+                    
+                }, 500)
+            }else{
+                setTimeout(() => {
+                    setImporterStatus(`Done...`);
+                    setImporterCurrent(3);
+                    setDone(true);
+                    setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
+                }, 500)
+            }
             
+        }).catch(() => {
+        })
+    }
+
+    const importAll = async () => {
+        const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
+
+        const steps = filteredTemplateList.map(element => element.title);
+        if(isCreateMenu){
+            setImporterStep([
+                ...steps,
+                "Importing Menu"
+            ]);
+        }else{
+            setImporterStep(steps);
+        }
+        
+        setDone(false);
+
+        for (let i = 0; i < filteredTemplateList.length; i++) {
+            const template = filteredTemplateList[i];
+
+            try {
+                setImporterNotice(`Creating “${template.title}” page in progress...`);
+                setImporterStatus(`Create Page: ${template.page}....`);
+
+                await wp?.apiFetch({
+                    path: `gtb-themes-backend/v1/pages/assign`,
+                    method: 'POST',
+                    data: {
+                        title: template.title
+                    }
+                });
+
+                updateTemplateStatus(template.title);
+                setImporterStatus(`Assigning Templates: ${template.page}....`);
+                setImporterCurrent(i + 1);
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+            } catch (error) {
+                console.error(`Failed to assign template for page: ${template.page}`, error);
+            }
+        }
+
+        setTimeout(() => {
+            let count = 1;
+            if(isCreateMenu){
+                setImporterStatus(`Importing Menu....`);
+                setImporterCurrent(filteredTemplateList.length + count);
+                count++;
+                wp?.apiFetch({
+                    path: `gtb-themes-backend/v1/import/menus`,
+                    method: 'GET',
+                }).then(() => {
+                    setTimeout(() => {
+                        setImporterStatus(`Done...`);
+                        setImporterCurrent(filteredTemplateList.length + count);
+                        setDone(true);
+                        setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
+                    }, 500);
+                }).catch(() => {
+                    setDone(true);
+                    setCompleteSubtitle(__('Import Failed!', '--gtb-theme-namespace--'));
+                })
+            }else{
+                setTimeout(() => {
+                    setImporterStatus(`Done...`);
+                    setImporterCurrent(filteredTemplateList.length + count);
+                    setDone(true);
+                    setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
+                }, 500)
+            }
+        }, 500);
+    };
+
+    const handleNextImport = () => {
+        setModalCurrent(2);
+        if('all' === importMode){
+            importAll();
+        }else{
+            importTemplates(importMode);
         }
     }
 
-    return <div className='gutenverse-importer-wrapper-modal-wizzard'>
-        <div className='importer-modal'>
-
-            {done ? <>
-                <div className='import-complete'>
-                    <div className="auth-icon-status-wrapper">
-                        <svg viewBox="0 0 160 160">
-                            <defs>
-                                <circle id="circle-clip" cx="50%" cy="50%" r="18%" />
-                                <clipPath id="avatar-clip">
-                                    <use href="#circle-clip" />
-                                </clipPath>
-                            </defs>
-                            <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
-                                <animate attributeName="r" values="18%;50%" dur="4s" repeatCount="indefinite" />
-                                <animate attributeName="fill-opacity" values="1;0" dur="4s" repeatCount="indefinite" />
-                            </circle>
-
-                            <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
-                                <animate attributeName="r" values="18%;50%" dur="4s" begin="1s" repeatCount="indefinite" />
-                                <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="1s" repeatCount="indefinite" />
-                            </circle>
-
-                            <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
-                                <animate attributeName="r" values="18%;50%" dur="4s" begin="2s" repeatCount="indefinite" />
-                                <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="2s" repeatCount="indefinite" />
-                            </circle>
-
-                            <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
-                                <animate attributeName="r" values="18%;50%" dur="4s" begin="3s" repeatCount="indefinite" />
-                                <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="3s" repeatCount="indefinite" />
-                            </circle>
+    const modalContent = () => {
+        if( 1 === modalCurrent && !done ){
+            return <>
+                <div className='importer-header'>
+                    <span>{headerText}</span>
+                </div>
+                <div className='importer-body first-step'>
+                    <div className='importer-warn'>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 0C4.47754 0 0 4.47915 0 10C0 15.5241 4.47754 20 10 20C15.5225 20 20 15.5241 20 10C20 4.47915 15.5225 0 10 0ZM10 4.43548C10.9353 4.43548 11.6935 5.19371 11.6935 6.12903C11.6935 7.06435 10.9353 7.82258 10 7.82258C9.06468 7.82258 8.30645 7.06435 8.30645 6.12903C8.30645 5.19371 9.06468 4.43548 10 4.43548ZM12.2581 14.6774C12.2581 14.9446 12.0414 15.1613 11.7742 15.1613H8.22581C7.95859 15.1613 7.74194 14.9446 7.74194 14.6774V13.7097C7.74194 13.4425 7.95859 13.2258 8.22581 13.2258H8.70968V10.6452H8.22581C7.95859 10.6452 7.74194 10.4285 7.74194 10.1613V9.19355C7.74194 8.92633 7.95859 8.70968 8.22581 8.70968H10.8065C11.0737 8.70968 11.2903 8.92633 11.2903 9.19355V13.2258H11.7742C12.0414 13.2258 12.2581 13.4425 12.2581 13.7097V14.6774Z" fill="#FFC908"></path>
                         </svg>
-                        <div className="auth-status-icon">
-                            <svg width="30" height="23" viewBox="0 0 30 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g filter="url(#filter0_b_1867_7047)">
-                                    <path d="M29.9987 2.66689L9.9987 22.6669L0.832031 13.5002L3.18203 11.1502L9.9987 17.9502L27.6487 0.316895L29.9987 2.66689Z" fill="#1bc87f" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_b_1867_7047" x="-3.16797" y="-3.68311" width="37.168" height="30.3501" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                                        <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                                        <feGaussianBlur in="BackgroundImageFix" stdDeviation="2" />
-                                        <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1867_7047" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1867_7047" result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                        <span>
+                            {warnText}
+                        </span>
+                    </div>
+                    <div className='importer-step'>
+                        <p>{__(`Select the options below to import this template:`, '--gtb-theme-namespace--')}</p>
+                        <div className="import-mode-wrapper">
+                            <div className="checkbox-inner">
+                                <div className="select-inner">
+                                    <input
+                                        type="checkbox"
+                                        checked={modalCurrent}
+                                        hidden
+                                    />
+                                    <span className="checkmark" onClick={() => setIsCreateMenu(!modalCurrent)}/>
+                                </div>
+                                <div className="label-wrapper">
+                                    <p className='label-checkbox'>{__(`Full Import`, '--gtb-theme-namespace--')}</p>
+                                    <p className='label-description'>{__(`Import page and menu for this template.`, '--gtb-theme-namespace--')}</p>
+                                </div>
+                            </div>
+                            <div className="checkbox-inner">
+                                <div className="select-inner">
+                                    <input
+                                        type="checkbox"
+                                        checked={!modalCurrent}
+                                        hidden
+                                    />
+                                    <span className="checkmark" onClick={() => setIsCreateMenu(!modalCurrent)}/>
+                                </div>
+                                <div className="label-wrapper">
+                                    <p className='label-checkbox'>{__(`Import Without Menu`, '--gtb-theme-namespace--')}</p>
+                                    <p className='label-description'>{__(`Import page for this template, without menu.`, '--gtb-theme-namespace--')}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className='complete-title'>
-                        {completeTitle}
-                    </div>
-                    <div className='complete-subtitle'>
-                        {completeSubtitle}
-                    </div>
-                    <div className='close-buttom' onClick={() => close()}>
-                        {__('Close', '--gtb-theme-namespace--')}
+                </div>
+                <div className='importer-footer first-step'>
+                    <div className='footer-info'>
+                        <div className="button-start-import" onClick={handleNextImport}>{__(`Start Import`, '--gtb-theme-namespace--')}</div>
                     </div>
                 </div>
-            </> : <>
+            </>
+        }else if( 2 === modalCurrent && !done){
+            return <>
                 <div className='importer-header'>
                     <span>{headerText}</span>
                 </div>
@@ -528,7 +614,69 @@ export const ImporterModal = (props) => {
                 <div className='footer-loading'>
                     <div className='loading-status' style={{ width: `${((importerCurrent / (importerStep.length)) * 100)}%` }}></div>
                 </div>
-            </>}
+            </>
+        }else if( done ){
+            return <div className='import-complete'>
+                <div className="auth-icon-status-wrapper">
+                    <svg viewBox="0 0 160 160">
+                        <defs>
+                            <circle id="circle-clip" cx="50%" cy="50%" r="18%" />
+                            <clipPath id="avatar-clip">
+                                <use href="#circle-clip" />
+                            </clipPath>
+                        </defs>
+                        <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
+                            <animate attributeName="r" values="18%;50%" dur="4s" repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" values="1;0" dur="4s" repeatCount="indefinite" />
+                        </circle>
+
+                        <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
+                            <animate attributeName="r" values="18%;50%" dur="4s" begin="1s" repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="1s" repeatCount="indefinite" />
+                        </circle>
+
+                        <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
+                            <animate attributeName="r" values="18%;50%" dur="4s" begin="2s" repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="2s" repeatCount="indefinite" />
+                        </circle>
+
+                        <circle cx="50%" cy="50%" r="18%" fill="white" fillOpacity="1">
+                            <animate attributeName="r" values="18%;50%" dur="4s" begin="3s" repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" values="1;0" dur="4s" begin="3s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                    <div className="auth-status-icon">
+                        <svg width="30" height="23" viewBox="0 0 30 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g filter="url(#filter0_b_1867_7047)">
+                                <path d="M29.9987 2.66689L9.9987 22.6669L0.832031 13.5002L3.18203 11.1502L9.9987 17.9502L27.6487 0.316895L29.9987 2.66689Z" fill="#1bc87f" />
+                            </g>
+                            <defs>
+                                <filter id="filter0_b_1867_7047" x="-3.16797" y="-3.68311" width="37.168" height="30.3501" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="2" />
+                                    <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1867_7047" />
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1867_7047" result="shape" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <div className='complete-title'>
+                    {completeTitle}
+                </div>
+                <div className='complete-subtitle'>
+                    {completeSubtitle}
+                </div>
+                <div className='close-buttom' onClick={() => close()}>
+                    {__('Close', '--gtb-theme-namespace--')}
+                </div>
+            </div>
+        }
+    }
+
+    return <div className='gutenverse-importer-wrapper-modal-wizzard'>
+        <div className='importer-modal'>
+            {modalContent()}
         </div>
     </div>
 }
