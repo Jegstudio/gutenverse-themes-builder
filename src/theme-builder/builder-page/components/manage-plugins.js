@@ -154,6 +154,8 @@ const ManagePlugins = () => {
                     setPaged={setPaged}
                     totalData={plugins.length}
                     totalPage={Math.ceil(plugins.length/num_post)}
+                    emptyTitle = {__('You Haven’t Add Any Required Plugin Yet', 'gutenverse-themes-builder')} 
+                    emptySubtitle = {__('Start by searching for a plugin above, then select it to add to the list.', 'gutenverse-themes-builder')}
                 >
                     <>
                         {!isEmpty(plugins) && paginationData.map((plugin, key) => {
@@ -184,6 +186,7 @@ const ManagePlugins = () => {
                 {editPopup && <FormPopup
                     onClose={() =>   setEditPopup(false)}
                     initialData={editPopup}
+                    classnames={'manage-plugins'}
                     onSubmit={(updateData) => {
                         updatePluginValue(updateData.plugin, updateData.key )
                         setEditPopup(false)
@@ -198,13 +201,15 @@ const ManagePlugins = () => {
                                     value={data.plugin.label}
                                     onChange={(value) => { updateData('label',value); setIsEdited(true);}}
                                     important={true}
+                                    description={__('Simplify the plugin name by removing extra details.', 'gutenverse-themes-builder')}
                                 />
                                 <TextControl
                                     id={'version'}
-                                    title={__('Title', 'gutenverse-themes-builder')}
+                                    title={__('Plugin Version', 'gutenverse-themes-builder')}
                                     value={data.plugin.version}
                                     onChange={(value) => { updateData('version',value); setIsEdited(true);}}
                                     important={true}
+                                    description={__('Set the version used in your theme.', 'gutenverse-themes-builder')}
                                 />
                             </>
                         }

@@ -121,7 +121,7 @@ const DashboardPage = () => {
                         {plugins.map((plugin) => {
                             return <tr key={plugin?.slug}>
                                 <td className="tbody_td">{plugin?.title}</td>
-                                <td className="tbody_td">{plugin?.active ? 'Active' : 'Not Active'}</td>
+                                <td className="tbody_td"><span className={`status ${plugin?.active && 'active'}`}>{plugin?.active ? 'Active' : 'Not Active'}</span></td>
                             </tr>;
                         })}
                     </tbody>

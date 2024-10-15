@@ -110,6 +110,7 @@ body {
                     font-size: 13px;
                     font-weight: 400;
                     line-height: 18.2px;
+                    color: #ffffffbf;
                 }
                 
             }
@@ -138,11 +139,11 @@ body {
                     .join-button{
                         background-image: linear-gradient(to bottom, #fff 72%, #f5ffdb), linear-gradient(to bottom, #011627, #011627);
                         border-radius: 5px;
-                        padding: 10px 20px;
+                        padding: 11px 22px;
                         z-index: 3;
                         font-family: 'Roboto';
                         font-size: 12px;
-                        font-weight: 600;
+                        font-weight: 500;
                         line-height: 14.06px;
                         text-align: left;
                         color: #011627;
@@ -246,6 +247,16 @@ body {
             }
         }
 
+        &.manage-page{
+            tr{
+                th,td{
+                    &:last-child{
+                        width: 350px;
+                    }
+                }
+            }
+        }
+
         tr{
             &.empty {
                 padding: 20px;
@@ -259,7 +270,7 @@ body {
                 }
                 &:last-child{
                     border-right: 1px solid var(--gtb-grey-soft);
-                    width: 350px;
+                    width: 300px;
                 }
             }
 
@@ -507,6 +518,7 @@ body {
             background-color: var(--gtb-blue-soft);
             color: var(--gtb-blue);
             fill: var(--gtb-blue);
+            transition: all .5s;
 
             &:hover {
                 background-color: var(--gtb-blue);
@@ -519,6 +531,7 @@ body {
             background-color: var(--gtb-green-soft);
             color: var(--gtb-green);
             fill: var(--gtb-green);
+            transition: all .5s;
 
             &:hover {
                 background-color: var(--gtb-green);
@@ -528,14 +541,15 @@ body {
         }
 
         .delete {
-            background-color: var(--gtb-red-soft);
+            background-color: var(--gtb-white);
             color: var(--gtb-red);
             fill: var(--gtb-red);
+            transition: all .5s;
 
             &:hover {
-                background-color: var(--gtb-red);
-                color: var(--gtb-white);
-                fill: var(--gtb-white);
+                background-color: var(--gtb-red-soft);
+                color: var(--gtb-red);
+                fill: var(--gtb-red);
             }
         }
     }
@@ -629,6 +643,7 @@ body {
         padding: 40px;
         background-color: var(--gtb-white);
         border-radius: 5px;
+        border: 1px solid #e3e4e6;
         h3{
             margin-top: 0px
         }
@@ -675,7 +690,7 @@ body {
             &.input-inner {
                 width: 100%;
                 display: flex;
-
+                gap: 20px;
                 input {
                     border: 1px solid var(--gtb-grey-soft);
                     border-radius: 5px;
@@ -684,11 +699,16 @@ body {
                     box-sizing: border-box;
                 }
 
+                .input-file-button{
+                    border-radius: 5px;
+                }
+
                 textarea{
                     width: 100%;
                     border: 1px solid var(--gtb-grey-soft);
                     border-radius: 5px;
                     height: 100px;
+                    padding: 8px;
                 }
 
                 >span {
@@ -964,6 +984,12 @@ body {
         backdrop-filter: blur(2px);
         z-index: 99999;
         overflow-y: scroll;
+
+        &.manage-plugins{
+            .input-inner{
+                display: block;
+            }
+        }
     }
 
     .popup-content {
@@ -1141,6 +1167,7 @@ body {
     .asset-data-wrapper {
         background-color: var(--gtb-white);
         border-radius: 5px;
+        border: 1px solid #E3E4E6;
 
         .data-header {
             display: flex;
@@ -1165,6 +1192,9 @@ body {
             .input-wrapper {
                 width: 100%;
 
+                .input-inner{
+                    display: block;
+                }
                 &:last-child {
                     width: 100%;
                 }
@@ -1204,6 +1234,7 @@ body {
     .font-data-wrapper {
         background-color: var(--gtb-white);
         border-radius: 5px;
+        border: 1px solid #E3E4E6;
 
         .data-header {
             display: flex;
@@ -1252,7 +1283,7 @@ body {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                padding: 4px 20px;
+                padding: 12px 20px;
                 background: #FFFFFF;
                 border-radius: 5px;
                 background-color: var(--gtb-white);
@@ -1395,7 +1426,8 @@ body {
         gap: 20px
     }
     .image-preview {
-        width: 300px;
+        max-width: 300px;
+        height: 100%;
     }
     .margin {
         &-top{
@@ -1421,13 +1453,17 @@ body {
                 width: 50%;
                 .header{
                     border-bottom: 1px solid #E3E4E6;
-                    padding: 0px 24px;
+                    padding: 0px 30px;
+                    border-radius: 5px;
                 }
                 .content{
-                    padding: 0px 24px;
+                    padding: 30px;
                     .input-wrapper{
                         label{
                             text-wrap: nowrap;
+                        }
+                        &:first-child{
+                            margin-top: 0;
                         }
                     }
                     .input-inner{
@@ -1487,6 +1523,14 @@ body {
             img {
                 width: 100%;
             }
+        }
+
+        .button-loading{
+            min-width: 134px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
     .data-footer{
@@ -1549,13 +1593,14 @@ body {
 }
 
 .notice-input {
-    border-radius: 3px;
+    border-radius: 5px;
     border: 1px solid #e3e4e6;
     margin: 20px 0px;
     .editor-styles-wrapper {
         flex: 1 1;
         padding: 20px;
         background-color: white;
+        border-radius: 5px;
         p {
             font-size: inherit;
             line-height: inherit;
@@ -1611,6 +1656,7 @@ body {
         display: flex;
         flex-direction: column;
         min-height: 180px;
+        border-radius: 5px;
 
         img {
             max-width: 100%;
@@ -1634,6 +1680,7 @@ body {
         align-items: center;
         align-content: center;
         background-color: white;
+        border-radius: 5px;
 
         .navigation_block {
             border-right: 1px solid #e3e4e6;

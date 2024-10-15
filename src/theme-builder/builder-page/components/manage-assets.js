@@ -13,7 +13,7 @@ import { PRESET_CSS } from '../data/preset-css';
 import { PRESET_JS } from '../data/preset-js';
 import ContentWrapper from './content-wrapper';
 
-const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, actionAssetData, presetStyles }) => {
+const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, actionAssetData, presetStyles, buttonText }) => {
 
     return <div className="asset-data-wrapper">
         <div className="data-header">
@@ -163,7 +163,7 @@ const ManageAssetOption = ({ title, assetData, setMode, updateDetails, loading, 
         {!loading && <div className="data-footer">
             <div className="buttons inline"></div>
             <div className="buttons inline">
-                <button className="button create" onClick={actionAssetData}>{title}</button>
+                <button className="button create" onClick={actionAssetData}>{buttonText}</button>
             </div>
         </div>}
     </div>;
@@ -197,6 +197,7 @@ const EditAsset = ({ data, setMode, updateAssetList, presetStyles }) => {
     return <ManageAssetOption
         {...params}
         title={__('Edit Asset Detail', 'gutenverse-themes-builder')}
+        buttonText={__('Save Changes', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -228,6 +229,7 @@ const CreateAsset = ({ setMode, updateAssetList, presetStyles }) => {
     return <ManageAssetOption
         {...params}
         title={__('Create Asset', 'gutenverse-themes-builder')}
+        buttonText={__('Create Asset', 'gutenverse-themes-builder')}
     />;
 };
 

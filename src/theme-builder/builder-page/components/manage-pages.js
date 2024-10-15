@@ -396,6 +396,7 @@ const ManagePages = () => {
                     setPaged={setPaged}
                     totalData={totalData}
                     totalPage={totalPage}
+                    classnames={'manage-page'}
                     emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 
                     emptySubtitle = {__('Click \'Create Page\' to add and manage pages that will be included as demos when exporting your theme.', 'gutenverse-themes-builder')}
                     showButton = {true}

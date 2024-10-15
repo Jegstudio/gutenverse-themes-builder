@@ -297,6 +297,7 @@ const PatternList = () => {
                     numPost={num_post}
                     totalData={totalData}
                     totalPage={totalPage}
+                    classnames={'pattern-list'}
                     emptyTitle = {__('You Haven’t Created Any Patterns Yet', 'gutenverse-themes-builder')} 
                     emptySubtitle = {__('Click \'Create Pattern\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
                     showButton = {true}

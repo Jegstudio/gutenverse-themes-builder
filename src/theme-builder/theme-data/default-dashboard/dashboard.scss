@@ -16,6 +16,25 @@
     padding: 20px !important;
     margin: 40px 20px 0 0;
     display: flex;
+    border: 1px solid #e3e4e6;
+}
+
+body {
+    --gtb-white: #ffffff;
+    --gtb-black: #000000;
+    --gtb-dark: #011627;
+    --gtb-dark-grey: #40505D;
+    --gtb-grey: #99A2A9;
+    --gtb-grey-soft: #E3E4E6;
+    --gtb-light: #F8FBFF;
+    --gtb-blue: #3B57F7;
+    --gtb-dark-blue: #2435ec;
+    --gtb-blue-soft: #DBE7FF;
+    --gtb-red: #E73030;
+    --gtb-red-soft: #FBE4E4;
+    --gtb-green: #5BBD96;
+    --gtb-green-soft: #E4FBE6;
+    --gtb-blue-soft: #DBE7FF;
 }
 
 #gutenverse-theme-dashboard {
@@ -35,8 +54,8 @@
 
     h2 {
         margin: 0;
-        font-weight: 500;
-        font-size: 20px;
+        font-weight: bold;
+        font-size: 24px;
         line-height: 28px;
         margin-top: 10px;
     }
@@ -96,7 +115,7 @@
             cursor: pointer;
             font-size: 13px;
             line-height: 18px;
-            border-radius: 50px;
+            border-radius: 5px;
             background: var(--guten-theme-blue);
             color: white;
             padding: 16px 24px;
@@ -135,6 +154,7 @@
             &.description {
                 max-width: 1024px;
                 margin-top: 20px;
+                line-height: 1.8em;
             }
 
             &.note {
@@ -232,13 +252,16 @@
         }
 
         .content {
-            padding: 10px 30px 10px 60px;
+            padding: 0px 30px 10px 60px;
             display: flex;
             flex-wrap: wrap;
             align-content: center;
 
             &>* {
                 width: 100%;
+            }
+            h2{
+                margin-top: 0;
             }
         }
 
@@ -338,6 +361,9 @@
                 }
             }
         }
+        .description{
+            margin-top: 10px;
+        }
     }
 
     .benefits {
@@ -351,7 +377,7 @@
             line-height: 1.9em;
 
             &.description {
-                margin-top: 20px;
+                margin-top: 10px;
             }
         }
 
@@ -369,15 +395,6 @@
         display: flex;
     }
 
-    @media only screen and (max-width: 1270px) {
-        .comparison {
-            width: 65%;
-        }
-
-        .benefits {
-            width: 30%;
-        }
-    }
 
     @media only screen and (max-width: 780px) {
         .install-template {
@@ -513,5 +530,38 @@
 
 .themes-upgrade-action a.button-success {
     background: green;
+}
+
+.status {
+    background-color: var(--gtb-grey-soft);
+    color: var(--gtb-grey);
+    padding: 4px 8px;
+    border-radius: 50px;
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 12px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    &:before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        margin-right: 4px;
+        border-radius: 10px;
+        background-color: var(--gtb-grey);
+    }
+
+    &.active {
+        background-color: var(--gtb-green-soft);
+        color: var(--gtb-green);
+
+        &:before {
+            background-color: var(--gtb-green);
+        }
+    }
 }
 
