@@ -135,6 +135,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     value={themeData?.info_details?.tags}
                     options={TAGS}
                     isMulti={true}
+                    classNamePrefix={'tag-select'}
                     onChange={updateDetails('tags')}
                 />
                 <TextareaControl

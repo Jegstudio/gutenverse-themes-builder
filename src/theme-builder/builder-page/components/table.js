@@ -12,7 +12,8 @@ const Table = (props) => {
         emptyTitle = __('No Data Found', 'gutenverse-themes-builder'), 
         emptySubtitle = __('Please Create a Data', 'gutenverse-themes-builder'),
         showButton = false,
-        buttons
+        buttons,
+        classnames = ''
     } = props;
 
     const ButtonElement = () => {
@@ -24,7 +25,7 @@ const Table = (props) => {
     }
     return <>
         {
-            length === 0 ? <div className='table empty'>
+            length === 0 ? <div className={`table empty ${classnames}`}>
                 <div className='empty-content'>
                     <h3>{emptyTitle}</h3>
                     <p>{emptySubtitle}</p>
@@ -32,7 +33,7 @@ const Table = (props) => {
                         showButton && <div className='buttons'><ButtonElement/></div>
                     }
                 </div>
-            </div> : <table className="table">
+            </div> : <table className={`table ${classnames}`} >
                 <tr className="head">
                     {heads.map((head, i) => <th key={i}>{head}</th>)}
                 </tr>

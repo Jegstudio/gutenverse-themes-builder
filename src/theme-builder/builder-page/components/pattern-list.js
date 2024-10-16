@@ -83,6 +83,7 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                             },
                         ]}
                         onChange={value => { setPatternCategory(value)}}
+                        value = {patternCategory}
                         description={__('Select your pattern category.', 'gutenverse-themes-builder')}
                     />
                     <div className="input-wrap pattern-sync">
@@ -167,6 +168,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
             onClose();
         }
     }
+    console.log(patternSync);
 
     return <>
         {
@@ -224,7 +226,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                     <div className="input-wrap pattern-sync">
                         <input
                             type="checkbox"
-                            onChange={() => { setPatternSync(e.target.value); setIsEdited(true)}}
+                            onChange={() => { setPatternSync(!patternSync); setIsEdited(true)}}
                             checked={patternSync}
                             hidden
                         />
@@ -295,6 +297,7 @@ const PatternList = () => {
                     numPost={num_post}
                     totalData={totalData}
                     totalPage={totalPage}
+                    classnames={'pattern-list'}
                     emptyTitle = {__('You Haven’t Created Any Patterns Yet', 'gutenverse-themes-builder')} 
                     emptySubtitle = {__('Click \'Create Pattern\' to start designing your very first pattern and get things moving.', 'gutenverse-themes-builder')}
                     showButton = {true}

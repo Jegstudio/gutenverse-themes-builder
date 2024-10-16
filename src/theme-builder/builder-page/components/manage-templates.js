@@ -17,12 +17,24 @@ const ManageTemplates = () => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [addTemplateLoading, setAddTemplateLoading] = useState({
+        core : false,
+        gutenverse : false,
+        pro : false
+    });
 
     const afterFetching = (response) => {
         setThemeMode(response?.mode);
         setTemplateList(response?.data);
         setTemplateData(null);
         setFetching(false);
+        let category = response?.param.category;
+        setTimeout(() => {
+            setAddTemplateLoading({
+                ...addTemplateLoading,
+                [category] : false
+            })
+        }, 500);
     };
 
     useEffect(() => {
@@ -30,6 +42,10 @@ const ManageTemplates = () => {
     }, []);
 
     const addTemplate = (category) => {
+        setAddTemplateLoading({
+            ...addTemplateLoading,
+            [category] : true
+        })
         if (templateData?.[category]?.name && templateData?.[category]?.template_type) {
             const params = {
                 template_data: {
@@ -108,7 +124,7 @@ const ManageTemplates = () => {
                 message : () => {
                     return <>
                         <p><b>Warning:</b> You only need to make one of these options:</p>
-                        <ul style={{listStyle: 'circle', padding: '10px'}}>
+                        <ul style={{listStyle: 'disc', padding: '10px'}}>
                             <li>Template Home</li>
                             <li>Template FrontPage</li>
                             <li>Page Homepage ( page that assign as homepage) </li>
@@ -155,7 +171,9 @@ const ManageTemplates = () => {
                                     onChange={onDataChange(item.id, 'name')}
                                 />}
                                 <div className="buttons">
-                                    <div className="template-add" onClick={() => addTemplate(item.id)}>{__('Add New', 'gutenverse-themes-builder')}</div>
+                                    {
+                                        addTemplateLoading[item.id] ? <div className="button button-loading" disabled>Loading... </div> : <div className="template-add" onClick={() => addTemplate(item.id)}>{__('Add New', 'gutenverse-themes-builder')}</div>
+                                    }
                                 </div>
                                 <div className="template-list">
                                     <h3>{__('Template List', 'gutenverse-themes-builder')}</h3>
@@ -163,7 +181,7 @@ const ManageTemplates = () => {
                                         <tr className="template-item">
                                             <th><span><strong>{__('Name', 'gutenverse-themes-builder')}</strong></span></th>
                                             <th><span><strong>{__('Type', 'gutenverse-themes-builder')}</strong></span></th>
-                                            <th><span><strong>{__('Delete', 'gutenverse-themes-builder')}</strong></span></th>
+                                            <th style={{textAlign: "center"}}><span><strong>{__('Delete', 'gutenverse-themes-builder')}</strong></span></th>
                                         </tr>
                                         {templateList.map((template, index) => {
                                             return template && template?.category === item.id && <tr key={index} className="template-item">

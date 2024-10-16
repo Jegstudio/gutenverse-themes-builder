@@ -15,7 +15,7 @@ const importantData = {
     title: true,
 };
 
-const ManageFontOption = ({ title, fontData, setMode, updateDetails, loading, actionFontData, notice }) => {
+const ManageFontOption = ({ title, fontData, setMode, updateDetails, loading, actionFontData, notice, buttonText }) => {
     return <div className="font-data-wrapper">
         <div className="data-header">
             <div className="buttons inline">
@@ -49,7 +49,7 @@ const ManageFontOption = ({ title, fontData, setMode, updateDetails, loading, ac
         {!loading && <div className="data-footer">
             <div className="buttons inline"></div>
             <div className="buttons inline">
-                <button className="button create" onClick={actionFontData}>{title}</button>
+                <button className="button create" onClick={actionFontData}>{buttonText}</button>
             </div>
         </div>}
     </div>;
@@ -91,7 +91,8 @@ const EditFont = ({ data, setMode, updateFontList }) => {
     const params = { notice, fontData, setMode, updateDetails, loading, actionFontData: updateFontData };
     return <ManageFontOption
         {...params}
-        title={__('Edit Font Detail', 'gutenverse-themes-builder')}
+        title={__('Edit Font Size', 'gutenverse-themes-builder')}
+        buttonText={__('Save Changes', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -131,7 +132,9 @@ const CreateFont = ({ setMode, updateFontList }) => {
     const params = { notice, fontData, setMode, updateDetails, loading, actionFontData: createFontData };
     return <ManageFontOption
         {...params}
-        title={__('Create Font', 'gutenverse-themes-builder')}
+        title={__('Add Font Size', 'gutenverse-themes-builder')}
+        buttonText={__('Save Changes', 'gutenverse-themes-builder')}
+
     />;
 };
 

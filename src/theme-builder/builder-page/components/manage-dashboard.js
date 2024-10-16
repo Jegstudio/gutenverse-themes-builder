@@ -104,9 +104,9 @@ const ManageDashbaord = () => {
                         <div className='media-input-wrapper'>
                             <h3>{__('Your Theme Logo', 'gutenverse-themes-builder')}</h3>
                             <p>{__('Upload a logo of your theme', 'gutenverse-themes-builder')}</p>
-                            {dashboardData?.logo && <div className="image-wrapper">
+                            {dashboardData?.logo ? <div className="image-wrapper">
                                 <img src={dashboardData?.logo?.url} />
-                            </div>}
+                            </div> : <div style={{height: '100px'}}></div>}
                             <MediaSelect updateThumbnailData={value => updateData('logo', value)} />
                         </div>
                     </>}
@@ -120,10 +120,11 @@ const ManageDashbaord = () => {
                                 <TextControl
                                     id={'core-theme-name'}
                                     title={__('Core Theme Name', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={value => {
+                                        console.log(value)
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            name_core: e.target.value
+                                            name_core: value
                                         });
                                     }}
                                     value={dashboardData?.comparison?.name_core}
@@ -133,10 +134,10 @@ const ManageDashbaord = () => {
                                 <TextControl
                                     id={'lite-theme-name'}
                                     title={__('Lite Theme Name', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            name_lite: e.target.value
+                                            name_lite: value
                                         });
                                     }}
                                     value={dashboardData?.comparison?.name_lite}
@@ -146,10 +147,10 @@ const ManageDashbaord = () => {
                                 <TextControl
                                     id={'pro-theme-name'}
                                     title={__('Pro Theme Name', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            name_pro: e.target.value
+                                            name_pro: value
                                         });
                                     }}
                                     value={dashboardData?.comparison?.name_pro}
@@ -159,10 +160,10 @@ const ManageDashbaord = () => {
                                 <TextareaControl
                                     id={'comparison-desc'}
                                     title={__('Comparison Description', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            description: e.target.value
+                                            description: value
                                         });
                                     }}
                                     description={__('Describe the key differences between the themes', 'gutenverse-themes-builder')}
@@ -179,10 +180,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'core-template-count'}
                                     title={__('Core Theme Template Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            core_template_count: parseInt(e.target.value)
+                                            core_template_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.core_template_count}
@@ -192,10 +193,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'lite-template-count'}
                                     title={__('Lite Theme Template Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            lite_theme_template_count: parseInt(e.target.value)
+                                            lite_theme_template_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.lite_theme_template_count}
@@ -205,10 +206,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'lite-gtv-block-count'}
                                     title={__('Lite Gutenverse Block Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            lite_block_count: parseInt(e.target.value)
+                                            lite_block_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.lite_block_count}
@@ -218,10 +219,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'lite-template-library-count'}
                                     title={__('Lite Template Library Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            lite_template_count: parseInt(e.target.value)
+                                            lite_template_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.lite_template_count}
@@ -231,10 +232,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'pro-template-count'}
                                     title={__('Pro Theme Template Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            pro_theme_template_count: parseInt(e.target.value)
+                                            pro_theme_template_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.pro_theme_template_count}
@@ -244,10 +245,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'pro-gtv-block-count'}
                                     title={__('Pro Gutenverse Block Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            pro_block_count: parseInt(e.target.value)
+                                            pro_block_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.pro_block_count}
@@ -257,10 +258,10 @@ const ManageDashbaord = () => {
                                 <NumberControl
                                     id={'pro-template-library-count'}
                                     title={__('Pro Template Library Count', 'gutenverse-themes-builder')}
-                                    onChange={(e) => {
+                                    onChange={(value) => {
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
-                                            pro_template_count: parseInt(e.target.value)
+                                            pro_template_count: parseInt(value)
                                         });
                                     }}
                                     value={dashboardData?.comparison?.pro_template_count}
@@ -275,7 +276,7 @@ const ManageDashbaord = () => {
                 </div>
                 <div className="buttons margin-top-32 end">
                     {
-                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
                         <div className="button create padding-12-28" onClick={() => updateDashboardData()}>{__('Save Changes', 'gutenverse-themes-builder')}</div>
                     }
                 </div>

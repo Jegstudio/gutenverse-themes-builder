@@ -10,7 +10,8 @@ export const FormPopup = (props) => {
         onSubmit,
         children: FormInput,
         showFooterButton = true,
-        initialData
+        initialData,
+        classnames = ''
     } = props;
 
     const [isEdited, setIsEdited] = useState(false);
@@ -46,7 +47,7 @@ export const FormPopup = (props) => {
                 actionText={__('Leave', 'gutenverse-themes-builder')}
                 buttonFill='#3B57F7'
                 svgFill='#FFC908'
-            /> : <div className="popup-container" onClick={handleOnClose}>
+            /> : <div className={`popup-container ${classnames}`} onClick={handleOnClose}>
                 <div className="popup-content" onClick={e => e.stopPropagation()}>
                     <div className="popup-header">
                         <span className="title pattern">{__('Edit Page')}</span>

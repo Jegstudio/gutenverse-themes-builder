@@ -146,6 +146,7 @@ export const createTemplate = (params, callback = def_callback) => {
             template_data
         }
     }).then((response) => {
+        response.param = template_data
         callback(response);
     }).catch(() => {
     });

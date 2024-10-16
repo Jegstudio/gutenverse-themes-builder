@@ -91,7 +91,7 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
     };
     
     return (
-        <div className="popup-container" onClick={onClose}>
+        <div className="popup-container manage-page" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
                     <span className="title pattern">{__('Create Page')}</span>
@@ -121,6 +121,7 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                             noOptionsMessage={() => __('Type to start searching...', '--gctd--')}
                             onChange={(value)=> setTemplateSlug(value.value)}
                             loadOptions={input => onSearch(input)}
+                            defaultOptions
                         />
                     </div>
                     <div className='input-wrap'>
@@ -225,7 +226,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                 actionText={__('Leave', 'gutenverse-themes-builder')}
                 buttonFill='#3B57F7'
                 svgFill='#FFC908'
-            /> : <div className="popup-container" onClick={handleOnClose}>
+            /> : <div className="popup-container manage-page" onClick={handleOnClose}>
                 <div className="popup-content" onClick={e => e.stopPropagation()}>
                     <div className="popup-header">
                         <span className="title pattern">{__('Edit Page')}</span>
@@ -377,7 +378,7 @@ const ManagePages = () => {
                 message : () => {
                     return <>
                         <p><b>Warning:</b> You only need to make one of these options:</p>
-                        <ul style={{listStyle: 'circle', padding: '10px'}}>
+                        <ul style={{listStyle: 'disc', padding: '10px'}}>
                             <li>Template Home</li>
                             <li>Template FrontPage</li>
                             <li>Page Homepage ( page that assign as homepage) </li>
@@ -395,6 +396,7 @@ const ManagePages = () => {
                     setPaged={setPaged}
                     totalData={totalData}
                     totalPage={totalPage}
+                    classnames={'manage-page'}
                     emptyTitle = {__('You Haven’t Created Any Pages Yet', 'gutenverse-themes-builder')} 
                     emptySubtitle = {__('Click \'Create Page\' to add and manage pages that will be included as demos when exporting your theme.', 'gutenverse-themes-builder')}
                     showButton = {true}
@@ -413,10 +415,10 @@ const ManagePages = () => {
                                 <td >{page?.post_title}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPagePopup(page)}><EditIcon />Edit</a>
-                                        <a className="edit edit-content" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit Content</a>
-                                        <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
+                                        <a className="edit" onClick={() => setEditPagePopup(page)}>Quick Edit</a>
+                                        <a className="edit" target="_blank" rel="noreferrer" href={`${editPath}?post=${page?.ID}&action=edit`}><EditIcon />Edit</a>
                                         <a className="edit" target="_blank" rel="noreferrer" href={`${url}/${page?.post_name}`}>View</a>
+                                        <a className="delete" onClick={() => setDeletePopup(page?.ID)}><DeleteIcon />Delete</a>
                                     </div>
                                 </td>
                             </tr>;
