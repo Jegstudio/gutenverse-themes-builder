@@ -46,6 +46,7 @@ const ImportTemplates = () => {
     const [importerStatus, setImporterStatus] = useState(0);
     const [done, setDone] = useState(false);
     const [completeSubtitle, setCompleteSubtitle] = useState(null);
+    const [importMode, setImportMode] = useState('');
 
     const updateTemplateStatus = (title) => {
         setTemplateList(prevTemplateList =>
@@ -64,83 +65,6 @@ const ImportTemplates = () => {
         );
     };
 
-    const importTemplates = template => {
-        setImporterStep([
-            "Creating Pages",
-            "Assigning Templates",
-        ])
-        setImporterNotice(`Creating “${template.title}” page in progress...`);
-        setImporterStatus(`Create Page: ${template.page}....`)
-        setImporterCurrent(1);
-        setDone(false);
-        setModal(true);
-
-        wp?.apiFetch({
-            path: `gtb-themes-backend/v1/pages/assign`,
-            method: 'POST',
-            data: {
-                title: template.title
-            }
-        }).then(() => {
-            setImporterStatus(`Assigning Templates: ${template.page}....`)
-            setImporterCurrent(2);
-            updateTemplateStatus(template.title);
-            setTimeout(() => {
-                setImporterStatus(`Done....`)
-                setImporterCurrent(3);
-                setTimeout(() => {
-                    setDone(true);
-                    setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
-                }, 500)
-            }, 500)
-        }).catch(() => {
-        })
-    }
-
-    const importAll = async () => {
-        const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
-
-        const steps = filteredTemplateList.map(element => element.title);
-        setImporterStep(steps);
-        setDone(false);
-        setModal(true);
-
-        for (let i = 0; i < filteredTemplateList.length; i++) {
-            const template = filteredTemplateList[i];
-
-            try {
-                setImporterNotice(`Creating “${template.title}” page in progress...`);
-                setImporterStatus(`Create Page: ${template.page}....`);
-
-                await wp?.apiFetch({
-                    path: `gtb-themes-backend/v1/pages/assign`,
-                    method: 'POST',
-                    data: {
-                        title: template.title
-                    }
-                });
-
-                updateTemplateStatus(template.title);
-                setImporterStatus(`Assigning Templates: ${template.page}....`);
-                setImporterCurrent(i + 1);
-
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-            } catch (error) {
-                console.error(`Failed to assign template for page: ${template.page}`, error);
-            }
-        }
-
-        setTimeout(() => {
-            setImporterStatus(`Done....`);
-            setImporterCurrent(filteredTemplateList.length + 1);
-            setTimeout(() => {
-                setDone(true);
-                setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
-            }, 500);
-        }, 500);
-    };
-
     useEffect(() => {
         if (templateList?.length > 0) {
             let allDone = true;
@@ -153,6 +77,12 @@ const ImportTemplates = () => {
         }
     },[templateList])
 
+    const openImportModal = (value) => {
+        setModal(true);
+        setDone(false);
+        setImportMode(value);
+    }
+
     return <div className='template-install'>
         {modal && <ImporterModal
             importerStep={importerStep}
@@ -162,12 +92,21 @@ const ImportTemplates = () => {
             completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
+            setImporterStep = {setImporterStep}
+            setImporterNotice = {setImporterNotice}
+            setImporterStatus = {setImporterStatus}
+            setImporterCurrent = {setImporterCurrent}
+            setDone = {setDone}
+            updateTemplateStatus = {updateTemplateStatus}
+            setCompleteSubtitle = {setCompleteSubtitle}
+            importMode ={importMode}
+            templateList = {templateList}
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
             <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
                 if (!allImported) {
-                    importAll();
+                    openImportModal('all');
                 }
             }}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -190,7 +129,7 @@ const ImportTemplates = () => {
                                     }`}
                                 onClick={() => {
                                     if (!template.status.using_template) {
-                                        importTemplates(template)
+                                        openImportModal(template);
                                     }
                                 }}
                             >

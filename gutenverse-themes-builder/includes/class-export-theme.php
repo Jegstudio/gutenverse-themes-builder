@@ -133,7 +133,7 @@ class Export_Theme {
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
-		// $this->create_menus( $wp_filesystem );
+		$this->create_menus( $wp_filesystem );
 		$this->extractor_send_file( $data );
 
 		// child theme .
@@ -225,7 +225,7 @@ class Export_Theme {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
-			// $content     = $this->extract_menus( $content, $system );
+			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->extract_images( $content, $system, $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
@@ -1330,8 +1330,6 @@ class Export_Theme {
 
 		$placeholder = str_replace( '{{theme_fonts}}', $fonts, $placeholder );
 
-		
-
 		$system->put_contents(
 			$class_dir . '/class-init.php',
 			$placeholder,
@@ -1352,9 +1350,8 @@ class Export_Theme {
 	 * Extract Menu
 	 *
 	 * @param string $content .
-	 * @param object $system .
 	 */
-	public function extract_menus( $content, $system ) {
+	public function extract_menus( $content ) {
 		preg_match_all( '/"menuId":(\d+)/', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[1] as $match ) {
@@ -1471,7 +1468,7 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
-					// $content = $this->extract_menus( $content, $system );
+					$content = $this->extract_menus( $content, $system );
 					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );

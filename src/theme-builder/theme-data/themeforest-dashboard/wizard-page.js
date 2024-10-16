@@ -269,19 +269,14 @@ const ImportTemplates = ({ updateProgress }) => {
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
             <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
-                openImportModal('all');
-
-                //uncomment this if done
-                // if (!allImported) {
-                //     openImportModal('all');
-                // }
+                if (!allImported) {
+                    openImportModal('all');
+                }
             }}>
-                {/* Uncomment this if done */}
-                {/* {!allImported && <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {!allImported && <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.00033 13.3327C3.63366 13.3327 3.31966 13.202 3.05833 12.9407C2.79699 12.6793 2.66655 12.3656 2.66699 11.9993V9.99935H4.00033V11.9993H12.0003V9.99935H13.3337V11.9993C13.3337 12.366 13.203 12.68 12.9417 12.9413C12.6803 13.2027 12.3665 13.3331 12.0003 13.3327H4.00033ZM8.00033 10.666L4.66699 7.33268L5.60033 6.36602L7.33366 8.09935V2.66602H8.66699V8.09935L10.4003 6.36602L11.3337 7.33268L8.00033 10.666Z" fill="white" />
                 </svg>}
-                {allImported ? __('All Pages Imported', '--gtb-theme-namespace--') : __('Import All Pages', '--gtb-theme-namespace--')} */}
-                {__('Import All Pages', '--gtb-theme-namespace--')}
+                {allImported ? __('All Pages Imported', '--gtb-theme-namespace--') : __('Import All Pages', '--gtb-theme-namespace--')}
             </div>
         </div>
         <div className='template-list'>
@@ -291,8 +286,7 @@ const ImportTemplates = ({ updateProgress }) => {
                     <div className='template-page-desc'>
                         <h3>{template?.title}</h3>
                         <div className='buttons'>
-                            {/* Uncomment this if done */}
-                            {/* <div
+                            <div
                                 className={`button-import-page ${template?.status?.exists
                                     ? (template?.status?.using_template ? 'imported' : 'switch')
                                     : 'import'
@@ -301,16 +295,6 @@ const ImportTemplates = ({ updateProgress }) => {
                                     if (!template.status.using_template) {
                                         openImportModal(template);
                                     }
-                                }}
-                            >
-                                {template?.status?.exists
-                                    ? (template?.status?.using_template ? __('Imported', '--gtb-theme-namespace--') : __('Switch Template', '--gtb-theme-namespace--'))
-                                    : __('Import Page', '--gtb-theme-namespace--')}
-                            </div> */}
-                            <div
-                                className={`button-import-page`}
-                                onClick={() => {
-                                    openImportModal(template);
                                 }}
                             >
                                 {template?.status?.exists
@@ -364,7 +348,7 @@ export const ImporterModal = (props) => {
     } = props;
 
     const [modalCurrent, setModalCurrent] = useState(1);
-    const [isCreateMenu, setIsCreateMenu] = useState(false);
+    const [isCreateMenu, setIsCreateMenu] = useState(true);
 
     const importTemplates = template => {
         if(isCreateMenu){
@@ -528,11 +512,13 @@ export const ImporterModal = (props) => {
                             <div className="checkbox-inner">
                                 <div className="select-inner">
                                     <input
+                                        id='with-menu'
                                         type="checkbox"
-                                        checked={modalCurrent}
+                                        checked={isCreateMenu}
+                                        onChange={() => {}}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => setIsCreateMenu(!modalCurrent)}/>
+                                    <span className="checkmark" onClick={() => !isCreateMenu && setIsCreateMenu(!isCreateMenu)}/>
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Full Import`, '--gtb-theme-namespace--')}</p>
@@ -542,11 +528,13 @@ export const ImporterModal = (props) => {
                             <div className="checkbox-inner">
                                 <div className="select-inner">
                                     <input
+                                        id='without-menu'
                                         type="checkbox"
-                                        checked={!modalCurrent}
+                                        checked={!isCreateMenu}
+                                        onChange={() => {}}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => setIsCreateMenu(!modalCurrent)}/>
+                                    <span className="checkmark" onClick={() => { isCreateMenu && setIsCreateMenu(!isCreateMenu)}}/>
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Import Without Menu`, '--gtb-theme-namespace--')}</p>
