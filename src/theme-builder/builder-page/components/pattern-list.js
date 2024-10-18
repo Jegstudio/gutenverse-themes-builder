@@ -168,7 +168,6 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
             onClose();
         }
     }
-    console.log(patternSync);
 
     return <>
         {
@@ -231,13 +230,13 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                             hidden
                         />
                         <label>{__('Export as Pattern Sync', 'gutenverse-themes-builder')}</label><br/>
-                        <span className="description">{__('Sync pattern when exported. Used for categorizing exported patterns.', 'gutenverse-themes-builder')}</span>
+                        <span className="description">{__('Sync pattern when exported. This option does not have any function in pattern wrapper. It used to categorize when pattern exported', 'gutenverse-themes-builder')}</span>
                     </div>
                 </div>
                 <div className="popup-footer">
                     <div className="buttons end">
                         <div className="button" onClick={patternSubmit}>
-                            {__('Save', 'gutenverse-themes-builder')}
+                            {__('Save Changes', 'gutenverse-themes-builder')}
                         </div>
                     </div>
                 </div>

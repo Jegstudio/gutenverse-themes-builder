@@ -1140,9 +1140,11 @@ class Backend_Api {
 
 			$info_db->update_data( $data, $theme_id );
 		}
+		$new_data = $info_db->get_theme_data( $theme_id );
 
 		return array(
 			'status' => 'success',
+			'data'   => maybe_unserialize( $new_data[0]['other'] )
 		);
 	}
 

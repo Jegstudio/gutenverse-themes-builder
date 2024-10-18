@@ -3,7 +3,7 @@ import { useState, useEffect } from '@wordpress/element';
 
 
 const FileControl = (props) => {
-    const { id, title, description, value, onChange, typeMedia = [], important } = props;
+    const { id, title, description, value, onChange, typeMedia = [], important, placeholder } = props;
     const [fileFrame, setFileFrame] = useState(null);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const FileControl = (props) => {
     return <div className="input-wrapper">
         <label name={id}>{title}{important && <span>&nbsp;*</span>}</label>
         <div className="input-inner">
-            <input type="text" className="input-file-text" value={value?.filename} disabled />
+            <input type="text" className="input-file-text" value={value?.filename} disabled placeholder={placeholder}/>
             <button onClick={() => selectItem(fileFrame)} className="input-file-button button" >{__('Choose File', 'gutenverse-themes-builder')}</button>
             {description && <span>{description}</span>}
         </div>

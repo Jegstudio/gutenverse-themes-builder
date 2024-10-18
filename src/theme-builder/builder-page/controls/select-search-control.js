@@ -5,7 +5,7 @@ import AsyncSelect from 'react-select/async';
 const SelectSearchControl = (props) => {
     const {
         id,
-        title = 'Text Title',
+        title,
         description,
         value = '',
         values,
@@ -20,7 +20,7 @@ const SelectSearchControl = (props) => {
     return (
         <>
             <div className="input-wrapper">
-                <label name={id}>{title}</label>
+                { title && <label name={id}>{title}</label>}
                 <div className="select-inner">
                     <AsyncSelect
                         id={id}
@@ -42,7 +42,7 @@ const SelectSearchControl = (props) => {
                         defaultOptions={defaultOptions} */
                         onChange={onChange}
                         loadOptions={input => onSearch(input, values)} />
-                    {description && <span>{description}</span>}
+                    {description && <span className='description'>{description}</span>}
                 </div>
             </div>
 

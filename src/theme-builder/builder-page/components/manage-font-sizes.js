@@ -197,6 +197,7 @@ const ManageFontSizes = () => {
                 <>
                     <Table 
                         heads={['ID', 'Slug', 'Title', 'Size', 'Actions',]}
+                        classnames={'manage-font-sizes'}
                         length={fontList.length}
                         paged={paged}
                         setPaged={setPaged}

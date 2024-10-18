@@ -294,7 +294,7 @@
                             }
 
                             &:hover {
-
+                                transform: scale(.94);
                                 span,
                                 svg {
                                     color: hsla(0, 0%, 100%, .749);
@@ -304,7 +304,6 @@
                                     }
                                 }
 
-                                transform: scale(.94);
                             }
                         }
 

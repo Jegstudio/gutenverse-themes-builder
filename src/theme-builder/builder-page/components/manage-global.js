@@ -12,7 +12,7 @@ import { ArrowLeft } from 'react-feather';
 import FileControl from '../controls/file-control';
 import apiFetch from '@wordpress/api-fetch';
 
-const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updateDetails, actionGlobalData, notice }) => {
+const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updateDetails, actionGlobalData, notice, buttonText }) => {
     const [loading, setLoading] = useState(false);
 
     const onDrop = useCallback(acceptedFiles => {
@@ -49,6 +49,7 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
                         title={__('Template kit global.json file (Optional).', 'gutenverse-themes-builder')}
                         value={globalData?.file}
                         onChange={value => updateDetails('file', value)}
+                        placeholder={__('Upload global.json file', 'gutenverse-themes-builder')}
                     />
                     {/* <section className="container">
                         {files.length === 0 ?
@@ -71,7 +72,7 @@ const ManageGlobalOption = ({ title, globalData, setMode, files, setFiles, updat
         {!loading && <div className="data-footer">
             <div className="buttons inline"></div>
             <div className="buttons inline">
-                <button className="button create" onClick={actionGlobalData}>{title}</button>
+                <button className="button create" onClick={actionGlobalData}>{buttonText}</button>
             </div>
         </div>}
     </div>;
@@ -110,7 +111,8 @@ const EditGlobal = ({ data, setMode, updateGlobalList }) => {
     const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: updateGlobalData };
     return <ManageGlobalOption
         {...params}
-        title={__('Edit Global Detail', 'gutenverse-themes-builder')}
+        title={__('Edit Global Style Detail', 'gutenverse-themes-builder')}
+        buttonText={__('Save Changes', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -147,7 +149,8 @@ const CreateGlobal = ({ setMode, updateGlobalList }) => {
     const params = { notice, globalData, setMode, files, setFiles, updateDetails, loading, actionGlobalData: createGlobalData };
     return <ManageGlobalOption
         {...params}
-        title={__('Create Global', 'gutenverse-themes-builder')}
+        title={__('Create Global Style', 'gutenverse-themes-builder')}
+        buttonText={__('Create Global', 'gutenverse-themes-builder')}
     />;
 };
 
@@ -257,7 +260,7 @@ const ManageGlobal = () => {
                                 return <tr key={key}>
                                     <td>{global?.id}</td>
                                     <td>{global?.title}</td>
-                                    <td><span className={`status ${activeGlobal === global?.id ? 'active' : ''}`}>{activeGlobal === global?.id ? __('Active', 'gutenverse-themes-builder') : __('Inactive', 'gutenverse-themes-builder')}</span></td>
+                                    <td><span className={`status ${activeGlobal === global?.id ? 'active' : ''}`}>{activeGlobal === global?.id ? __('ACTIVE', 'gutenverse-themes-builder') : __('INACTIVE', 'gutenverse-themes-builder')}</span></td>
                                     <td>
                                         <div className="actions">
                                             {activeGlobal !== global?.id && <a className="edit" onClick={() => setSwitchPopup(global?.id)}>Set Active</a>}

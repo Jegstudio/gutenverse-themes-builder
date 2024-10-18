@@ -256,6 +256,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                                 onChange={(value)=> { setTemplateSlug(value.value); setIsEdited(true); }}
                                 loadOptions={input => onSearch(input)}
                                 value={{id: templateSlug, label: templateSlug}}
+                                defaultOptions
                             />
                         </div>
                         <div className='input-wrap'>
@@ -291,7 +292,7 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     <div className="popup-footer">
                         <div className="buttons end">
                             <div className="button" onClick={pageSubmit}>
-                                {__('Submit', 'gutenverse-themes-builder')}
+                                {__('Save Changes', 'gutenverse-themes-builder')}
                             </div>
                         </div>
                     </div>

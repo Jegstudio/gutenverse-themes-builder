@@ -121,7 +121,6 @@ const ManageDashbaord = () => {
                                     id={'core-theme-name'}
                                     title={__('Core Theme Name', 'gutenverse-themes-builder')}
                                     onChange={value => {
-                                        console.log(value)
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
                                             name_core: value
