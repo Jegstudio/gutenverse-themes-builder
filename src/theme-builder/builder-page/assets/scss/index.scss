@@ -666,7 +666,8 @@ body {
         border-radius: 5px;
         border: 1px solid #e3e4e6;
         h3{
-            margin-top: 0px
+            margin-top: 0px;
+            margin-bottom: 12px;
         }
     }
 
@@ -1540,8 +1541,13 @@ body {
             }
         }
     }
-
+ 
     .manage-dashboard {
+        .select-dashboard{
+            .description{
+                margin-top: 12px;
+            }
+        }
         .lite-wrapper{
             display: flex;
             gap: 20px;
@@ -1554,7 +1560,10 @@ body {
                 .header{
                     border-bottom: 1px solid #E3E4E6;
                     padding: 0px 30px;
-                    border-radius: 5px;
+                    border-radius: 5px 5px 0px 0px;
+                    h3{
+                        margin: 20px 0px
+                    }
                 }
                 .content{
                     padding: 30px;
@@ -1581,10 +1590,12 @@ body {
             span{
                 font-family: 'Roboto';
                 font-size: 12px;
-                font-style: italic;
+                font-style: normal;
                 font-weight: 400;
                 line-height: 16.8px;
                 text-align: left;
+                color: #99A2A9;
+                display: block;
             }
         }
         
@@ -1619,6 +1630,7 @@ body {
             max-height: 600px;
             overflow: hidden;
             margin-bottom: 20px;
+            margin-top: 20px;
 
             img {
                 width: 100%;
@@ -1697,7 +1709,7 @@ body {
         flex: 1 1;
         padding: 20px;
         background-color: white;
-        border-radius: 5px;
+        border-radius: 0px 0px 5px 5px;
         p {
             font-size: inherit;
             line-height: inherit;
@@ -1777,7 +1789,7 @@ body {
         align-items: center;
         align-content: center;
         background-color: white;
-        border-radius: 5px;
+        border-radius: 5px 5px 0px 0px;
 
         .navigation_block {
             border-right: 1px solid #e3e4e6;

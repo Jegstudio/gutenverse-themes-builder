@@ -40,7 +40,8 @@ const ReadmeEditor = () => {
                 height: '400px',
                 width: '100%',
                 borderRadius: '5px',
-                marginTop: '5px'
+                marginTop: '5px',
+                marginBottom: '32px'
             }}>
                 <CodeEditor
                     value={readmeContent}
@@ -55,11 +56,13 @@ const ReadmeEditor = () => {
                     }}
                 />
             </div>
-            {!loading && <div className="data-footer">
+            <div className="data-footer">
                 <div className="buttons end">
-                    <button className="button create padding-12-28" onClick={saveReadme}>{__('Save Readme', 'gutenverse-themes-builder')}</button>
+                    {
+                        loading ? <div className="button button-loading padding-12-28" disabled>{__('Loading...', 'gutenverse-themes-builder')}</div> : <button className="button create padding-12-28" onClick={saveReadme}>{__('Save Readme', 'gutenverse-themes-builder')}</button>
+                    }
                 </div>
-            </div>}
+            </div>
         </ContentWrapper>
     );
 };

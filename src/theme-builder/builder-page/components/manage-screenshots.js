@@ -122,7 +122,7 @@ const ManageScreenshots = () => {
                 </div>
                 <div className="buttons margin-top-32 end">
                     {
-                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
                         <div className="button create padding-12-28" onClick={() => updateScreenshotData()}>{__('Save Changes', 'gutenverse-themes-builder')}</div>
                     }
                 </div>

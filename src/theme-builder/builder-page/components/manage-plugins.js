@@ -191,6 +191,7 @@ const ManagePlugins = () => {
                 {editPopup && <FormPopup
                     onClose={() =>   setEditPopup(false)}
                     initialData={editPopup}
+                    buttonText={__('Save Changes', 'gutenverse-themes-builder')}
                     classnames={'manage-plugins'}
                     onSubmit={(updateData) => {
                         updatePluginValue(updateData.plugin, updateData.key )

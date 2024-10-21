@@ -11,7 +11,8 @@ export const FormPopup = (props) => {
         children: FormInput,
         showFooterButton = true,
         initialData,
-        classnames = ''
+        classnames = '',
+        buttonText = __('Submit', 'gutenverse-themes-builder')
     } = props;
 
     const [isEdited, setIsEdited] = useState(false);
@@ -63,7 +64,7 @@ export const FormPopup = (props) => {
                         {
                             showFooterButton && <div className="buttons end">
                                 <div className="button" onClick={() => onSubmit(data)}>
-                                    {__('Submit', 'gutenverse-themes-builder')}
+                                    {buttonText}
                                 </div>
                             </div>
                         }
