@@ -12,7 +12,7 @@
 .comparison,
 .benefits {
     background: #FFFFFF;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 20px !important;
     margin: 40px 20px 0 0;
     display: flex;
@@ -238,13 +238,13 @@ body {
             }
 
             .image:first-child {
-                border-radius: 5px;
+                border-radius: 10px;
                 width: 350px;
                 height: 280px;
             }
 
             .image:not(:first-child) {
-                border-radius: 2px;
+                border-radius: 5px;
                 width: 75px;
                 margin-top: 10px;
                 height: 60px;
