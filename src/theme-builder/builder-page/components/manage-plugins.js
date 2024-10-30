@@ -148,8 +148,6 @@ const ManagePlugins = () => {
         });
     };
 
-    console.log(pluginNoticeNormal)
-
     return (
         <ContentWrapper
             title={__('Manage Plugins', 'gutenverse-themes-builder')}

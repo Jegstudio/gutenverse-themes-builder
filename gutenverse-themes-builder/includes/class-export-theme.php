@@ -1148,64 +1148,95 @@ class Export_Theme {
 			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
 			$style = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
-			.install-gutenverse-plugin-notice {
-				position: relative;
-				display: flex;
-				margin: 10px 0 20px !important;
-				padding: 0 !important;
-				border: 1px solid #c3c4c7;
-				border-left-width: 0;
-			}
+				.install-gutenverse-plugin-notice {
+					position: relative;
+					display: flex;
+					margin: 10px 0 20px !important;
+					padding: 0 !important;
+					border: 1px solid #c3c4c7;
+					border-left-width: 0;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-banner-logo {
-				background: #ECF0F8;
-				padding: 20px 15px;
-				border-left: 4px;
-				border-right: 0;
-				border-style: solid;
-				border-image: linear-gradient(to bottom, #3F3BF7, #5CD0DA) 1 100%;
-			}
+				.install-gutenverse-plugin-notice .gutenverse-banner-logo {
+					background: #ECF0F8;
+					padding: 20px 15px;
+					border-left: 4px;
+					border-right: 0;
+					border-style: solid;
+					border-image: linear-gradient(to bottom, #3F3BF7, #5CD0DA) 1 100%;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-bottom {
-				display: flex;
-			}
+				.install-gutenverse-plugin-notice .gutenverse-bottom {
+					display: flex;
+				}
 
-			.install-gutenverse-plugin-notice a.gutenverse-button {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
-				text-decoration: none;
-				cursor: pointer;
-				font-size: 12px;
-				line-height: 18px;
-				border-radius: 5px;
-				background: #3B57F7;
-				color: #fff;
-				padding: 10px 15px;
-				font-weight: 500;
-				background: #4569FF;
-				transition: transform 0.5s ease, color 0.5s ease;
-			}
+				.install-gutenverse-plugin-notice a.gutenverse-button {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
+					text-decoration: none;
+					cursor: pointer;
+					font-size: 12px;
+					line-height: 18px;
+					border: none;
+					border-radius: 5px;
+					background: #3B57F7;
+					color: #fff;
+					padding: 10px 15px;
+					font-weight: 500;
+					background: #4569FF;
+					transition: transform 0.5s ease, color 0.5s ease;
+				}
 
-			.install-gutenverse-plugin-notice a.gutenverse-button:hover {
-				color: hsla(0, 0%, 100%, .749);
-				transform: scale(.94);
-			}
+				.install-gutenverse-plugin-notice a.gutenverse-button:hover {
+					color: hsla(0, 0%, 100%, .749);
+					background: #2435EC;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-notice-text {
-				padding: 30px;
-				position: relative;
-				z-index: 2;
-			}
+				.install-gutenverse-plugin-notice .gutenverse-notice-text {
+					padding: 30px 20px 30px;
+					position: relative;
+					z-index: 2;
+				}
 
-			.install-gutenverse-plugin-notice h3 {
-				margin: 0 0 1em;
-			}
+				.install-gutenverse-plugin-notice h3 {
+					margin: 0 0 15px;
+				}
 
-			.install-gutenverse-plugin-notice p {
-				font-size: 13px;
-				font-weight: 400;
-				margin: 5px 100px 20px 0 !important;
-			}
-		</style>' : '<style>
+				.install-gutenverse-plugin-notice p {
+					font-size: 13px;
+					font-weight: 400;
+					margin: 0 100px 15px 0 !important;
+				}
+
+				.install-gutenverse-plugin-notice #gutenverse-install-plugin.loader:after{
+					display: block;
+					content: "";
+					border: 5px solid white;
+					border-radius: 50%;
+					border-top: 5px solid rgba(255, 255, 255, 0);
+					width: 8px;
+					height: 8px;
+					-webkit-animation: spin 2s linear infinite;
+					animation: spin 2s linear infinite;
+				}
+
+				@-webkit-keyframes spin {
+					0% {
+						-webkit-transform: rotate(0deg);
+					}
+					100% {
+						-webkit-transform: rotate(360deg);
+					}
+				}
+
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+			</style>' : '<style>
 				.install-gutenverse-plugin-notice {
 					border: 1px solid #E6E6EF;
 					position: relative;
@@ -1325,7 +1356,7 @@ class Export_Theme {
 
 				#gutenverse-install-plugin.loader:after {
 					display: block;
-					content: \'\';
+					content: "";
 					border: 5px solid white;
 					border-radius: 50%;
 					border-top: 5px solid rgba(255, 255, 255, 0);
@@ -1472,7 +1503,7 @@ class Export_Theme {
 						sequenceInstall(plugins);
 						Promise.all(promises).then(() => {						
 							window.location.reload();
-							$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
+							$(this).removeClass('loader').addClass('finished').text('Installation Completed');
 						});
 					}
 				});
