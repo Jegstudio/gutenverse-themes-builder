@@ -1146,7 +1146,242 @@ class Export_Theme {
 			$plugin_notice_placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
-			$notice                    = '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+			$style = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
+			.install-gutenverse-plugin-notice {
+				position: relative;
+				display: flex;
+				margin: 10px 0 20px !important;
+				padding: 0 !important;
+				border: 1px solid #c3c4c7;
+				border-left-width: 0;
+			}
+
+			.install-gutenverse-plugin-notice .gutenverse-banner-logo {
+				background: #ECF0F8;
+				padding: 20px 15px;
+				border-left: 4px;
+				border-right: 0;
+				border-style: solid;
+				border-image: linear-gradient(to bottom, #3F3BF7, #5CD0DA) 1 100%;
+			}
+
+			.install-gutenverse-plugin-notice .gutenverse-bottom {
+				display: flex;
+			}
+
+			.install-gutenverse-plugin-notice a.gutenverse-button {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
+				text-decoration: none;
+				cursor: pointer;
+				font-size: 12px;
+				line-height: 18px;
+				border-radius: 5px;
+				background: #3B57F7;
+				color: #fff;
+				padding: 10px 15px;
+				font-weight: 500;
+				background: #4569FF;
+				transition: transform 0.5s ease, color 0.5s ease;
+			}
+
+			.install-gutenverse-plugin-notice a.gutenverse-button:hover {
+				color: hsla(0, 0%, 100%, .749);
+				transform: scale(.94);
+			}
+
+			.install-gutenverse-plugin-notice .gutenverse-notice-text {
+				padding: 30px;
+				position: relative;
+				z-index: 2;
+			}
+
+			.install-gutenverse-plugin-notice h3 {
+				margin: 0 0 1em;
+			}
+
+			.install-gutenverse-plugin-notice p {
+				font-size: 13px;
+				font-weight: 400;
+				margin: 5px 100px 20px 0 !important;
+			}
+		</style>' : '<style>
+				.install-gutenverse-plugin-notice {
+					border: 1px solid #E6E6EF;
+					position: relative;
+					overflow: hidden;
+					padding: 0 !important;
+					margin-bottom: 30px !important;
+					background: url( <?php echo esc_url( ' . $this->get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/background-banner.png\' ); ?> );
+					background-size: cover;
+					background-position: center;
+				}
+
+				.install-gutenverse-plugin-notice .gutenverse-notice-content {
+					display: flex;
+					align-items: center;
+					position: relative;
+				}
+
+				.gutenverse-notice-text, .gutenverse-notice-image {
+					width: 50%;
+				}
+
+				.gutenverse-notice-text {
+					padding: 40px 0 40px 40px;
+					position: relative;
+					z-index: 2;
+				}
+
+				.install-gutenverse-plugin-notice img {
+					max-height: 100%;
+					display: flex;
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+				}
+
+				.install-gutenverse-plugin-notice:after {
+					content: "";
+					position: absolute;
+					left: 0;
+					top: 0;
+					height: 100%;
+					width: 5px;
+					display: block;
+					background: linear-gradient(to bottom, #68E4F4, #4569FF, #F045FF);
+				}
+
+				.install-gutenverse-plugin-notice .notice-dismiss {
+					top: 20px;
+					right: 20px;
+					padding: 0;
+					background: white;
+					border-radius: 6px;
+				}
+
+				.install-gutenverse-plugin-notice .notice-dismiss:before {
+					content: "\f335";
+					font-size: 17px;
+					width: 25px;
+					height: 25px;
+					line-height: 25px;
+					border: 1px solid #E6E6EF;
+					border-radius: 3px;
+				}
+
+				.install-gutenverse-plugin-notice h3 {
+					margin-top: 5px;
+					margin-bottom: 15px;
+					font-weight: 600;
+					font-size: 25px;
+					line-height: 1.4em;
+				}
+
+				.install-gutenverse-plugin-notice h3 span {
+					font-weight: 700;
+					background-clip: text !important;
+					-webkit-text-fill-color: transparent;
+					background: linear-gradient(80deg, rgba(208, 77, 255, 1) 0%,rgba(69, 105, 255, 1) 48.8%,rgba(104, 228, 244, 1) 100%);
+				}
+
+				.install-gutenverse-plugin-notice p {
+					font-size: 13px;
+					font-weight: 400;
+					margin: 5px 100px 20px 0 !important;
+				}
+
+				.install-gutenverse-plugin-notice .gutenverse-bottom {
+					display: flex;
+					align-items: center;
+					margin-top: 30px;
+				}
+
+				.install-gutenverse-plugin-notice a {
+					text-decoration: none;
+					margin-right: 20px;
+				}
+
+				.install-gutenverse-plugin-notice a.gutenverse-button {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
+					text-decoration: none;
+					cursor: pointer;
+					font-size: 12px;
+					line-height: 18px;
+					border-radius: 5px;
+					background: #3B57F7;
+					color: #fff;
+					padding: 10px 15px;
+					font-weight: 500;
+					background: linear-gradient(to left, #68E4F4, #4569FF, #F045FF);
+					transition: transform 0.5s ease, color 0.5s ease;
+				}
+
+				.install-gutenverse-plugin-notice a.gutenverse-button:hover {
+					color: hsla(0, 0%, 100%, .749);
+					transform: scale(.94);
+				}
+
+				#gutenverse-install-plugin.loader:after {
+					display: block;
+					content: \'\';
+					border: 5px solid white;
+					border-radius: 50%;
+					border-top: 5px solid rgba(255, 255, 255, 0);
+					width: 10px;
+					height: 10px;
+					-webkit-animation: spin 2s linear infinite;
+					animation: spin 2s linear infinite;
+				}
+
+				@-webkit-keyframes spin {
+					0% {
+						-webkit-transform: rotate(0deg);
+					}
+					100% {
+						-webkit-transform: rotate(360deg);
+					}
+				}
+
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+
+				@media screen and (max-width: 1024px) {
+					.gutenverse-notice-text {
+						width: 100%;
+					}
+
+					.gutenverse-notice-image {
+						display: none;
+					}
+				}
+			</style>';
+			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+			<div class="gutenverse-banner-logo">
+					<svg width="20" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M16.667 14.432h-10L5 11.546H5L3.334 8.659 1.666 5.771 0 8.658v.001l1.666 2.887 1.667 2.886L5 17.32h10l1.667-2.888z" fill="#3B57F7"></path><path d="M3.33 8.66h6.667l1.667 2.886 1.666 2.886h3.333l-1.666-2.886-3.333-5.775H1.662L3.33 8.66z" fill="#3B57F7"></path><path d="M18.333 5.774l-1.666-2.887L15 0H5L3.332 2.887h10.002l1.665 2.886 1.667 2.888 1.667 2.887L20 8.66H20l-1.667-2.887z" fill="#5CD0DA"></path>
+					</svg>
+				</div>
+				<div class="gutenverse-notice-inner">
+					<div class="gutenverse-notice-content">
+						<div class="gutenverse-notice-text">
+							<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
+							<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
+							<div class="gutenverse-bottom">
+								<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
+									<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>' : '<div class="notice is-dismissible install-gutenverse-plugin-notice">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
@@ -1242,6 +1477,7 @@ class Export_Theme {
 				});
 			} );
 			</script>";
+			$plugin_notice_placeholder = str_replace( '{{dashboard_style}}', $style, $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{dashboard_script}}', $script, $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{dashboard_notice}}', $notice, $plugin_notice_placeholder );
 			$add_class[]               = 'new Plugin_Notice();';

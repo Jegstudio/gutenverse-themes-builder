@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import { FormPopup } from './form-popup';
 import TextControl from '../controls/text-control';
 import { WarningPopup } from './warning-popup';
+import SwitchControl from '../controls/switch-control';
 
 
 const defaultPlugins = [
@@ -17,6 +18,7 @@ const defaultPlugins = [
 ];
 
 const ManagePlugins = () => {
+    const [pluginNoticeNormal, setPluginNoticeNormal] = useState(false);
     const [plugins, setPlugins] = useState([]);
     const [loading, setLoading] = useState(false);
     const [deletePopup, setDeletePopup] = useState(false);
@@ -65,6 +67,8 @@ const ManagePlugins = () => {
                         break;
                 }
             }
+
+            setPluginNoticeNormal(response?.other?.pluginNoticeNormal);
         });
     }, []);
 
@@ -76,6 +80,16 @@ const ManagePlugins = () => {
                 data: plugins
             }, setLoading(false));
         },1000)
+    };
+
+    const updatePluginNoticeData = (value) => {
+        setLoading(true);
+        updateOtherData({
+            key: 'pluginNoticeNormal',
+            data: value
+        }, () => {
+            setLoading(false);
+        });
     };
 
     let searchTimer;
@@ -134,15 +148,30 @@ const ManagePlugins = () => {
         });
     };
 
+    console.log(pluginNoticeNormal)
+
     return (
         <ContentWrapper
             title={__('Manage Plugins', 'gutenverse-themes-builder')}
             description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
         >
-            <>
+            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> : <>
+                <div>
+                    <SwitchControl
+                        id={'plugi-notice-mode'}
+                        title={__('Use Normal Notice (Not Custom)?', 'gutenverse-themes-builder')}
+                        value={pluginNoticeNormal}
+                        onChange={(value) => {
+                            updatePluginNoticeData(value);
+                            setPluginNoticeNormal(value);
+                        }}
+                    />
+                </div>
+    
                 <div className="plugin-search-wrapper">
                     <SelectSearchControl
                         id={'search'}
+                        title={__('Search Plugin', 'gutenverse-themes-builder')}
                         description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
                         value={''}
                         onChange={updatePluginList}
@@ -228,7 +257,7 @@ const ManagePlugins = () => {
                     onProceed={() => deletePlugin(deletePopup.value)}
                     onClose={() => setDeletePopup(false)}
                 />}
-            </>
+            </>}
         </ContentWrapper>
     );
 };
