@@ -1182,22 +1182,21 @@ class Export_Theme {
 					padding: 10px 15px;
 					font-weight: 500;
 					background: #4569FF;
-					transition: transform 0.5s ease, color 0.5s ease;
+					transition: background 0.5s ease;
 				}
 
 				.install-gutenverse-plugin-notice a.gutenverse-button:hover {
-					color: hsla(0, 0%, 100%, .749);
 					background: #2435EC;
 				}
 
 				.install-gutenverse-plugin-notice .gutenverse-notice-text {
-					padding: 30px 20px 30px;
+					padding: 30px 20px 20px;
 					position: relative;
 					z-index: 2;
 				}
 
 				.install-gutenverse-plugin-notice h3 {
-					margin: 0 0 15px;
+					margin: 0 0 10px;
 				}
 
 				.install-gutenverse-plugin-notice p {
@@ -1496,13 +1495,13 @@ class Export_Theme {
 
 					if(!hasLoaderClass && !hasFinishClass) {
 						promises = [];
-						var plugins = <?php echo wp_json_encode( \$plugins ); ?>;
+						var plugins = <?php echo wp_json_encode( \$plugins_required ); ?>;
 						$(this).addClass('loader').text('');
 
 						sequenceInstall(plugins);
 						Promise.all(promises).then(() => {						
 							window.location.reload();
-							$(this).removeClass('loader').addClass('finished').text('Installation Completed');
+							$(this).removeClass('loader').addClass('finished').text('All is Done!');
 						});
 					}
 				});
