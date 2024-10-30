@@ -305,7 +305,7 @@ class Upgrader {
 							</svg>
 						</div>
 						<div class="notice-content">
-							<h2><?php echo sprintf( esc_html__( '%s Upgrade Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
+							<h2><?php echo sprintf( esc_html__( '%s Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
 							<p>
 								<?php esc_html_e( 'There are some new exciting updates we want to announce. This update will required the latest version of Gutenverse plugin to work smoothly, so we recommend to update your Gutenverse plugin.', '{{slug}}' ); ?>
 							</p>
@@ -351,7 +351,7 @@ class Upgrader {
 							</svg>
 						</div>
 						<div class="notice-content">
-							<h2><?php echo sprintf( esc_html__( '%s Upgrade Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
+							<h2><?php echo sprintf( esc_html__( '%s Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
 							{{notice_message}}
 							<div class="themes-upgrade-action">
 								<a class='close-notification' href="#">
@@ -400,7 +400,7 @@ class Upgrader {
 							</svg>
 						</div>
 						<div class="notice-content">
-							<h2><?php echo sprintf( esc_html__( '%s Upgrade Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
+							<h2><?php echo sprintf( esc_html__( '%s Notice!', '{{slug}}' ), wp_get_theme()->name ); ?></h2>
 							{{notice_message}}
 							<div class="themes-upgrade-action">
 								<a class='close-notification' href="#">

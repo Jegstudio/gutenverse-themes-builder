@@ -9,6 +9,8 @@ import { isEmpty } from 'lodash';
 import { FormPopup } from './form-popup';
 import TextControl from '../controls/text-control';
 import { WarningPopup } from './warning-popup';
+import SelectControl from '../controls/select-control';
+import { ArrowLeft } from 'react-feather';
 
 
 const defaultPlugins = [
@@ -23,6 +25,13 @@ const ManagePlugins = () => {
     const [editPopup, setEditPopup] = useState(false);
     const [paged,setPaged] = useState(1);
     const [num_post] = useState(10);
+    const [pluginCategory, setPluginCategory] = useState('');
+    const [customPlugin, setCustomPlugin] = useState({
+        label : "",
+        type  : "custom",
+        value : "",
+        version: ""
+    });
     const indexOfLastItem = paged * num_post;
     const indexOfFirstItem = indexOfLastItem - num_post;
     const paginationData = plugins.slice(indexOfFirstItem, indexOfLastItem);
@@ -78,6 +87,16 @@ const ManagePlugins = () => {
         },1000)
     };
 
+    const addCustomPlugin = () => {
+        let list = [...plugins, customPlugin];
+        setPlugins(list);
+        updateOtherData({
+            key: 'plugins',
+            data: list
+        });
+        setPluginCategory('');
+    }
+
     let searchTimer;
 
     const searchPlugin = input => new Promise(resolve => {
@@ -108,7 +127,6 @@ const ManagePlugins = () => {
         let checkIndex = plugins.indexOf(el => el.value = value?.value);
         if (!defaultPlugins.includes(value?.value) || -1 === checkIndex) {
             const update = plugins.filter(plugin => plugin.value !== value.value);
-
             setPlugins([
                 ...update,
                 value
@@ -118,6 +136,7 @@ const ManagePlugins = () => {
                 key: 'plugins',
                 data: newPlugins
             });
+            setPluginCategory('')
         }
     };
 
@@ -134,13 +153,23 @@ const ManagePlugins = () => {
         });
     };
 
-    return (
-        <ContentWrapper
-            title={__('Manage Plugins', 'gutenverse-themes-builder')}
-            description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
-        >
-            <>
-                <div className="plugin-search-wrapper">
+    const handleCustomPluginChange = (name, value) => {
+        setCustomPlugin({
+            ...customPlugin,
+            [name]: value
+        })
+      };
+    
+    const PluginContent = () => {
+        if(pluginCategory === 'wporg'){
+            return <div className="plugin-search-wrapper">
+                <div className='plugin-header'>
+                        <div className="buttons inline">
+                            <button className="button data" onClick={() => setPluginCategory('')}><ArrowLeft size={14} /></button>
+                        </div>
+                        <h3 className="subtitle">Add Wordpress Org Plugins</h3>
+                    </div>
+                <div className='plugin-body'>
                     <SelectSearchControl
                         id={'search'}
                         description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
@@ -148,8 +177,62 @@ const ManagePlugins = () => {
                         onChange={updatePluginList}
                         onSearch={searchPlugin}
                     />
+                    <div className="buttons margin-top-32 end">
+                        {
+                            loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
+                            <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
+                        }
+                    </div>
                 </div>
-                
+            </div>
+        }else if (pluginCategory === 'custom'){
+            return <div className="plugin-search-wrapper">
+                    <div className='plugin-header'>
+                        <div className="buttons inline">
+                            <button className="button data" onClick={() => setPluginCategory('')}><ArrowLeft size={14} /></button>
+                        </div>
+                        <h3 className="subtitle">Add Custom Plugins</h3>
+                    </div>
+                    <div className='plugin-body'>
+                    <TextControl
+                        id={'label'}
+                        title={__('Label', 'gutenverse-themes-builder')}
+                        value={customPlugin.label}
+                        onChange={value => handleCustomPluginChange('label', value)}
+                        important={true}
+                    />
+                    <TextControl
+                        id={'type'}
+                        title={__('Type', 'gutenverse-themes-builder')}
+                        value={customPlugin.type}
+                        onChange={value => handleCustomPluginChange('type', value)}
+                        important={true}
+                    />
+                    <TextControl
+                        id={'value'}
+                        title={__('Plugin Slug', 'gutenverse-themes-builder')}
+                        value={customPlugin.value}
+                        onChange={value => handleCustomPluginChange('value', value)}
+                        description={__('If don\'t know the slug just change plugin name to lowercase then change space to "-"', 'gutenverse-themes-builder')}
+                        important={true}
+                    />
+                    <TextControl
+                        id={'version'}
+                        title={__('Version', 'gutenverse-themes-builder')}
+                        value={customPlugin.version}
+                        onChange={value => handleCustomPluginChange('version', value)}
+                        important={true}
+                    />
+                    <div className="buttons margin-top-32 end">
+                        {
+                            loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
+                            <div className="button create padding-12-28" onClick={() => addCustomPlugin()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }else {
+            return <>
                 <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
                 <Table
                     classnames={'manage-plugins'}
@@ -166,7 +249,7 @@ const ManagePlugins = () => {
                         {!isEmpty(plugins) && paginationData.map((plugin, key) => {
                             return <tr key={key}>
                                 <td>{plugin?.label}</td>
-                                <td>{__('Wordpress.org', 'gutenverse-themes-builder')}</td>
+                                <td>{plugin?.type === 'wporg' ? __('Wordpress.org', 'gutenverse-themes-builder') : __('Custom', 'gutenverse-themes-builder')}</td>
                                 <td>{plugin?.version}</td>
                                 <td>
                                     <div className="actions">
@@ -181,13 +264,36 @@ const ManagePlugins = () => {
                         })}
                     </>
                 </Table>
-                <div className="buttons margin-top-32 end">
-                    {
-                        loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
-                        <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
-                    }
+            </>
+        }
+    }
+
+    return (
+        <ContentWrapper
+            title={__('Manage Plugins', 'gutenverse-themes-builder')}
+            description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
+        >
+            <>
+                <div className="plugin-search-wrapper">
+                    <SelectControl
+                        id={'plugin-category'}
+                        title={__('Plugin Category', 'gutenverse-themes-builder')}
+                        options={[
+                            {
+                                value: 'wporg',
+                                label: __('Wordpress Org', 'gutenverse-themes-builder')
+                            },
+                            {
+                                value: 'custom',
+                                label: __('Custom Plugin', 'gutenverse-themes-builder')
+                            }
+                        ]}
+                        onChange={value => { setPluginCategory(value)}}
+                        value = {pluginCategory}
+                        description={__('Select your plugin category.', 'gutenverse-themes-builder')}
+                    />
                 </div>
-                
+                {PluginContent()}
                 {editPopup && <FormPopup
                     onClose={() =>   setEditPopup(false)}
                     initialData={editPopup}
