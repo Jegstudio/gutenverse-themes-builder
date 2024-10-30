@@ -153,6 +153,7 @@ class Themeforest_Data {
 		$theme_url = get_template_directory_uri();
 		foreach ( $templates as $value ) {
 			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
+			$content = str_replace( "\'", "'", $content );
 			$page_id = null;
 
 			if ( ! empty( $value['core-patterns'] ) ) {

@@ -87,7 +87,7 @@ const ManageDashbaord = () => {
             {/* <ContentPreview /> */}
             <div className="manage-dashboard">
                 <div>
-                    <div className="input-wrapper se">
+                    <div className="input-wrapper select-dashboard">
                         <Select
                             value={dashboardData?.mode}
                             options={[
@@ -97,7 +97,7 @@ const ManageDashbaord = () => {
                             ]}
                             onChange={value => updateData('mode', value)}
                         />
-                        <span>{__('Select your dashboard mode', 'gutenverse-themes-builder')}</span>
+                        <span className='description'>{__('Select your dashboard mode', 'gutenverse-themes-builder')}</span>
                     </div>
                     
                     {dashboardData?.mode?.value === 'themeforest' && <>
@@ -121,7 +121,6 @@ const ManageDashbaord = () => {
                                     id={'core-theme-name'}
                                     title={__('Core Theme Name', 'gutenverse-themes-builder')}
                                     onChange={value => {
-                                        console.log(value)
                                         updateData('comparison', {
                                             ...dashboardData?.comparison,
                                             name_core: value

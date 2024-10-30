@@ -114,6 +114,7 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     value={themeData?.info_details?.theme_mode}
                     options={THEME_MODE}
                     onChange={updateDetails('theme_mode')}
+                    description={__('Select the mode for the theme', 'gutenverse-themes-builder')}
                     important={true}
                 />
                 <TextControl
@@ -121,12 +122,14 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     title={__('Content Width', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.core_content_width}
                     onChange={updateDetails('core_content_width')}
+                    description={__('Width of the content area (in pixels)', 'gutenverse-themes-builder')}
                 />
                 <TextControl
                     id={'core_wide_width'}
                     title={__('Wide Size', 'gutenverse-themes-builder')}
                     value={themeData?.info_details?.core_wide_width}
                     onChange={updateDetails('core_wide_width')}
+                    description={__('Width for wide layouts or media (in pixels)', 'gutenverse-themes-builder')}
                 />
                 <SelectControl
                     id={'tags'}

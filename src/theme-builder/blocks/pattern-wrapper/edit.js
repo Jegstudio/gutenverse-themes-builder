@@ -69,6 +69,7 @@ const PatternPreview = ({ setAttributes, clientId, patterns }) => {
             clientId
         });
     };
+    
     return !isEmpty(patterns) &&
         <div className="pattern-collection">
             <div className="masonry-content">

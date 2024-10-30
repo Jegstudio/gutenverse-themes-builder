@@ -36,7 +36,7 @@ const SelectControl = (props) => {
                         options={options}
                         onChange={onSelectChange}
                         isMulti={isMulti} />
-                    {description && <span>{description}</span>}
+                    {description && <span className='description'>{description}</span>}
                 </div>
             </div>
 

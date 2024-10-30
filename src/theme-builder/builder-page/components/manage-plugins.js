@@ -68,18 +68,14 @@ const ManagePlugins = () => {
         });
     }, []);
 
-    useEffect(()=> {
-        updatePluginData();
-    },[plugins])
-
     const updatePluginData = () => {
         setLoading(true);
-        updateOtherData({
-            key: 'plugins',
-            data: plugins
-        }, () => {
-            setLoading(false);
-        });
+        setTimeout( () => {
+            updateOtherData({
+                key: 'plugins',
+                data: plugins
+            }, setLoading(false));
+        },1000)
     };
 
     let searchTimer;
@@ -117,17 +113,25 @@ const ManagePlugins = () => {
                 ...update,
                 value
             ]);
+            let newPlugins = [...update,value];
+            updateOtherData({
+                key: 'plugins',
+                data: newPlugins
+            });
         }
     };
 
     const updatePluginValue = (value, index) => {
-        console.log(index);
         let arrCopy = [...plugins];
 
         arrCopy[index] = value;
         setPlugins([
             ...arrCopy
         ]);
+        updateOtherData({
+            key: 'plugins',
+            data: arrCopy
+        });
     };
 
     return (
@@ -135,7 +139,7 @@ const ManagePlugins = () => {
             title={__('Manage Plugins', 'gutenverse-themes-builder')}
             description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
         >
-            {loading ? <div className="saving-indicator">{__('Saving...', 'gutenverse-themes-builder')}</div> : <>
+            <>
                 <div className="plugin-search-wrapper">
                     <SelectSearchControl
                         id={'search'}
@@ -148,6 +152,7 @@ const ManagePlugins = () => {
                 
                 <h3>{__('List plugins used for current theme', 'gutenverse-themes-builder')}</h3>
                 <Table
+                    classnames={'manage-plugins'}
                     heads={['Plugin Name', 'Hosted', 'Version', 'Actions',]}
                     length={paginationData.length}
                     paged={paged}
@@ -178,7 +183,7 @@ const ManagePlugins = () => {
                 </Table>
                 <div className="buttons margin-top-32 end">
                     {
-                        loading ? <div className="button button-loading" disabled>Loading... </div> :
+                        loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
                         <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
                     }
                 </div>
@@ -186,6 +191,7 @@ const ManagePlugins = () => {
                 {editPopup && <FormPopup
                     onClose={() =>   setEditPopup(false)}
                     initialData={editPopup}
+                    buttonText={__('Save Changes', 'gutenverse-themes-builder')}
                     classnames={'manage-plugins'}
                     onSubmit={(updateData) => {
                         updatePluginValue(updateData.plugin, updateData.key )
@@ -222,7 +228,7 @@ const ManagePlugins = () => {
                     onProceed={() => deletePlugin(deletePopup.value)}
                     onClose={() => setDeletePopup(false)}
                 />}
-            </>}
+            </>
         </ContentWrapper>
     );
 };
