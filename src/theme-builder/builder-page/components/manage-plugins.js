@@ -11,6 +11,7 @@ import TextControl from '../controls/text-control';
 import { WarningPopup } from './warning-popup';
 import SelectControl from '../controls/select-control';
 import { ArrowLeft } from 'react-feather';
+import SwitchControl from '../controls/switch-control';
 
 
 const defaultPlugins = [
@@ -19,6 +20,7 @@ const defaultPlugins = [
 ];
 
 const ManagePlugins = () => {
+    const [pluginNoticeNormal, setPluginNoticeNormal] = useState(false);
     const [plugins, setPlugins] = useState([]);
     const [loading, setLoading] = useState(false);
     const [deletePopup, setDeletePopup] = useState(false);
@@ -74,6 +76,8 @@ const ManagePlugins = () => {
                         break;
                 }
             }
+
+            setPluginNoticeNormal(response?.other?.pluginNoticeNormal);
         });
     }, []);
 
@@ -96,6 +100,15 @@ const ManagePlugins = () => {
         });
         setPluginCategory('');
     }
+    const updatePluginNoticeData = (value) => {
+        setLoading(true);
+        updateOtherData({
+            key: 'pluginNoticeNormal',
+            data: value
+        }, () => {
+            setLoading(false);
+        });
+    };
 
     let searchTimer;
 
@@ -152,7 +165,6 @@ const ManagePlugins = () => {
             data: arrCopy
         });
     };
-
     const handleCustomPluginChange = (name, value) => {
         setCustomPlugin({
             ...customPlugin,
@@ -164,24 +176,21 @@ const ManagePlugins = () => {
         if(pluginCategory === 'wporg'){
             return <div className="plugin-search-wrapper">
                 <div className='plugin-header'>
-                        <div className="buttons inline">
-                            <button className="button data" onClick={() => setPluginCategory('')}><ArrowLeft size={14} /></button>
-                        </div>
-                        <h3 className="subtitle">Add Wordpress Org Plugins</h3>
+                    <div className="buttons inline">
+                        <button className="button data" onClick={() => setPluginCategory('')}><ArrowLeft size={14} /></button>
                     </div>
+                    <h3 className="subtitle">Add Wordpress Org Plugins</h3>
+                </div>
                 <div className='plugin-body'>
-                    <SelectSearchControl
-                        id={'search'}
-                        description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
-                        value={''}
-                        onChange={updatePluginList}
-                        onSearch={searchPlugin}
-                    />
-                    <div className="buttons margin-top-32 end">
-                        {
-                            loading ? <div className="button button-loading padding-12-28" disabled>Loading... </div> :
-                            <div className="button create padding-12-28" onClick={() => updatePluginData()}>{__('Save Plugin', 'gutenverse-themes-builder')}</div>
-                        }
+                    <div className="plugin-search-wrapper">
+                        <SelectSearchControl
+                            id={'search'}
+                            title={__('Search Plugin', 'gutenverse-themes-builder')}
+                            description={__('Search for WP.org plugins you used for building your current active theme.', 'gutenverse-themes-builder')}
+                            value={''}
+                            onChange={updatePluginList}
+                            onSearch={searchPlugin}
+                        />
                     </div>
                 </div>
             </div>
@@ -267,13 +276,24 @@ const ManagePlugins = () => {
             </>
         }
     }
-
+    
     return (
         <ContentWrapper
             title={__('Manage Plugins', 'gutenverse-themes-builder')}
             description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
         >
             <>
+                <div>
+                    <SwitchControl
+                        id={'plugi-notice-mode'}
+                        title={__('Use Normal Notice (Not Custom)?', 'gutenverse-themes-builder')}
+                        value={pluginNoticeNormal}
+                        onChange={(value) => {
+                            updatePluginNoticeData(value);
+                            setPluginNoticeNormal(value);
+                        }}
+                    />
+                </div>
                 <div className="plugin-search-wrapper">
                     <SelectControl
                         id={'plugin-category'}
