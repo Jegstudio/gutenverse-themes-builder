@@ -32,7 +32,8 @@ const ManagePlugins = () => {
         label : "",
         type  : "custom",
         value : "",
-        version: ""
+        version: "",
+        url: ""
     });
     const indexOfLastItem = paged * num_post;
     const indexOfFirstItem = indexOfLastItem - num_post;
@@ -81,16 +82,6 @@ const ManagePlugins = () => {
         });
     }, []);
 
-    const updatePluginData = () => {
-        setLoading(true);
-        setTimeout( () => {
-            updateOtherData({
-                key: 'plugins',
-                data: plugins
-            }, setLoading(false));
-        },1000)
-    };
-
     const addCustomPlugin = () => {
         let list = [...plugins, customPlugin];
         setPlugins(list);
@@ -100,6 +91,7 @@ const ManagePlugins = () => {
         });
         setPluginCategory('');
     }
+
     const updatePluginNoticeData = (value) => {
         setLoading(true);
         updateOtherData({
@@ -230,6 +222,13 @@ const ManagePlugins = () => {
                         title={__('Version', 'gutenverse-themes-builder')}
                         value={customPlugin.version}
                         onChange={value => handleCustomPluginChange('version', value)}
+                        important={true}
+                    />
+                    <TextControl
+                        id={'url'}
+                        title={__('Plugin Url', 'gutenverse-themes-builder')}
+                        value={customPlugin.url}
+                        onChange={value => handleCustomPluginChange('url', value)}
                         important={true}
                     />
                     <div className="buttons margin-top-32 end">
