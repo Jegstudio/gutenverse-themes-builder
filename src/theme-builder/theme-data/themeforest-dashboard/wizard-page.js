@@ -44,7 +44,7 @@ const ImportLoading = (props) => {
 const InstallPlugin = ({ action, setAction, updateProgress }) => {
     const { plugins } = window['GutenThemeConfig'];
     const [installing, setInstalling] = useState({ show: true, message: 'Preparing...', progress: '1/4' })
-
+    console.log(plugins);
     useEffect(() => {
         let allActive = true;
         plugins?.map(plugin => {

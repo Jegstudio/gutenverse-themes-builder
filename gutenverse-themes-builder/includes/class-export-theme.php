@@ -1015,21 +1015,40 @@ class Export_Theme {
 		if ( ! empty( $other['plugins'] ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
-				$result      = plugins_api(
-					'plugin_information',
-					array(
-						'slug'   => $plugin['value'],
-						'locale' => 'en_US',
-						'fields' => array(
-							'icons' => true,
+				gutenverse_rlog( $plugin );
+				if ( 'wporg' === $plugin['type'] ) {
+					$result      = plugins_api(
+						'plugin_information',
+						array(
+							'slug'   => $plugin['value'],
+							'locale' => 'en_US',
+							'fields' => array(
+								'icons' => true,
+							),
+						)
+					);
+					$icons       = var_export( $result->icons, true );
+					$description = $result->sections['description'];
+					$short_desc  = '';
+					if ( preg_match( '/<p[^>]*>(.*?)<\/p>/', $description, $matches ) ) {
+						$short_desc = wp_strip_all_tags( $matches[1] );
+					}
+				} else {
+					$result = wp_remote_request(
+						GUTENVERSE_FRAMEWORK_LIBRARY_URL . 'wp-json/gutenverse-server/v4/plugin/detail',
+						array(
+							'method'  => 'POST',
+							'body'    => json_encode(
+								array(
+									'slug' => $plugin['value'],
+								)
+							),
+							'headers' => array(
+								'Content-Type' => 'application/json',
+							),
 						),
-					)
-				);
-				$icons       = var_export( $result->icons, true );
-				$description = $result->sections['description'];
-				$short_desc  = '';
-				if ( preg_match( '/<p[^>]*>(.*?)<\/p>/', $description, $matches ) ) {
-					$short_desc = wp_strip_all_tags( $matches[1] );
+					);
+					gutenverse_rlog( $result );
 				}
 
 				$required[] = "array(
@@ -1146,7 +1165,7 @@ class Export_Theme {
 			$plugin_notice_placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
-			$style = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
+			$style                     = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
 			.install-gutenverse-plugin-notice {
 				position: relative;
 				display: flex;
