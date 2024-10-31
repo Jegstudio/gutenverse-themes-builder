@@ -1015,7 +1015,7 @@ class Export_Theme {
 		if ( ! empty( $other['plugins'] ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
-				gutenverse_rlog( $plugin );
+				$url = '';
 				if ( 'wporg' === $plugin['type'] ) {
 					$result      = plugins_api(
 						'plugin_information',
@@ -1048,34 +1048,43 @@ class Export_Theme {
 							),
 						),
 					);
-					gutenverse_rlog( $result );
+
+					$response = json_decode( $result['body'], true );
+					if ( 'success' === $response['status'] ) {
+						$data       = $response['data'];
+						$icons      = var_export(
+							array(
+								'1x' => strval( $data['icon'] ),
+							),
+							true
+						);
+						$short_desc = $data['description'];
+						$url        = $data['url'];
+					}
 				}
 
 				$required[] = "array(
-					'slug'       => '{$plugin['value']}',
-					'title'      => '{$plugin['label']}',
-					'short_desc' => '{$short_desc}',
-					'active'     => in_array( '{$plugin['value']}', \$plugins, true ),
-					'installed'  => \$this->is_installed( '{$plugin['value']}' ),
-					'icons'      => {$icons},
+					'slug'       		=> '{$plugin['value']}',
+					'title'      		=> '{$plugin['label']}',
+					'short_desc' 		=> '{$short_desc}',
+					'active'    		=> in_array( '{$plugin['value']}', \$plugins, true ),
+					'installed'  		=> \$this->is_installed( '{$plugin['value']}' ),
+					'icons'      		=> {$icons},
+					'download_url'      => '{$url}',
 				)";
 			}
 		}
 
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
-
-		$theme_data = maybe_unserialize( $data['theme_data'] );
-		$other      = maybe_unserialize( $data['other'] );
-		$add_class  = array();
-		$assigns    = array();
-		$data_page  = array();
-		$theme_logo = 'false';
+		$add_class   = array();
+		$assigns     = array();
+		$data_page   = array();
+		$theme_logo  = 'false';
 
 		/**Create Notice */
 
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$add_class[] = 'new Themeforest_Data();';
-			$theme_data  = maybe_unserialize( $data['theme_data'] );
 			$theme_slug  = $this->get_constant_name( $theme_data['slug'] );
 
 			if ( isset( $other['dashboard']['logo'] ) ) {
