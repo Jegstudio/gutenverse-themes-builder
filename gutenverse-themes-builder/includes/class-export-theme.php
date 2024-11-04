@@ -1152,17 +1152,7 @@ class Export_Theme {
 					display: flex;
 					margin: 10px 0 20px !important;
 					padding: 0 !important;
-					border: 1px solid #c3c4c7;
-					border-left-width: 0;
-				}
-
-				.install-gutenverse-plugin-notice .gutenverse-banner-logo {
-					background: #ECF0F8;
-					padding: 20px 15px;
-					border-left: 4px;
-					border-right: 0;
-					border-style: solid;
-					border-image: linear-gradient(to bottom, #3F3BF7, #5CD0DA) 1 100%;
+					border-left: 4px solid #2271b1;
 				}
 
 				.install-gutenverse-plugin-notice .gutenverse-bottom {
@@ -1176,17 +1166,12 @@ class Export_Theme {
 					font-size: 12px;
 					line-height: 18px;
 					border: none;
-					border-radius: 5px;
-					background: #3B57F7;
+					border-radius: 3px;
+					background: #2271b1;
 					color: #fff;
 					padding: 10px 15px;
 					font-weight: 500;
-					background: #4569FF;
 					transition: background 0.5s ease;
-				}
-
-				.install-gutenverse-plugin-notice a.gutenverse-button:hover {
-					background: #2435EC;
 				}
 
 				.install-gutenverse-plugin-notice .gutenverse-notice-text {
@@ -1215,6 +1200,10 @@ class Export_Theme {
 					height: 8px;
 					-webkit-animation: spin 2s linear infinite;
 					animation: spin 2s linear infinite;
+				}
+
+				.install-gutenverse-plugin-notice .notice-dismiss {
+					z-index: 999;
 				}
 
 				@-webkit-keyframes spin {
@@ -1393,11 +1382,6 @@ class Export_Theme {
 				}
 			</style>';
 			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice is-dismissible install-gutenverse-plugin-notice">
-			<div class="gutenverse-banner-logo">
-					<svg width="20" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M16.667 14.432h-10L5 11.546H5L3.334 8.659 1.666 5.771 0 8.658v.001l1.666 2.887 1.667 2.886L5 17.32h10l1.667-2.888z" fill="#3B57F7"></path><path d="M3.33 8.66h6.667l1.667 2.886 1.666 2.886h3.333l-1.666-2.886-3.333-5.775H1.662L3.33 8.66z" fill="#3B57F7"></path><path d="M18.333 5.774l-1.666-2.887L15 0H5L3.332 2.887h10.002l1.665 2.886 1.667 2.888 1.667 2.887L20 8.66H20l-1.667-2.887z" fill="#5CD0DA"></path>
-					</svg>
-				</div>
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
