@@ -1152,26 +1152,11 @@ class Export_Theme {
 					display: flex;
 					margin: 10px 0 20px !important;
 					padding: 0 !important;
-					border-left: 4px solid #2271b1;
+					border-left: 4px solid #72aee6;
 				}
 
 				.install-gutenverse-plugin-notice .gutenverse-bottom {
 					display: flex;
-				}
-
-				.install-gutenverse-plugin-notice a.gutenverse-button {
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
-					text-decoration: none;
-					cursor: pointer;
-					font-size: 12px;
-					line-height: 18px;
-					border: none;
-					border-radius: 3px;
-					background: #2271b1;
-					color: #fff;
-					padding: 10px 15px;
-					font-weight: 500;
-					transition: background 0.5s ease;
 				}
 
 				.install-gutenverse-plugin-notice .gutenverse-notice-text {
@@ -1381,14 +1366,14 @@ class Export_Theme {
 					}
 				}
 			</style>';
-			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice is-dismissible install-gutenverse-plugin-notice">
+			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice notice-info is-dismissible install-gutenverse-plugin-notice">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
 							<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
 							<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
 							<div class="gutenverse-bottom">
-								<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
+								<a class="button-primary" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
 									<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
 								</a>
 							</div>
