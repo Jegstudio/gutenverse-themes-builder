@@ -2,6 +2,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ContentWrapper from './content-wrapper';
 import { getThemeData, updateOtherData } from '../../../data/api-fetch';
+import { IconCloseSVG } from 'gutenverse-core/icons';
 
 
 const ManageScreenshots = () => {
@@ -114,8 +115,16 @@ const ManageScreenshots = () => {
                     <h3>{__('Screenshots for Dashboard', 'gutenverse-themes-builder')}</h3>
                     <p>{__('Make sure each screenshot size is smaller than 500KB to reduce the theme file size', 'gutenverse-themes-builder')}</p>
                     <div className='image-wrapper'>
-                        {dashboard && dashboard.map(screenshot => {
-                            return <img className="image-preview" key={screenshot?.id} src={screenshot?.url} />;
+                        {dashboard && dashboard.map((screenshot, index) => {
+                            return <div className="image-preview" key={screenshot?.id} >
+                                <div className="close" onClick={() => {
+                                    const newList = dashboard.filter((ss, i) => i !== index);
+                                    setDashboard(newList);
+                                }}>
+                                    <IconCloseSVG/>
+                                </div>
+                                <img src={screenshot?.url} />
+                            </div>;
                         })}
                     </div><br/>
                     <button className='button' onClick={() => selectItem(screenshotFrame)}>{__('Choose Images', 'gutenverse-themes-builder')}</button>
