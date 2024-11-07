@@ -13,9 +13,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Gutenverse_Themes_Builder\Database\Database;
 
+if ( ! function_exists( 'gutenverse_generate_unique_string' ) ) {
+	/**
+	 * Generate Unique String
+	 *
+	 * @param integer $length .
+	 * @param array   $data array of assosiative array .
+	 * @param string  $key .
+	 */
+	function gutenverse_generate_unique_string( $length, $data, $key ) {
+		do {
+			$uuid        = wp_generate_uuid4();
+			$short_uuid  = substr( $uuid, 0, $length );
+			$filter_data = array_filter(
+				$data,
+				function ( $obj ) use ( $key, $short_uuid ) {
+					return isset( $obj[ $key ] ) && $obj[ $key ] === $short_uuid;
+				}
+			);
+			$check_uuid  = reset( $filter_data );
+		} while ( $check_uuid );
+
+		return $short_uuid;
+	}
+}
 if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 	/**
 	 * Check if the url is an image url
+	 *
+	 * @param string $url .
 	 */
 	function gutenverse_themes_builder_is_image_url( $url ) {
 		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
@@ -26,9 +52,9 @@ if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 }
 if ( ! function_exists( 'gutenverse_themes_builder_to_unicode_escape' ) ) {
 	/**
-	 * escape to unicode
+	 * Escape to unicode
 	 *
-	 * @param string str .
+	 * @param string $str .
 	 *
 	 * @return string
 	 */
@@ -53,18 +79,57 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 	 * @return array
 	 */
 	function gutenverse_themes_builder_get_image_without_resolution( $image ) {
-		// Capture image url that has resolution inside double quotes.
+		/** Capture image url that has resolution inside double quotes. */
 		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image, $matches );
 
 		if ( empty( $matches ) ) {
 			return false;
 		}
 		$res = explode( 'x', explode( '-', $matches[1] )[1] );
+
+		/** Get Image Name Without symbol */
+		$image_arr  = explode( '/', str_replace( $matches[1], $matches[2], $matches[0] ) );
+		$image_name = $image_arr[ count( $image_arr ) - 1 ];
+		/** Check if the $image_name have . in their name other than extention and end with _ */
+		/** Split the image name by the last dot to separate the extension */
+		$parts = explode( '.', $image_name );
+
+		/** Check if the filename ends with an underscore  */
+		if ( 2 < count( $parts ) ) {
+			/** The last part is the extension */
+			$extension = array_pop( $parts );
+
+			/** Recombine the remaining parts into the main part of the filename  */
+			$filename    = implode( '.', $parts );
+			$end_of_name = substr( $filename, -1 );
+			switch ( $end_of_name ) {
+				case '_':
+				case '-':
+				case '.':
+				case '!':
+				case ',':
+				case '/':
+					/** Remove the trailing underscore */
+					$filename = rtrim( $filename, '_' );
+					/** Reconstruct the full image name */
+					$image_name = $filename . '.' . $extension;
+					break;
+				default:
+					break;
+			}
+			if ( substr( $filename, -1 ) === '_' ) {
+				/** Remove the trailing underscore */
+				$filename = rtrim( $filename, '_' );
+				/** Reconstruct the full image name */
+				$image_name = $filename . '.' . $extension;
+			}
+		}
 		return array(
-			'original' => $matches[0],
-			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
-			'width'    => $res[0],
-			'height'   => explode( '.', $res[1] )[0],
+			'original'   => $matches[0],
+			'nores'      => str_replace( $matches[1], $matches[2], $matches[0] ),
+			'image_name' => $image_name,
+			'width'      => $res[0],
+			'height'     => explode( '.', $res[1] )[0],
 		);
 	}
 }

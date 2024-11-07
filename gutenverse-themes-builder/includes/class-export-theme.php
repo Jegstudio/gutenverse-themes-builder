@@ -130,7 +130,8 @@ class Export_Theme {
 		$this->create_templates( $wp_filesystem, $theme_id, $data['slug'] );
 		$this->create_pages( $wp_filesystem, $theme_id, $data );
 		$this->register_patterns( $wp_filesystem, $data );
-		$this->export_all_images( $wp_filesystem );
+		gutenverse_rlog( $this->image_list );
+		// $this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
 		$this->create_menus( $wp_filesystem );
@@ -226,7 +227,7 @@ class Export_Theme {
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_menus( $content, $system );
-			$content     = $this->extract_images( $content, $system, $data['slug'], true );
+			$content     = $this->extract_images( $content, 'page', $data['slug'], true );
 			$content     = $this->fix_colors( $content );
 			$content     = $this->fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
@@ -1732,11 +1733,11 @@ class Export_Theme {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, false, 'template' );
+					$content = $this->extract_images( $content, 'template', $theme_slug );
 					$content = $this->extract_menus( $content, $system );
-					$content = $this->extract_images( $content, $system, $theme_slug );
 					$content = $this->fix_colors( $content );
 					$content = $this->fix_core_navigation( $content );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, false, 'template' );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -1940,68 +1941,66 @@ class Export_Theme {
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
-						$content          = str_replace( "'", "\'", $posts[0]->post_content );
-						$content          = $this->extract_images( $content, $system, $theme_slug );
-						$content          = $this->extract_menus( $content, $system );
-						$content          = $this->fix_colors( $content );
-						$content          = $this->fix_core_navigation( $content );
-						$pattern_name     = $posts[0]->post_name;
-						$pattern_title    = $posts[0]->post_title;
-						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
-						$pattern_category = empty( $pattern_category ) ? 'core' : $pattern_category;
-						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
-
-						/** Create pattern php files */
-						$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
-						$target_file = $pattern_dir . '/' . $pattern_name . '.php';
-						$content     = $this->replace_template_part( $content, $theme_slug );
-						$placeholder = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
-						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
-						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
-						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
-
-						/**replace additional object with object sync */
-						if ( $pattern_sync ) {
-							$additional = "'is_sync' => true,";
-						} else {
-							$additional = "'is_sync' => false,";
-						}
-						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
-
-						/**Add pattern to class_block_pattern array to register pattern */
-						switch ( $pattern_category ) {
-							case 'pro':
-								if ( 'template' === $place ) {
-									$this->template_pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								} elseif ( 'page' === $place ) {
-									$this->page_pro_patterns[] = '"' . $pattern_name . '"';
-								}
-								break;
-							case 'gutenverse':
-								if ( 'template' === $place ) {
-									$this->template_gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
-								} elseif ( 'page' === $place ) {
-									$this->page_gutenverse_patterns[] = '"' . $pattern_name . '"';
-								}
-								break;
-							default:
-								if ( 'template' === $place ) {
-									$this->template_core_patterns[] = "'{$pattern_name}'";
-								} elseif ( 'page' === $place ) {
-									$this->page_core_patterns[] = '"' . $pattern_name . '"';
-								}
-								break;
-						}
-
-						$system->put_contents(
-							$target_file,
-							$placeholder,
-							FS_CHMOD_FILE
-						);
+						$pattern_sync = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 
 						if ( $only_get_content && ! $pattern_sync ) {
 							$pattern_after = $posts[0]->post_content;
 						} else {
+							$content       = str_replace( "'", "\'", $posts[0]->post_content );
+							$content       = $this->extract_images( $content, $pattern_sync ? 'sync' : 'async', $theme_slug );
+							$content       = $this->extract_menus( $content, $system );
+							$content       = $this->fix_colors( $content );
+							$content       = $this->fix_core_navigation( $content );
+							$pattern_name  = $posts[0]->post_name;
+							$pattern_title = $posts[0]->post_title;
+							/** Create pattern php files */
+							$placeholder      = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/pattern.txt' );
+							$target_file      = $pattern_dir . '/' . $pattern_name . '.php';
+							$content          = $this->replace_template_part( $content, $theme_slug );
+							$placeholder      = str_replace( '{{pattern_title}}', $pattern_title, $placeholder );
+							$placeholder      = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
+							$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
+							$pattern_category = empty( $pattern_category ) ? 'core' : $pattern_category;
+							$placeholder      = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
+							$placeholder      = str_replace( '{{pattern_content}}', $content, $placeholder );
+
+							/**Replace additional object with object sync */
+							if ( $pattern_sync ) {
+								$additional = "'is_sync' => true,";
+							} else {
+								$additional = "'is_sync' => false,";
+							}
+							$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
+
+							/**Add pattern to class_block_pattern array to register pattern */
+							switch ( $pattern_category ) {
+								case 'pro':
+									if ( 'template' === $place ) {
+										$this->template_pro_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+									} elseif ( 'page' === $place ) {
+										$this->page_pro_patterns[] = '"' . $pattern_name . '"';
+									}
+									break;
+								case 'gutenverse':
+									if ( 'template' === $place ) {
+										$this->template_gutenverse_patterns[] = "\$block_patterns[] = '{$pattern_name}'";
+									} elseif ( 'page' === $place ) {
+										$this->page_gutenverse_patterns[] = '"' . $pattern_name . '"';
+									}
+									break;
+								default:
+									if ( 'template' === $place ) {
+										$this->template_core_patterns[] = "'{$pattern_name}'";
+									} elseif ( 'page' === $place ) {
+										$this->page_core_patterns[] = '"' . $pattern_name . '"';
+									}
+									break;
+							}
+							$system->put_contents(
+								$target_file,
+								$placeholder,
+								FS_CHMOD_FILE
+							);
 							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
 						}
 					}
@@ -2071,47 +2070,65 @@ class Export_Theme {
 	 * Extract Images
 	 *
 	 * @param string  $content .
-	 * @param object  $system .
+	 * @param string  $type .
 	 * @param string  $slug .
 	 * @param boolean $is_outside_pattern_wrapper .
 	 */
-	private function extract_images( $content, $system, $slug, $is_outside_pattern_wrapper = false ) {
+	private function extract_images( $content, $type, $slug, $is_outside_pattern_wrapper = false ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
 			foreach ( $matches[0] as $image ) {
-				$this->add_image( $image );
-				$image_uri                = $this->get_constant_name( $slug ) . '_URI';
-				$image_without_resolution = gutenverse_themes_builder_get_image_without_resolution( $image );
-				if ( $image_without_resolution ) {
-					$image_arr = explode( '/', $image_without_resolution['nores'] );
-				} else {
-					$image_arr = explode( '/', $image );
-				}
-				$image_name = $image_arr[ count( $image_arr ) - 1 ];
-				/**Check if the $image_name have . in their name other than extention and end with _ */
-				/** Split the image name by the last dot to separate the extension */
-				$parts = explode( '.', $image_name );
+				switch ( $type ) {
+					case 'page':
+					case 'sync':
+						$image_without_resolution = gutenverse_themes_builder_get_image_without_resolution( $image );
+						$uuid                     = gutenverse_generate_unique_string( 8, $this->image_list, 'uuid' );
+						$filter_data              = array_filter(
+							$this->image_list,
+							function ( $obj ) use ( $, $short_uuid ) {
+								return isset( $obj[ $key ] ) && $obj[ $key ] === $short_uuid;
+							}
+						);
+						break;
+					case 'template':
+					case 'async':
+					default:
+						$uuid = gutenverse_generate_unique_string( 8, $this->image_list, 'uuid' );
+						$this->add_image( $image, $type, $uuid );
+						$image_uri                = $this->get_constant_name( $slug ) . '_URI';
+						$image_without_resolution = gutenverse_themes_builder_get_image_without_resolution( $image );
+						if ( $image_without_resolution ) {
+							$image_arr = explode( '/', $image_without_resolution['nores'] );
+						} else {
+							$image_arr = explode( '/', $image );
+						}
+						$image_name = $image_arr[ count( $image_arr ) - 1 ];
+						/**Check if the $image_name have . in their name other than extention and end with _ */
+						/** Split the image name by the last dot to separate the extension */
+						$parts = explode( '.', $image_name );
 
-				/** Check if the filename ends with an underscore  */
-				if ( 2 < count( $parts ) ) {
-					/** The last part is the extension */
-					$extension = array_pop( $parts );
+						/** Check if the filename ends with an underscore  */
+						if ( 2 < count( $parts ) ) {
+							/** The last part is the extension */
+							$extension = array_pop( $parts );
 
-					/** Recombine the remaining parts into the main part of the filename  */
-					$filename = implode( '.', $parts );
-					if ( substr( $filename, -1 ) === '_' ) {
-						/** Remove the trailing underscore */
-						$filename = rtrim( $filename, '_' );
-						/** Reconstruct the full image name */
-						$image_name = $filename . '.' . $extension;
-					}
+							/** Recombine the remaining parts into the main part of the filename  */
+							$filename = implode( '.', $parts );
+							if ( substr( $filename, -1 ) === '_' ) {
+								/** Remove the trailing underscore */
+								$filename = rtrim( $filename, '_' );
+								/** Reconstruct the full image name */
+								$image_name = $filename . '.' . $extension;
+							}
+						}
+						$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
+						if ( $is_outside_pattern_wrapper ) {
+							$image_code = "{{home_url}}/assets/img/$image_name";
+						}
+						$content = str_replace( $image, $image_code, $content );
+						break;
 				}
-				$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-				if ( $is_outside_pattern_wrapper ) {
-					$image_code = "{{home_url}}/assets/img/$image_name";
-				}
-				$content = str_replace( $image, $image_code, $content );
 			}
 		}
 		return $content;
@@ -2121,9 +2138,17 @@ class Export_Theme {
 	 * Add image to list
 	 *
 	 * @param string $image image url string .
+	 * @param string $type type of image (template, page, sync, or async) string .
+	 * @param string $uuid id of image .
+	 * @param string $name .
 	 */
-	private function add_image( $image ) {
-		$this->image_list[] = $image;
+	private function add_image( $image, $type, $uuid, $name ) {
+		$this->image_list[] = array(
+			'image'     => $name,
+			'image_url' => $image,
+			'type'      => $type,
+			'uuid'      => $uuid,
+		);
 	}
 
 	/**
