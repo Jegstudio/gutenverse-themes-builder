@@ -1174,65 +1174,69 @@ class Export_Theme {
 			$plugin_notice_placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
-			$style                     = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
-			.install-gutenverse-plugin-notice {
-				position: relative;
-				display: flex;
-				margin: 10px 0 20px !important;
-				padding: 0 !important;
-				border: 1px solid #c3c4c7;
-				border-left-width: 0;
-			}
+			$style = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
+				.install-gutenverse-plugin-notice {
+					position: relative;
+					display: flex;
+					margin: 10px 0 20px !important;
+					padding: 0 !important;
+					border-left: 4px solid #72aee6;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-banner-logo {
-				background: #ECF0F8;
-				padding: 20px 15px;
-				border-left: 4px;
-				border-right: 0;
-				border-style: solid;
-				border-image: linear-gradient(to bottom, #3F3BF7, #5CD0DA) 1 100%;
-			}
+				.install-gutenverse-plugin-notice .gutenverse-bottom {
+					display: flex;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-bottom {
-				display: flex;
-			}
+				.install-gutenverse-plugin-notice .gutenverse-notice-text {
+					padding: 30px 20px 20px;
+					position: relative;
+					z-index: 2;
+				}
 
-			.install-gutenverse-plugin-notice a.gutenverse-button {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", serif;
-				text-decoration: none;
-				cursor: pointer;
-				font-size: 12px;
-				line-height: 18px;
-				border-radius: 5px;
-				background: #3B57F7;
-				color: #fff;
-				padding: 10px 15px;
-				font-weight: 500;
-				background: #4569FF;
-				transition: transform 0.5s ease, color 0.5s ease;
-			}
+				.install-gutenverse-plugin-notice h3 {
+					margin: 0 0 10px;
+				}
 
-			.install-gutenverse-plugin-notice a.gutenverse-button:hover {
-				color: hsla(0, 0%, 100%, .749);
-				transform: scale(.94);
-			}
+				.install-gutenverse-plugin-notice p {
+					font-size: 13px;
+					font-weight: 400;
+					margin: 0 100px 15px 0 !important;
+				}
 
-			.install-gutenverse-plugin-notice .gutenverse-notice-text {
-				padding: 30px;
-				position: relative;
-				z-index: 2;
-			}
+				.install-gutenverse-plugin-notice #gutenverse-install-plugin.loader:after{
+					display: block;
+					content: "";
+					border: 5px solid white;
+					border-radius: 50%;
+					border-top: 5px solid rgba(255, 255, 255, 0);
+					width: 8px;
+					height: 8px;
+					-webkit-animation: spin 2s linear infinite;
+					animation: spin 2s linear infinite;
+				}
 
-			.install-gutenverse-plugin-notice h3 {
-				margin: 0 0 1em;
-			}
+				.install-gutenverse-plugin-notice .notice-dismiss {
+					z-index: 999;
+				}
 
-			.install-gutenverse-plugin-notice p {
-				font-size: 13px;
-				font-weight: 400;
-				margin: 5px 100px 20px 0 !important;
-			}
-		</style>' : '<style>
+				@-webkit-keyframes spin {
+					0% {
+						-webkit-transform: rotate(0deg);
+					}
+					100% {
+						-webkit-transform: rotate(360deg);
+					}
+				}
+
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+			</style>' : '<style>
 				.install-gutenverse-plugin-notice {
 					border: 1px solid #E6E6EF;
 					position: relative;
@@ -1352,7 +1356,7 @@ class Export_Theme {
 
 				#gutenverse-install-plugin.loader:after {
 					display: block;
-					content: \'\';
+					content: "";
 					border: 5px solid white;
 					border-radius: 50%;
 					border-top: 5px solid rgba(255, 255, 255, 0);
@@ -1390,19 +1394,14 @@ class Export_Theme {
 					}
 				}
 			</style>';
-			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice is-dismissible install-gutenverse-plugin-notice">
-			<div class="gutenverse-banner-logo">
-					<svg width="20" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M16.667 14.432h-10L5 11.546H5L3.334 8.659 1.666 5.771 0 8.658v.001l1.666 2.887 1.667 2.886L5 17.32h10l1.667-2.888z" fill="#3B57F7"></path><path d="M3.33 8.66h6.667l1.667 2.886 1.666 2.886h3.333l-1.666-2.886-3.333-5.775H1.662L3.33 8.66z" fill="#3B57F7"></path><path d="M18.333 5.774l-1.666-2.887L15 0H5L3.332 2.887h10.002l1.665 2.886 1.667 2.888 1.667 2.887L20 8.66H20l-1.667-2.887z" fill="#5CD0DA"></path>
-					</svg>
-				</div>
+			$notice                    = ! empty( $other['pluginNoticeNormal'] ) ? '<div class="notice notice-info is-dismissible install-gutenverse-plugin-notice">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
 							<h3><?php esc_html_e( \'Take Your Website To New Height with\', \'' . $theme_data['slug'] . '\' ); ?> <span>Gutenverse!</span></h3> 
 							<p><?php esc_html_e( \'' . $theme_data['title'] . ' theme work best with Gutenverse plugin. By installing Gutenverse plugin you may access ' . $theme_data['title'] . ' templates built with Gutenverse and get access to more than 40 free blocks, hundred free Layout and Section.\', \'' . $theme_data['slug'] . '\' ); ?></p>
 							<div class="gutenverse-bottom">
-								<a class="gutenverse-button" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
+								<a class="button-primary" id="gutenverse-install-plugin" href="<?php echo esc_url( wp_nonce_url( self_admin_url( \'themes.php?page=' . $theme_data['slug'] . '-dashboard\' ), \'install-plugin_gutenverse\' ) ); ?>">
 									<?php echo esc_html( __( \'Install Required Plugins\', \'' . $theme_data['slug'] . '\' ) ); ?>
 								</a>
 							</div>
@@ -1493,13 +1492,13 @@ class Export_Theme {
 
 					if(!hasLoaderClass && !hasFinishClass) {
 						promises = [];
-						var plugins = <?php echo wp_json_encode( \$plugins ); ?>;
+						var plugins = <?php echo wp_json_encode( \$plugins_required ); ?>;
 						$(this).addClass('loader').text('');
 
 						sequenceInstall(plugins);
 						Promise.all(promises).then(() => {						
 							window.location.reload();
-							$(this).removeClass('loader').addClass('finished').text('Visit Theme Dashboard');
+							$(this).removeClass('loader').addClass('finished').text('All is Done!');
 						});
 					}
 				});
