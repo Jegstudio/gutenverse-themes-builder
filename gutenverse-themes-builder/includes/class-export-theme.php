@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Gutenverse_Themes_Builder\Database\Database;
-use InvalidArgumentException;
 use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -134,6 +133,7 @@ class Export_Theme {
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_dashboard( $wp_filesystem, $data );
 		$this->create_menus( $wp_filesystem );
+		$this->create_helper( $wp_filesystem, $data );
 		$this->extractor_send_file( $data );
 
 		// child theme .
@@ -141,6 +141,26 @@ class Export_Theme {
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$this->create_child_theme( $wp_filesystem, $data );
 		}
+	}
+
+	/**
+	 * Create helper
+	 *
+	 * @param object $system .
+	 * @param array  $data .
+	 */
+	public function create_helper( $system, $data ) {
+		$theme_data  = maybe_unserialize( $data['theme_data'] );
+		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/helper-class.txt' );
+		$placeholder = ! empty( $theme_data['author_name'] ) ? str_replace( '{{author_name}}', $theme_data['author_name'], $placeholder ) : $placeholder;
+		$placeholder = ! empty( $theme_data['slug'] ) ? str_replace( '{{slug}}', $theme_data['slug'], $placeholder ) : $placeholder;
+		$placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $placeholder );
+
+		$system->put_contents(
+			gutenverse_themes_builder_theme_built_path() . '/inc/class/class-helper.php',
+			$placeholder,
+			FS_CHMOD_FILE
+		);
 	}
 
 	/**
@@ -253,13 +273,14 @@ class Export_Theme {
 			$placeholder             = str_replace( '{{pro_pattern}}', $pro_pattern_list, $placeholder );
 			$this->page_pro_patterns = array();
 
-			$page_images = array_filter(
+			$page_images      = array_filter(
 				$this->image_list,
 				function ( $image ) use ( $page ) {
 					return $image['id'] === $page->ID;
 				}
 			);
-			$placeholder = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", json_encode( $page_images ) ) : '', $placeholder );
+			$reindexed_images = array_values( $page_images );
+			$placeholder      = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", json_encode( $reindexed_images ) ) : '', $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -1907,7 +1928,8 @@ class Export_Theme {
 										return $image['id'] === $posts[0]->ID;
 									}
 								);
-								$placeholder      = str_replace( '{{pattern_image}}', ! empty( $pattern_images ) ? json_encode( $pattern_images ) : '', $placeholder );
+								$reindexed        = array_values( $pattern_images );
+								$placeholder      = str_replace( '{{pattern_image}}', ! empty( $pattern_images ) ? json_encode( $reindexed ) : '', $placeholder );
 
 								/**Replace additional object with object sync */
 								if ( $pattern_sync ) {
