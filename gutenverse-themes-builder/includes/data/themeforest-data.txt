@@ -128,6 +128,26 @@ class Themeforest_Data {
 				},
 			)
 		);
+
+		register_rest_route(
+			self::ENDPOINT,
+			'install/plugins',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'install_plugin' ),
+				'permission_callback' => function () {
+					if ( ! current_user_can( 'manage_options' ) ) {
+						return new WP_Error(
+							'forbidden_permission',
+							esc_html__( 'Forbidden Access', '--gctd--' ),
+							array( 'status' => 403 )
+						);
+					}
+
+					return true;
+				},
+			)
+		);
 	}
 
 	/**
@@ -279,6 +299,83 @@ class Themeforest_Data {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Download plugin file
+	 *
+	 * @param string $url .
+	 */
+	public function download_plugin_file( $url ) {
+		$url = esc_url_raw( $url );
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			return new WP_Error( 'invalid_url', 'A valid URL was not provided' );
+		}
+		$temp_file = download_url( $url );
+		if ( is_wp_error( $temp_file ) ) {
+			// If download_url() fails, use a fallback method
+			$temp_file = wp_tempnam( $url );
+
+			if ( ! $temp_file ) {
+				return new WP_Error( 'temp_file_error', 'Could not create a temporary file' );
+			}
+
+			// Use PHP Streams as a fallback
+			$source      = fopen( $url, 'r' );
+			$destination = fopen( $temp_file, 'w' );
+
+			if ( ! $source || ! $destination ) {
+				return new WP_Error( 'file_open_error', 'Could not open file for reading or writing' );
+			}
+
+			// Copy data from URL to temporary file
+			stream_copy_to_stream( $source, $destination );
+
+			// Close file handlers
+			fclose( $source );
+			fclose( $destination );
+		}
+		return $temp_file;
+	}
+
+	/**
+	 * Create Synced Pattern
+	 *
+	 * @param WP_REST_Request $request Request Object.
+	 */
+	public function install_plugin( $request ) {
+		$download_url = $request->get_param( 'download_url' );
+
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		WP_Filesystem();
+		global $wp_filesystem;
+
+		$temp_file = $this->download_plugin_file( $download_url );
+		if ( is_wp_error( $temp_file ) ) {
+			return array(
+				'status'  => 'failed',
+				'message' => 'Failed to download the plugin',
+			);
+		}
+
+		$plugin_dir = WP_PLUGIN_DIR;
+		$unzip_file = unzip_file( $temp_file, $plugin_dir );
+
+		if ( is_wp_error( $unzip_file ) ) {
+			return array(
+				'status'  => 'failed',
+				'message' => 'Failed to unzip the plugin',
+			);
+		}
+
+		unlink( $temp_file );
+		return array(
+			'status'  => 'success',
+			'message' => 'Plugin installed successfully!',
+		);
 	}
 
 	/**

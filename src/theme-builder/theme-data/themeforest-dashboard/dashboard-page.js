@@ -219,18 +219,45 @@ const DashboardPage = () => {
             const plugin = plugins[index];
 
             if (!plugin?.installed) {
-                wp?.apiFetch({
-                    path: 'wp/v2/plugins',
-                    method: 'POST',
-                    data: {
-                        slug: plugin?.slug,
-                        status: 'active'
-                    },
-                }).then(() => {
-                    installPlugins(index + 1);
-                }).catch(() => {
-                    alert('Error during installing plugin');
-                })
+                if(plugin?.download_url){
+                    wp?.apiFetch({
+                        path: 'gtb-themes-backend/v1/install/plugins',
+                        method: 'POST',
+                        data:{
+                            slug: plugin?.slug,
+                            download_url: plugin?.download_url
+                        }
+                    }).then((res) => {
+                        if( 'failed' === res['status'] ){
+                            console.log( res['message'] );
+                        }
+                        wp?.apiFetch({
+                            path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
+                            method: 'POST',
+                            data: {
+                                status: 'active'
+                            }
+                        }).then(() => {
+                            installPlugins(index + 1);
+                        }).catch(() => {
+                            console.error('Error during plugin activation');
+                            installPlugins(index);
+                        })
+                    })
+                }else{
+                    wp?.apiFetch({
+                        path: 'wp/v2/plugins',
+                        method: 'POST',
+                        data: {
+                            slug: plugin?.slug,
+                            status: 'active'
+                        },
+                    }).then(() => {
+                        installPlugins(index + 1);
+                    }).catch(() => {
+                        console.error('Error during installing plugin');
+                    })
+                }
             } else if (!plugin?.active) {
                 wp?.apiFetch({
                     path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
@@ -241,6 +268,8 @@ const DashboardPage = () => {
                 }).then(() => {
                     installPlugins(index + 1);
                 }).catch(() => {
+                    console.error('Error during plugin activation');
+                    installPlugins(index);
                 })
             } else {
                 installPlugins(index + 1);

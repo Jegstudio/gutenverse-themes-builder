@@ -44,7 +44,6 @@ const ImportLoading = (props) => {
 const InstallPlugin = ({ action, setAction, updateProgress }) => {
     const { plugins } = window['GutenThemeConfig'];
     const [installing, setInstalling] = useState({ show: true, message: 'Preparing...', progress: '1/4' })
-
     useEffect(() => {
         let allActive = true;
         plugins?.map(plugin => {
@@ -75,20 +74,46 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
             setTimeout(() => {
                 setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
                 const plugin = plugins[index];
-
                 if (!plugin?.installed) {
-                    wp?.apiFetch({
-                        path: 'wp/v2/plugins',
-                        method: 'POST',
-                        data: {
-                            slug: plugin?.slug,
-                            status: 'active'
-                        },
-                    }).then(() => {
-                        installPlugins(index + 1);
-                    }).catch(() => {
-                        console.error('Error during installing plugin');
-                    })
+                    if(plugin?.download_url){
+                        wp?.apiFetch({
+                            path: 'gtb-themes-backend/v1/install/plugins',
+                            method: 'POST',
+                            data:{
+                                slug: plugin?.slug,
+                                download_url: plugin?.download_url
+                            }
+                        }).then((res) => {
+                            if( 'failed' === res['status'] ){
+                                console.log( res['message'] );
+                            }
+                            wp?.apiFetch({
+                                path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
+                                method: 'POST',
+                                data: {
+                                    status: 'active'
+                                }
+                            }).then(() => {
+                                installPlugins(index + 1);
+                            }).catch(() => {
+                                console.error('Error during plugin activation');
+                                installPlugins(index);
+                            })
+                        })
+                    }else{
+                        wp?.apiFetch({
+                            path: 'wp/v2/plugins',
+                            method: 'POST',
+                            data: {
+                                slug: plugin?.slug,
+                                status: 'active'
+                            },
+                        }).then(() => {
+                            installPlugins(index + 1);
+                        }).catch(() => {
+                            console.error('Error during installing plugin');
+                        })
+                    }
                 } else if (!plugin?.active) {
                     wp?.apiFetch({
                         path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
@@ -112,7 +137,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 setAction('done');
             }, 1500);
         }
-
     }
 
     const onInstall = () => {
