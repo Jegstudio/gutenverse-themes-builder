@@ -8,4 +8,4 @@ export { directionStartEndPoint, gradientDefault, getDevice, getRgbaValue } from
 
 export { handleBgScrollWidth, handleBgScrollHeight } from './styling/handler/handle-background-scrolling';
 export { handleAdanimImageRadius, handleAdanimImageFilter } from './styling/handler/handle-adanim-image';
-export { handleAdanimDividerWidth, handleAdanimDividerSize, handleAdanimDividerColor } from './styling/handler/handle-adanim-divider';as
+export { handleAdanimDividerWidth, handleAdanimDividerSize, handleAdanimDividerColor } from './styling/handler/handle-adanim-divider';
