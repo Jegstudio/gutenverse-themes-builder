@@ -24,7 +24,7 @@ class GutenversePROLiteFilter {
             this.addGutenverseFilter();
         }else{
             apiFetch({
-                path: 'jeg-theme-essence/v1/jeg-theme-essence-proxy',
+                path: 'gutenverse-essence/v1/gutenverse-essence-proxy',
                 method: 'POST',
                 data: {
                     method : 'POST',
@@ -43,85 +43,85 @@ class GutenversePROLiteFilter {
     addGutenverseFilter(){
         addFilter(
             'gutenverse.section.sticky',
-            'jeg-theme-essence/section.sticky',
+            'gutenverse-essence/section.sticky',
             (results, props) => stickySection(results, props),
             9
         );
         addFilter(
             'gutenverse.column.sticky',
-            'jeg-theme-essence/column.sticky',
+            'gutenverse-essence/column.sticky',
             (results, props) => stickyColumn(results, props),
             9
         );
         addFilter(
             'gutenverse.form-builder.sticky',
-            'jeg-theme-essence/form-builder.sticky',
+            'gutenverse-essence/form-builder.sticky',
             (results, props) => stickyFormBuilder(results, props),
             9
         );
         addFilter(
             'gutenverse.hoc.sticky-animation',
-            'jeg-theme-essence/hoc/sticky-animation',
+            'gutenverse-essence/hoc/sticky-animation',
             (results, props) => withAnimationSticky(results, props),
             9
         );
         addFilter(
             'gutenverse.child-style-control',
-            'jeg-theme-essence/highlight-control',
+            'gutenverse-essence/highlight-control',
             (results, props) => hightlightPanel(results, props),
             9
         );
         addFilter(
             'gutenverse.transform-options',
-            'jeg-theme-essence/transform-options',
+            'gutenverse-essence/transform-options',
             (results, props) => transformOptions(results, props),
             9
         );
         addFilter(
             'gutenverse.popup-builder.options',
-            'jeg-theme-essence/popup-builder-options',
+            'gutenverse-essence/popup-builder-options',
             (results, props) => popupOptions(props, results),
             9
         );
         addFilter(
             'gutenverse.mega-menu.panels',
-            'jeg-theme-essence/mega-menu-panels',
+            'gutenverse-essence/mega-menu-panels',
             (results, props) => megaMenuPanel(props, results),
             9
         );
         addFilter(
             'gutenverse.mega-menu-item.panels',
-            'jeg-theme-essence/mega-menu-item-panels',
+            'gutenverse-essence/mega-menu-item-panels',
             (results, props) => megaMenuItemPanel(props, results),
             9
         );
         addFilter(
             'gutenverse.text-clip',
-            'jeg-theme-essence/text-clip',
+            'gutenverse-essence/text-clip',
             (results, props) => textClipOptions(results, props),
             9
         );
         addFilter(
             'gutenverse.text-clip',
-            'jeg-theme-essence/text-clip',
+            'gutenverse-essence/text-clip',
             (results, props) => textClipOptions(results, props),
             9
         );
         addFilter(
             'gutenverse.background-effect-options',
-            'jeg-theme-essence/background-effect-options',
+            'gutenverse-essence/background-effect-options',
             (result, props) => backgroundEffectOption(result,props),
             9
         );
         addFilter(
             'gutenverse.hoc.background-effect',
-            'jeg-theme-essence/background-effect-hoc',
+            'gutenverse-essence/background-effect-hoc',
             (result, props) => backgroundEffectHoc(result, props),
             9
         );
         addFilter(
             'gutenverse.hoc.background-effect-script',
-            'jeg-theme-essence/background-effect-script',
+            'gutenverse-essence/background-effect-script',
             (result, props) => withBackgroundEffectScript(result, props),
             9
         );

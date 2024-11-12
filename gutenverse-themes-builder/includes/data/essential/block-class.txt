@@ -1,0 +1,34 @@
+<?php
+/**
+ * Blocks class
+ *
+ * @author {{author_name}}
+ * @package {{slug}}
+ */
+
+namespace {{namespace}};
+
+/**
+ * Class Blocks
+ *
+ * @package {{slug}}
+ */
+class Blocks {
+	/**
+	 * Blocks constructor.
+	 */
+	public function __construct() {
+		add_action( 'init', array( $this, 'register_blocks' ), 101 );
+	}
+
+	/**
+	 * Register All Blocks
+	 */
+	public function register_blocks() {
+		// Static block.
+		register_block_type( {{constant}}_DIR . './block/mega-menu/block.json' );
+		register_block_type( {{constant}}_DIR . './block/mega-menu-item/block.json' );
+		register_block_type( {{constant}}_DIR . './block/advance-tabs/block.json' );
+		register_block_type( {{constant}}_DIR . './block/advance-tab/block.json' );
+	}
+}
