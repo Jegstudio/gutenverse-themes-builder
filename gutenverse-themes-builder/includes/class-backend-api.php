@@ -532,6 +532,17 @@ class Backend_Api {
 				'permission_callback' => 'gutenverse_permission_check_admin',
 			)
 		);
+
+		/** Essential APIs */
+		register_rest_route(
+			self::ENDPOINT,
+			'/essential-proxy',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'essence_proxy' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**
@@ -1141,10 +1152,16 @@ class Backend_Api {
 			$info_db->update_data( $data, $theme_id );
 		}
 		$new_data = $info_db->get_theme_data( $theme_id );
+		$plugin   = 'gutenverse-pro/gutenverse-pro.php';
+		if ( gutenverse_check_dashboard_mode() ) {
+			deactivate_plugins( $plugin );
+		} else {
+			activate_plugin( $plugin );
+		}
 
 		return array(
 			'status' => 'success',
-			'data'   => maybe_unserialize( $new_data[0]['other'] )
+			'data'   => maybe_unserialize( $new_data[0]['other'] ),
 		);
 	}
 
@@ -1923,7 +1940,6 @@ class Backend_Api {
 		$active    = get_option( 'gtb_active_theme_id' );
 		$data      = $assets_db->get_pagination_data( $active, $offset, $num_post );
 
-		
 		$max_page = ceil( $data['total_data'] / $num_post );
 		return array(
 			'data'       => $data,
@@ -2072,7 +2088,7 @@ class Backend_Api {
 
 	/**
 	 * Get Font List Pagination.
-	 * 
+	 *
 	 * @param object $request .
 	 *
 	 * @return object
@@ -2273,7 +2289,7 @@ class Backend_Api {
 
 	/**
 	 * Get Font List pagination.
-	 * 
+	 *
 	 * @param object $request .
 	 *
 	 * @return object
@@ -3120,9 +3136,9 @@ class Backend_Api {
 						'compare' => '===',
 					),
 				),
-				'meta_key' => '_gtb_page_order',          // Replace 'meta_id' with the actual meta key
-				'orderby'  => 'meta_value_num',   // Use 'meta_value_num' if the meta value is numeric
-				'order'    => 'ASC',  
+				'meta_key'       => '_gtb_page_order',          // Replace 'meta_id' with the actual meta key
+				'orderby'        => 'meta_value_num',   // Use 'meta_value_num' if the meta value is numeric
+				'order'          => 'ASC',
 			)
 		);
 
@@ -3309,5 +3325,37 @@ class Backend_Api {
 				200
 			);
 		}
+	}
+
+	/**
+	 * Essence Proxy
+	 */
+	public function essence_proxy( $request ) {
+		$url      = gutenverse_esc_data( $request->get_param( 'url' ) );
+		$body     = gutenverse_esc_data( (array) $request->get_param( 'body' ), 'array' );
+		$method   = gutenverse_esc_data( $request->get_param( 'method' ) );
+		$response = wp_remote_request(
+			$url,
+			array(
+				'method'  => strtoupper( $method ),
+				'body'    => $body ? json_encode( $body ) : $body,
+				'headers' => array(
+					'Content-Type' => 'application/json',
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_REST_Response(
+				array(
+					'active' => false,
+					'status' => 'failed',
+				),
+				400
+			);
+		}
+
+		$external_api_body = wp_remote_retrieve_body( $response );
+		return rest_ensure_response( json_decode( $external_api_body ) );
 	}
 }

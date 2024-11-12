@@ -6,6 +6,11 @@ const themeBuilderEditor = require("./scripts/theme-builder-editor");
 const themeBuilderPage = require("./scripts/theme-builder-page");
 const { dashboard } = require("./scripts/dashboard");
 const admin = require("./scripts/admin");
+const {filter} = require('./scripts/essential/filter');
+const {blocksHelper} = require('./scripts/essential/block-helper');
+const {blocks} = require('./scripts/essential/blocks');
+const {frontend} = require('./scripts/essential/frontend');
+const {profrontend} = require('./scripts/essential/pro-frontend');
 
 module.exports = [
     themeBuilderBlocks,
@@ -15,5 +20,10 @@ module.exports = [
     themeBuilderThemeforestDashboard,
     themeBuilderLiteDashboard,
     dashboard,
-    admin
+    admin,
+    filter,
+    blocksHelper,
+    blocks,
+    frontend,
+    profrontend
 ];

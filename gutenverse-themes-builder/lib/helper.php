@@ -13,6 +13,55 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Gutenverse_Themes_Builder\Database\Database;
 
+if ( ! function_exists( 'gutenverse_check_dashboard_mode' ) ) {
+	/**
+	 * Check dashboard mode
+	 */
+	function gutenverse_check_dashboard_mode() {
+		$theme_id = get_option( 'gtb_active_theme_id' );
+		$info_db  = Database::instance()->theme_info;
+		$data     = $info_db->get_theme_data( $theme_id );
+		if ( isset( $data[0]['other'] ) ) {
+			$other             = maybe_unserialize( $data[0]['other'] );
+			if ( isset( $other['dashboard']['mode']['value'] ) && isset( $other['dashboard']['themeforest_mode'] ) ) {
+				$dashboard_mode    = $other['dashboard']['mode']['value'];
+				$is_export_feature = $other['dashboard']['themeforest_mode'];
+				$plugin            = 'gutenverse-pro/gutenverse-pro.php';
+				$all_plugins       = get_plugins();
+				if ( isset( $all_plugins[ $plugin ] ) ) {
+					if ( 'themeforest' === $dashboard_mode && $is_export_feature ) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+}
+if ( ! function_exists( 'gutenverse_generate_unique_string' ) ) {
+	/**
+	 * Generate Unique String
+	 *
+	 * @param integer $length .
+	 * @param array   $data array of assosiative array .
+	 * @param string  $key .
+	 */
+	function gutenverse_generate_unique_string( $length, $data, $key ) {
+		do {
+			$uuid        = wp_generate_uuid4();
+			$short_uuid  = substr( $uuid, 0, $length );
+			$filter_data = array_filter(
+				$data,
+				function ( $obj ) use ( $key, $short_uuid ) {
+					return isset( $obj[ $key ] ) && $obj[ $key ] === $short_uuid;
+				}
+			);
+			$check_uuid  = reset( $filter_data );
+		} while ( $check_uuid );
+
+		return $short_uuid;
+	}
+}
 if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 	/**
 	 * Check if the url is an image url
@@ -60,6 +109,67 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 			return false;
 		}
 		$res = explode( 'x', explode( '-', $matches[1] )[1] );
+<<<<<<< Updated upstream
+=======
+
+		/** Get Image Name Without symbol */
+		$image_arr  = explode( '/', str_replace( $matches[1], $matches[2], $matches[0] ) );
+		$image_name = $image_arr[ count( $image_arr ) - 1 ];
+		/** Check if the $image_name have . in their name other than extention and end with _ */
+		/** Split the image name by the last dot to separate the extension */
+		$parts = explode( '.', $image_name );
+
+		/** Check if the filename ends with an underscore  */
+		if ( 2 < count( $parts ) ) {
+			/** The last part is the extension */
+			$extension = array_pop( $parts );
+
+			/** Recombine the remaining parts into the main part of the filename  */
+			$filename    = implode( '.', $parts );
+			$end_of_name = substr( $filename, -1 );
+			switch ( $end_of_name ) {
+				case '_':
+				case '-':
+				case '.':
+				case '!':
+				case ',':
+				case '/':
+					/** Remove the trailing underscore */
+					$filename = rtrim( $filename, '_' );
+					/** Reconstruct the full image name */
+					$image_name = $filename . '.' . $extension;
+					break;
+				default:
+					break;
+			}
+			if ( substr( $filename, -1 ) === '_' ) {
+				/** Remove the trailing underscore */
+				$filename = rtrim( $filename, '_' );
+				/** Reconstruct the full image name */
+				$image_name = $filename . '.' . $extension;
+			}
+		}
+
+		$image_without_res = str_replace( $matches[1], $matches[2], $matches[0] );
+
+		/**Check resolution again */
+		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image_without_res, $matches_check );
+
+		/**If image name still has the resolution, trim again */
+		if ( ! empty( $matches ) ) {
+			$check_image_name = gutenverse_themes_builder_get_image_without_resolution( $image_without_res );
+			if ( $check_image_name ) {
+				$image_name        = $check_image_name['image_name'];
+				$image_without_res = $check_image_name['nores'];
+			} else {
+				$is_valid    = wp_remote_head( $image_without_res );
+				$status_code = wp_remote_retrieve_response_code( $is_valid );
+				if ( 200 !== $status_code ) {
+					$image_without_res = $image;
+				}
+			}
+		}
+>>>>>>> Stashed changes
 		return array(
 			'original' => $matches[0],
 			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),

@@ -1,0 +1,1 @@
+export const getUnitPoint = ({unit, point}) => unit && point ? `${point}${unit}` : '';

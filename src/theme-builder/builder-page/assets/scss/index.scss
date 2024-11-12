@@ -693,6 +693,17 @@ body {
             margin-bottom: 12px;
         }
     }
+    .plugin-notice-mode-wrapper{
+        .input-wrapper{
+            .switch-wrapper{
+                display: flex;
+                width: 100%;
+                label{
+                    max-width: 100%;
+                }
+            }
+        }
+    }
 
     /* Controls */
     .input-wrapper {
@@ -1582,6 +1593,16 @@ body {
     }
  
     .manage-dashboard {
+        .media-input-wrapper{
+            .input-wrapper{
+                .switch-wrapper{
+                    display: flex;
+                    label{
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
         .select-dashboard{
             .description{
                 margin-top: 12px;

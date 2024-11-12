@@ -282,7 +282,7 @@ const ManagePlugins = () => {
             description={__('This is place to manage which plugins are used in your current theme.', 'gutenverse-themes-builder')}
         >
             <>
-                <div>
+                <div className="plugin-notice-mode-wrapper">
                     <SwitchControl
                         id={'plugi-notice-mode'}
                         title={__('Use Normal Notice (Not Custom)?', 'gutenverse-themes-builder')}

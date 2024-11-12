@@ -1,0 +1,113 @@
+.advance-tab-heading {
+  .advance-tab-heading-item {
+    display: flex;
+    cursor: pointer;  
+    align-items: center;
+    > * {
+      cursor: text;
+    }
+    .advance-tab-heading-content{
+      display: flex;
+      align-items: center;
+    }
+    .heading-navigation {
+      display: flex;
+      position: absolute;
+      right: 10px;
+      opacity: 0;
+      transition: opacity 0.5s;
+
+      .advance-tab-shift-vertical {
+        background: #000;
+        cursor: pointer;
+        z-index: 9;
+
+        svg {
+          display: flex;
+          border-radius: 3px;
+          color: #fff;
+        }
+
+        &.advance-tab-shift-up {
+          margin-right: 5px;
+        }
+      }
+    }
+
+    &:hover {
+      .heading-navigation {
+        opacity: 1;
+      }
+    }
+
+    .advance-tab-shift {
+      cursor: pointer;
+      overflow: hidden;
+      width: 0;
+      transition: width 0.1s;
+      opacity: 0;
+      z-index: 9;
+    }
+
+    &:hover{
+      .advance-tab-shift {
+        margin: 0 25px;
+        width: 24px;
+        opacity: 1;
+        &-left {
+          margin-left: 0; 
+        }
+  
+        &-right {
+          margin-right: 0; 
+        }
+      }
+    }
+  }
+}
+
+.Mobile {
+  &.guten-advance-tabs {
+    overflow: visible;
+    display: block;
+
+    .advance-tab-heading {
+      display: none;
+    }
+
+    .advance-tab-heading-mobile {
+      display: block;
+    }
+  }
+}
+.advance-tab-heading-mobile{
+  margin: 0 auto;
+  .advance-tab-heading-content{
+    display: flex;
+    align-items: center;
+    width: 150px;
+  }
+  .advance-tab-heading-item-mobile{
+    display: flex;
+    justify-content: center;
+    margin : 20px;
+  }
+  .advance-tab-option{
+    padding: 10px;
+  }
+}
+.guten-advance-tabs *{
+  transition: background-color .3s,border .3s,border-radius .3s,box-shadow .3s, color .1s;
+}
+
+// .guten-advance-tabs{
+//   .advance-tab-heading-content {
+//     border: solid black 2px;
+//     border-radius: 10px;
+//     padding: 20px;
+//   }
+//   .advance-tab-body{
+//     border: solid black 2px;
+//     border-radius: 10px;
+//   }
+// }

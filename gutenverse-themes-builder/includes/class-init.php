@@ -57,9 +57,22 @@ class Init {
 		add_filter( 'wp_check_filetype_and_ext', array( $this, 'update_mime_types' ), 10, 3 );
 		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ), 9 );
 		add_action( 'plugins_loaded', array( $this, 'framework_loaded' ), 99 );
+		add_action( 'plugins_loaded', array( $this, 'allow_local' ) );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_custom_theme_json' ) );
 		add_filter( 'big_image_size_threshold', '__return_false' );
+	}
+
+	/**
+	 * Allow Local Hosted File.
+	 */
+	public function allow_local() {
+		add_filter(
+			'http_request_host_is_external',
+			function () {
+				return true;
+			}
+		);
 	}
 
 	/**
@@ -108,6 +121,7 @@ class Init {
 	 */
 	public function add_to_allowed_mimes( $mimes ) {
 		$mimes['json'] = 'application/json';
+		$mimes['svg']  = 'image/svg+xml';
 
 		return $mimes;
 	}
@@ -123,6 +137,10 @@ class Init {
 		if ( 'json' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
 			$defaults['type'] = 'application/json';
 			$defaults['ext']  = 'json';
+		}
+		if ( 'svg' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
+			$defaults['type'] = 'image/svg+xml';
+			$defaults['ext']  = 'svg';
 		}
 
 		return $defaults;
@@ -191,6 +209,9 @@ class Init {
 		new Theme_Pattern();
 		new Dashboard();
 		new Meta_Option();
+		if ( ! class_exists( '\Gutenverse\Pro\License' ) ) {
+			new Style_Generator();
+		}
 	}
 
 	/**
@@ -219,6 +240,17 @@ class Init {
 
 		/* TODO : Remove this later! */
 		add_action( 'init', array( $this, 'alter_table' ) );
+		add_action( 'init', array( $this, 'turn_off_pro_if_themeforest_mode' ) );
+	}
+
+	/**
+	 * Deactivate pro plugin if builder mode is themeforest.
+	 */
+	public function turn_off_pro_if_themeforest_mode() {
+		$plugin = 'gutenverse-pro/gutenverse-pro.php';
+		if ( gutenverse_check_dashboard_mode() ) {
+			deactivate_plugins( $plugin );
+		}
 	}
 
 	/**

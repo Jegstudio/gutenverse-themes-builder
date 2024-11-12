@@ -11,19 +11,20 @@ const SwitchControl = (props) => {
     return (
         <>
             <div className="input-wrapper control-checkbox">
-                <label name={id}>{title}</label>
-                <div className="select-inner">
-                    <input
-                        id={id}
-                        type="checkbox"
-                        checked={value}
-                        hidden
-                    />
-                    <span className="switch" onClick={() => onChange(!value)}/>
-                    {description && <span>{description}</span>}
+                <div className="switch-wrapper">
+                    <label name={id}>{title}</label>
+                    <div className="select-inner">
+                        <input
+                            id={id}
+                            type="checkbox"
+                            checked={value}
+                            hidden
+                        />
+                        <span className="switch" onClick={() => onChange(!value)}/>
+                    </div>
                 </div>
+                {description && <span>{description}</span>}
             </div>
-
         </>
     );
 };

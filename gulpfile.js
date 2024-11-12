@@ -58,12 +58,32 @@ gulp.task("page", function () {
         .pipe(gulp.dest("gutenverse-themes-builder/assets/css/"));
 });
 
-gulp.task("build-process", gulp.parallel("editor", "frontend", "page"));
+gulp.task('editor-essential', function () {
+    return gulp
+        .src([path.resolve(__dirname, './src/essential/assets/scss/editor.scss')])
+        .pipe(sass({ includePaths: ['node_modules'] }))
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(concat('editor-essential.css'))
+        .pipe(postcss(postCSSOptions))
+        .pipe(gulp.dest('gutenverse-themes-builder/assets/css/essential/'));
+});
+
+gulp.task('frontend-essential', function () {
+    return gulp
+        .src([path.resolve(__dirname, './src/essential/assets/scss/frontend.scss')])
+        .pipe(sass({ includePaths: ['node_modules'] }))
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(concat('frontend-essential.css'))
+        .pipe(postcss(postCSSOptions))
+        .pipe(gulp.dest('gutenverse-themes-builder/assets/css/essential/'));
+});
+
+gulp.task("build-process", gulp.parallel("editor", "frontend", "page", "editor-essential", "frontend-essential"));
 
 gulp.task("build", gulp.series("build-process"));
 
 const watchProcess = (basePath = ".") => {
-    gulp.watch([`${basePath}/src/**/*.scss`], gulp.parallel(["editor", "frontend", "page"]));
+    gulp.watch([`${basePath}/src/**/*.scss`], gulp.parallel(["editor", "frontend", "page", "editor-essential", "frontend-essential"]));
 };
 
 gulp.task(
