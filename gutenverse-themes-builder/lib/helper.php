@@ -109,8 +109,6 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 			return false;
 		}
 		$res = explode( 'x', explode( '-', $matches[1] )[1] );
-<<<<<<< Updated upstream
-=======
 
 		/** Get Image Name Without symbol */
 		$image_arr  = explode( '/', str_replace( $matches[1], $matches[2], $matches[0] ) );
@@ -169,7 +167,6 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 				}
 			}
 		}
->>>>>>> Stashed changes
 		return array(
 			'original' => $matches[0],
 			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
