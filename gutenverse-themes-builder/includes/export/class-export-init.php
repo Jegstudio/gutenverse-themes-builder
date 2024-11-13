@@ -25,6 +25,7 @@ class Export_Init {
 	 * @param string $theme_id .
 	 */
 	public static function create_init_php( $system, $data, $theme_id ) {
+		$instance       = new self();
 		$theme_data     = maybe_unserialize( $data['theme_data'] );
 		$templates_db   = Database::instance()->theme_templates;
 		$templates_data = $templates_db->get_data( $theme_id );
@@ -57,8 +58,8 @@ class Export_Init {
 		$placeholder = str_replace( '{{additional_filter}}', join( "\n\t\t", $additional_filter ), $placeholder );
 
 		// Build dashboard.
-		$placeholder = self::build_dashboard( $placeholder, $theme_data, $system );
-		$required    = self::get_required_plugin( $other );
+		$placeholder = $instance->build_dashboard( $placeholder, $theme_data, $system );
+		$required    = $instance->get_required_plugin( $other );
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
 		$add_class   = array();
 		$assigns     = array();
@@ -152,11 +153,11 @@ class Export_Init {
 
 			if ( isset( $other['dashboard']['themeforest_mode'] ) && $other['dashboard']['themeforest_mode'] ) {
 				$add_class[] = 'new Essential();';
-				self::add_essential( $theme_data, $system, $class_dir );
+				$instance->add_essential( $theme_data, $system, $class_dir );
 			}
 		} else {
 			$plugin_notice_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/plugin-notice.txt' );
-			$plugin_notice_placeholder = self::add_plugin_notice( $plugin_notice_placeholder, $theme_data, $required );
+			$plugin_notice_placeholder = $instance->add_plugin_notice( $plugin_notice_placeholder, $theme_data, $required );
 			$add_class[]               = 'new Plugin_Notice();';
 			$system->put_contents(
 				$class_dir . '/class-plugin-notice.php',
@@ -172,10 +173,10 @@ class Export_Init {
 		$placeholder = str_replace( '{{theme_logo}}', $theme_logo, $placeholder );
 		$placeholder = str_replace( '{{assign_templates}}', join( ",\n\t\t\t\t", $assigns ), $placeholder );
 		$placeholder = str_replace( '{{additional_class}}', join( "\n\t\t\t\t", $add_class ), $placeholder );
-		$placeholder = self::add_screenshot_page_list( $placeholder, $other, $theme_data, $system );
-		$placeholder = self::load_gutenverse_templates( $placeholder, $templates_data, $theme_data );
-		$placeholder = self::add_custom_template( $placeholder, $templates_data );
-		$placeholder = self::generate_init_fonts( $placeholder );
+		$placeholder = $instance->add_screenshot_page_list( $placeholder, $other, $theme_data, $system );
+		$placeholder = $instance->load_gutenverse_templates( $placeholder, $templates_data, $theme_data );
+		$placeholder = $instance->add_custom_template( $placeholder, $templates_data );
+		$placeholder = $instance->generate_init_fonts( $placeholder );
 
 		$system->put_contents(
 			$class_dir . '/class-init.php',
