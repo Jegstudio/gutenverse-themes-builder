@@ -125,6 +125,10 @@ const ManagePlugins = () => {
         setPlugins([
             ...update
         ]);
+        updateOtherData({
+            key: 'plugins',
+            data: update
+        });
         setPaged(1);
     };
 

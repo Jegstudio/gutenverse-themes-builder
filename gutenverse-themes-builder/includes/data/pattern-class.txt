@@ -92,12 +92,25 @@ class Block_Patterns {
 
 				if ( (bool) $pattern_data['is_sync'] ) {
 					$post = get_page_by_path( $block_pattern . '-synced', OBJECT, 'wp_block' );
+					/**Download Image */
+					$content = wp_slash( $pattern_data['content'] );
+					if ( $pattern_data['images'] ) {
+						$images = json_decode( $pattern_data['images'] );
+						foreach ( $images as $key => $image ) {
+							$url  = $image->image_url;
+							$data = Helper::check_image_exist( $url );
+							if ( ! $data ) {
+								$data = Helper::handle_file( $url );
+							}
+							$content = str_replace( $url, $data['url'], $content );
+						}
+					}
 					if ( empty( $post ) ) {
 						$post_id = wp_insert_post(
 							array(
 								'post_name'    => $block_pattern . '-synced',
 								'post_title'   => $pattern_data['title'],
-								'post_content' => wp_slash( $pattern_data['content'] ),
+								'post_content' => $content,
 								'post_status'  => 'publish',
 								'post_author'  => 1,
 								'post_type'    => 'wp_block',

@@ -116,24 +116,8 @@ gulp.task('copy-plugin-folder', function () {
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
-gulp.task('copy-framework', function () {
-    return gulp
-        .src('./gutenverse-core/framework/**/*', { encoding: false })
-        .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
-});
-
-gulp.task('replace-text-domain', function () {
-    return gulp
-        .src(['./release/gutenverse-themes-builder/lib/framework/**/*.js', './release/gutenverse-themes-builder/lib/framework/**/*.php'])
-        .pipe(replace('--gctd--', 'gutenverse-themes-builder'))
-        .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
-});
-
-
 gulp.task('release', gulp.series(
     'copy-plugin-folder',
-    'copy-framework',
-    'replace-text-domain'
 ));
 
 async function getZip() {

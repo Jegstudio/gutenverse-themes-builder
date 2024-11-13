@@ -104,10 +104,12 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 	 * @return array
 	 */
 	function gutenverse_themes_builder_get_image_without_resolution( $image ) {
-		// Capture image url that has resolution inside double quotes.
+		/** Capture image url that has resolution inside double quotes. */
 		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image, $matches );
 
-		if ( empty( $matches ) ) {
+		$is_valid    = wp_remote_head( $image );
+		$status_code = wp_remote_retrieve_response_code( $is_valid );
+		if ( empty( $matches ) || 200 !== $status_code ) {
 			return false;
 		}
 		$res = explode( 'x', explode( '-', $matches[1] )[1] );
@@ -170,10 +172,11 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 			}
 		}
 		return array(
-			'original' => $matches[0],
-			'nores'    => str_replace( $matches[1], $matches[2], $matches[0] ),
-			'width'    => $res[0],
-			'height'   => explode( '.', $res[1] )[0],
+			'original'   => $matches[0],
+			'nores'      => $image_without_res,
+			'image_name' => $image_name,
+			'width'      => $res[0],
+			'height'     => explode( '.', $res[1] )[0],
 		);
 	}
 }
