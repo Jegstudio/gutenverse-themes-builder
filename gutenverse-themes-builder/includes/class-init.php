@@ -52,10 +52,8 @@ class Init {
 	 * Init constructor.
 	 */
 	private function __construct() {
-		$this->register_framework();
 		add_filter( 'upload_mimes', array( $this, 'add_to_allowed_mimes' ) );
 		add_filter( 'wp_check_filetype_and_ext', array( $this, 'update_mime_types' ), 10, 3 );
-		add_action( 'plugins_loaded', array( $this, 'plugin_loaded' ), 9 );
 		add_action( 'plugins_loaded', array( $this, 'framework_loaded' ), 99 );
 		add_action( 'plugins_loaded', array( $this, 'allow_local' ) );
 		add_action( 'activated_plugin', array( $this, 'plugin_activation' ) );
@@ -146,36 +144,6 @@ class Init {
 		return $defaults;
 	}
 
-	/**
-	 * Register Framework.
-	 */
-	public function register_framework() {
-		require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/init.php';
-		$init = \Gutenverse_Initialize_Framework::instance();
-
-		$framework_file    = GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
-		$framework_version = $init->get_framework_version( $framework_file );
-		$init->register_version( GUTENVERSE_THEMES_BUILDER, $framework_version );
-	}
-
-	/**
-	 * Check if we can load framework.
-	 *
-	 * @return boolean
-	 */
-	public function can_load_framework() {
-		require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/init.php';
-		$init = \Gutenverse_Initialize_Framework::instance();
-
-		return $init->can_load_version( GUTENVERSE_THEMES_BUILDER );
-	}
-
-	/**
-	 * Load Plugin.
-	 */
-	public function plugin_loaded() {
-		$this->load_framework();
-	}
 
 	/**
 	 * Framework Loaded
@@ -185,16 +153,6 @@ class Init {
 		$this->init_hook();
 		$this->init_instance();
 		$this->init_post_type();
-	}
-
-	/**
-	 * Load Framework.
-	 */
-	public function load_framework() {
-		if ( $this->can_load_framework() ) {
-			defined( 'GUTENVERSE_FRAMEWORK_URL_PATH' ) || define( 'GUTENVERSE_FRAMEWORK_URL_PATH', plugins_url( GUTENVERSE_THEMES_BUILDER ) . '/lib/framework' );
-			require_once GUTENVERSE_THEMES_BUILDER_DIR . 'lib/framework/bootstrap.php';
-		}
 	}
 
 	/**

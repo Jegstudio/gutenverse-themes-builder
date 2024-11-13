@@ -26,12 +26,8 @@ if ( ! function_exists( 'gutenverse_check_dashboard_mode' ) ) {
 			if ( isset( $other['dashboard']['mode']['value'] ) && isset( $other['dashboard']['themeforest_mode'] ) ) {
 				$dashboard_mode    = $other['dashboard']['mode']['value'];
 				$is_export_feature = $other['dashboard']['themeforest_mode'];
-				$plugin            = 'gutenverse-pro/gutenverse-pro.php';
-				$all_plugins       = get_plugins();
-				if ( isset( $all_plugins[ $plugin ] ) ) {
-					if ( 'themeforest' === $dashboard_mode && $is_export_feature ) {
-						return true;
-					}
+				if ( 'themeforest' === $dashboard_mode && $is_export_feature ) {
+					return true;
 				}
 			}
 		}
