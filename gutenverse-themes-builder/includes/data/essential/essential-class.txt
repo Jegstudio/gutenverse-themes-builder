@@ -67,8 +67,10 @@ class Essential {
 	/**
 	 * Essential constructor.
 	 */
-	private function __construct() {
-		$this->init_hook();
+	public function __construct() {
+		if(class_exists('Gutenverse\Framework\Style_Abstract')){
+			$this->init_hook();
+		}
 	}
 
 	/**
@@ -76,11 +78,11 @@ class Essential {
 	 */
 	public function init_class() {
 		if( ! class_exists('\Gutenverse\Pro\License') ){
-			$this->blocks = new Blocks();
-			$this->style_generator = new Style_Generator();
+			$this->blocks = new Essential_Blocks();
+			$this->style_generator = new Essential_Style_Generator();
 		}
-		$this->assets          = new Assets();
-		$this->api             = new Api();
+		$this->assets          = new Essential_Assets();
+		$this->api             = new Essential_Api();
 	}
 
 	/**

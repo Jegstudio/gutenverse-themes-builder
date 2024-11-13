@@ -132,7 +132,6 @@ class Export_Theme {
 		$this->register_patterns( $wp_filesystem, $data );
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
-		$this->create_dashboard( $wp_filesystem, $data );
 		$this->create_menus( $wp_filesystem );
 		$this->extractor_send_file( $data );
 
@@ -1166,6 +1165,134 @@ class Export_Theme {
 					)";
 				}
 			}
+
+			if ( isset( $other['dashboard']['themeforest_mode'] ) && $other['dashboard']['themeforest_mode'] ) {
+				$add_class[] = 'new Essential();';
+
+				/**Add Init Essential */
+				$essential_init_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/essential-class.txt' );
+				$essential_init_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_init_placeholder );
+				$essential_init_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_init_placeholder );
+				$essential_init_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_init_placeholder );
+				$system->put_contents(
+					$class_dir . '/class-essential.php',
+					$essential_init_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Api Class Essential */
+				$essential_api_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/api-class.txt' );
+				$essential_api_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_api_placeholder );
+				$essential_api_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_api_placeholder );
+				$essential_api_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_api_placeholder );
+				$system->put_contents(
+					$class_dir . '/class-essential-api.php',
+					$essential_api_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Asset Class Essential */
+				$essential_asset_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/asset-class.txt' );
+				$essential_asset_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_asset_placeholder );
+				$essential_asset_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_asset_placeholder );
+				$essential_asset_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_asset_placeholder );
+				$essential_asset_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $essential_asset_placeholder );
+
+				$system->put_contents(
+					$class_dir . '/class-essential-assets.php',
+					$essential_asset_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Block Class Essential */
+				$essential_block_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/block-class.txt' );
+				$essential_block_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_block_placeholder );
+				$essential_block_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_block_placeholder );
+				$essential_block_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_block_placeholder );
+				$essential_block_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $essential_block_placeholder );
+
+				$system->put_contents(
+					$class_dir . '/class-essential-blocks.php',
+					$essential_block_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Style Generator Class Essential */
+				$essential_style_generator_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/style-generator-class.txt' );
+				$essential_style_generator_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_style_generator_placeholder );
+				$essential_style_generator_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_style_generator_placeholder );
+				$essential_style_generator_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_style_generator_placeholder );
+
+				$system->put_contents(
+					$class_dir . '/class-essential-style-generator.php',
+					$essential_style_generator_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Create directory to save block style class */
+				$class_block_style_dir = gutenverse_themes_builder_theme_built_path() . 'inc/class/style';
+				if ( ! is_dir( $class_block_style_dir ) ) {
+					wp_mkdir_p( $class_block_style_dir );
+				}
+
+				/**Add Advance Tab Class Essential */
+				$essential_advance_tab_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/block/advance-tab.txt' );
+				$essential_advance_tab_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_advance_tab_placeholder );
+				$essential_advance_tab_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_advance_tab_placeholder );
+				$essential_advance_tab_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_advance_tab_placeholder );
+
+				$system->put_contents(
+					$class_block_style_dir . '/class-advance-tabs.php',
+					$essential_advance_tab_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Mega Menu Item Class Essential */
+				$essential_mega_menu_item_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/block/mega-menu-item.txt' );
+				$essential_mega_menu_item_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_mega_menu_item_placeholder );
+				$essential_mega_menu_item_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_mega_menu_item_placeholder );
+				$essential_mega_menu_item_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_mega_menu_item_placeholder );
+
+				$system->put_contents(
+					$class_block_style_dir . '/class-mega-menu-item.php',
+					$essential_mega_menu_item_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Mega Menu Class Essential */
+				$essential_mega_menu_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/block/mega-menu.txt' );
+				$essential_mega_menu_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_mega_menu_placeholder );
+				$essential_mega_menu_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_mega_menu_placeholder );
+				$essential_mega_menu_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_mega_menu_placeholder );
+
+				$system->put_contents(
+					$class_block_style_dir . '/class-mega-menu.php',
+					$essential_mega_menu_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Add Style Default Class Essential */
+				$essential_style_default_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/essential/block/style-default.txt' );
+				$essential_style_default_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $essential_style_default_placeholder );
+				$essential_style_default_placeholder = str_replace( '{{slug}}', $theme_data['slug'], $essential_style_default_placeholder );
+				$essential_style_default_placeholder = str_replace( '{{author_name}}', $theme_data['author_name'], $essential_style_default_placeholder );
+				$essential_style_default_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $essential_style_default_placeholder );
+
+				$system->put_contents(
+					$class_block_style_dir . '/class-style-default.php',
+					$essential_style_default_placeholder,
+					FS_CHMOD_FILE
+				);
+
+				/**Copy Essential Js Dir */
+				$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/assets/js/essential', gutenverse_themes_builder_theme_built_path() . 'assets/js/essential', array( 'chunk-gsap-scroll-trigger.js.map', 'chunk-gsap.js.map', 'frontend.js.map', 'profrontend.js.map', 'filter.js.map' ) );
+				/**Copy Essential Css Dir */
+				$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/assets/css/essential', gutenverse_themes_builder_theme_built_path() . 'assets/css/essential' );
+				/**Copy Essential Dependencies Dir */
+				$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/lib/dependencies/essential', gutenverse_themes_builder_theme_built_path() . 'assets/dependencies/essential' );
+				/**Copy Essential Blocks Dir */
+				$this->copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/block', gutenverse_themes_builder_theme_built_path() . 'assets/block', array( 'pattern-wrapper' ) );
+			}
 		} else {
 			$plugin_notice_placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/plugin-notice.txt' );
 			$plugin_notice_placeholder = str_replace( '{{namespace}}', $this->get_namespace( $theme_data['slug'] ), $plugin_notice_placeholder );
@@ -1174,7 +1301,7 @@ class Export_Theme {
 			$plugin_notice_placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $plugin_notice_placeholder );
 			$plugin_notice_placeholder = str_replace( '{{constant}}', $this->get_constant_name( $theme_data['slug'] ), $plugin_notice_placeholder );
 
-			$style = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
+			$style                     = ! empty( $other['pluginNoticeNormal'] ) ? '<style>
 				.install-gutenverse-plugin-notice {
 					position: relative;
 					display: flex;
@@ -1755,73 +1882,6 @@ class Export_Theme {
 					);
 				}
 			}
-
-			// add blank and basic tempaltes.
-			// $canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			// if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-			// if ( 'core' === $template['category'] ) {
-			// $system->put_contents(
-			// $canvas_target_dir . '/blank-canvas.html',
-			// '<!-- wp:post-content /-->',
-			// FS_CHMOD_FILE
-			// );
-			// } else {
-			// $system->put_contents(
-			// $canvas_target_dir . '/blank-canvas.html',
-			// '<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-			// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
-			// <!-- /wp:gutenverse/post-content -->',
-			// FS_CHMOD_FILE
-			// );
-			// }
-			// }
-			// if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-			// if ( 'core' === $template['category'] ) {
-			// $system->put_contents(
-			// $canvas_target_dir . '/template-basic.html',
-			// '<!-- wp:template-part {"slug":"header"} /-->
-
-			// <!-- wp:post-content /-->
-
-			// <!-- wp:template-part {"slug":"footer"} /-->',
-			// FS_CHMOD_FILE
-			// );
-			// } else {
-			// $content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
-
-			// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-			// <div class="guten-element guten-post-content guten-ReyA1K"></div>
-			// <!-- /wp:gutenverse/post-content -->
-
-			// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
-
-			// $content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-			// $header_slug = false;
-			// $footer_slug = false;
-			// foreach ( $headers as $header ) {
-			// $header_slug = $header['to'];
-			// }
-			// foreach ( $footers as $footer ) {
-			// $footer_slug = $footer['to'];
-			// }
-			// if ( $header_slug ) {
-			// $content = preg_replace( "'--header_slug--'", $header_slug, $content );
-			// } else {
-			// $content = preg_replace( "'--header_slug--'", 'header', $content );
-			// }
-			// if ( $footer_slug ) {
-			// $content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-			// } else {
-			// $content = preg_replace( "'--footer_slug--'", 'footer', $content );
-			// }
-
-			// $system->put_contents(
-			// $canvas_target_dir . '/template-basic.html',
-			// $content,
-			// FS_CHMOD_FILE
-			// );
-			// }
-			// }
 		}
 	}
 
@@ -2256,15 +2316,6 @@ class Export_Theme {
 	}
 
 	/**
-	 * Create Dashboard
-	 *
-	 * @param object $system .
-	 * @param array  $data .
-	 */
-	private function create_dashboard( $system, $data ) {
-	}
-
-	/**
 	 * Send File to User.
 	 *
 	 * @param array $data .
@@ -2351,8 +2402,9 @@ class Export_Theme {
 	 *
 	 * @param string $source .
 	 * @param string $destination .
+	 * @param array  $exception array of exception .
 	 */
-	public function copy_dir( $source, $destination ) {
+	public function copy_dir( $source, $destination, $exception = array() ) {
 		if ( ! is_dir( $source ) ) {
 			return;
 		}
@@ -2364,7 +2416,7 @@ class Export_Theme {
 		$items = scandir( $source );
 
 		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
+			if ( '.' === $item || '..' === $item || in_array( $item, $exception ) ) {
 				continue;
 			}
 

@@ -22,7 +22,7 @@ if ( ! function_exists( 'gutenverse_check_dashboard_mode' ) ) {
 		$info_db  = Database::instance()->theme_info;
 		$data     = $info_db->get_theme_data( $theme_id );
 		if ( isset( $data[0]['other'] ) ) {
-			$other             = maybe_unserialize( $data[0]['other'] );
+			$other = maybe_unserialize( $data[0]['other'] );
 			if ( isset( $other['dashboard']['mode']['value'] ) && isset( $other['dashboard']['themeforest_mode'] ) ) {
 				$dashboard_mode    = $other['dashboard']['mode']['value'];
 				$is_export_feature = $other['dashboard']['themeforest_mode'];
@@ -65,6 +65,8 @@ if ( ! function_exists( 'gutenverse_generate_unique_string' ) ) {
 if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 	/**
 	 * Check if the url is an image url
+	 *
+	 * @param string $url .
 	 */
 	function gutenverse_themes_builder_is_image_url( $url ) {
 		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
@@ -75,9 +77,9 @@ if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 }
 if ( ! function_exists( 'gutenverse_themes_builder_to_unicode_escape' ) ) {
 	/**
-	 * escape to unicode
+	 * Escape to unicode
 	 *
-	 * @param string str .
+	 * @param string $str .
 	 *
 	 * @return string
 	 */
@@ -225,6 +227,7 @@ if ( ! function_exists( 'gutenverse_themes_builder_theme_built_path' ) ) {
 	 *
 	 * @param string  $theme_id .
 	 * @param boolean $url .
+	 * @param boolean $child .
 	 *
 	 * @return string
 	 */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Assets class
+ * Essential Assets class
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -11,11 +11,11 @@ namespace {{namespace}};
 use DateTime;
 
 /**
- * Class Assets
+ * Class Essential Assets
  *
  * @package {{slug}}
  */
-class Assets {
+class Essential_Assets {
 
 	/**
 	 * Init constructor.
@@ -35,17 +35,17 @@ class Assets {
 	public function frontend_scripts() {
 		wp_enqueue_script(
 			'{{slug}}-frontend-event',
-			{{constant}}_URL . '/assets/js/profrontend.js',
+			{{constant}}_URI . '/assets/js/essential/profrontend.js',
 			array(),
 			{{constant}}_VERSION,
 			true
 		);
 
-		$frontend_include = ( include {{constant}}_DIR . '/assets/dependencies/frontend.asset.php' )['dependencies'];
+		$frontend_include = ( include {{constant}}_DIR . '/assets/dependencies/essential/frontend.asset.php' )['dependencies'];
 
 		wp_enqueue_script(
 			'{{slug}}-frontend',
-			{{constant}}_URL . '/assets/js/frontend.js',
+			{{constant}}_URI . '/assets/js/essential/frontend.js',
 			$frontend_include,
 			{{constant}}_VERSION,
 			true
@@ -54,7 +54,7 @@ class Assets {
 		// Register & Enqueue Style.
 		wp_enqueue_style(
 			'{{slug}}-frontend-block',
-			{{constant}}_URL . '/assets/css/frontend.css',
+			{{constant}}_URI . '/assets/css/essential/frontend-essential.css',
 			array( 'gutenverse-frontend-style' ),
 			{{constant}}_VERSION
 		);
@@ -67,15 +67,15 @@ class Assets {
 		$include = array_values(
 			array_unique(
 				array_merge(
-					( include_once {{constant}}_DIR . '/assets/dependencies/editor.sticky.asset.php' )['dependencies'],
-					( include_once {{constant}}_DIR . '/assets/dependencies/filter.asset.php' )['dependencies']
+					( include_once {{constant}}_DIR . '/assets/dependencies/essential/editor.sticky.asset.php' )['dependencies'],
+					( include_once {{constant}}_DIR . '/assets/dependencies/essential/filter.asset.php' )['dependencies']
 				)
 			)
 		);
 
 		wp_enqueue_script(
 			'{{slug}}-filter',
-			{{constant}}_URL . '/assets/js/filter.js',
+			{{constant}}_URI . '/assets/js/essential/filter.js',
 			$include,
 			{{constant}}_VERSION,
 			true
@@ -83,21 +83,21 @@ class Assets {
 
 		wp_enqueue_style(
 			'{{slug}}-editor-block',
-			{{constant}}_URL . '/assets/css/editor.css',
+			{{constant}}_URI . '/assets/css/essential/editor-essential.css',
 			array( 'gutenverse-editor-style' ),
 			{{constant}}_VERSION
 		);
 
 		wp_enqueue_style(
 			'{{slug}}-frontend-block',
-			{{constant}}_URL . '/assets/css/frontend.css',
+			{{constant}}_URI . '/assets/css/essential/frontend-essential.css',
 			array( 'gutenverse-frontend-style' ),
 			{{constant}}_VERSION
 		);
 
 		wp_enqueue_script(
 			'{{slug}}-blocks',
-			{{constant}}_URL . '/assets/js/blocks.js',
+			{{constant}}_URI . '/assets/js/essential/blocks.js',
 			$include,
 			{{constant}}_VERSION,
 			true
@@ -108,7 +108,6 @@ class Assets {
 
 		if ( ! gutenverse_check_if_script_localized( 'GutenverseProJSURL' ) ) {
 			wp_localize_script( '{{slug}}-filter', 'GutenverseProJSURL', $this->js_pro_config() );
-			wp_set_script_translations( 'gutenverse-pro', 'gutenverse-pro', {{constant}}_LANG_DIR );
 
 			wp_localize_script(
 				'{{slug}}-block',
@@ -198,8 +197,8 @@ class Assets {
 	 */
 	public function js_pro_config() {
 		return array(
-			'editorSticky' => {{constant}}_URL . '/assets/js/editor.sticky.js',
-			'imgDir'       => {{constant}}_URL . '/assets/img',
+			'editorSticky' => {{constant}}_URI . '/assets/js/essential/editor.sticky.js',
+			'imgDir'       => {{constant}}_URI . '/assets/img',
 			'wpJsonConfig' => array(
 				'wpjson_url'      => get_rest_url(),
 				'wpjson_nonce'    => wp_create_nonce( 'wp_rest' ),
@@ -216,7 +215,6 @@ class Assets {
 		$config['license']   = $this->get_license();
 		$config['domainURL'] = get_site_url(); // Todo: check if we are using WordPress address.
 		$config['current']   = ( new DateTime() )->getTimestamp();
-		$config['lottieDir'] = {{constant}}_URL . '/assets/lottie';
 
 		return $config;
 	}

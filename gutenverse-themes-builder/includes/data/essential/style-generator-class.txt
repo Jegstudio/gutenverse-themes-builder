@@ -1,6 +1,6 @@
 <?php
 /**
- * Style Generator Class
+ * Essential Style Generator Class
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -14,11 +14,11 @@ use {{namespace}}\Style\Mega_Menu;
 use {{namespace}}\Style\Mega_Menu_Item;
 
 /**
- * Class Style Generator
+ * Class Essential Style Generator
  *
  * @package {{slug}}
  */
-class Style_Generator {
+class Essential_Style_Generator {
 	/**
 	 * Constructor.
 	 */

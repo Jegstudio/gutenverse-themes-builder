@@ -1,6 +1,6 @@
 <?php
 /**
- * Blocks class
+ * Essential Blocks class
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -9,11 +9,11 @@
 namespace {{namespace}};
 
 /**
- * Class Blocks
+ * Class Essential Blocks
  *
  * @package {{slug}}
  */
-class Blocks {
+class Essential_Blocks {
 	/**
 	 * Blocks constructor.
 	 */
@@ -26,9 +26,9 @@ class Blocks {
 	 */
 	public function register_blocks() {
 		// Static block.
-		register_block_type( {{constant}}_DIR . './block/mega-menu/block.json' );
-		register_block_type( {{constant}}_DIR . './block/mega-menu-item/block.json' );
-		register_block_type( {{constant}}_DIR . './block/advance-tabs/block.json' );
-		register_block_type( {{constant}}_DIR . './block/advance-tab/block.json' );
+		register_block_type( {{constant}}_DIR . './assets/block/essential/mega-menu/block.json' );
+		register_block_type( {{constant}}_DIR . './assets/block/essential/mega-menu-item/block.json' );
+		register_block_type( {{constant}}_DIR . './assets/block/essential/advance-tabs/block.json' );
+		register_block_type( {{constant}}_DIR . './assets/block/essential/advance-tab/block.json' );
 	}
 }

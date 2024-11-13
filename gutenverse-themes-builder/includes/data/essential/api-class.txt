@@ -1,6 +1,6 @@
 <?php
 /**
- * API
+ * Essential API
  *
  * @author {{author_name}}
  * @package {{slug}}
@@ -11,11 +11,11 @@ namespace {{namespace}};
 use WP_REST_Response;
 
 /**
- * Class API
+ * Class Essential API
  *
  * @package {{slug}}
  */
-class Api {
+class Essential_Api {
 	/**
 	 * Api constructor.
 	 */
@@ -25,7 +25,7 @@ class Api {
 	}
 
 	/**
-	 * Register Jeg Theme Essence APIs
+	 * Register Essential APIs
 	 */
 	public function register_routes() {
 		register_rest_route(
