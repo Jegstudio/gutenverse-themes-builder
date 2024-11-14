@@ -278,6 +278,7 @@ class Export_Init {
 			foreach ( $other['plugins'] as $plugin ) {
 				$url = '';
 				$icons = null;
+				$short_desc = '';
 				if ( 'wporg' === $plugin['type'] ) {
 					$result      = plugins_api(
 						'plugin_information',
