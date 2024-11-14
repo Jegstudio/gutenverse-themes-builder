@@ -73,7 +73,7 @@ const ManageDashbaord = () => {
 
     const updateDashboardData = () => {
         setLoading(true);
-        setInterval(() => {
+        setTimeout(() => {
             updateOtherData({
                 key: 'dashboard',
                 data: { ...dashboardData }
