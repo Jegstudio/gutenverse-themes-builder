@@ -326,6 +326,7 @@ class Export_Init {
 						$url        = $data['url'];
 					}
 				}
+				$icons      = isset( $icons ) ? $icons : 'null';
 				$required[] = "array(
 					'slug'       		=> '{$plugin['value']}',
 					'title'      		=> '{$plugin['label']}',
