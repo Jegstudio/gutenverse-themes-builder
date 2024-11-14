@@ -58,7 +58,7 @@ class Export_Init {
 		$placeholder = str_replace( '{{additional_filter}}', join( "\n\t\t", $additional_filter ), $placeholder );
 
 		// Build dashboard.
-		$placeholder = $instance->build_dashboard( $placeholder, $theme_data, $system );
+		$placeholder = $instance->build_dashboard( $placeholder, $theme_data, $system, $other );
 		$required    = $instance->get_required_plugin( $other );
 		$placeholder = str_replace( '{{plugins_required}}', join( ",\n\t\t\t\t", $required ), $placeholder );
 		$add_class   = array();
@@ -78,6 +78,7 @@ class Export_Init {
 			}
 
 			if ( ! is_wp_error( $image_data ) ) {
+				gutenverse_rlog( $image_data );
 				$system->put_contents(
 					$thumbnail,
 					$image_data['body'],
@@ -191,10 +192,11 @@ class Export_Init {
 	 * @param string $placeholder .
 	 * @param array  $theme_data .
 	 * @param object $system .
+	 * @param array  $other .
 	 *
 	 * @return string
 	 */
-	private function build_dashboard( $placeholder, $theme_data, $system ) {
+	private function build_dashboard( $placeholder, $theme_data, $system, $other ) {
 		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/js' ) ) {
 			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/js' );
 		}
@@ -239,7 +241,7 @@ class Export_Init {
 			copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/default/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
 		}
 		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/background-banner.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/background-banner.png' );
-		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse-2.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/banner-install-gutenverse-2.png' );
+		copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/banner-install-gutenverse.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/banner-install-gutenverse.png' );
 
 		$dashboard_data_string = '';
 		if ( isset( $other['dashboard']['mode'] ) && 'lite' === $other['dashboard']['mode']['value'] ) {
@@ -599,7 +601,7 @@ class Export_Init {
                         </div>
                     </div>
                     <div class="gutenverse-notice-image">
-                        <img src="<?php echo esc_url( ' . Misc::get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse-2.png\' ); ?>"/>
+                        <img src="<?php echo esc_url( ' . Misc::get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse.png\' ); ?>"/>
                     </div>
                 </div>
             </div>

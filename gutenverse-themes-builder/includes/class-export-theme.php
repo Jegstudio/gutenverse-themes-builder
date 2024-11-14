@@ -587,7 +587,6 @@ class Export_Theme {
 						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 
 						if ( $theme_id === $pattern_theme_id ) {
-							error_log( print_r( $posts[0]->ID, true ) );
 							if ( $only_get_content && ! $pattern_sync ) {
 								$pattern_after = $posts[0]->post_content;
 							} else {
