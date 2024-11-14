@@ -82,7 +82,7 @@ const ManageScreenshots = () => {
 
     const updateScreenshotData = () => {
         setLoading(true);
-        setInterval(() => {
+        setTimeout(() => {
             updateOtherData({
                 key: 'screenshots',
                 data: {

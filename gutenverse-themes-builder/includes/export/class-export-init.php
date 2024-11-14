@@ -78,7 +78,6 @@ class Export_Init {
 			}
 
 			if ( ! is_wp_error( $image_data ) ) {
-				gutenverse_rlog( $image_data );
 				$system->put_contents(
 					$thumbnail,
 					$image_data['body'],
@@ -314,7 +313,7 @@ class Export_Init {
 					$response = json_decode( $result['body'], true );
 					if ( 'success' === $response['status'] ) {
 						$data  = $response['data'];
-						$icons = array();
+						$icons = null;
 						if ( isset( $data['icon'] ) ) {
 							$icons = var_export(
 								array(
@@ -327,7 +326,6 @@ class Export_Init {
 						$url        = $data['url'];
 					}
 				}
-				$icons      = isset( $icons ) ? $icons : array();
 				$required[] = "array(
 					'slug'       		=> '{$plugin['value']}',
 					'title'      		=> '{$plugin['label']}',
