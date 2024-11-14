@@ -711,6 +711,15 @@ body {
         align-items: flex-start;
         margin: 15px 0;
 
+        .error-list{
+            margin: 0px;
+            padding: 0px;
+            li{
+                list-style-type: none;
+                color: #f73b3b;
+                font-size: 10px;
+            }
+        }
         label {
             width: 40%;
             margin-right: 16px;

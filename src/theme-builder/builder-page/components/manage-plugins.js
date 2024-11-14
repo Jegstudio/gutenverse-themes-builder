@@ -38,6 +38,14 @@ const ManagePlugins = () => {
     const indexOfLastItem = paged * num_post;
     const indexOfFirstItem = indexOfLastItem - num_post;
     const paginationData = plugins.slice(indexOfFirstItem, indexOfLastItem);
+    const customRule = {
+        label : ['required'],
+        type  : ['required'],
+        value : ['required'],
+        version: ['required'],
+        url: ['required']
+    }
+    const [customErrors, setCustomErrors] = useState({});
 
     useEffect(() => {
         getThemeData(null, response => {
@@ -81,15 +89,35 @@ const ManagePlugins = () => {
             setPluginNoticeNormal(response?.other?.pluginNoticeNormal);
         });
     }, []);
-
     const addCustomPlugin = () => {
-        let list = [...plugins, customPlugin];
-        setPlugins(list);
-        updateOtherData({
-            key: 'plugins',
-            data: list
-        });
-        setPluginCategory('');
+        let errors = validateForm(customPlugin, customRule);
+        if(isEmpty(errors)){
+            let list = [...plugins, customPlugin];
+            setPlugins(list);
+            updateOtherData({
+                key: 'plugins',
+                data: list
+            });
+            setPluginCategory('');
+            setCustomErrors({});
+        }else{
+            setCustomErrors(errors);
+        }
+    }
+
+    const validateForm = (data, rule) => {
+        let errors = {};
+        for (const key in data) {
+            if(rule[key].includes('required')){
+                if(isEmpty(data[key])){
+                    if (!errors[key]) {
+                        errors[key] = [];
+                    }
+                    errors[key].push(`${key} is required!`);
+                }
+            }
+        }
+        return errors;
     }
 
     const updatePluginNoticeData = (value) => {
@@ -205,6 +233,7 @@ const ManagePlugins = () => {
                         value={customPlugin.label}
                         onChange={value => handleCustomPluginChange('label', value)}
                         important={true}
+                        errors={customErrors.label}
                     />
                     <TextControl
                         id={'type'}
@@ -212,6 +241,7 @@ const ManagePlugins = () => {
                         value={customPlugin.type}
                         onChange={value => handleCustomPluginChange('type', value)}
                         important={true}
+                        errors={customErrors.type}
                     />
                     <TextControl
                         id={'value'}
@@ -220,6 +250,7 @@ const ManagePlugins = () => {
                         onChange={value => handleCustomPluginChange('value', value)}
                         description={__('If don\'t know the slug just change plugin name to lowercase then change space to "-"', 'gutenverse-themes-builder')}
                         important={true}
+                        errors={customErrors.value}
                     />
                     <TextControl
                         id={'version'}
@@ -227,6 +258,7 @@ const ManagePlugins = () => {
                         value={customPlugin.version}
                         onChange={value => handleCustomPluginChange('version', value)}
                         important={true}
+                        errors={customErrors.version}
                     />
                     <TextControl
                         id={'url'}
@@ -234,6 +266,7 @@ const ManagePlugins = () => {
                         value={customPlugin.url}
                         onChange={value => handleCustomPluginChange('url', value)}
                         important={true}
+                        errors={customErrors.url}
                     />
                     <div className="buttons margin-top-32 end">
                         {
@@ -265,7 +298,7 @@ const ManagePlugins = () => {
                                 <td>{plugin?.version}</td>
                                 <td>
                                     <div className="actions">
-                                        <a className="edit" onClick={() => setEditPopup( {plugin : plugin, key: (((paged-1) * num_post) + parseInt(key) )} )}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
+                                        <a className="edit" onClick={() => {setEditPopup( {plugin : plugin, key: (((paged-1) * num_post) + parseInt(key) )} ); setCustomErrors({});}}>{__('Quick Edit', 'gutenverse-themes-builder')}</a>
                                         {
                                             !defaultPlugins.includes(plugin?.value) && <a className="delete" onClick={() => setDeletePopup(plugin)}><DeleteIcon />{__('Delete', 'gutenverse-themes-builder')}</a>
                                         }
@@ -311,42 +344,87 @@ const ManagePlugins = () => {
                                 label: __('Custom Plugin', 'gutenverse-themes-builder')
                             }
                         ]}
-                        onChange={value => { setPluginCategory(value)}}
+                        onChange={value => { setPluginCategory(value); setCustomErrors({});}}
                         value = {pluginCategory}
                         description={__('Select your plugin category.', 'gutenverse-themes-builder')}
                     />
                 </div>
                 {PluginContent()}
                 {editPopup && <FormPopup
-                    onClose={() =>   setEditPopup(false)}
+                    onClose={() => setEditPopup(false)}
                     initialData={editPopup}
                     buttonText={__('Save Changes', 'gutenverse-themes-builder')}
                     classnames={'manage-plugins'}
                     onSubmit={(updateData) => {
-                        updatePluginValue(updateData.plugin, updateData.key )
-                        setEditPopup(false)
+                        let errors = validateForm(updateData.plugin, customRule);
+                        if(isEmpty(errors)){
+                            updatePluginValue(updateData.plugin, updateData.key )
+                            setEditPopup(false)
+                        }else{
+                            setCustomErrors(errors);
+                        }
                     }}
                 >
                     {
                         ({data, updateData, setIsEdited}) => {
-                            return <>
-                                <TextControl
-                                    id={'label'}
-                                    title={__('Plugin Name', 'gutenverse-themes-builder')}
-                                    value={data.plugin.label}
-                                    onChange={(value) => { updateData('label',value); setIsEdited(true);}}
-                                    important={true}
-                                    description={__('Simplify the plugin name by removing extra details.', 'gutenverse-themes-builder')}
-                                />
-                                <TextControl
-                                    id={'version'}
-                                    title={__('Plugin Version', 'gutenverse-themes-builder')}
-                                    value={data.plugin.version}
-                                    onChange={(value) => { updateData('version',value); setIsEdited(true);}}
-                                    important={true}
-                                    description={__('Set the version used in your theme.', 'gutenverse-themes-builder')}
-                                />
-                            </>
+                            switch (data.plugin.type) {
+                                case 'custom':
+                                    return <>
+                                    <TextControl
+                                        id={'label'}
+                                        title={__('Label', 'gutenverse-themes-builder')}
+                                        value={data.plugin.label}
+                                        onChange={(value) => { updateData('label',value); setIsEdited(true);}}
+                                        important={true}
+                                        errors={customErrors.label}
+                                    />
+                                    <TextControl
+                                        id={'value'}
+                                        title={__('Plugin Slug', 'gutenverse-themes-builder')}
+                                        value={data.plugin.value}
+                                        onChange={(value) => { updateData('value',value); setIsEdited(true);}}
+                                        description={__('If don\'t know the slug just change plugin name to lowercase then change space to "-"', 'gutenverse-themes-builder')}
+                                        important={true}
+                                        errors={customErrors.value}
+                                    />
+                                    <TextControl
+                                        id={'version'}
+                                        title={__('Version', 'gutenverse-themes-builder')}
+                                        value={data.plugin.version}
+                                        onChange={(value) => { updateData('version',value); setIsEdited(true);}}
+                                        important={true}
+                                        errors={customErrors.version}
+                                    />
+                                    <TextControl
+                                        id={'url'}
+                                        title={__('Plugin Url', 'gutenverse-themes-builder')}
+                                        value={data.plugin.url}
+                                        onChange={(value) => { updateData('url',value); setIsEdited(true);}}
+                                        important={true}
+                                        errors={customErrors.url}
+                                    />
+                                    </>
+                                case 'wporg':
+                                default:
+                                    return <>
+                                        <TextControl
+                                            id={'label'}
+                                            title={__('Plugin Name', 'gutenverse-themes-builder')}
+                                            value={data.plugin.label}
+                                            onChange={(value) => { updateData('label',value); setIsEdited(true);}}
+                                            important={true}
+                                            description={__('Simplify the plugin name by removing extra details.', 'gutenverse-themes-builder')}
+                                        />
+                                        <TextControl
+                                            id={'version'}
+                                            title={__('Plugin Version', 'gutenverse-themes-builder')}
+                                            value={data.plugin.version}
+                                            onChange={(value) => { updateData('version',value); setIsEdited(true);}}
+                                            important={true}
+                                            description={__('Set the version used in your theme.', 'gutenverse-themes-builder')}
+                                        />
+                                    </>
+                            }
                         }
                     }
                 </FormPopup>

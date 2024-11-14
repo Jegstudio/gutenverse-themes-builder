@@ -313,13 +313,16 @@ class Export_Init {
 
 					$response = json_decode( $result['body'], true );
 					if ( 'success' === $response['status'] ) {
-						$data       = $response['data'];
-						$icons      = var_export(
-							array(
-								'1x' => strval( $data['icon'] ),
-							),
-							true
-						);
+						$data = $response['data'];
+						$icons = array();
+						if ( isset( $data['icon'] ) ) {
+							$icons = var_export(
+								array(
+									'1x' => strval( $data['icon'] ),
+								),
+								true
+							);
+						}
 						$short_desc = $data['description'];
 						$url        = $data['url'];
 					}
