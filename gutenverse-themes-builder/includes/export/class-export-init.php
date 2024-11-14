@@ -313,7 +313,7 @@ class Export_Init {
 
 					$response = json_decode( $result['body'], true );
 					if ( 'success' === $response['status'] ) {
-						$data = $response['data'];
+						$data  = $response['data'];
 						$icons = array();
 						if ( isset( $data['icon'] ) ) {
 							$icons = var_export(
@@ -327,7 +327,7 @@ class Export_Init {
 						$url        = $data['url'];
 					}
 				}
-
+				$icons      = isset( $icons ) ? $icons : array();
 				$required[] = "array(
 					'slug'       		=> '{$plugin['value']}',
 					'title'      		=> '{$plugin['label']}',
