@@ -277,6 +277,7 @@ class Export_Init {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
 				$url = '';
+				$icons = null;
 				if ( 'wporg' === $plugin['type'] ) {
 					$result      = plugins_api(
 						'plugin_information',
@@ -313,7 +314,6 @@ class Export_Init {
 					$response = json_decode( $result['body'], true );
 					if ( 'success' === $response['status'] ) {
 						$data  = $response['data'];
-						$icons = null;
 						if ( isset( $data['icon'] ) ) {
 							$icons = var_export(
 								array(
