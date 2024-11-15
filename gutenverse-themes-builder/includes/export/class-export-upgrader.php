@@ -24,7 +24,7 @@ class Export_Upgrader {
 	public static function create_upgrader_php( $system, $data ) {
 		$theme_data = maybe_unserialize( $data['theme_data'] );
 		$other      = maybe_unserialize( $data['other'] );
-		if ( ! isset( $other['notice'] ) || Misc::is_serialized_block_empty( $other['notice'] ) ) {
+		if ( empty( $other['notice']['updaterNotice'] ) || Misc::is_serialized_block_empty( $other['notice']['updaterNotice'] ) ) {
 			return;
 		}
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/upgrader.txt' );

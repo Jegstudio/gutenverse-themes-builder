@@ -61,9 +61,6 @@ const ManageDashbaord = () => {
             });
         });
     }, []);
-    useEffect(() => {
-        console.log(dashboardData)
-    },[dashboardData])
     const updateData = (key, value) => {
         setDashboardData({
             ...dashboardData,
@@ -78,8 +75,8 @@ const ManageDashbaord = () => {
                 key: 'dashboard',
                 data: { ...dashboardData }
             });
-            setLoading(false)
         }, 500);
+        setLoading(false);
     };
 
     return (

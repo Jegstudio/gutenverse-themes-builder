@@ -1135,7 +1135,6 @@ class Backend_Api {
 		$theme_id = get_option( 'gtb_active_theme_id' );
 		$info_db  = Database::instance()->theme_info;
 		$previous = $info_db->get_theme_data( $theme_id );
-
 		if ( ! empty( $previous ) ) {
 			$other_data = maybe_unserialize( $previous[0]['other'] );
 

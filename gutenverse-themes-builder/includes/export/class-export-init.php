@@ -30,8 +30,12 @@ class Export_Init {
 		$templates_db   = Database::instance()->theme_templates;
 		$templates_data = $templates_db->get_data( $theme_id );
 		$class_dir      = gutenverse_themes_builder_theme_built_path() . 'inc/class';
+		$theme_slug     = Misc::get_constant_name( $theme_data['slug'] );
 		if ( ! is_dir( $class_dir ) ) {
 			wp_mkdir_p( $class_dir );
+		}
+		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
+			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/img' );
 		}
 		// Take which placeholder.
 		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
@@ -54,6 +58,29 @@ class Export_Init {
 			$config[]            = "'isThemeforest' => true,";
 			$additional_filter[] = "add_filter( 'gutenverse_show_theme_list', '__return_false' );";
 		}
+		if ( ! empty( $other['notice']['eventNotice'] ) ) {
+			$event_url     = $other['notice']['eventNotice']['url'];
+			$event_expired = $other['notice']['eventNotice']['expired'];
+			$event_banner  = $other['notice']['eventNotice']['banner'];
+			$banner_url    = 'null';
+			if ( isset( $event_banner ) ) {
+				$banner_data = wp_remote_get( $event_banner['url'], array( 'sslverify' => true ) );
+				$banner_path = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $event_banner['filename'];
+				$banner_url  = "{$theme_slug}_URI . 'assets/img/" . $event_banner['filename'] . "'";
+				if ( ! is_wp_error( $banner_data ) ) {
+					$system->put_contents(
+						$banner_path,
+						$banner_data['body'],
+						FS_CHMOD_FILE
+					);
+				}
+			}
+			$config[] = "'eventBanner' => array(
+				'url' => '{$event_url}', 
+				'expired' => '{$event_expired}', 
+				'banner' => {$banner_url},
+			)";
+		}
 		$placeholder = str_replace( '{{additional_config}}', join( "\n\t\t\t", $config ), $placeholder );
 		$placeholder = str_replace( '{{additional_filter}}', join( "\n\t\t", $additional_filter ), $placeholder );
 
@@ -69,21 +96,20 @@ class Export_Init {
 		/**Create Notice */
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$add_class[] = 'new Themeforest_Data();';
-			$theme_slug  = Misc::get_constant_name( $theme_data['slug'] );
 
 			if ( isset( $other['dashboard']['logo'] ) ) {
 				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
 				$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
 				$theme_logo = "{$theme_slug}_URI . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
+				if ( ! is_wp_error( $image_data ) ) {
+					$system->put_contents(
+						$thumbnail,
+						$image_data['body'],
+						FS_CHMOD_FILE
+					);
+				}
 			}
 
-			if ( ! is_wp_error( $image_data ) ) {
-				$system->put_contents(
-					$thumbnail,
-					$image_data['body'],
-					FS_CHMOD_FILE
-				);
-			}
 			$pages = new \WP_Query(
 				array(
 					'post_type'      => 'page',
@@ -166,7 +192,7 @@ class Export_Init {
 			);
 		}
 
-		if ( isset( $other['notice'] ) && ! Misc::is_serialized_block_empty( $other['notice'] ) ) {
+		if ( ! empty( $other['notice']['updaterNotice'] ) && ! Misc::is_serialized_block_empty( $other['notice']['updaterNotice'] ) ) {
 			$add_class[] = 'new Upgrader();';
 		}
 
@@ -276,8 +302,8 @@ class Export_Init {
 		if ( ! empty( $other['plugins'] ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 			foreach ( $other['plugins'] as $plugin ) {
-				$url = '';
-				$icons = null;
+				$url        = '';
+				$icons      = null;
 				$short_desc = '';
 				if ( 'wporg' === $plugin['type'] ) {
 					$result      = plugins_api(
@@ -314,7 +340,7 @@ class Export_Init {
 
 					$response = json_decode( $result['body'], true );
 					if ( 'success' === $response['status'] ) {
-						$data  = $response['data'];
+						$data = $response['data'];
 						if ( isset( $data['icon'] ) ) {
 							$icons = var_export(
 								array(

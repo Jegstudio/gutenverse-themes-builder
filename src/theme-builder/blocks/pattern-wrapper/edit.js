@@ -73,7 +73,6 @@ const PatternPreview = ({ setAttributes, clientId, patterns }) => {
         <div className="pattern-collection">
             <div className="masonry-content">
                 {patterns.map((pattern, key) => {
-                    console.log(pattern.content)
                     return key % 2 === 0 && <div key={key} className="pattern-frame" onClick={() => changeOption(pattern)}>
                         <BlockPreview blocks={parse(pattern.content)} />
                         <span className="title">{pattern.label}</span>

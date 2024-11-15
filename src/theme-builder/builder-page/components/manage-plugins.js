@@ -97,9 +97,10 @@ const ManagePlugins = () => {
             updateOtherData({
                 key: 'plugins',
                 data: list
+            }, () => {
+                setPluginCategory('');
+                setCustomErrors({});
             });
-            setPluginCategory('');
-            setCustomErrors({});
         }else{
             setCustomErrors(errors);
         }
@@ -156,8 +157,9 @@ const ManagePlugins = () => {
         updateOtherData({
             key: 'plugins',
             data: update
+        },() => {
+            setPaged(1);
         });
-        setPaged(1);
     };
 
     const updatePluginList = (value) => {
@@ -172,8 +174,9 @@ const ManagePlugins = () => {
             updateOtherData({
                 key: 'plugins',
                 data: newPlugins
+            },() => {
+                setPluginCategory('');
             });
-            setPluginCategory('')
         }
     };
 
@@ -234,14 +237,6 @@ const ManagePlugins = () => {
                         onChange={value => handleCustomPluginChange('label', value)}
                         important={true}
                         errors={customErrors.label}
-                    />
-                    <TextControl
-                        id={'type'}
-                        title={__('Type', 'gutenverse-themes-builder')}
-                        value={customPlugin.type}
-                        onChange={value => handleCustomPluginChange('type', value)}
-                        important={true}
-                        errors={customErrors.type}
                     />
                     <TextControl
                         id={'value'}

@@ -90,9 +90,8 @@ const ManageScreenshots = () => {
                     dashboard
                 }
             });
-            setLoading(false)
         }, 500);
-        
+        setLoading(false);
     };
 
     return <ContentWrapper

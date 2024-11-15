@@ -10,12 +10,27 @@ const DashboardPage = () => {
         pluginDesc,
         pages,
         demoUrl,
-        plugins
+        plugins,
+        eventBanner = null
     } = window['GutenThemeConfig'];
 
     const [allActive, setAllActive] = useState(false);
     const [popupImg, setPopupImg] = useState('');
     const [openPopup, setOpenPopup] = useState(false);
+
+    const today = new Date();
+    const expired = new Date(eventBanner?.expired);
+    const EventBanner = () => {
+        return <>
+            {
+                ( eventBanner && today <= expired ) && <div className="event-banner-wrapper">
+                    <a href={eventBanner?.url} target="_blank" rel="noreferrer" >
+                        <img src={eventBanner?.banner} alt="event-banner"/>
+                    </a>
+                </div>
+            }
+        </>
+    }
 
     useEffect(() => {
         let done = true;
@@ -106,6 +121,7 @@ const DashboardPage = () => {
                 </div>
             </div>
         </div>
+        <EventBanner/>
         <div className="bottom-container">
             <div className="comparison">
                 <h2 className="title">{pluginTitle}</h2>
