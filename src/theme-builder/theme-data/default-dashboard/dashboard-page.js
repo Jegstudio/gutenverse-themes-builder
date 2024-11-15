@@ -96,6 +96,7 @@ const DashboardPage = () => {
     }
 
     return <Fragment>
+        <EventBanner/>
         <div className="top-container">
             <div className="install-template">
                 <div className="thumbnail">
@@ -121,7 +122,6 @@ const DashboardPage = () => {
                 </div>
             </div>
         </div>
-        <EventBanner/>
         <div className="bottom-container">
             <div className="comparison">
                 <h2 className="title">{pluginTitle}</h2>
