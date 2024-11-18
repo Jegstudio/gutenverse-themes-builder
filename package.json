@@ -82,6 +82,9 @@
     "sass-loader": "^15.0.0",
     "style-loader": "^4.0.0",
     "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "animejs": "^3.2.2",
+    "gsap": "^3.12.5",
+    "mathjs": "^13.0.3"
   }
 }

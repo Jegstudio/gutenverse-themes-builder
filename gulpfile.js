@@ -58,12 +58,32 @@ gulp.task("page", function () {
         .pipe(gulp.dest("gutenverse-themes-builder/assets/css/"));
 });
 
-gulp.task("build-process", gulp.parallel("editor", "frontend", "page"));
+gulp.task('editor-essential', function () {
+    return gulp
+        .src([path.resolve(__dirname, './src/essential/assets/scss/editor.scss')])
+        .pipe(sass({ includePaths: ['node_modules'] }))
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(concat('editor-essential.css'))
+        .pipe(postcss(postCSSOptions))
+        .pipe(gulp.dest('gutenverse-themes-builder/assets/css/essential/'));
+});
+
+gulp.task('frontend-essential', function () {
+    return gulp
+        .src([path.resolve(__dirname, './src/essential/assets/scss/frontend.scss')])
+        .pipe(sass({ includePaths: ['node_modules'] }))
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(concat('frontend-essential.css'))
+        .pipe(postcss(postCSSOptions))
+        .pipe(gulp.dest('gutenverse-themes-builder/assets/css/essential/'));
+});
+
+gulp.task("build-process", gulp.parallel("editor", "frontend", "page", "editor-essential", "frontend-essential"));
 
 gulp.task("build", gulp.series("build-process"));
 
 const watchProcess = (basePath = ".") => {
-    gulp.watch([`${basePath}/src/**/*.scss`], gulp.parallel(["editor", "frontend", "page"]));
+    gulp.watch([`${basePath}/src/**/*.scss`], gulp.parallel(["editor", "frontend", "page", "editor-essential", "frontend-essential"]));
 };
 
 gulp.task(
@@ -96,24 +116,8 @@ gulp.task('copy-plugin-folder', function () {
         .pipe(gulp.dest('./release/gutenverse-themes-builder/'));
 });
 
-gulp.task('copy-framework', function () {
-    return gulp
-        .src('./gutenverse-core/framework/**/*', { encoding: false })
-        .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
-});
-
-gulp.task('replace-text-domain', function () {
-    return gulp
-        .src(['./release/gutenverse-themes-builder/lib/framework/**/*.js', './release/gutenverse-themes-builder/lib/framework/**/*.php'])
-        .pipe(replace('--gctd--', 'gutenverse-themes-builder'))
-        .pipe(gulp.dest('./release/gutenverse-themes-builder/lib/framework/'));
-});
-
-
 gulp.task('release', gulp.series(
     'copy-plugin-folder',
-    'copy-framework',
-    'replace-text-domain'
 ));
 
 async function getZip() {

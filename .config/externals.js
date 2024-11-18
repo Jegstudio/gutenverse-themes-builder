@@ -101,9 +101,14 @@ const externals = {
 	...wpExternals,
 }
 
+const proFrontendExternals = {
+	'gutenverse-pro-frontend': 'gutenverseProFrontend'
+};
+
 module.exports = {
 	externals,
     editorExternals,
     frontendExternals,
-    backendExternals
+    backendExternals,
+	proFrontendExternals
 };

@@ -19,6 +19,17 @@
     display: flex;
 }
 
+.event-banner-wrapper{
+    margin-top: 30px;
+    margin-right: 20px;
+    img{
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border : 1px solid transparent;
+    }
+}
+
 #gutenverse-theme-dashboard {
     --guten-theme-black: #011627;
     --guten-theme-blue: #3B57F7;

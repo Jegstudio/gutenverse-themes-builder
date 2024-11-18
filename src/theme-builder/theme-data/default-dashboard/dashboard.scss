@@ -19,6 +19,17 @@
     border: 1px solid #e3e4e6;
 }
 
+.event-banner-wrapper{
+    margin-top: 30px;
+    margin-right: 20px;
+    img{
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border : 1px solid transparent;
+    }
+}
+
 body {
     --gtb-white: #ffffff;
     --gtb-black: #000000;

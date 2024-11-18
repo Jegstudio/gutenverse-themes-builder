@@ -82,7 +82,7 @@ const ManageScreenshots = () => {
 
     const updateScreenshotData = () => {
         setLoading(true);
-        setInterval(() => {
+        setTimeout(() => {
             updateOtherData({
                 key: 'screenshots',
                 data: {
@@ -90,9 +90,8 @@ const ManageScreenshots = () => {
                     dashboard
                 }
             });
-            setLoading(false)
         }, 500);
-        
+        setLoading(false);
     };
 
     return <ContentWrapper

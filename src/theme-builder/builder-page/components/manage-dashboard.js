@@ -6,6 +6,7 @@ import { Select } from 'gutenverse-core/components';
 import TextControl from '../controls/text-control';
 import TextareaControl from '../controls/textarea-control';
 import NumberControl from '../controls/number-control';
+import SwitchControl from '../controls/switch-control';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
@@ -60,7 +61,6 @@ const ManageDashbaord = () => {
             });
         });
     }, []);
-
     const updateData = (key, value) => {
         setDashboardData({
             ...dashboardData,
@@ -70,13 +70,13 @@ const ManageDashbaord = () => {
 
     const updateDashboardData = () => {
         setLoading(true);
-        setInterval(() => {
+        setTimeout(() => {
             updateOtherData({
                 key: 'dashboard',
                 data: { ...dashboardData }
             });
-            setLoading(false)
         }, 500);
+        setLoading(false);
     };
 
     return (
@@ -101,7 +101,15 @@ const ManageDashbaord = () => {
                     </div>
                     
                     {dashboardData?.mode?.value === 'themeforest' && <>
+                        
                         <div className='media-input-wrapper'>
+                            <SwitchControl 
+                                id={'theme-forest-include-pro'}
+                                title={__('Themeforest Mode', 'gutenverse-themes-builder')}
+                                description= {__('This mode will export certain features of the theme builder within the theme.', 'gutenverse-themes-builder')}
+                                value={dashboardData.themeforest_mode}
+                                onChange={value => updateData('themeforest_mode', value)}
+                            />
                             <h3>{__('Your Theme Logo', 'gutenverse-themes-builder')}</h3>
                             <p>{__('Upload a logo of your theme', 'gutenverse-themes-builder')}</p>
                             {dashboardData?.logo ? <div className="image-wrapper">

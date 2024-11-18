@@ -45,6 +45,12 @@ class Blocks {
 	public function register_blocks() {
 		// Static block.
 		$this->register_dynamic_block( GUTENVERSE_THEMES_BUILDER_DIR . './block/pattern-wrapper/block.json' );
+		if ( gutenverse_check_dashboard_mode() && ! class_exists( '\Gutenverse\Pro\License' ) ) {
+			register_block_type( GUTENVERSE_THEMES_BUILDER_DIR . './block/mega-menu/block.json' );
+			register_block_type( GUTENVERSE_THEMES_BUILDER_DIR . './block/mega-menu-item/block.json' );
+			register_block_type( GUTENVERSE_THEMES_BUILDER_DIR . './block/advance-tabs/block.json' );
+			register_block_type( GUTENVERSE_THEMES_BUILDER_DIR . './block/advance-tab/block.json' );
+		}
 	}
 
 	/**

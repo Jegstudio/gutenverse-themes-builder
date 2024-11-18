@@ -43,11 +43,40 @@ registerCoreBlocks(supportBlocks);
 const ManageNotice = () => {
     const [loading, setLoading] = useState(false);
     const [blocks, setBlocks] = useState([createBlock('core/paragraph')]);
+    const [data, setData] = useState({});
+
+    const selectItem = () => {
+        const mediaFrame = wp?.media({
+            title: 'Select or Upload Media',
+            button: {
+                text: 'Select as Banner'
+            },
+            library: {
+                type: [ 'image/jpg', 'image/jpeg', 'image/png' ]
+            },
+            multiple: false
+        });
+        mediaFrame.on('select', () =>  {
+            const attachment = mediaFrame.state().get('selection').first().toJSON();
+            setData({
+                ...data,
+                banner : {
+                    id: attachment?.id,
+                    filename: attachment?.filename,
+                    url: attachment?.url,
+                }
+            });
+        });
+        mediaFrame.open();
+    };
 
     useEffect(() => {
         getThemeData(null, response => {
-            if (response?.other?.notice) {
-                setBlocks(parse(response?.other?.notice));
+            if (response?.other?.notice?.updaterNotice) {
+                setBlocks(parse(response?.other?.notice?.updaterNotice));
+            }
+            if (response?.other?.notice?.eventNotice) {
+                setData(response?.other?.notice?.eventNotice)
             }
         });
     }, []);
@@ -56,11 +85,12 @@ const ManageNotice = () => {
         setLoading(true);
         setTimeout(updateOtherData({
             key: 'notice',
-            data: serialize(blocks)
-        }, () => {
-            setLoading(false);
+            data: { 
+                updaterNotice : serialize(blocks),
+                eventNotice : data
+            }
         }), 1000)
-        
+        setLoading(false);
     };
 
     return <>
@@ -69,6 +99,31 @@ const ManageNotice = () => {
             description={__('Edit your current active theme notice content here. This will be built as notification for your theme.', 'gutenverse-themes-builder')}
         >
             <div className="notice-wrapper">
+                <h2>{__('Event Notice', 'gutenverse-themes-builder')}</h2>
+                <div className="event-notice-wrapper">
+                    <div className='media-input-wrapper'>
+                        <h3>{__('Event Banner', 'gutenverse-themes-builder')}</h3>
+                        <div>
+                            {data?.banner && <img className="image-preview" src={data?.banner.url} />}
+                        </div><br/>
+                        <button className='button' onClick={() => selectItem()}>{__('Choose Image', 'gutenverse-themes-builder')}</button>
+                    </div>
+                    <div className="input-wrapper">
+                        <label >Theme URL</label>
+                        <div className="input-inner">
+                            <input type="text" placeholder="Theme URL" value={data.url} onChange={(e) => setData({ ...data, url: e.target.value})}/>
+                        </div>
+                    </div>
+                    <div className="input-wrapper">
+                        <label >Expired</label>
+                        <div className="input-inner">
+                            <input type="date" placeholder="Expired Date" value={data.expired} onChange={(e) => setData({ ...data, expired: e.target.value})}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="notice-wrapper">
+                <h2>{__('Upgrader Notice', 'gutenverse-themes-builder')}</h2>
                 <div className="notice-input">
                     <div className="editor__body">
                         <SlotFillProvider>

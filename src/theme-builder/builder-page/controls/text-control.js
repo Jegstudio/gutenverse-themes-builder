@@ -7,7 +7,8 @@ const TextControl = (props) => {
         description,
         value,
         important = false,
-        onChange
+        onChange,
+        errors = []
     } = props;
 
     const onTextChange = e => onChange(e.target.value);
@@ -24,6 +25,13 @@ const TextControl = (props) => {
                     value={value}
                     onChange={onTextChange}
                 />
+                <ul className="error-list">
+                    {
+                        errors.length > 0 && errors.map((el, index) => {
+                            return <li key={index}>{el}</li>
+                        })
+                    }
+                </ul>
                 {description && <span>{description}</span>}
             </div>
         </div>

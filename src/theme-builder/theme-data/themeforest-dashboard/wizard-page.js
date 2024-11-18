@@ -84,9 +84,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                                 download_url: plugin?.download_url
                             }
                         }).then((res) => {
-                            if( 'failed' === res['status'] ){
-                                console.log( res['message'] );
-                            }
                             wp?.apiFetch({
                                 path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
                                 method: 'POST',
