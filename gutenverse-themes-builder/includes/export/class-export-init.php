@@ -305,6 +305,7 @@ class Export_Init {
 				$url        = '';
 				$icons      = null;
 				$short_desc = '';
+
 				if ( 'wporg' === $plugin['type'] ) {
 					$result      = plugins_api(
 						'plugin_information',
@@ -351,6 +352,8 @@ class Export_Init {
 						}
 						$short_desc = $data['description'];
 						$url        = $data['url'];
+					} else {
+						$url = $plugin['url'];
 					}
 				}
 				$icons      = isset( $icons ) ? $icons : 'null';

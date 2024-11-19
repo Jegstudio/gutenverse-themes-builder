@@ -8,6 +8,8 @@
 
 namespace {{namespace}};
 
+use WP_Query;
+
 /**
  * Class Api
  *
@@ -339,33 +341,11 @@ class Themeforest_Data {
 	public function download_plugin_file( $url ) {
 		$url = esc_url_raw( $url );
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', __(  'A valid URL was not provided', '--gctd--' ) );
+			return false;
 		}
 		$temp_file = download_url( $url );
 		if ( is_wp_error( $temp_file ) ) {
-			// If download_url() fails, use a fallback method
-			$temp_file = wp_tempnam( $url );
-
-			if ( ! $temp_file ) {
-            return new WP_Error( 'temp_file_error', __( 'Could not create a temporary file.', '--gctd--' ) );
-			}
-
-			// Use wp_remote_get() to fetch the file
-			$response = wp_remote_get( $url, [
-				'timeout' => 20,
-				'stream'  => true, // Streams the response body to a file
-				'filename' => $temp_file, // Write directly to the temp file
-			] );
-
-			if ( is_wp_error( $response ) ) {
-				return new WP_Error( 'remote_get_error', __( 'Failed to retrieve the remote file.', '--gctd--' ) );
-			}
-
-			// Check for HTTP status code 200
-			$response_code = wp_remote_retrieve_response_code( $response );
-			if ( 200 !== $response_code ) {
-				return new WP_Error( 'http_error', sprintf( __( 'HTTP error: %s', '--gctd--' ), $response_code ) );
-			}
+			return false;
 		}
 		return $temp_file;
 	}
@@ -386,7 +366,7 @@ class Themeforest_Data {
 		global $wp_filesystem;
 
 		$temp_file = $this->download_plugin_file( $download_url );
-		if ( is_wp_error( $temp_file ) ) {
+		if ( ! $temp_file ) {
 			return array(
 				'status'  => 'failed',
 				'message' => 'Failed to download the plugin',
