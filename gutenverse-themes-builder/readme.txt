@@ -75,6 +75,11 @@ For additional information and assistance, please visit our extensive <a href="h
 
 == Changelog ==
 
+= 1.0.2 =
+* Add Themeforest mode to export some functionality with theme
+* Add Event Notification for theme
+* Improved Export Theme functionality
+
 = 1.0.1 =
 * Add dashboard generator for themes
 * Add manage pages for themes
