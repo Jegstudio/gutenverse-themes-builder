@@ -12,7 +12,7 @@
     "fix": "npx eslint --fix ./src || echo \"Formatting done! Please fix the remaining warnings and errors\"",
     "start:js": "cross-env NODE_ENV=development webpack --config .config/webpack.config.dev.js --watch",
     "start:dev": "cross-env NODE_ENV=development webpack --config .config/webpack.config.dev.js",
-    "build:js": "cross-env NODE_ENV=production webpack --config .config/webpack.config.dev.js",
+    "build:js": "cross-env NODE_ENV=production webpack --config .config/webpack.config.prod.js",
     "start:css": "cross-env NODE_ENV=development gulp watch",
     "build:css": "cross-env NODE_ENV=production gulp build",
     "development": "gulp clean && npm run development --prefix gutenverse-core && npm run dev && gulp release && npm run pot && gulp zip",
