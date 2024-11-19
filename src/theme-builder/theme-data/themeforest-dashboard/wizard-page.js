@@ -84,18 +84,24 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                                 download_url: plugin?.download_url
                             }
                         }).then((res) => {
-                            wp?.apiFetch({
-                                path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
-                                method: 'POST',
-                                data: {
-                                    status: 'active'
-                                }
-                            }).then(() => {
+                            if('success' === res.status){
+                                wp?.apiFetch({
+                                    path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
+                                    method: 'POST',
+                                    data: {
+                                        status: 'active'
+                                    }
+                                }).then(() => {
+                                    installPlugins(index + 1);
+                                }).catch(() => {
+                                    alert('Error during plugin activation');
+                                    installPlugins(index + 1);
+                                })
+                            }else{
+                                alert(res.message);
                                 installPlugins(index + 1);
-                            }).catch(() => {
-                                console.error('Error during plugin activation');
-                                installPlugins(index);
-                            })
+                            }
+                            
                         })
                     }else{
                         wp?.apiFetch({
@@ -108,7 +114,8 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                         }).then(() => {
                             installPlugins(index + 1);
                         }).catch(() => {
-                            console.error('Error during installing plugin');
+                            alert('Error during plugin activation');
+                            installPlugins(index + 1);
                         })
                     }
                 } else if (!plugin?.active) {
@@ -121,8 +128,8 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                     }).then(() => {
                         installPlugins(index + 1);
                     }).catch(() => {
-                        console.error('Error during plugin activation');
-                        installPlugins(index);
+                        alert('Error during plugin activation');
+                        installPlugins(index + 1);
                     })
                 } else {
                     installPlugins(index + 1);

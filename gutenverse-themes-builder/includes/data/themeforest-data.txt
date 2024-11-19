@@ -8,6 +8,8 @@
 
 namespace {{namespace}};
 
+use WP_Query;
+
 /**
  * Class Api
  *
@@ -280,7 +282,22 @@ class Themeforest_Data {
 					}
 				}
 				if ( $data->object_slug && ( 'page' === $data->type ) ) {
-					$page = get_page_by_path( $data->object_slug, OBJECT, 'page' );
+					$args = [
+						'name'        => $data->object_slug,
+						'post_type'   => 'page',
+						'post_status' => 'publish',
+						'numberposts' => 1
+					];
+
+					$query = new WP_Query( $args );
+
+					if ( $query->have_posts() ) {
+						$page = $query->posts[0]; // Get the first result
+					} else {
+						$page = null; // No page found
+					}
+
+					wp_reset_postdata(); 
 					if ( $page ) {
 						$url = get_permalink( $page->ID );
 					}
@@ -324,31 +341,11 @@ class Themeforest_Data {
 	public function download_plugin_file( $url ) {
 		$url = esc_url_raw( $url );
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', 'A valid URL was not provided' );
+			return false;
 		}
 		$temp_file = download_url( $url );
 		if ( is_wp_error( $temp_file ) ) {
-			// If download_url() fails, use a fallback method
-			$temp_file = wp_tempnam( $url );
-
-			if ( ! $temp_file ) {
-				return new WP_Error( 'temp_file_error', 'Could not create a temporary file' );
-			}
-
-			// Use PHP Streams as a fallback
-			$source      = fopen( $url, 'r' );
-			$destination = fopen( $temp_file, 'w' );
-
-			if ( ! $source || ! $destination ) {
-				return new WP_Error( 'file_open_error', 'Could not open file for reading or writing' );
-			}
-
-			// Copy data from URL to temporary file
-			stream_copy_to_stream( $source, $destination );
-
-			// Close file handlers
-			fclose( $source );
-			fclose( $destination );
+			return false;
 		}
 		return $temp_file;
 	}
@@ -369,7 +366,7 @@ class Themeforest_Data {
 		global $wp_filesystem;
 
 		$temp_file = $this->download_plugin_file( $download_url );
-		if ( is_wp_error( $temp_file ) ) {
+		if ( ! $temp_file ) {
 			return array(
 				'status'  => 'failed',
 				'message' => 'Failed to download the plugin',
