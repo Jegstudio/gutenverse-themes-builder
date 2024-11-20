@@ -206,8 +206,12 @@ class Init {
 	 */
 	public function turn_off_pro_if_themeforest_mode() {
 		$plugin = 'gutenverse-pro/gutenverse-pro.php';
-		if ( gutenverse_check_dashboard_mode() ) {
-			deactivate_plugins( $plugin );
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		$is_plugin_active = is_plugin_active( $plugin );
+		if ( gutenverse_pro_installed() ) {
+			if ( gutenverse_check_dashboard_mode() && $is_plugin_active ) {
+				deactivate_plugins( $plugin );
+			}
 		}
 	}
 
