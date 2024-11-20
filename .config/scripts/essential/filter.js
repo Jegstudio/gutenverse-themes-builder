@@ -11,6 +11,7 @@ const filter = {
     devtool: "cheap-module-source-map",
     entry: {
         filter: path.resolve(process.cwd(), "src/essential/filters/index.js"),
+        ['filter-client'] : path.resolve(process.cwd(), "src/essential/filters/filter-client.js"),
     },
     externals: {
         ...coreFrontendExternals,
@@ -40,7 +41,10 @@ const filter = {
                             source: process.env.NODE_ENV === 'development' ? "./build/essential/filter.js*" : "./build/essential/filter.js",
                             destination: "./gutenverse-themes-builder/assets/js/essential/",
                         },
-                        
+                        {
+                            source: process.env.NODE_ENV === 'development' ? "./build/essential/filter-client.js*" : "./build/essential/filter-client.js",
+                            destination: "./gutenverse-themes-builder/assets/js/essential/",
+                        },
                     ],
                 },
             },
