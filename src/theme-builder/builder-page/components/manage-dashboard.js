@@ -7,6 +7,7 @@ import TextControl from '../controls/text-control';
 import TextareaControl from '../controls/textarea-control';
 import NumberControl from '../controls/number-control';
 import SwitchControl from '../controls/switch-control';
+import { isEmpty } from 'lodash';
 
 const MediaSelect = ({ updateThumbnailData }) => {
     const [thumbnailFrame, setThumbnailFrame] = useState(null);
@@ -79,23 +80,24 @@ const ManageDashbaord = () => {
     const updateDashboardData = () => {
         setLoading(true);
         if( dashboardData?.mode.value === 'themeforest' && dashboardData?.themeforest_mode ){
-            if( ! isPluginInArray("jeg-theme-essential") ){
+            if( ! isEmpty( extraPlugins ) ){
                 let essence = extraPlugins.find( el => el.slug === "jeg-theme-essential" );
-                console.log(essence);
-                updateOtherData({
-                    key: 'plugins',
-                    data: [...pluginData, {
-                        label : essence.title,
-                        value : essence.slug,
-                        url : essence.url,
-                        type: 'custom',
-                        version: essence.version
-                    }]
-                });
+                if( ! isPluginInArray("jeg-theme-essential") && essence ){
+                    updateOtherData({
+                        key: 'plugins',
+                        data: [...pluginData, {
+                            label : essence.title,
+                            value : essence.slug,
+                            url : essence.url,
+                            type: 'custom',
+                            version: essence.version
+                        }]
+                    });
+                }
             }
         }else{
             if( isPluginInArray("jeg-theme-essential") ){
-                let noEssence = pluginData.filter( el => el.slug !== "jeg-theme-essential" );
+                let noEssence = pluginData.filter( el => el.value !== "jeg-theme-essential" );
                 updateOtherData({
                     key: 'plugins',
                     data: noEssence
@@ -112,7 +114,7 @@ const ManageDashbaord = () => {
     };
 
     const isPluginInArray = (slug) => {
-        let idx = pluginData.findIndex(el => el.slug === slug);
+        let idx = pluginData.findIndex(el => el.value === slug);
         return idx !== -1;
     }
     return (
