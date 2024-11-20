@@ -289,7 +289,7 @@ class Builder_Page {
 	 * @return array
 	 */
 	public function get_extra_plugin_gutenverse() {
-		$result = wp_remote_request(
+		$result   = wp_remote_request(
 			GUTENVERSE_FRAMEWORK_LIBRARY_URL . 'wp-json/gutenverse-server/v4/extra-plugin/list',
 			array(
 				'method'  => 'GET',
@@ -299,7 +299,7 @@ class Builder_Page {
 			),
 		);
 		$response = json_decode( $result['body'], true );
-		if ( 'success' === $response['status'] ) {
+		if ( isset( $response['status'] ) && 'success' === $response['status'] ) {
 			return $response['data'];
 		} else {
 			return array();
