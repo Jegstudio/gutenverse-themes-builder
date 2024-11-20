@@ -178,8 +178,9 @@ class Export_Init {
 			if ( isset( $other['dashboard']['themeforest_mode'] ) && $other['dashboard']['themeforest_mode'] ) {
 				$dir_string = Misc::get_constant_name( $theme_data['slug'] ) . '_DIR';
 				$url_string = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
-				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_directory', $dir_string . 'assets' );";
-				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_url', $url_string . 'assets' );";
+				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_directory', function () { return $dir_string . 'assets'; });";
+				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_url', function () { return $url_string . 'assets'; } );";
+				$additional_filter[] = "add_filter( 'jeg_theme_essential_mode_on', '__return_true' );";
 				$instance->add_essential();
 			}
 		} else {
