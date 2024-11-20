@@ -203,7 +203,7 @@ export const hightlightPanel = (results, props) => {
             },
             {
                 id: 'margin',
-                label: __('Margin', '--gctd--'),
+                label: __('Margin', 'gutenverse-pro'),
                 component: DimensionControl,
                 allowDeviceControl: true,
                 show: (!switcher.layout || switcher.layout === 'normal'),
@@ -242,7 +242,7 @@ export const hightlightPanel = (results, props) => {
             },
             {
                 id: 'padding',
-                label: __('Padding', '--gctd--'),
+                label: __('Padding', 'gutenverse-pro'),
                 component: DimensionControl,
                 allowDeviceControl: true,
                 show: (!switcher.layout || switcher.layout === 'normal'),
@@ -281,7 +281,7 @@ export const hightlightPanel = (results, props) => {
             },
             {
                 id: 'marginHover',
-                label: __('Margin', '--gctd--'),
+                label: __('Margin', 'gutenverse-pro'),
                 component: DimensionControl,
                 allowDeviceControl: true,
                 show: switcher.layout === 'hover',
@@ -320,7 +320,7 @@ export const hightlightPanel = (results, props) => {
             },
             {
                 id: 'paddingHover',
-                label: __('Padding', '--gctd--'),
+                label: __('Padding', 'gutenverse-pro'),
                 component: DimensionControl,
                 allowDeviceControl: true,
                 show: switcher.layout === 'hover',

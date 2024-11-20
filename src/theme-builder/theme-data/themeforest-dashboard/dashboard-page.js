@@ -172,12 +172,12 @@ const DashboardPage = () => {
         resetInvalid();
         switch (invalid) {
             case 'error':
-                return __('there is an error requesting subscription.', '--gctd--');
+                return __('there is an error requesting subscription.', '--gtb-theme-namespace--');
             case 'format':
-                return __('please use a valid email address format.', '--gctd--');
+                return __('please use a valid email address format.', '--gtb-theme-namespace--');
             case 'empty':
             default:
-                return __('please input an email address.', '--gctd--');
+                return __('please input an email address.', '--gtb-theme-namespace--');
         }
     };
 

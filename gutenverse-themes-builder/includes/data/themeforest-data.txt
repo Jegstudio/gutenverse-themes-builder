@@ -101,7 +101,7 @@ class Themeforest_Data {
 					if ( ! current_user_can( 'manage_options' ) ) {
 						return new WP_Error(
 							'forbidden_permission',
-							esc_html__( 'Forbidden Access', '--gctd--' ),
+							esc_html__( 'Forbidden Access', '{{slug}}' ),
 							array( 'status' => 403 )
 						);
 					}
@@ -121,7 +121,7 @@ class Themeforest_Data {
 					if ( ! current_user_can( 'manage_options' ) ) {
 						return new WP_Error(
 							'forbidden_permission',
-							esc_html__( 'Forbidden Access', '--gctd--' ),
+							esc_html__( 'Forbidden Access', '{{slug}}' ),
 							array( 'status' => 403 )
 						);
 					}
@@ -141,7 +141,7 @@ class Themeforest_Data {
 					if ( ! current_user_can( 'manage_options' ) ) {
 						return new WP_Error(
 							'forbidden_permission',
-							esc_html__( 'Forbidden Access', '--gctd--' ),
+							esc_html__( 'Forbidden Access', '{{slug}}' ),
 							array( 'status' => 403 )
 						);
 					}

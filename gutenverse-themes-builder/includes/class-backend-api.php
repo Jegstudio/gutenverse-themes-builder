@@ -1162,10 +1162,14 @@ class Backend_Api {
 		}
 		$new_data = $info_db->get_theme_data( $theme_id );
 		$plugin   = 'gutenverse-pro/gutenverse-pro.php';
-		if ( gutenverse_check_dashboard_mode() ) {
-			deactivate_plugins( $plugin );
-		} else {
-			activate_plugin( $plugin );
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		$is_plugin_active = is_plugin_active( $plugin );
+		if ( gutenverse_pro_installed() ) {
+			if ( gutenverse_check_dashboard_mode() && $is_plugin_active ) {
+				deactivate_plugins( $plugin );
+			} else {
+				activate_plugin( $plugin );
+			}
 		}
 
 		return array(

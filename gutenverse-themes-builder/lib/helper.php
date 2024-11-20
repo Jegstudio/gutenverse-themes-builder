@@ -26,6 +26,7 @@ if ( ! function_exists( 'gutenverse_check_dashboard_mode' ) ) {
 			if ( isset( $other['dashboard']['mode']['value'] ) && isset( $other['dashboard']['themeforest_mode'] ) ) {
 				$dashboard_mode    = $other['dashboard']['mode']['value'];
 				$is_export_feature = $other['dashboard']['themeforest_mode'];
+				
 				if ( 'themeforest' === $dashboard_mode && $is_export_feature ) {
 					return true;
 				}

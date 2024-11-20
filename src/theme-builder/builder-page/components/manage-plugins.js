@@ -16,7 +16,8 @@ import SwitchControl from '../controls/switch-control';
 
 const defaultPlugins = [
     'gutenverse',
-    'pro'
+    'pro',
+    'jeg-theme-essential'
 ];
 
 const ManagePlugins = () => {
