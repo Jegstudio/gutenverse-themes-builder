@@ -176,8 +176,8 @@ class Export_Init {
 			}
 
 			if ( isset( $other['dashboard']['themeforest_mode'] ) && $other['dashboard']['themeforest_mode'] ) {
-				$dir_string = Misc::get_constant_name( $theme_data['slug'] ) . '_DIR';
-				$url_string = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
+				$dir_string          = Misc::get_constant_name( $theme_data['slug'] ) . '_DIR';
+				$url_string          = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
 				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_directory', function () { return $dir_string . 'assets'; });";
 				$additional_filter[] = "add_filter( 'jeg_theme_essential_assets_url', function () { return $url_string . 'assets'; } );";
 				$additional_filter[] = "add_filter( 'jeg_theme_essential_mode_on', '__return_true' );";
@@ -731,7 +731,7 @@ class Export_Init {
 	 */
 	private function add_essential() {
 		/**Copy Essential Js Dir */
-		Misc::copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/assets/js/essential', gutenverse_themes_builder_theme_built_path() . 'assets/js/essential', array( 'chunk-gsap-scroll-trigger.js.map', 'chunk-gsap.js.map', 'frontend.js.map', 'profrontend.js.map', 'filter.js.map' ) );
+		Misc::copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/assets/js/essential', gutenverse_themes_builder_theme_built_path() . 'assets/js/essential', array( 'chunk-gsap-scroll-trigger.js.map', 'chunk-gsap.js.map', 'frontend.js.map', 'profrontend.js.map', 'filter.js.map', 'filter-client.js.map', 'filter.js', 'chunk-gsap.js.LICENSE.txt', 'chunk-gsap-scroll-trigger.js.LICENSE.txt' ) );
 		/**Copy Essential Css Dir */
 		Misc::copy_dir( GUTENVERSE_THEMES_BUILDER_DIR . '/assets/css/essential', gutenverse_themes_builder_theme_built_path() . 'assets/css/essential' );
 		/**Copy Essential Dependencies Dir */
