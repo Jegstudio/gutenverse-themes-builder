@@ -22,7 +22,7 @@ const MediaSelect = ({ updateThumbnailData }) => {
             },
             multiple: false
         });
-
+        
         setThumbnailFrame(firstFrame);
     }, []);
 
@@ -52,6 +52,10 @@ const MediaSelect = ({ updateThumbnailData }) => {
 const ManageDashbaord = () => {
     const [dashboardData, setDashboardData] = useState({});
     const [loading, setLoading] = useState(false);
+    const [pluginData, setPluginData] = useState([]);
+    const {
+        extraPlugins,
+    } = window['GutenverseThemeBuilder'];;
     useEffect(() => {
         getThemeData(null, response => {
             const themeDataRes = response;
@@ -59,6 +63,10 @@ const ManageDashbaord = () => {
                 ...dashboardData,
                 ...themeDataRes?.other?.dashboard,
             });
+            setPluginData([
+                ...pluginData,
+                ...themeDataRes?.other?.plugins,
+            ]);
         });
     }, []);
     const updateData = (key, value) => {
@@ -70,15 +78,43 @@ const ManageDashbaord = () => {
 
     const updateDashboardData = () => {
         setLoading(true);
+        if( dashboardData?.mode.value === 'themeforest' && dashboardData?.themeforest_mode ){
+            if( ! isPluginInArray("jeg-theme-essential") ){
+                let essence = extraPlugins.find( el => el.slug === "jeg-theme-essential" );
+                console.log(essence);
+                updateOtherData({
+                    key: 'plugins',
+                    data: [...pluginData, {
+                        label : essence.title,
+                        value : essence.slug,
+                        url : essence.url,
+                        type: 'custom',
+                        version: essence.version
+                    }]
+                });
+            }
+        }else{
+            if( isPluginInArray("jeg-theme-essential") ){
+                let noEssence = pluginData.filter( el => el.slug !== "jeg-theme-essential" );
+                updateOtherData({
+                    key: 'plugins',
+                    data: noEssence
+                });
+            }
+        }
         setTimeout(() => {
             updateOtherData({
                 key: 'dashboard',
                 data: { ...dashboardData }
             });
+            setLoading(false);
         }, 500);
-        setLoading(false);
     };
 
+    const isPluginInArray = (slug) => {
+        let idx = pluginData.findIndex(el => el.slug === slug);
+        return idx !== -1;
+    }
     return (
         <ContentWrapper
             title={__('Manage Dashboard', 'gutenverse-themes-builder')}

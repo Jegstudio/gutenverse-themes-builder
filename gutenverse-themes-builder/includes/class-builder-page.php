@@ -278,7 +278,31 @@ class Builder_Page {
 		$config['createPattern'] = admin_url( 'post-new.php?post_type=gutenverse-pattern' );
 		$config['themeSlug']     = $this->get_theme_slug();
 		$config['themeMode']     = gutenverse_themes_builder_get_theme_mode();
+		$config['extraPlugins']  = $this->get_extra_plugin_gutenverse();
 
 		return $config;
+	}
+
+	/**
+	 * Get extra plugin gutenverse
+	 *
+	 * @return array
+	 */
+	public function get_extra_plugin_gutenverse() {
+		$result = wp_remote_request(
+			GUTENVERSE_FRAMEWORK_LIBRARY_URL . 'wp-json/gutenverse-server/v4/extra-plugin/list',
+			array(
+				'method'  => 'GET',
+				'headers' => array(
+					'Content-Type' => 'application/json',
+				),
+			),
+		);
+		$response = json_decode( $result['body'], true );
+		if ( 'success' === $response['status'] ) {
+			return $response['data'];
+		} else {
+			return array();
+		}
 	}
 }
