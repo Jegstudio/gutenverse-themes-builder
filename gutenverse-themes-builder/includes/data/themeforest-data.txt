@@ -163,36 +163,33 @@ class Themeforest_Data {
 		global $wp_filesystem;
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
-		$title        = $request->get_param( 'title' );
-		$active_theme = wp_get_theme();
-		$theme_dir    = $active_theme->get_stylesheet_directory();
-		$files        = glob( $theme_dir . '/gutenverse-pages/*' );
-		$templates    = array();
-		foreach( $files as $file ){
-			$json_file_data = $wp_filesystem->get_contents( $file );
-			$templates[]    = json_decode( $json_file_data, true );
-		}
-		$theme_url = get_template_directory_uri();
-		foreach ( $templates as $value ) {
-			$content = str_replace( '{{home_url}}', $theme_url, $value['content'] );
+		$title           = $request->get_param( 'title' );
+		$page_slug_title = str_replace( ' ', '_', strtolower( $title ) );
+		$active_theme    = wp_get_theme();
+		$theme_dir       = $active_theme->get_stylesheet_directory();
+		$json_file_data  = $wp_filesystem->get_contents( $theme_dir . '/gutenverse-pages/' . $page_slug_title . '.json' );
+		$page            = json_decode( $json_file_data, true );
+		$theme_url       = get_template_directory_uri();
+		if ( $page ) {
+			$content = str_replace( '{{home_url}}', $theme_url, $page['content'] );
 			$content = str_replace( "\'", "'", $content );
 			$page_id = null;
 
-			if ( ! empty( $value['core-patterns'] ) ) {
-				$this->import_synced_patterns( $value['core-patterns'] );
+			if ( ! empty( $page['core-patterns'] ) ) {
+				$this->import_synced_patterns( $page['core-patterns'] );
 			}
 
-			if ( ! empty( $value['pro-patterns'] ) ) {
-				$this->import_synced_patterns( $value['pro-patterns'] );
+			if ( ! empty( $page['pro-patterns'] ) ) {
+				$this->import_synced_patterns( $page['pro-patterns'] );
 			}
 
-			if ( ! empty( $value['gutenverse-patterns'] ) ) {
-				$this->import_synced_patterns( $value['gutenverse-patterns'] );
+			if ( ! empty( $page['gutenverse-patterns'] ) ) {
+				$this->import_synced_patterns( $page['gutenverse-patterns'] );
 			}
 
 			/**Download Image */
-			if ( $value['image_arr'] ) {
-				$images  = json_decode( str_replace( "'", '"', $value['image_arr'] ) );
+			if ( $page['image_arr'] ) {
+				$images  = json_decode( str_replace( "'", '"', $page['image_arr'] ) );
 				$content = wp_slash( $content );
 
 				foreach ( $images as $key => $image ) {
@@ -205,44 +202,38 @@ class Themeforest_Data {
 				}
 			}
 
-			if ( ! $title || $title === $value['pagetitle'] ) {
-				$query = new \WP_Query(
+			$query  = new \WP_Query(
+				array(
+					'post_type'      => 'page',
+					'post_status'    => 'publish',
+					'title'          => $page['pagetitle'],
+					'posts_per_page' => 1,
+				)
+			);
+
+			if ( $query->have_posts() ) {
+				$existing_page = $query->posts[0];
+				$page_id       = $existing_page->ID;
+				wp_update_post(
 					array(
-						'post_type'      => 'page',
-						'post_status'    => 'publish',
-						'title'          => $value['pagetitle'],
-						'posts_per_page' => 1,
+						'ID'            => $existing_page->ID,
+						'page_template' => $page['template'],
 					)
 				);
+			} else {
+				$new_page = array(
+					'post_title'    => $page['pagetitle'],
+					'post_content'  => $content,
+					'post_status'   => 'publish',
+					'post_type'     => 'page',
+					'page_template' => $page['template'],
+				);
+				$page_id  = wp_insert_post( $new_page );
+			}
 
-				if ( $query->have_posts() ) {
-					$existing_page = $query->posts[0];
-					$page_id = $existing_page->ID;
-					wp_update_post(
-						array(
-							'ID'            => $existing_page->ID,
-							'page_template' => $value['template'],
-						)
-					);
-				} else {
-					$new_page = array(
-						'post_title'    => $value['pagetitle'],
-						'post_content'  => $content,
-						'post_status'   => 'publish',
-						'post_type'     => 'page',
-						'page_template' => $value['template'],
-					);
-					$page_id = wp_insert_post( $new_page );
-				}
-
-				if( $value['is_homepage'] && $page_id ){
-					update_option( 'show_on_front', 'page' );
-					update_option( 'page_on_front', $page_id );
-				}
-
-				if ( $title ) {
-					break;
-				}
+			if ( $page['is_homepage'] && $page_id ) {
+				update_option( 'show_on_front', 'page' );
+				update_option( 'page_on_front', $page_id );
 			}
 		}
 
