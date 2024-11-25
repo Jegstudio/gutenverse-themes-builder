@@ -1,18 +1,18 @@
 import { addFilter } from '@wordpress/hooks';
-import { stickySection } from './parts/panel/stickySection';
-import { withAnimationSticky } from './parts/hoc/withAnimationSticky';
-import { stickyColumn } from './parts/panel/stickyColumn';
-import { stickyFormBuilder } from './parts/panel/stickyFormBuilder';
-import apiFetch from '@wordpress/api-fetch';
-import { hightlightPanel } from './parts/panel/highlightPanel';
-import { transformOptions } from './parts/panel/transformOptions';
+import { stickyData as stickySection } from '../../../gutenverse-server/src/pro/filters/part/sticky-section-option';
+import { withAnimationSticky } from '../../../gutenverse-extend/src/pro/hoc/with-animation-sticky';
+import { stickyData as stickyColumn } from '../../../gutenverse-server/src/pro/filters/part/sticky-column-option';
+import { stickyData as stickyFormBuilder } from '../../../gutenverse-server/src/pro/filters/part/sticky-form-builder-option';
+import { panelChildStyle as highlightPanel } from '../../../gutenverse-server/src/pro/filters/part/child-style-control';
+import { transformData as transformOptions } from '../../../gutenverse-server/src/pro/filters/part/transform-option';
 import { popupOptions } from './parts/panel/popupOptions';
-import { megaMenuPanel } from './parts/blocks/mega-menu/panel-list';
-import { megaMenuItemPanel } from './parts/blocks/mega-menu-item/panel-list';
-import { textClipOptions } from './parts/panel/textClipOptions';
-import { backgroundEffectHoc } from './parts/hoc/withBackgroundEffect';
-import { backgroundEffectOption } from './parts/panel/backgroundEffectOptions';
-import { withBackgroundEffectScript } from './parts/hoc/withBackgroundEffectScript';
+import { panelData as megaMenuPanel } from '../../../gutenverse-server/src/pro/filters/part/panels/mega-menu/panel-list';
+import { panelData as megaMenuItemPanel } from '../../../gutenverse-server/src/pro/filters/part/panels/mega-menu-item/panel-list';
+import { panelData as advanceTabsPanel } from '../../../gutenverse-server/src/pro/filters/part/panels/advance-tabs/panel-list';
+import { textClipOptions } from '../../../gutenverse-server/src/pro/filters/part/text-clip-option';
+import { backgroundEffectHoc } from '../../../gutenverse-server/src/pro/filters/part/hoc/background-effect';
+import { backgroundEffectData as backgroundEffectOption } from '../../../gutenverse-server/src/pro/filters/part/background-effect-option';
+import { withBackgroundEffectScript } from '../../../gutenverse-extend/src/pro/hoc/with-background-effect-script';
 
 class GutenversePROLiteFilter {
     constructor() {
@@ -29,7 +29,7 @@ class GutenversePROLiteFilter {
         addFilter(
             'gutenverse.section.sticky',
             'gutenverse-essence/section.sticky',
-            (results, props) => stickySection(results, props),
+            (results, props) => stickySection(props, results),
             9
         );
         addFilter(
@@ -53,7 +53,7 @@ class GutenversePROLiteFilter {
         addFilter(
             'gutenverse.child-style-control',
             'gutenverse-essence/highlight-control',
-            (results, props) => hightlightPanel(results, props),
+            (results, props) => highlightPanel(results, props),
             9
         );
         addFilter(
@@ -78,6 +78,12 @@ class GutenversePROLiteFilter {
             'gutenverse.mega-menu-item.panels',
             'gutenverse-essence/mega-menu-item-panels',
             (results, props) => megaMenuItemPanel(props, results),
+            9
+        );
+        addFilter(
+            'gutenverse.advance-tabs-panel',
+            'gutenverse-essence/advance-tab-panels',
+            (results, props) => advanceTabsPanel(props, results),
             9
         );
         addFilter(
