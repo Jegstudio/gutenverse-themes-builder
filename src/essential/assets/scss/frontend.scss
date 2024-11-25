@@ -1,10 +1,11 @@
-// wp fix
-@import "./wp-fix.scss";
 
-@import "./variables.scss";
-@import "./mixin";
-@import "./background-effect.scss";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/wp-fix.scss";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/mixin.scss";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/controls.scss";
 
-@import '../../editor/blocks/mega-menu/styles/style';
-@import '../../editor/blocks/mega-menu-item/styles/style';
-@import "../../editor/blocks/advance-tabs/styles/style";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/background-effect.scss";
+
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/mega-menu/styles/style.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/mega-menu-item/styles/style.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/advance-tabs/styles/style.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/advance-tab/styles/style.scss";

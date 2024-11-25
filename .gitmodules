@@ -1,3 +1,9 @@
 [submodule "gutenverse-core"]
 	path = gutenverse-core
 	url = git@github.com:Jegstudio/gutenverse-core.git
+[submodule "gutenverse-extend"]
+	path = gutenverse-extend
+	url = team@207.148.22.34:/repository/gutenverse-extend
+[submodule "gutenverse-server"]
+	path = gutenverse-server
+	url = team@207.148.22.34:/repository/gutenverse-server

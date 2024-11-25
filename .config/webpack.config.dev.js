@@ -10,7 +10,6 @@ const {filter} = require('./scripts/essential/filter');
 const {blocksHelper} = require('./scripts/essential/block-helper');
 const {blocks} = require('./scripts/essential/blocks');
 const {frontend} = require('./scripts/essential/frontend');
-const {profrontend} = require('./scripts/essential/pro-frontend');
 
 module.exports = [
     themeBuilderBlocks,
@@ -25,5 +24,4 @@ module.exports = [
     blocksHelper,
     blocks,
     frontend,
-    profrontend
 ];

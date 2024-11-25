@@ -1,11 +1,11 @@
-@import "./mixin";
-@import "./controls";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/mixin.scss";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/controls.scss";
 
 // wp fix
-@import "./wp-fix.scss";
+@import "../../../../gutenverse-extend/src/pro/assets/scss/wp-fix.scss";
 
 // Element
-@import "../../editor/blocks/mega-menu/styles/editor.scss";
-@import "../../editor/blocks/mega-menu-item/styles/editor.scss";
-@import "../../editor/blocks/advance-tabs/styles/editor.scss";
-@import "../../editor/blocks/advance-tab/styles/editor.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/mega-menu/styles/editor.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/mega-menu-item/styles/editor.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/advance-tabs/styles/editor.scss";
+@import "../../../../gutenverse-extend/src/pro/editor/blocks/advance-tab/styles/editor.scss";

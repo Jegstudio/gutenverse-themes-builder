@@ -8,7 +8,7 @@ const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extrac
 
 let copyPath = [];
 
-const blockDir = path.resolve(process.cwd(), "src/essential/editor/blocks");
+const blockDir = path.resolve(process.cwd(), "gutenverse-extend/src/pro/editor/blocks");
 
 fs.readdirSync(blockDir).filter((file) => {
     const blockPath = `${blockDir}/${file}`;

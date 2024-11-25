@@ -39,14 +39,6 @@ const frontend = {
                             source: process.env.NODE_ENV === 'development' ? "./build/essential/frontend.js*" : "./build/essential/frontend.js",
                             destination: "./gutenverse-themes-builder/assets/js/essential/",
                         },
-                        {
-                            source: process.env.NODE_ENV === 'development' ? "./build/essential/chunk-gsap.js*" : "./build/essential/chunk-gsap.js",
-                            destination: "./gutenverse-themes-builder/assets/js/essential/",
-                        },
-                        {
-                            source: process.env.NODE_ENV === 'development' ? "./build/essential/chunk-gsap-scroll-trigger.js*" : "./build/essential/chunk-gsap-scroll-trigger.js",
-                            destination: "./gutenverse-themes-builder/assets/js/essential/",
-                        },
                     ],
                 },
             },

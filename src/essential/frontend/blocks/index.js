@@ -1,9 +1,9 @@
 import { u, addFilter } from 'gutenverse-core-frontend';
-import GutenverseMegaMenu from './blocks/mega-menu';
-import GutenverseMegaMenuItem from './blocks/mega-menu-item';
-import GutenverseSticky from './script/sticky';
-import GutenverseAdvanceTabs from './blocks/advance-tabs';
-import GutenverseBackgroundEffect from './script/background-effect';
+import GutenverseMegaMenu from '../../../../gutenverse-extend/src/pro/frontend/blocks/blocks/mega-menu';
+import GutenverseMegaMenuItem from '../../../../gutenverse-extend/src/pro/frontend/blocks/blocks/mega-menu-item';
+import GutenverseSticky from '../../../../gutenverse-extend/src/pro/frontend/blocks/script/sticky';
+import GutenverseAdvanceTabs from '../../../../gutenverse-extend/src/pro/frontend/blocks/blocks/advance-tabs';
+import GutenverseBackgroundEffect from '../../../../gutenverse-extend/src/pro/frontend/blocks/script/background-effect';
 
 const swiperFrontend = (result, props) => {
     const isTrue = (val) => val === 'true';
