@@ -717,7 +717,7 @@ const transformOption = (props) => {
                         >
                             <>
                                 {
-                                    proOptions.includes('skew') && <>
+                                    !proOptions.includes('skew') && <>
                                         <SizeControl
                                             label={
                                                 <>
@@ -777,7 +777,7 @@ const transformOption = (props) => {
                         >
                             <>
                                 {
-                                    proOptions.includes('opacity') && <RangeControl
+                                    !proOptions.includes('opacity') && <RangeControl
                                         label={
                                             <>
                                                 {__('Opacity', 'gutenverse-pro')}
