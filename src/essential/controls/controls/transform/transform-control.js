@@ -364,7 +364,7 @@ const transformOption = (props) => {
                         >
                             <>
                                 {
-                                    proOptions.includes('skew') && <>
+                                    !proOptions.includes('skew') && <>
                                         <SizeControl
                                             label={
                                                 <>
@@ -425,7 +425,7 @@ const transformOption = (props) => {
                         >
                             <>
                                 {
-                                    proOptions.includes('opacity') && <RangeControl
+                                    !proOptions.includes('opacity') && <RangeControl
                                         label={
                                             <>
                                                 {__('Opacity', 'gutenverse')}
@@ -456,7 +456,7 @@ const transformOption = (props) => {
                         >
                             <>
                                 {
-                                    proOptions.includes('perspective') && <SizeControl
+                                    !proOptions.includes('perspective') && <SizeControl
                                         label={
                                             <>
                                                 {__('Perspective', 'gutenverse-pro')}
