@@ -494,8 +494,9 @@ export const ImporterModal = (props) => {
                         setDone(true);
                         setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
                     }, 500);
-                }).catch(() => {
+                }).catch((error) => {
                     setDone(true);
+                    console.error(`Failed to import menu`, error);
                 })
             }else{
                 setTimeout(() => {
