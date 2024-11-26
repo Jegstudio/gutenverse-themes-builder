@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run start --prefix gutenverse-core & npm run start:js & npm run start:css",
-    "dev": "npm run dev --prefix gutenverse-core && npm run start:dev && npm run build:css",
-    "build": "npm run build --prefix gutenverse-core && npm run build:js && npm run build:css",
+    "start": "npm run start --prefix gutenverse-core && npm run start --prefix gutenverse-extend && npm run start --prefix gutenverse-server && npm run start:js && npm run start:css",
+    "dev": "npm run dev --prefix gutenverse-core && npm run dev --prefix gutenverse-extend && npm run dev --prefix gutenverse-server && npm run start:dev && npm run build:css",
+    "build": "npm run build --prefix gutenverse-core && npm run build --prefix gutenverse-extend && npm run build --prefix gutenverse-server && npm run build:js && npm run build:css",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "cross-env NODE_ENV=development webpack watch --mode development",
     "fix": "npx eslint --fix ./src || echo \"Formatting done! Please fix the remaining warnings and errors\"",
@@ -15,8 +15,8 @@
     "build:js": "cross-env NODE_ENV=production webpack --config .config/webpack.config.prod.js",
     "start:css": "cross-env NODE_ENV=development gulp watch",
     "build:css": "cross-env NODE_ENV=production gulp build",
-    "development": "gulp clean && npm run development --prefix gutenverse-core && npm run dev && gulp release && npm run pot && gulp zip",
-    "production": "gulp clean && npm run production --prefix gutenverse-core && npm run build && gulp release && npm run pot && gulp zip",
+    "development": "gulp clean && npm run development --prefix gutenverse-core && npm run development --prefix gutenverse-extend && npm run development --prefix gutenverse-server && npm run dev && gulp release && npm run pot && gulp zip",
+    "production": "gulp clean && npm run production --prefix gutenverse-core && npm run production --prefix gutenverse-extend && npm run production --prefix gutenverse-server && npm run build && gulp release && npm run pot && gulp zip",
     "pot": "wp i18n make-pot ./release/gutenverse-themes-builder ./release/gutenverse-themes-builder/languages/gutenverse-themes-builder.pot --domain=gutenverse-themes-builder"
   },
   "repository": {

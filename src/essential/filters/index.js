@@ -97,6 +97,12 @@ class GutenversePROLiteFilter {
             9
         );
         addFilter(
+            'gutenverse.advance-tabs-panel',
+            'gutenverse-essence/advance-tab-panels',
+            (results, props) => advanceTabsPanel(props, results),
+            9
+        );
+        addFilter(
             'gutenverse.text-clip',
             'gutenverse-essence/text-clip',
             (results, props) => textClipOptions(results, props),
