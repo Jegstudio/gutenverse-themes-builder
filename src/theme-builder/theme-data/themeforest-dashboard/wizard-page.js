@@ -496,7 +496,6 @@ export const ImporterModal = (props) => {
                     }, 500);
                 }).catch(() => {
                     setDone(true);
-                    setCompleteSubtitle(__('Import Failed!', '--gtb-theme-namespace--'));
                 })
             }else{
                 setTimeout(() => {
