@@ -1,4 +1,4 @@
-import { NumberControl, RangeControl, SelectControl, TextControl } from 'gutenverse-core/controls';
+import { NumberControl, SelectControl, TextControl } from 'gutenverse-core/controls';
 import { __ } from '@wordpress/i18n';
 
 export const popupOptions = (props, result) => {
