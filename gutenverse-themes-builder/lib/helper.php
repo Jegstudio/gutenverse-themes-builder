@@ -26,7 +26,7 @@ if ( ! function_exists( 'gutenverse_check_dashboard_mode' ) ) {
 			if ( isset( $other['dashboard']['mode']['value'] ) && isset( $other['dashboard']['themeforest_mode'] ) ) {
 				$dashboard_mode    = $other['dashboard']['mode']['value'];
 				$is_export_feature = $other['dashboard']['themeforest_mode'];
-				
+
 				if ( 'themeforest' === $dashboard_mode && $is_export_feature ) {
 					return true;
 				}
@@ -160,17 +160,20 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 			if ( $check_image_name ) {
 				$image_name        = $check_image_name['image_name'];
 				$image_without_res = $check_image_name['nores'];
+				$valid_name        = $check_image_name['valid_name'];
 			} else {
 				$is_valid    = wp_remote_head( $image_without_res );
 				$status_code = wp_remote_retrieve_response_code( $is_valid );
 				if ( 200 !== $status_code ) {
 					$image_without_res = $image;
+					$valid_name = $valid_name;
 				}
 			}
 		}
 		return array(
 			'original'   => $matches[0],
 			'nores'      => $image_without_res,
+			'valid_name' => $valid_name,
 			'image_name' => $image_name,
 			'width'      => $res[0],
 			'height'     => explode( '.', $res[1] )[0],
