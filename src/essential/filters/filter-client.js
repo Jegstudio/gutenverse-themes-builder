@@ -1,13 +1,11 @@
 import { addGutenverseFilter } from "./theFilter";
-import { applyFilters } from '@wordpress/hooks';
-
 class GutenversePROLiteFilter {
     constructor() {
         const {
-            plugins
+            plugins, license
         } = window['GutenverseConfig'];
-        const checkInstall = plugins['gutenverse-pro'] ? true : false;
-        if(applyFilters('gutenverse.essential.control', !checkInstall)){
+        const checkActive = plugins['gutenverse-pro'] ? plugins['gutenverse-pro'].active : false;
+        if( !checkActive && !license){
             addGutenverseFilter();
         }
     }
