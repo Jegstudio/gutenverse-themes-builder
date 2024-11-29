@@ -12,7 +12,7 @@ import { tabTitleStyle } from '../../../../editor/blocks/advance-tabs/panels/pan
 import { tabTitleWrapperStyle } from '../../../../editor/blocks/advance-tabs/panels/panel-tab-title-wrapper';
 import { tabTitlesWrapperStyle } from '../../../../editor/blocks/advance-tabs/panels/panel-tab-titles-wrapper';
 
-export const panelData = (props, def, result) => {
+export const advanceTabPanel = (props, result) => {
     result[
         result.findIndex(el => el.id === 'content')
     ] = {

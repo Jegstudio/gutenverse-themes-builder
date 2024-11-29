@@ -103,6 +103,10 @@ class Block_Patterns {
 								$data = Helper::handle_file( $url );
 							}
 							$content = str_replace( $url, $data['url'], $content );
+							$image_id = $image->image_id;
+							if ( $image_id && 'null' !== $image_id ) {
+								$content = str_replace( '"imageId":' . $image_id, '"imageId":' . $data['id'], $content );
+							}
 						}
 					}
 					if ( empty( $post ) ) {

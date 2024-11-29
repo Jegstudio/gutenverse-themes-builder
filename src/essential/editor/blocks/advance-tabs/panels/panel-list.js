@@ -1,17 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { advancePanel, animationPanel, borderPanel, maskPanel, mouseMoveEffectPanel, positioningPanel, responsivePanel, transformPanel, conditionPanel } from 'gutenverse-core/controls';
+import { advancePanel, animationPanel, borderPanel, maskPanel, mouseMoveEffectPanel, positioningPanel, responsivePanel, transformPanel, conditionPanel, LockedProPanel } from 'gutenverse-core/controls';
 import { TabSetting, TabStyle } from 'gutenverse-core/controls';
 import { applyFilters } from '@wordpress/hooks';
-import { itemsPanel } from './panel-items';
-import { contentStyle } from './panel-tab-content';
-import { iconStylePanel } from './panel-icon-style';
-import { contentPanel } from './panel-content';
-import { tabTitleStyle } from './panel-tab-title';
-import { tabTitleWrapperStyle } from './panel-tab-title-wrapper';
-import { tabTitlesWrapperStyle } from './panel-tab-titles-wrapper';
-import { tabMobile } from './panel-tab-mobile';
-import { iconMobileStylePanel } from './panel-icon-mobile-style';
-import { tabMobileOptions } from './panel-tab-mobile-options';
 
 export const panelList = () => {
     return applyFilters(
@@ -22,7 +12,11 @@ export const panelList = () => {
                 title: __('Content', 'gutenverse-pro'),
                 initialOpen: true,
                 pro: true,
-                panelArray: contentPanel,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabSetting
             },
             {
@@ -30,7 +24,11 @@ export const panelList = () => {
                 title: __('Heading Items', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: itemsPanel,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabSetting
             },
             {
@@ -38,7 +36,11 @@ export const panelList = () => {
                 title: __('Tab Titles Wrapper Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: tabTitlesWrapperStyle,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -46,7 +48,11 @@ export const panelList = () => {
                 title: __('Tab Title Wrapper Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: tabTitleWrapperStyle,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -54,7 +60,11 @@ export const panelList = () => {
                 title: __('Tab Title Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: tabTitleStyle,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -62,7 +72,11 @@ export const panelList = () => {
                 title: __('Tab Icon Style', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: iconStylePanel,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle,
             },
             {
@@ -70,7 +84,11 @@ export const panelList = () => {
                 title: __('Tab Content Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: contentStyle,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -78,7 +96,11 @@ export const panelList = () => {
                 title: __('Tab Responsive Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: tabMobile,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -86,7 +108,11 @@ export const panelList = () => {
                 title: __('Tab Icon Responsive Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: iconMobileStylePanel,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
@@ -94,7 +120,11 @@ export const panelList = () => {
                 title: __('Tab Responsive Options Style ', 'gutenverse-pro'),
                 initialOpen: false,
                 pro: true,
-                panelArray: tabMobileOptions,
+                panelArray: () => {
+                    return [{
+                        component: LockedProPanel,
+                    }];
+                },
                 tabRole: TabStyle
             },
             {
