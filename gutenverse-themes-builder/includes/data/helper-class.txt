@@ -30,21 +30,22 @@ class Helper {
 					array(
 						'key'     => '_import_source',
 						'value'   => $url,
-						'compare' => 'LIKE',
+						'compare' => '=',
 					),
 				),
 			)
 		);
-
-		foreach ( $attachments->posts as $post ) {
-			$attachment_url = wp_get_attachment_url( $post->ID );
-			return array(
-				'id'  => $post->ID,
-				'url' => $attachment_url,
-			);
+		if( $attachments->have_posts() ){
+			foreach ( $attachments->posts as $post ) {
+				$attachment_url = wp_get_attachment_url( $post->ID );
+				return array(
+					'id'  => $post->ID,
+					'url' => $attachment_url,
+				);
+			}
 		}
-
-		return $attachments->posts;
+		
+		return false;
 	}
 
 	/**
