@@ -101,7 +101,6 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                                 alert(res.message);
                                 installPlugins(index + 1);
                             }
-                            
                         })
                     }else{
                         wp?.apiFetch({
@@ -134,12 +133,12 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 } else {
                     installPlugins(index + 1);
                 }
-            }, 1500);
+            }, 500);
         } else {
             setInstalling({ show: true, message: 'Installing Complete', progress: '4/4' });
             setTimeout(() => {
                 setAction('done');
-            }, 1500);
+            }, 500);
         }
     }
 
@@ -495,9 +494,9 @@ export const ImporterModal = (props) => {
                         setDone(true);
                         setCompleteSubtitle(__('All Demo is successfully imported!', '--gtb-theme-namespace--'));
                     }, 500);
-                }).catch(() => {
+                }).catch((error) => {
                     setDone(true);
-                    setCompleteSubtitle(__('Import Failed!', '--gtb-theme-namespace--'));
+                    console.error(`Failed to import menu`, error);
                 })
             }else{
                 setTimeout(() => {
@@ -598,13 +597,13 @@ export const ImporterModal = (props) => {
                         </div>
                         <div className='importer-inner-step'>
                             {importerStep.map((step, index) => {
-                                const item = index + 1;
+                                const item = index;
                                 return (
                                     <div key={index} className={`steps ${importerCurrent > item ? 'done' : importerCurrent == item ? 'current' : ''}`}>
                                         {importerCurrent > item ? <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect x="0.5" y="2.5" width="15" height="15" rx="7.5" fill="#3B57F7" />
                                             <rect x="0.5" y="2.5" width="15" height="15" rx="7.5" stroke="#3B57F7" />
-                                            <path d="M12 7L6.5 12.5L4 10" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M12 7L6.5 12.5L4 10" stroke="white" strokeLinecap=" " strokeLinejoin="round" />
                                         </svg> : <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" fill="white" />
                                             <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" stroke="#D0D5DD" />
@@ -624,7 +623,7 @@ export const ImporterModal = (props) => {
                 <div className='importer-footer'>
                     <div className='footer-info'>
                         <span>{importerStatus}</span>
-                        <span>{__(`${(importerCurrent - 1)}/${(importerStep.length)} Completed`, '--gtb-theme-namespace--')}</span>
+                        <span>{__(`${(importerCurrent)}/${(importerStep.length)} Completed`, '--gtb-theme-namespace--')}</span>
                     </div>
                 </div>
                 <div className='footer-loading'>

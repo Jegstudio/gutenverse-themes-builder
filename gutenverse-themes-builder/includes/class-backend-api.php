@@ -1164,7 +1164,7 @@ class Backend_Api {
 		$plugin   = 'gutenverse-pro/gutenverse-pro.php';
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		$is_plugin_active = is_plugin_active( $plugin );
-		if ( gutenverse_pro_installed() ) {
+		if ( gutenverse_pro_installed() && 'dashboard' === $key ) {
 			if ( gutenverse_check_dashboard_mode() && $is_plugin_active ) {
 				deactivate_plugins( $plugin );
 			} else {

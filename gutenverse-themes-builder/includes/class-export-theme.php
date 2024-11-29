@@ -723,6 +723,9 @@ class Export_Theme {
 					$placeholder = $image;
 				}
 
+				$valid_image_arr = explode( '/', $placeholder );
+				$valid_name      = $valid_image_arr[ count( $valid_image_arr ) - 1 ];
+
 				/**Check the type of the image for image page and sync have different purpose than template and async */
 				switch ( $type ) {
 					case 'page':
@@ -735,12 +738,35 @@ class Export_Theme {
 							}
 						);
 
+						$images_id_with_the_same_name = new \WP_Query(
+							array(
+								'post_type'   => 'attachment',
+								'post_status' => 'inherit',
+								'meta_query'  => array(
+									array(
+										'key'     => '_wp_attached_file',
+										'value'   => $valid_name,
+										'compare' => 'LIKE',
+									),
+								),
+							)
+						);
+						$image_id = 'null';
+						if ( $images_id_with_the_same_name->have_posts() ) {
+							foreach ( $images_id_with_the_same_name->posts as $image_post ) {
+								$att_image = wp_get_attachment_url( $image_post->ID );
+								if ( $att_image === $placeholder ) {
+									$image_id = $image_post->ID;
+								}
+							}
+						}
+
 						/**Get the first value that have the condition or get null if no data found */
 						$filter_image = reset( $filter_data );
 
 						/**Add image to array image*/
 						if ( ! $filter_image ) {
-							$this->add_image( $placeholder, $type, $image_name, $parent_id );
+							$this->add_image( $placeholder, $type, $image_name, $parent_id, $image_id );
 						}
 
 						/**Replace image with uuid image */
@@ -786,13 +812,15 @@ class Export_Theme {
 	 * @param string $type type of image (template, page, sync, or async) string .
 	 * @param string $name .
 	 * @param string $id id of image master (page/pattern).
+	 * @param string $image_id id of the image.
 	 */
-	private function add_image( $image, $type, $name, $id = '' ) {
+	private function add_image( $image, $type, $name, $id = '', $image_id = 'null' ) {
 		$this->image_list[] = array(
 			'name'      => $name,
 			'image_url' => $image,
 			'type'      => $type,
 			'id'        => $id,
+			'image_id'  => $image_id,
 		);
 	}
 
