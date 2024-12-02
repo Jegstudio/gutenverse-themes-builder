@@ -751,11 +751,14 @@ class Export_Theme {
 								),
 							)
 						);
+
 						$image_id = 'null';
 						if ( $images_id_with_the_same_name->have_posts() ) {
 							foreach ( $images_id_with_the_same_name->posts as $image_post ) {
-								$att_image = wp_get_attachment_url( $image_post->ID );
-								if ( $att_image === $placeholder ) {
+								$att_image      = wp_get_attachment_url( $image_post->ID );
+								$att_image_arr  = explode( '/', $att_image );
+								$att_image_name = $att_image_arr[ count( $att_image_arr ) - 1 ];
+								if ( $att_image_name === $valid_name ) {
 									$image_id = $image_post->ID;
 								}
 							}
