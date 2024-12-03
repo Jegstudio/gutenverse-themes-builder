@@ -274,7 +274,7 @@ const ImportTemplates = ({ updateProgress }) => {
         }
     },[templateList])
 
-    return <div className='template-install'>
+    return <div className='template-install import-demo'>
         {modal && <ImporterModal
             importerStep={importerStep}
             importerNotice={importerNotice}

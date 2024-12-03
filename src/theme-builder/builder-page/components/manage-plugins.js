@@ -17,7 +17,7 @@ import SwitchControl from '../controls/switch-control';
 const defaultPlugins = [
     'gutenverse',
     'pro',
-    'jeg-theme-essential'
+    'gutenverse-companion'
 ];
 
 const ManagePlugins = () => {
@@ -199,7 +199,7 @@ const ManagePlugins = () => {
             [name]: value
         })
       };
-    
+    console.log(plugins);
     const PluginContent = () => {
         if(pluginCategory === 'wporg'){
             return <div className="plugin-search-wrapper">
