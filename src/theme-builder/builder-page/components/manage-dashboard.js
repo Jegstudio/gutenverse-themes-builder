@@ -54,9 +54,6 @@ const ManageDashbaord = () => {
     const [dashboardData, setDashboardData] = useState({});
     const [loading, setLoading] = useState(false);
     const [pluginData, setPluginData] = useState([]);
-    const {
-        extraPlugins,
-    } = window['GutenverseThemeBuilder'];;
     useEffect(() => {
         getThemeData(null, response => {
             const themeDataRes = response;
@@ -80,24 +77,20 @@ const ManageDashbaord = () => {
     const updateDashboardData = () => {
         setLoading(true);
         if( dashboardData?.mode.value === 'themeforest' && dashboardData?.themeforest_mode ){
-            if( ! isEmpty( extraPlugins ) ){
-                let essence = extraPlugins.find( el => el.slug === "jeg-theme-essential" );
-                if( ! isPluginInArray("jeg-theme-essential") && essence ){
-                    updateOtherData({
-                        key: 'plugins',
-                        data: [...pluginData, {
-                            label : essence.title,
-                            value : essence.slug,
-                            url : essence.url,
-                            type: 'custom',
-                            version: essence.version
-                        }]
-                    });
-                }
+            if( ! isPluginInArray("gutenverse-companion") ){
+                updateOtherData({
+                    key: 'plugins',
+                    data: [...pluginData, {
+                        value: 'gutenverse-companion',
+                        version: '1.0.1',
+                        type: 'wporg',
+                        label: 'Gutenverse Companion'
+                    }]
+                });
             }
         }else{
-            if( isPluginInArray("jeg-theme-essential") ){
-                let noEssence = pluginData.filter( el => el.value !== "jeg-theme-essential" );
+            if( isPluginInArray("gutenverse-companion") ){
+                let noEssence = pluginData.filter( el => el.value !== "gutenverse-companion" );
                 updateOtherData({
                     key: 'plugins',
                     data: noEssence

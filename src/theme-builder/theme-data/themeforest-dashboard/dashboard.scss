@@ -367,7 +367,7 @@
     }
 }
 
-.template-install {
+.template-install.import-demo {
     width: 100%;
 
     .template-title {
@@ -379,6 +379,7 @@
 
         .content-title {
             margin: 0;
+            width: auto;
         }
 
         .button-import-all {
