@@ -32,7 +32,7 @@ export const CreatePatternPopup = ({ onClose, updateList }) => {
                 const { status, data } = result;
 
                 if ('success' === status) {
-                    updateList(result?.data?.list);
+                    updateList();
                     onClose();
                 } else {
                     const { message } = data;
@@ -151,7 +151,7 @@ export const EditPatternPopup = ({ id, onClose, updateList }) => {
                 const { status, data } = result;
 
                 if ('success' === status) {
-                    updateList(result?.data?.list);
+                    updateList();
                     onClose();
                 } else {
                     const { message } = data;
@@ -255,7 +255,7 @@ const PatternList = () => {
     const [paged,setPaged] = useState(1);
     const [totalData, setTotalData] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
-    let num_post = 10;
+    let num_post = 1;
 
     const {
         editPath,
@@ -271,7 +271,16 @@ const PatternList = () => {
         getPatternListPagination({ paged: paged, num_post: num_post }, updateList);
     }, [paged]);
 
-    const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: 1 }, updateList);
+    const removePattern = () => deletePattern({ pattern_id: deletePopup, paged: paged }, () => {
+        if( paged === totalPage && patternList.length === 1 ){
+            setPaged( paged - 1 );
+        }else{
+            getPageListPagination({
+                paged,
+                num_post
+            },updateList)
+        }
+    });
     return (
         <ContentWrapper
             title={__('Pattern List', 'gutenverse-themes-builder')}
@@ -331,8 +340,8 @@ const PatternList = () => {
                     onProceed={removePattern}
                     onClose={() => setDeletePopup(false)}
                 />}
-                {createPatternPopup && <CreatePatternPopup onClose={() => setCreatePatternPopup(false)} updateList={updateList} />}
-                {editPatternPopup && <EditPatternPopup id={editPatternPopup} onClose={() => setEditPatternPopup(false)} updateList={updateList} />}
+                {createPatternPopup && <CreatePatternPopup onClose={() => setCreatePatternPopup(false)} updateList={() => getPatternListPagination({ paged: paged, num_post: num_post }, updateList)} />}
+                {editPatternPopup && <EditPatternPopup id={editPatternPopup} onClose={() => setEditPatternPopup(false)} updateList={() => getPatternListPagination({ paged: paged, num_post: num_post }, updateList)} />}
             </>
         </ContentWrapper>
     );

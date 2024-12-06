@@ -1373,9 +1373,6 @@ class Backend_Api {
 
 				return array(
 					'status' => 'success',
-					'data'   => array(
-						'list' => $this->get_pattern_list_pagination( $request ),
-					),
 				);
 			} else {
 				return array(
@@ -1428,9 +1425,6 @@ class Backend_Api {
 
 				return array(
 					'status' => 'success',
-					'data'   => array(
-						'list' => $this->get_pattern_list_pagination( $request ),
-					),
 				);
 			} else {
 				return array(
@@ -1937,7 +1931,7 @@ class Backend_Api {
 			wp_delete_post( $pattern_id, true );
 		}
 
-		return $this->get_pattern_list_pagination( $request );
+		return true;
 	}
 
 	/**
@@ -3259,8 +3253,7 @@ class Backend_Api {
 			}
 			return new WP_REST_Response(
 				array(
-					'status' => 'success',
-					'data'   => $this->get_page_list( $request ),
+					'status' => 'success'
 				),
 				200
 			);
@@ -3286,8 +3279,7 @@ class Backend_Api {
 		}
 		return new WP_REST_Response(
 			array(
-				'status' => 'success',
-				'data'   => $this->get_page_list( $request ),
+				'status' => 'success'
 			),
 			200
 		);
@@ -3344,7 +3336,6 @@ class Backend_Api {
 			return new WP_REST_Response(
 				array(
 					'status' => 'success',
-					'data'   => $this->get_page_list( $request ),
 				),
 				200
 			);

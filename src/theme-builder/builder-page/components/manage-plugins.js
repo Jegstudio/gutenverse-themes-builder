@@ -199,7 +199,6 @@ const ManagePlugins = () => {
             [name]: value
         })
       };
-    console.log(plugins);
     const PluginContent = () => {
         if(pluginCategory === 'wporg'){
             return <div className="plugin-search-wrapper">

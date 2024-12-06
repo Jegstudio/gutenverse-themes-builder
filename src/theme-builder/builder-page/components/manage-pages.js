@@ -77,9 +77,9 @@ export const CreatePagePopup = ({ onClose, updateList, onSearch,  }) => {
                     order : order,
                 }
             }).then(result => {
-                const { status, data } = result;
+                const { status } = result;
                 if ('success' === status) {
-                    updateList(result?.data);
+                    updateList();
                     onClose();
                 }
             }).catch((err) => {
@@ -197,9 +197,9 @@ export const EditPagePopup = ({ page, onClose, updateList, onSearch  }) => {
                     order: order
                 }
             }).then(result => {
-                const { status, data } = result;
+                const { status } = result;
                 if ('success' === status) {
-                    updateList(result?.data);
+                    updateList();
                     onClose();
                 }
             }).catch((err) => {
@@ -356,8 +356,16 @@ const ManagePages = () => {
             num_post
         },updateList);
     }, [paged]);
-
-    const removePage = () => deletePage({ id: deletePopup }, updateList);
+    const removePage = () => deletePage({ id: deletePopup }, () => {
+        if( paged === totalPage && pageList.length === 1 ){
+            setPaged( paged - 1 );
+        }else{
+            getPageListPagination({
+                paged,
+                num_post
+            },updateList)
+        }
+    });
 
     return (
         <ContentWrapper
@@ -434,13 +442,20 @@ const ManagePages = () => {
                 />}
                 {createPagePopup && <CreatePagePopup 
                     onClose={() => setCreatePagePopup(false)} 
-                    updateList={updateList}
+                    updateList={ () => getPageListPagination({
+                        paged,
+                        num_post
+                    },updateList)}
                     onSearch={onSearch}
+
                 />}
                 {editPagePopup && <EditPagePopup 
                     page={editPagePopup} 
                     onClose={() => setEditPagePopup(false)} 
-                    updateList={updateList}
+                    updateList={ () => getPageListPagination({
+                        paged,
+                        num_post
+                    },updateList)}
                     onSearch={onSearch}
                 />}
             </>

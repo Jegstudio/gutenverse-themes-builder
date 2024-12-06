@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from '@wordpress/element';
 import { DashEye, CompCheck, CompX, Crown } from './dashboard-icons';
 import { __ } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 
 const DashboardPage = () => {
     const {
@@ -9,11 +10,17 @@ const DashboardPage = () => {
         pages,
         demoUrl,
         plugins,
+        home_url,
         dashboardData,
         slug,
         eventBanner = null
     } = window['GutenThemeConfig'];
 
+    const {
+        plugins : installedPlugins
+    } = window['GutenverseDashboard'];
+
+    const checkInstalledPro = installedPlugins['gutenverse-pro'];
     const coreTitle = dashboardData?.comparison?.name_core;
     const liteTitle = dashboardData?.comparison?.name_lite;
     const proTitle = dashboardData?.comparison?.name_pro;
@@ -128,7 +135,6 @@ const DashboardPage = () => {
 
         return <div className="theme-button active">Plugins Installed & Activated</div>;
     };
-
     return <Fragment>
         <EventBanner/>
         <div className="top-container">
@@ -363,9 +369,13 @@ const DashboardPage = () => {
                         <div className='comparison-item-inner'>
                             <h2 className="title">{proTitle} <span>PRO {<Crown/>}</span></h2>
                             <div className='comparison-list'>
-                                <a href={`https://gutenverse.com/pro?utm_source=${slug}&utm_medium=dashboard&utm_campaign=upgradepro`} className='upgrade-button' target='_blank'>
-                                    <span>Upgrade Now</span><Crown/>
-                                </a>
+                                {
+                                    checkInstalledPro ? <a href={`${home_url}/wp-admin/admin.php?page=gutenverse&path=theme-list&keyword=${proTitle}`} className='upgrade-button' target='_blank'>
+                                        <span>Install Now</span>
+                                    </a> : <a href={`https://gutenverse.com/pro?utm_source=${slug}&utm_medium=dashboard&utm_campaign=upgradepro`} className='upgrade-button' target='_blank'>
+                                        <span>Upgrade Now</span><Crown/>
+                                    </a>
+                                }
                                 <span>By upgrading to Gutenverse Pro, you'll unlock the pro version of {proTitle}, <b>30+</b> other themes, and all exclusive PRO features.</span>
                                 <div className='list-item'>
                                     <CompCheck />

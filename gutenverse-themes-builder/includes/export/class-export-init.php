@@ -842,7 +842,7 @@ class Export_Init {
 					}
 
 					$template_cases[] = 'case \'' . $template_name . '\':
-					return $this->change_stylesheet_directory() . \'' . $template_type . '/' . $template_name . '.html\';';
+					return $this->change_stylesheet_directory() . \'' . '/' . $template_type . '/' . $template_name . '.html\';';
 				}
 			}
 
