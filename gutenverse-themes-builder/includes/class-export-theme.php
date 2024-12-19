@@ -503,13 +503,13 @@ class Export_Theme {
 					$content = Misc::fix_core_navigation( $content );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","area":"header"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 
 					foreach ( $footers as $footer ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|footer)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","area":"footer"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 
@@ -685,9 +685,9 @@ class Export_Theme {
 						$part_name = $arr_slug[1];
 						if ( 'core' === $arr_slug[0] || 'gutenverse' === $arr_slug[0] || 'pro' === $arr_slug[0] ) {
 							if ( 'header' === $part_name ) {
-								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","area":"header"} /-->';
 							} elseif ( 'footer' === $part_name ) {
-								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","area":"footer"} /-->';
 							}
 							$content = str_replace( $match[0], $replace, $content );
 						}
