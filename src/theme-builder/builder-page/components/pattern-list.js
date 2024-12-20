@@ -255,7 +255,7 @@ const PatternList = () => {
     const [paged,setPaged] = useState(1);
     const [totalData, setTotalData] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
-    let num_post = 1;
+    let num_post = 10;
 
     const {
         editPath,
