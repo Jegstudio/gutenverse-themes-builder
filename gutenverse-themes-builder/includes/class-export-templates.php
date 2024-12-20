@@ -776,9 +776,9 @@ class Export_Templates {
 						$part_name = $arr_slug[1];
 						if ( 'core' === $arr_slug[0] || 'gutenverse' === $arr_slug[0] || 'pro' === $arr_slug[0] ) {
 							if ( 'header' === $part_name ) {
-								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","area":"header"} /-->';
 							} elseif ( 'footer' === $part_name ) {
-								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+								$replace = '<!-- wp:template-part {"slug":"' . $part_name . '","area":"footer"} /-->';
 							}
 							$content = preg_replace( $match[0], $replace, $content );
 						}
