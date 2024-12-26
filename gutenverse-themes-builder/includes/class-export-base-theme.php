@@ -33,7 +33,7 @@ class Export_Base_Theme {
 	/**
 	 * List of Config
 	 *
-	 * @var string
+	 * @var array
 	 */
 	private $config;
 
