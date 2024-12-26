@@ -155,6 +155,16 @@ class Backend_Api {
 			)
 		);
 
+		register_rest_route(
+			self::ENDPOINT,
+			'base-theme/export',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'export_base_theme' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
 		// Assets.
 		register_rest_route(
 			self::ENDPOINT,
@@ -1331,6 +1341,17 @@ class Backend_Api {
 	 */
 	public function export_templates( $request ) {
 		$result = new Export_Templates();
+
+		return $result;
+	}
+
+	/**
+	 * Export Base Theme
+	 *
+	 * @param object $request .
+	 */
+	public function export_base_theme( $request ) {
+		$result = new Export_Base_Theme();
 
 		return $result;
 	}
@@ -3253,7 +3274,7 @@ class Backend_Api {
 			}
 			return new WP_REST_Response(
 				array(
-					'status' => 'success'
+					'status' => 'success',
 				),
 				200
 			);
@@ -3279,7 +3300,7 @@ class Backend_Api {
 		}
 		return new WP_REST_Response(
 			array(
-				'status' => 'success'
+				'status' => 'success',
 			),
 			200
 		);

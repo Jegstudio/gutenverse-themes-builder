@@ -1,0 +1,16 @@
+/*
+	Theme Name: {{title}}
+	Description: {{title}} is a multipurpose base theme where you can install multiple templates.
+	Author: {{author_name}}
+	Author URI: {{author_uri}}
+	Version: {{theme_version}}
+	Stable tag: {{theme_version}}
+	Requires at least: {{wp_min_version}}
+	Tested up to: {{wp_tested_version}}
+	Requires PHP: {{php_version}}
+	License: GNU General Public License v3 or later.
+	License URI: https://www.gnu.org/licenses/gpl-3.0.html
+	Text Domain: {{slug}}
+	Tags: {{tags}}
+	Copyright: © {{author_name}}. All rights reserved.
+*/

@@ -1,4 +1,4 @@
-import { exportTemplate, exportTheme } from '../../../data/api-fetch';
+import { exportTemplate, exportTheme, exportBaseTheme } from '../../../data/api-fetch';
 import ContentWrapper from './content-wrapper';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
@@ -11,7 +11,7 @@ const ExportTheme = () => {
         exportTheme(response => {
             window.open(response?.fileresult?.fileurl);
             if (response?.fileresult?.child?.fileurl) {
-                setTimeout(()=>{
+                setTimeout(() => {
                     window.open(response?.fileresult?.child?.fileurl);
                 }, 500)
             }
@@ -23,9 +23,17 @@ const ExportTheme = () => {
         exportTemplate(response => {
             window.open(response?.fileresult?.fileurl);
             if (response?.fileresult?.child?.fileurl) {
-                setTimeout(()=>{
+                setTimeout(() => {
                     window.open(response?.fileresult?.child?.fileurl);
                 }, 500)
+            }
+        });
+    }
+
+    const startExportBase = () => {
+        exportBaseTheme(response => {
+            if (response?.fileresult?.fileurl) {
+                window.open(response?.fileresult?.fileurl);
             }
         });
     }
@@ -36,8 +44,9 @@ const ExportTheme = () => {
                 <h3>{__('Ready to export your themes ?', 'gutenverse-themes-builder')}</h3>
                 <p className='export-paragraph'>{__('Click \'Export Themes\' to generate a ZIP file of your theme. This package includes all theme files, ready for installation or sharing.', 'gutenverse-themes-builder')}</p>
                 <div className="buttons">
-                    { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export Themes', 'gutenverse-themes-builder')}</div>}
-                    { loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExportTemplate}>{__('Export Template', 'gutenverse-themes-builder')}</div>}
+                    {loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExport}>{__('Export Themes', 'gutenverse-themes-builder')}</div>}
+                    {loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExportBase}>{__('Export Base Themes', 'gutenverse-themes-builder')}</div>}
+                    {loading ? <div className="button button-loading" disabled>Loading... </div> : <div className="button" onClick={startExportTemplate}>{__('Export Template', 'gutenverse-themes-builder')}</div>}
                 </div>
             </div>
         </div>

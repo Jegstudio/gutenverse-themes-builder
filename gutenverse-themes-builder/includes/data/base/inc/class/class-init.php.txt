@@ -1,0 +1,87 @@
+<?php
+/**
+ * Init Configuration
+ *
+ * @author {{author_name}}
+ * @package {{slug}}
+ */
+
+namespace {{namespace}};
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Init Class
+ *
+ * @package {{slug}}
+ */
+class Init {
+
+	/**
+	 * Instance variable
+	 *
+	 * @var $instance
+	 */
+	private static $instance;
+
+	/**
+	 * Class instance.
+	 *
+	 * @return Init
+	 */
+	public static function instance() {
+		if ( null === static::$instance ) {
+			static::$instance = new static();
+		}
+
+		return static::$instance;
+	}
+
+	/**
+	 * Class constructor.
+	 */
+	private function __construct() {
+		$this->init_instance();
+		$this->load_hooks();
+	}
+
+	/**
+	 * Load initial hooks.
+	 */
+	private function load_hooks() {
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+	}
+
+	/**
+	 * Init Classes
+	 */
+	public function init_instance() {
+		new Notice();
+	}
+
+	/**
+	 * Add Menu
+	 */
+	public function admin_menu() {
+		add_theme_page(
+			'Base Theme Dashboard',
+			'Base Theme Dashboard',
+			'manage_options',
+			'{{slug}}-dashboard',
+			array( $this, 'load_dashboard' ),
+			1
+		);
+	}
+
+	/**
+	 * Template page
+	 */
+	public function load_dashboard() {
+		?>
+			<div id="{{slug}}-dashboard">
+			</div>
+		<?php
+	}
+}

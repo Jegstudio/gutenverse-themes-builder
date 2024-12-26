@@ -121,6 +121,17 @@ export const exportTemplate = (callback = def_callback) => {
     });
 };
 
+export const exportBaseTheme = (callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/base-theme/export'),
+        data: {}
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 
 /* Templates */
 
