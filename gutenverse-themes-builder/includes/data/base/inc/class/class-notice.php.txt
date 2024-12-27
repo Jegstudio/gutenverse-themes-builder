@@ -136,7 +136,7 @@ class Notice {
 		}
 
 		?>
-		<div class="notice is-dismissible install-gutenverse-plugin-notice">
+		<div class="notice is-dismissible install-gutenverse-plugin-notice" style="background: url( <?php echo esc_url( {{constant}}_URI . '/assets/img/background-banner.png' ); ?> );">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
