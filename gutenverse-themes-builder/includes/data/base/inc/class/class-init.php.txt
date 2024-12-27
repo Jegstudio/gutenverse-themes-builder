@@ -52,6 +52,7 @@ class Init {
 	 */
 	private function load_hooks() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_filter( 'gutenverse_companion_base_theme', '__return_true' );
 	}
 
 	/**
