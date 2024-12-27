@@ -44,20 +44,24 @@ class Export_Base_Theme {
 		$theme_id   = get_option( 'gtb_active_theme_id' );
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
-		$data       = $theme_data[0];
-		$theme_data = maybe_unserialize( $data['theme_data'] );
-		$other      = maybe_unserialize( $data['other'] );
+		if ( isset( $theme_data[0] ) ) {
+			$data       = $theme_data[0];
+			$theme_data = maybe_unserialize( $data['theme_data'] );
+			$other      = maybe_unserialize( $data['other'] );
 
-		$this->config = array_merge(
-			$theme_data,
-			array(
-				'constant'    => strtoupper( str_replace( '-', '_', sanitize_title( $theme_data['slug'] ) ) ),
-				'namespace'   => implode( '_', array_map( 'ucfirst', explode( '-', sanitize_title( $theme_data['slug'] ) ) ) ),
-				'screenshots' => ! empty( $other['screenshots'] ) ? $other['screenshots'] : '',
-			)
-		);
+			$this->config = array_merge(
+				$theme_data,
+				array(
+					'constant'    => strtoupper( str_replace( '-', '_', sanitize_title( $theme_data['slug'] ) ) ),
+					'namespace'   => implode( '_', array_map( 'ucfirst', explode( '-', sanitize_title( $theme_data['slug'] ) ) ) ),
+					'screenshots' => ! empty( $other['screenshots'] ) ? $other['screenshots'] : '',
+				)
+			);
 
-		$this->start();
+			if ( ! empty( $this->config['slug'] ) ) {
+				$this->start();
+			}
+		}
 	}
 
 	/**
