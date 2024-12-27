@@ -1,0 +1,94 @@
+var baseData = window['BaseAdminData'] || {}
+var promises = [];
+var actions = baseData.action;
+
+function sequenceInstall(plugins, index = 0) {
+    if (plugins[index]) {
+        var plugin = plugins[index];
+
+        switch (actions[plugin?.slug]) {
+            case 'active':
+                break;
+            case 'inactive':
+                var path = plugin?.slug + '/' + plugin?.slug;
+                promises.push(
+                    new Promise((resolve) => {
+                        fetch(wpApiSettings.root + 'wp/v2/plugins/' + path, {
+                            method: 'POST',
+                            headers: {
+                                "X-WP-Nonce": wpApiSettings.nonce,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(
+                                {
+                                    status: 'active'
+                                }
+                            )
+                        }).then(() => {
+                            sequenceInstall(plugins, index + 1);
+                            resolve(plugin);
+                        }).catch((error) => {
+                            alert('Plugin Install Failed')
+                        });
+                    })
+                );
+                break;
+            default:
+                promises.push(
+                    new Promise((resolve) => {
+                        fetch(wpApiSettings.root + 'wp/v2/plugins', {
+                            method: 'POST',
+                            headers: {
+                                "X-WP-Nonce": wpApiSettings.nonce,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(
+                                {
+                                    slug: plugin?.slug,
+                                    status: 'active'
+                                }
+                            )
+                        }).then(() => {
+                            sequenceInstall(plugins, index + 1);
+                            resolve(plugin);
+                        }).catch((error) => {
+                            alert('Plugin Install Failed')
+                        });
+                    })
+                );
+                break;
+        }
+    }
+
+    return;
+};
+
+jQuery(function ($) {
+    $('div.notice.install-gutenverse-plugin-notice').on('click', 'button.notice-dismiss', function (event) {
+        event.preventDefault();
+        $.post(ajaxurl, {
+            action: '{{slug}}s_set_admin_notice_viewed',
+            nonce: baseData.nonce,
+        });
+    });
+
+    $("#gutenverse-install-companion").on('click', function (e) {
+        var hasFinishClass = $(this).hasClass('finished');
+        var hasLoaderClass = $(this).hasClass('loader');
+
+        if (!hasFinishClass) {
+            e.preventDefault();
+        }
+
+        if (!hasLoaderClass && !hasFinishClass) {
+            promises = [];
+            var plugins = baseData.plugins;
+            $(this).addClass('loader').text('');
+
+            sequenceInstall(plugins);
+            Promise.all(promises).then(() => {
+                $(this).removeClass('loader').addClass('finished').text('Complete Wizard Setup');
+            });
+        }
+    });
+});
