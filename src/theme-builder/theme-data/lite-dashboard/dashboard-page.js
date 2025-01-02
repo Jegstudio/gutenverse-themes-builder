@@ -12,6 +12,7 @@ const DashboardPage = () => {
         plugins,
         home_url,
         dashboardData,
+        activeTheme,
         slug,
         eventBanner = null
     } = window['GutenThemeConfig'];
@@ -372,7 +373,7 @@ const DashboardPage = () => {
                                 {
                                     checkInstalledPro ? <a href={`${home_url}/wp-admin/admin.php?page=gutenverse&path=theme-list&keyword=${proTitle}`} className='upgrade-button' target='_blank'>
                                         <span>Install Now</span>
-                                    </a> : <a href={`https://gutenverse.com/pro?utm_source=${slug}&utm_medium=dashboard&utm_campaign=upgradepro`} className='upgrade-button' target='_blank'>
+                                    </a> : <a href={`https://gutenverse.com/pro?utm_source=${slug}&utm_medium=dashboard&utm_campaign=upgradepro&utm_client_site=${home_url}&utm_client_theme=${activeTheme}`} className='upgrade-button' target='_blank'>
                                         <span>Upgrade Now</span><Crown/>
                                     </a>
                                 }
