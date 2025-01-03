@@ -230,7 +230,16 @@ export const deletePattern = (params, callback = def_callback) => {
     });
 };
 
-
+export const getMiscField = (id, callback = def_callback) => {
+    apiFetch({
+        path: addQueryArgs('gtb-backend/v1/themes/misc', {
+            id
+        }),
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
 
 /* Assets */
 

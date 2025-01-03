@@ -13,6 +13,7 @@ import ManageGlobal from './components/manage-global';
 import ManageDashbaord from './components/manage-dashboard';
 import ManageNotice from './components/manage-notice';
 import ManagePages from './components/manage-pages';
+import Misc from './components/misc';
 
 const ThemeBuilder = ({ location }) => {
     const [path, setPath] = useState('list');
@@ -63,6 +64,9 @@ const ThemeBuilder = ({ location }) => {
             break;
         case 'notice-editor':
             Content = ManageNotice;
+            break;
+        case 'misc':
+            Content = Misc;
             break;
         default:
             Content = ThemeList;

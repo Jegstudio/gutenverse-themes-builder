@@ -147,6 +147,16 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
+			'themes/misc',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_misc' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
+		register_rest_route(
+			self::ENDPOINT,
 			'templates/export',
 			array(
 				'methods'             => 'POST',
@@ -1092,6 +1102,62 @@ class Backend_Api {
 		}
 
 		return $theme_data;
+	}
+
+	/**
+	 * Get theme acf data
+	 *
+	 * @param object $request .
+	 */
+	public function get_misc( $request ) {
+		$theme_id = ! empty( $request->get_param( 'id' ) ) ? $request->get_param( 'id' ) : get_option( 'gtb_active_theme_id' );
+		$info_db  = Database::instance()->theme_info;
+		$data     = $info_db->get_theme_data( $theme_id );
+
+		$theme_data = array();
+		$choices    = array();
+		if ( function_exists( 'acf_update_setting' ) ) {
+			acf_update_setting( 'l10n_var_export', false );
+			// Reset the field-groups store which may have been corrupted by export.
+			$store = acf_get_store( 'field-groups' );
+			if ( $store ) {
+				$store->reset();
+			}
+			$field_groups = array_filter(
+				acf_get_internal_post_type_posts( 'acf-field-group' ),
+				'acf_internal_post_object_contains_valid_key'
+			);
+
+			if ( $field_groups ) {
+				foreach ( $field_groups as $field_group ) {
+					$choices[] = array(
+						'title'    => esc_html( $field_group['title'] ),
+						'key'      => $field_group['key'],
+						'selected' => false,
+					);
+				}
+			}
+		}
+
+		$other = maybe_unserialize( $data[0]['other'] );
+
+		foreach ( $other as $key => $data ) {
+			if ( 'acf-field' === $key ) {
+				foreach ( $data as $field_key ) {
+					foreach ( $choices as &$choice ) {
+						if ( isset( $choice['key'] ) && $field_key === $choice['key'] ) {
+							$choice['selected'] = true;
+						}
+					}
+				}
+				unset( $choice );
+			}
+		}
+
+		return array(
+			'acf'  => $choices,
+			'post' => isset( $other['post'] ) ? $other['post'] : array(),
+		);
 	}
 
 	/**

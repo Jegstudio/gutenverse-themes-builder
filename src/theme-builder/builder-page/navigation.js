@@ -78,7 +78,11 @@ const Navigation = ({ location }) => {
             slug: pageSlug,
             path: 'readme-editor',
         },
-        
+        {
+            name: __('Misc', 'gutenverse'),
+            slug: pageSlug,
+            path: 'misc',
+        },
         {
             name: __('Export Theme', 'gutenverse'),
             slug: pageSlug,

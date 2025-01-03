@@ -416,9 +416,81 @@ class Export_Templates {
 						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 
 						/**replace additional object with object sync */
+						$theme_id   = get_option( 'gtb_active_theme_id' );
+						$info_db    = Database::instance()->theme_info;
+						$theme_data = $info_db->get_theme_data( $theme_id );
+						$data       = $theme_data[0];
+						$other      = maybe_unserialize( $data['other'] );
+						$acf_json   = array();
+						$post_json  = array();
+						if ( isset( $other['acf-field'] ) ) {
+							foreach ( $other['acf-field'] as $key ) {
+								if ( function_exists( 'acf_determine_internal_post_type' ) ) {
+									$post_type = acf_determine_internal_post_type( $key );
+									$post      = acf_get_internal_post_type( $key, $post_type );
 
-						$additional  = "'pattern_slug' => '" . $theme_slug . '/' . $pattern_name . "',
+									if ( empty( $post ) ) {
+										continue;
+									}
+
+									if ( 'acf-field-group' === $post_type ) {
+										$post['fields'] = acf_get_fields( $post );
+									}
+
+									$post       = acf_prepare_internal_post_type_for_export( $post, $post_type );
+									$acf_json[] = $post;
+								}
+							}
+						}
+						if ( isset( $other['post'] ) ) {
+							foreach ( $other['post'] as $post ) {
+								$post_id     = $post['value'];
+								$post_object = get_post( $post_id );
+
+								if ( $post_object ) {
+									$meta_data = get_post_meta( $post_id );
+
+									$featured_image_id  = get_post_thumbnail_id( $post_id );
+									$featured_image_url = $featured_image_id ? wp_get_attachment_url( $featured_image_id ) : '';
+
+									$attached_images = array();
+									$attachments     = get_attached_media( 'image', $post_id );
+									foreach ( $attachments as $attachment ) {
+										$attached_images[] = wp_get_attachment_url( $attachment->ID );
+									}
+
+									$post_json[] = array(
+										'id'              => $post_id,
+										'title'           => get_the_title( $post_id ),
+										'content'         => apply_filters( 'the_content', $post_object->post_content ),
+										'excerpt'         => $post_object->post_excerpt,
+										'status'          => $post_object->post_status,
+										'type'            => $post_object->post_type,
+										'meta'            => $meta_data,
+										'featured_image'  => $featured_image_url,
+										'attached_images' => $attached_images,
+										'date'            => $post_object->post_date,
+										'modified'        => $post_object->post_modified,
+										'author'          => $post_object->post_author,
+									);
+								}
+							}
+						}
+
+						$misc_data = array(
+							'acf'  => ! empty( $acf_json ) ? $acf_json : '',
+							'post' => ! empty( $post_json ) ? $post_json : '',
+						);
+
+						$additional = "'pattern_slug' => '" . $theme_slug . '/' . $pattern_name . "',
 						'images' => array(" . $this->format_image_array( $images ) . ')';
+
+						if ( strpos( $content, 'gutenverse/query-loop' ) !== false || strpos( $content, 'gutenverse/acf' ) !== false ) {
+							$misc_data_string = var_export( $misc_data, true );
+							$additional      .= ",
+							'misc' => " . $misc_data_string;
+						}
+
 						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
 
 						/**Add pattern to class_block_pattern array to register pattern */
