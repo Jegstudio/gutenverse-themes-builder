@@ -423,8 +423,21 @@ class Export_Templates {
 						$other      = maybe_unserialize( $data['other'] );
 						$acf_json   = array();
 						$post_json  = array();
-						if ( isset( $other['acf-field'] ) ) {
-							foreach ( $other['acf-field'] as $key ) {
+						$acf_field  = isset( $other['acf-field'] ) ? $other['acf-field'] : array();
+						$acf_tax    = isset( $other['acf-tax'] ) ? $other['acf-tax'] : array();
+						$acf_post   = isset( $other['acf-post'] ) ? $other['acf-post'] : array();
+
+						// Merge only the arrays that are set
+						$merged_acf_data = array_merge(
+							isset( $acf_field ) ? $acf_field : array(),
+							isset( $acf_tax ) ? $acf_tax : array(),
+							isset( $acf_post ) ? $acf_post : array()
+						);
+
+						$post_ids = array();
+
+						if ( ! empty( $merged_acf_data ) ) {
+							foreach ( $merged_acf_data as $key ) {
 								if ( function_exists( 'acf_determine_internal_post_type' ) ) {
 									$post_type = acf_determine_internal_post_type( $key );
 									$post      = acf_get_internal_post_type( $key, $post_type );
@@ -437,43 +450,64 @@ class Export_Templates {
 										$post['fields'] = acf_get_fields( $post );
 									}
 
+									if ( 'acf-post-type' === $post_type ) {
+										$post_type_name = $post['post_type'];
+
+										$query    = new \WP_Query(
+											array(
+												'post_type' => $post_type_name,
+												'posts_per_page' => -1,
+												'fields' => 'ids',
+											)
+										);
+										$post_ids = array_merge( $post_ids, $query->posts );
+									}
+
 									$post       = acf_prepare_internal_post_type_for_export( $post, $post_type );
 									$acf_json[] = $post;
 								}
 							}
 						}
-						if ( isset( $other['post'] ) ) {
-							foreach ( $other['post'] as $post ) {
-								$post_id     = $post['value'];
-								$post_object = get_post( $post_id );
+						error_log( print_r( $post_ids, 1 ) );
 
-								if ( $post_object ) {
-									$meta_data = get_post_meta( $post_id );
+						foreach ( $post_ids as $post_id ) {
+							$post_object = get_post( $post_id );
 
-									$featured_image_id  = get_post_thumbnail_id( $post_id );
-									$featured_image_url = $featured_image_id ? wp_get_attachment_url( $featured_image_id ) : '';
+							if ( $post_object ) {
+								$meta_data = get_post_meta( $post_id );
 
-									$attached_images = array();
-									$attachments     = get_attached_media( 'image', $post_id );
-									foreach ( $attachments as $attachment ) {
-										$attached_images[] = wp_get_attachment_url( $attachment->ID );
-									}
+								$featured_image_id  = get_post_thumbnail_id( $post_id );
+								$featured_image_url = $featured_image_id ? wp_get_attachment_url( $featured_image_id ) : '';
 
-									$post_json[] = array(
-										'id'              => $post_id,
-										'title'           => get_the_title( $post_id ),
-										'content'         => apply_filters( 'the_content', $post_object->post_content ),
-										'excerpt'         => $post_object->post_excerpt,
-										'status'          => $post_object->post_status,
-										'type'            => $post_object->post_type,
-										'meta'            => $meta_data,
-										'featured_image'  => $featured_image_url,
-										'attached_images' => $attached_images,
-										'date'            => $post_object->post_date,
-										'modified'        => $post_object->post_modified,
-										'author'          => $post_object->post_author,
-									);
+								$attached_images = array();
+								$attachments     = get_attached_media( 'image', $post_id );
+								foreach ( $attachments as $attachment ) {
+									$attached_images[] = wp_get_attachment_url( $attachment->ID );
 								}
+
+								// Retrieve taxonomies
+								$taxonomies     = get_object_taxonomies( $post_object->post_type, 'names' );
+								$taxonomy_terms = array();
+								foreach ( $taxonomies as $taxonomy ) {
+									$terms                       = wp_get_post_terms( $post_id, $taxonomy, array( 'fields' => 'all' ) );
+									$taxonomy_terms[ $taxonomy ] = wp_list_pluck( $terms, 'name', 'term_id' ); // Array with term IDs as keys and term names as values
+								}
+
+								$post_json[] = array(
+									'id'              => $post_id,
+									'title'           => get_the_title( $post_id ),
+									'content'         => apply_filters( 'the_content', $post_object->post_content ),
+									'excerpt'         => $post_object->post_excerpt,
+									'status'          => $post_object->post_status,
+									'type'            => $post_object->post_type,
+									'meta'            => $meta_data,
+									'featured_image'  => $featured_image_url,
+									'attached_images' => $attached_images,
+									'taxonomies'      => $taxonomy_terms,
+									'date'            => $post_object->post_date,
+									'modified'        => $post_object->post_modified,
+									'author'          => $post_object->post_author,
+								);
 							}
 						}
 

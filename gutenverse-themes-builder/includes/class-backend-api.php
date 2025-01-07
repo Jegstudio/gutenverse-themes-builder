@@ -1115,7 +1115,7 @@ class Backend_Api {
 		$data     = $info_db->get_theme_data( $theme_id );
 
 		$theme_data = array();
-		$choices    = array();
+		$acf_fields = array();
 		if ( function_exists( 'acf_update_setting' ) ) {
 			acf_update_setting( 'l10n_var_export', false );
 			// Reset the field-groups store which may have been corrupted by export.
@@ -1128,11 +1128,39 @@ class Backend_Api {
 				'acf_internal_post_object_contains_valid_key'
 			);
 
+			$taxonomies = array_filter(
+				acf_get_internal_post_type_posts( 'acf-taxonomy' ),
+				'acf_internal_post_object_contains_valid_key'
+			);
+
+			$post_types = array_filter(
+				acf_get_internal_post_type_posts( 'acf-post-type' ),
+				'acf_internal_post_object_contains_valid_key'
+			);
+
 			if ( $field_groups ) {
 				foreach ( $field_groups as $field_group ) {
-					$choices[] = array(
+					$acf_fields[] = array(
 						'title'    => esc_html( $field_group['title'] ),
 						'key'      => $field_group['key'],
+						'selected' => false,
+					);
+				}
+			}
+			if ( $taxonomies ) {
+				foreach ( $taxonomies as $taxonomy ) {
+					$acf_tax[] = array(
+						'title'    => esc_html( $taxonomy['title'] ),
+						'key'      => $taxonomy['key'],
+						'selected' => false,
+					);
+				}
+			}
+			if ( $post_types ) {
+				foreach ( $post_types as $post_type ) {
+					$acf_post[] = array(
+						'title'    => esc_html( $post_type['title'] ),
+						'key'      => $post_type['key'],
 						'selected' => false,
 					);
 				}
@@ -1144,19 +1172,40 @@ class Backend_Api {
 		foreach ( $other as $key => $data ) {
 			if ( 'acf-field' === $key ) {
 				foreach ( $data as $field_key ) {
-					foreach ( $choices as &$choice ) {
-						if ( isset( $choice['key'] ) && $field_key === $choice['key'] ) {
-							$choice['selected'] = true;
+					foreach ( $acf_fields as &$acf_f ) {
+						if ( isset( $acf_f['key'] ) && $field_key === $acf_f['key'] ) {
+							$acf_f['selected'] = true;
 						}
 					}
 				}
-				unset( $choice );
+				unset( $acf_f );
+			}
+			if ( 'acf-tax' === $key ) {
+				foreach ( $other['acf-tax'] as $tax_key ) {
+					foreach ( $acf_tax as &$acf_t ) {
+						if ( isset( $acf_t['key'] ) && $tax_key === $acf_t['key'] ) {
+							$acf_t['selected'] = true;
+						}
+					}
+				}
+				unset( $acf_t );
+			}
+			if ( 'acf-post' === $key ) {
+				foreach ( $other['acf-post'] as $post_key ) {
+					foreach ( $acf_post as &$acf_p ) {
+						if ( isset( $acf_p['key'] ) && $post_key === $acf_p['key'] ) {
+							$acf_p['selected'] = true;
+						}
+					}
+				}
+				unset( $acf_p );
 			}
 		}
 
 		return array(
-			'acf'  => $choices,
-			'post' => isset( $other['post'] ) ? $other['post'] : array(),
+			'acf-field' => $acf_fields,
+			'acf-tax'   => $acf_tax,
+			'acf-post'  => $acf_post,
 		);
 	}
 
@@ -3319,7 +3368,7 @@ class Backend_Api {
 			}
 			return new WP_REST_Response(
 				array(
-					'status' => 'success'
+					'status' => 'success',
 				),
 				200
 			);
@@ -3345,7 +3394,7 @@ class Backend_Api {
 		}
 		return new WP_REST_Response(
 			array(
-				'status' => 'success'
+				'status' => 'success',
 			),
 			200
 		);

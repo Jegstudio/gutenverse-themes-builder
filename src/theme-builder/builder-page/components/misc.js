@@ -10,24 +10,44 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
 const Misc = () => {
-    const [acfData, setAcfData] = useState([]);
-    const [postData, setPostData] = useState([]);
+    const [acfFieldData, setAcfFieldData] = useState([]);
+    const [acfTaxData, setAcfTaxData] = useState([]);
+    const [acfPostData, setAcfPostData] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getMiscField(null, response => {
             console.log(response);
-            if (response?.acf) {
-                setAcfData(response?.acf);
+            if (response?.['acf-field']) {
+                setAcfFieldData(response?.['acf-field']);
             }
-            if (response?.post) {
-                setPostData(response?.post);
+            if (response?.['acf-tax']) {
+                setAcfTaxData(response?.['acf-tax']);
+            }
+            if (response?.['acf-post']) {
+                setAcfPostData(response?.['acf-post']);
             }
         });
     }, []);
 
-    const handleSwitchChange = (key, value) => {
-        setAcfData((prevData) =>
+    const handleFieldChange = (key, value) => {
+        setAcfFieldData((prevData) =>
+            prevData.map((item) =>
+                item.key === key ? { ...item, selected: value } : item
+            )
+        );
+    };
+
+    const handleTaxChange = (key, value) => {
+        setAcfTaxData((prevData) =>
+            prevData.map((item) =>
+                item.key === key ? { ...item, selected: value } : item
+            )
+        );
+    };
+
+    const handlePostChange = (key, value) => {
+        setAcfPostData((prevData) =>
             prevData.map((item) =>
                 item.key === key ? { ...item, selected: value } : item
             )
@@ -37,22 +57,40 @@ const Misc = () => {
     const saveMisc = async () => {
         setLoading(true);
 
-        const dataAcf = acfData
+        const dataAcfField = acfFieldData
+            .filter(field => field.selected)
+            .map(field => field.key);
+
+        const dataAcfTax = acfTaxData
+            .filter(field => field.selected)
+            .map(field => field.key);
+
+        const dataAcfPost = acfPostData
             .filter(field => field.selected)
             .map(field => field.key);
 
         updateOtherData(
             {
-                key: 'post',
-                data: postData,
+                key: 'acf-field',
+                data: dataAcfField,
             },
             () => {
                 updateOtherData(
                     {
-                        key: 'acf-field',
-                        data: dataAcf,
+                        key: 'acf-post',
+                        data: dataAcfPost,
                     },
-                    () => { setLoading(false); }
+                    () => {
+                        updateOtherData(
+                            {
+                                key: 'acf-tax',
+                                data: dataAcfTax,
+                            },
+                            () => {
+                                setLoading(false);
+                            }
+                        );
+                    }
                 );
             }
         );
@@ -68,49 +106,44 @@ const Misc = () => {
             <br />
             <div className='media-input-wrapper'>
                 <h3>{__('Export ACF Field Group', 'gutenverse-themes-builder')}</h3>
-                {acfData.map((item) => (
+                {acfFieldData.map((item) => (
                     <div className='plugin-notice-mode-wrapper'>
                         <SwitchControl
                             key={item.key}
                             title={item.title}
                             value={item.selected}
-                            onChange={(value) => handleSwitchChange(item.key, value)}
+                            onChange={(value) => handleFieldChange(item.key, value)}
                         />
                     </div>
                 ))}
             </div>
             <br />
             <div className='media-input-wrapper'>
-                <h3>{__('Export Post', 'gutenverse-themes-builder')}</h3>
-                <div className="plugin-search-wrapper">
-                    <SelectSearchControl
-                        id={'search'}
-                        title={__('Search Post', 'gutenverse-themes-builder')}
-                        value={postData}
-                        isMulti={true}
-                        onChange={(a) => {
-                            setPostData(a)
-                        }}
-                        onSearch={input => new Promise(resolve => {
-                            apiFetch({
-                                path: addQueryArgs('/wp/v2/posts', {
-                                    search: input,
-                                }),
-                            }).then(data => {
-                                const promiseOptions = data.map(item => {
-                                    return {
-                                        label: item.title.rendered,
-                                        value: item.id
-                                    };
-                                });
-
-                                resolve(promiseOptions);
-                            }).catch(() => {
-                                resolve([]);
-                            });
-                        })}
-                    />
-                </div>
+                <h3>{__('Export ACF Taxonomy', 'gutenverse-themes-builder')}</h3>
+                {acfTaxData.map((item) => (
+                    <div className='plugin-notice-mode-wrapper'>
+                        <SwitchControl
+                            key={item.key}
+                            title={item.title}
+                            value={item.selected}
+                            onChange={(value) => handleTaxChange(item.key, value)}
+                        />
+                    </div>
+                ))}
+            </div>
+            <br />
+            <div className='media-input-wrapper'>
+                <h3>{__('Export ACF Post Type', 'gutenverse-themes-builder')}</h3>
+                {acfPostData.map((item) => (
+                    <div className='plugin-notice-mode-wrapper'>
+                        <SwitchControl
+                            key={item.key}
+                            title={item.title}
+                            value={item.selected}
+                            onChange={(value) => handlePostChange(item.key, value)}
+                        />
+                    </div>
+                ))}
             </div>
             <br />
             <div className="data-footer">

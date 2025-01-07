@@ -143,7 +143,7 @@ class Export_Theme {
 		$this->export_all_images( $wp_filesystem );
 		$this->create_thumbnail( $wp_filesystem, $data );
 		$this->create_menus( $wp_filesystem );
-		$this->create_misc_data( $wp_filesystem, $data );
+		//$this->create_misc_data( $wp_filesystem, $data );
 		$this->extractor_send_file( $data );
 
 		// child theme .
