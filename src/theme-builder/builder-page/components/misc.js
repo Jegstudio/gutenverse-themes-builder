@@ -101,7 +101,7 @@ const Misc = () => {
     return (
         <ContentWrapper
             title={__('Miscellaneous', 'gutenverse-themes-builder')}
-            description={__('Export additional content here. This content will be included as part of the theme package', 'gutenverse-themes-builder')}
+            description={__('Export additional content here. This content will be included as part of the template package', 'gutenverse-themes-builder')}
         >
             <br />
             <div className='media-input-wrapper'>
