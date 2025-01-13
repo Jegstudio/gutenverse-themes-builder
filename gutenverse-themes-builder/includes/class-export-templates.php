@@ -468,13 +468,41 @@ class Export_Templates {
 								}
 							}
 						}
-						error_log( print_r( $post_ids, 1 ) );
 
 						foreach ( $post_ids as $post_id ) {
 							$post_object = get_post( $post_id );
 
 							if ( $post_object ) {
-								$meta_data = get_post_meta( $post_id );
+								$meta_data     = get_post_meta( $post_id );
+								$exported_meta = array();
+
+								foreach ( $meta_data as $meta_key => $meta_values ) {
+									$processed_values = array();
+
+									foreach ( $meta_values as $meta_value ) {
+										$meta_value = maybe_unserialize( $meta_value );
+
+										if ( is_array( $meta_value ) ) {
+											$processed_array = array();
+											foreach ( $meta_value as $item ) {
+												if ( is_numeric( $item ) && wp_attachment_is_image( $item ) ) {
+													$image_url         = wp_get_attachment_url( $item );
+													$processed_array[] = $image_url ? $image_url : $item;
+												} else {
+													$processed_array[] = $item;
+												}
+											}
+											$processed_values[] = $processed_array;
+										} elseif ( is_numeric( $meta_value ) && wp_attachment_is_image( $meta_value ) ) {
+											$image_url          = wp_get_attachment_url( $meta_value );
+											$processed_values[] = $image_url ? $image_url : $meta_value;
+										} else {
+											$processed_values[] = $meta_value;
+										}
+									}
+
+									$exported_meta[ $meta_key ] = count( $processed_values ) === 1 ? $processed_values[0] : $processed_values;
+								}
 
 								$featured_image_id  = get_post_thumbnail_id( $post_id );
 								$featured_image_url = $featured_image_id ? wp_get_attachment_url( $featured_image_id ) : '';
@@ -500,7 +528,7 @@ class Export_Templates {
 									'excerpt'         => $post_object->post_excerpt,
 									'status'          => $post_object->post_status,
 									'type'            => $post_object->post_type,
-									'meta'            => $meta_data,
+									'meta'            => $exported_meta,
 									'featured_image'  => $featured_image_url,
 									'attached_images' => $attached_images,
 									'taxonomies'      => $taxonomy_terms,
