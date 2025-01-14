@@ -3,7 +3,7 @@ Contributors: Jegstudio
 Tags: themes, builder, template, block, editor
 Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -74,6 +74,9 @@ For additional information and assistance, please visit our extensive <a href="h
 
 
 == Changelog ==
+= 1.0.4 =
+* Fix issue when exporting footer
+
 = 1.0.3 =
 * Fix template part issue when using exported child theme
 * Update page and pattern UX
