@@ -346,7 +346,7 @@ class Init {
 
 		$config = array(
 			'home_url'      => home_url(),
-			'activeTheme    => get_option( 'stylesheet' ),
+			'activeTheme'   => get_option( 'stylesheet' ),
 			'version'       => {{constant}}_VERSION,
 			'images'        => {{constant}}_URI . '/assets/img/',
 			'title'         => esc_html__( '{{title}}', '{{slug}}' ),
