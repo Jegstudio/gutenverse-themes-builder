@@ -150,7 +150,7 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 		}
 
 		$image_without_res = str_replace( $matches[1], $matches[2], $matches[0] );
-
+		$valid_name = $image_name;
 		/**Check resolution again */
 		preg_match( '/http[^"]*(-\d+x\d+[^"]*(\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp))/', $image_without_res, $matches_check );
 
@@ -166,7 +166,7 @@ if ( ! function_exists( 'gutenverse_themes_builder_get_image_without_resolution'
 				$status_code = wp_remote_retrieve_response_code( $is_valid );
 				if ( 200 !== $status_code ) {
 					$image_without_res = $image;
-					$valid_name = $valid_name;
+					$valid_name = $image_name;
 				}
 			}
 		}

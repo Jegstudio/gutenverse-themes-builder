@@ -495,8 +495,8 @@ class Export_Theme {
 
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
-					$content = str_replace( "'", "\'", $html_content[ $slug_key ] );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, false, 'template' );
+					$content = $this->build_patterns( $html_content[ $slug_key ], $theme_id, $system, $theme_slug, false, 'template' );
+					$content = str_replace( "'", "\'", $content );
 					$content = $this->extract_images( $content, 'template', $theme_slug, true );
 					$content = $this->extract_menus( $content, $system );
 					$content = Misc::fix_colors( $content );
