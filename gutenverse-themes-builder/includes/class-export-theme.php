@@ -97,7 +97,7 @@ class Export_Theme {
 	 *
 	 * @var array
 	 */
-	private $menu_list;
+	private $menu_list = array();
 
 	/**
 	 * Init constructor.
@@ -269,7 +269,8 @@ class Export_Theme {
 				}
 			);
 			$reindexed_images = array_values( $page_images );
-			$placeholder      = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", json_encode( $reindexed_images ) ) : '', $placeholder );
+			gutenverse_themes_builder_sort_data( $reindexed_images, 'image_id' );
+			$placeholder = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", json_encode( $reindexed_images ) ) : '', $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -371,7 +372,10 @@ class Export_Theme {
 	 * @param string $menus .
 	 */
 	public function add_menus( $menus ) {
-		$this->menu_list[] = $menus;
+		$ids = array_column( $this->menu_list, 'menu_id' );
+		if ( array_search( $menus['menu_id'], $ids, true ) === false ) {
+			$this->menu_list[] = $menus;
+		}
 	}
 
 	/**
@@ -389,14 +393,14 @@ class Export_Theme {
 				foreach ( $menu_items as $item ) {
 					$url         = $item->url;
 					$object_slug = null;
+					$parent_idx  = null;
 					if ( 'page' === $item->object || 'post' === $item->object ) {
 						$url         = '#';
 						$post        = get_post( $item->object_id );
 						$object_slug = str_replace( ' ', '-', strtolower( $post->post_title ) );
 					}
 					if ( 0 !== intval( $item->menu_item_parent ) ) {
-						$parent_id  = intval( $item->menu_item_parent );
-						$parent_idx = null;
+						$parent_id = intval( $item->menu_item_parent );
 						foreach ( $arr_menu as $key => $parent ) {
 							if ( intval( $parent['id'] ) === $parent_id ) {
 								$parent_idx = $key;
@@ -921,16 +925,16 @@ class Export_Theme {
 		if ( empty( $other['screenshots'] ) ) {
 			return;
 		}
-
-		$image      = $other['screenshots']['thumbnail']['url'];
-		$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
-
-		if ( ! is_wp_error( $image_data ) ) {
-			$system->put_contents(
-				gutenverse_themes_builder_theme_built_path() . '/screenshot.jpg',
-				$image_data['body'],
-				FS_CHMOD_FILE
-			);
+		if ( isset( $other['screenshot']['thumbnail'] ) ) {
+			$image      = $other['screenshots']['thumbnail']['url'];
+			$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
+			if ( ! is_wp_error( $image_data ) ) {
+				$system->put_contents(
+					gutenverse_themes_builder_theme_built_path() . '/screenshot.jpg',
+					$image_data['body'],
+					FS_CHMOD_FILE
+				);
+			}
 		}
 	}
 

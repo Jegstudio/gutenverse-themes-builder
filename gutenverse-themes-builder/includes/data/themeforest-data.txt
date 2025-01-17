@@ -266,7 +266,7 @@ class Themeforest_Data {
 			}
 
 			$parent_id = array();
-			foreach ( $menu->menu_data as $key => $data ) {
+			foreach ( $menu->menu_data as $idx => $data ) {
 				$menu_parent = 0;
 				$url         = $data->url;
 				if ( null !== $data->parent ) {
@@ -319,7 +319,7 @@ class Themeforest_Data {
 				);
 				if ( $data->have_child ) {
 					$parent_id[] = array(
-						'idx'     => $key,
+						'idx'     => $idx,
 						'menu_id' => $menu_item_id,
 					);
 				}
