@@ -925,7 +925,7 @@ class Export_Theme {
 		if ( empty( $other['screenshots'] ) ) {
 			return;
 		}
-		if ( isset( $other['screenshot']['thumbnail'] ) ) {
+		if ( isset( $other['screenshots']['thumbnail'] ) ) {
 			$image      = $other['screenshots']['thumbnail']['url'];
 			$image_data = wp_remote_get( $image, array( 'sslverify' => true ) );
 			if ( ! is_wp_error( $image_data ) ) {
