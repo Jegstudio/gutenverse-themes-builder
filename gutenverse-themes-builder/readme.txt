@@ -3,7 +3,7 @@ Contributors: Jegstudio
 Tags: themes, builder, template, block, editor
 Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -74,6 +74,13 @@ For additional information and assistance, please visit our extensive <a href="h
 
 
 == Changelog ==
+= 1.0.6 =
+* fix valid name in helper
+* fix export footer
+* fix duplicates menu extracted
+* fix thumbnail navbar responsive
+* fix screenshot not exported
+
 = 1.0.5 =
 * Fix issue with exported themes causing error
 
