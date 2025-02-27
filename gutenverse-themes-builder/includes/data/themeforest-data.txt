@@ -166,7 +166,7 @@ class Themeforest_Data {
 		$title           = $request->get_param( 'title' );
 		$page_slug_title = str_replace( ' ', '_', strtolower( $title ) );
 		$active_theme    = wp_get_theme();
-		$theme_dir       = $active_theme->get_stylesheet_directory();
+		$theme_dir       = get_template_directory();
 		$json_file_data  = $wp_filesystem->get_contents( $theme_dir . '/gutenverse-pages/' . $page_slug_title . '.json' );
 		$page            = json_decode( $json_file_data, true );
 		$theme_url       = get_template_directory_uri();
@@ -254,7 +254,7 @@ class Themeforest_Data {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
 		$active_theme = wp_get_theme();
-		$theme_dir    = $active_theme->get_stylesheet_directory();
+		$theme_dir    = get_template_directory();
 		$menus        = (object) json_decode( $wp_filesystem->get_contents( $theme_dir . '/assets/misc/menu.json' ) );
 		foreach ( $menus as $key => $menu ) {
 			$menu_name   = get_option( 'stylesheet' ) . ' ' . intval( $key ) + 1;
