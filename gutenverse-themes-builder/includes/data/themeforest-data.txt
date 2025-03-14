@@ -456,14 +456,14 @@ class Themeforest_Data {
 	public function enqueue_backend() {
 		wp_enqueue_style(
 			'{{slug}}-inter-font',
-			{{constant}}_URI . '/assets/dashboard-fonts/inter/inter.css',
+			{{constant}}_URI . 'assets/dashboard-fonts/inter/inter.css',
 			array(),
 			{{constant}}_VERSION
 		);
 
 		wp_enqueue_style(
 			'{{slug}}-jakarta-sans-font',
-			{{constant}}_URI . '/assets/dashboard-fonts/plus-jakarta-sans/plus-jakarta-sans.css',
+			{{constant}}_URI . 'assets/dashboard-fonts/plus-jakarta-sans/plus-jakarta-sans.css',
 			array(),
 			{{constant}}_VERSION
 		);
