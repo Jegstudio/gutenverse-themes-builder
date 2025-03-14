@@ -625,13 +625,8 @@
             cursor: pointer;
             transition: all .5s ease;
             border-radius: 11px;
-            border-style: solid;
-            border-width: 3px;
-            border-image-source: linear-gradient(to bottom, #e3f0ff, #c3cefd);
-            border-image-slice: 1;
             background-image: linear-gradient(to right, #f045ff, #3b57f7 50%, #68e4f4), linear-gradient(to bottom, #fff3, #fff3), linear-gradient(to bottom, #e3f0ff, #c3cefd);
-            background-origin: border-box;
-            background-clip: content-box, content-box, border-box;
+            box-shadow: 0 0 0 0 #e3f0ff, 0 0 0 3px rgba(195, 206, 253, 1);
 
             .button-content-wrapper {
                 color: white;
