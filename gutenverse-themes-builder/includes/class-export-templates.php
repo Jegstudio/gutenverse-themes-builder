@@ -524,7 +524,6 @@ class Export_Templates {
 					$modified_content = $this->export_global_variables( $file_content );
 
 					$zip->addFromString( $relative_path, $modified_content );
-					error_log( $relative_path);
 				} else {
 					$zip->addFile( $file_path, $relative_path );
 				}
