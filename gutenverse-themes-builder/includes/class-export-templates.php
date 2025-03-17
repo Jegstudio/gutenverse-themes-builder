@@ -102,6 +102,20 @@ class Export_Templates {
 	private $image_list;
 
 	/**
+	 * List of Global Colors.
+	 *
+	 * @var array
+	 */
+	private $global_colors = array();
+
+	/**
+	 * List of Global Fonts.
+	 *
+	 * @var array
+	 */
+	private $global_fonts = array();
+
+	/**
 	 * Init constructor.
 	 */
 	public function __construct() {
@@ -399,7 +413,7 @@ class Export_Templates {
 						$content          = str_replace( "'", "\'", $posts[0]->post_content );
 						$content          = $this->extractor_extract_image_to_array( $content );
 						$images           = $content['images'];
-						$content          = $this->replace_global_variables( $content['contents'] );
+						$content          = $this->export_global_variables( $content['contents'] );
 						$content          = $this->fix_core_navigation( $content );
 						$pattern_name     = $posts[0]->post_name;
 						$pattern_title    = $posts[0]->post_title;
@@ -507,14 +521,17 @@ class Export_Templates {
 
 					$file_content = file_get_contents( $file_path );
 
-					$modified_content = $this->replace_global_variables( $file_content );
+					$modified_content = $this->export_global_variables( $file_content );
 
 					$zip->addFromString( $relative_path, $modified_content );
+					error_log( $relative_path);
 				} else {
 					$zip->addFile( $file_path, $relative_path );
 				}
 			}
 		}
+		$zip->addFromString( 'global/color.json', wp_json_encode( $this->global_colors, JSON_UNESCAPED_SLASHES ) );
+		$zip->addFromString( 'global/font.json', wp_json_encode( $this->global_fonts, JSON_UNESCAPED_SLASHES ) );
 
 		$zip->close();
 
@@ -530,26 +547,38 @@ class Export_Templates {
 	 *
 	 * @param string $pattern .
 	 */
-	public function replace_global_variables( $pattern ) {
-		// First match that only have two content: type and id.
+	public function export_global_variables( $pattern ) {
 		preg_match_all( '/{"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/', $pattern, $matches );
-		if ( ! empty( $matches ) ) {
+
+		if ( ! empty( $matches[1] ) ) {
 			$color_arr = $this->get_theme_colors();
 			$font_arr  = $this->get_theme_fonts();
-			foreach ( $matches[1] as $variable ) {
-				$variable_pattern = '/{"type":"variable","id":"' . $variable . '"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/';
-				// Replace colors.
-				if ( isset( $color_arr[ $variable ] ) ) {
-					$color_replace = $color_arr[ $variable ];
-					$pattern       = preg_replace( $variable_pattern, $color_replace, $pattern );
-				}
+			$pattern   = preg_replace_callback(
+				'/({"type":"variable","id":"([^"]*)"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})/',
+				function ( $match ) use ( $color_arr, $font_arr ) {
+					$json = json_decode( $match[1], true );
 
-				// Replace fonts.
-				if ( isset( $font_arr[ $variable ] ) ) {
-					$font_replace = $font_arr[ $variable ];
-					$pattern      = preg_replace( $variable_pattern, $font_replace, $pattern );
-				}
-			}
+					if ( isset( $json['id'] ) && is_string( $json['id'] ) ) {
+						if ( isset( $color_arr[ $json['id'] ] ) ) {
+							$color_slug                         = $this->sluggify( $color_arr[ $json['id'] ]['name'] );
+							$new_color                          = $color_arr[ $json['id'] ];
+							$json['id']                         = $color_slug;
+							$new_color['slug']                  = $color_slug;
+							$this->global_colors[ $color_slug ] = $new_color;
+						} elseif ( isset( $font_arr[ $json['id'] ] ) ) {
+							$font_slug                        = $this->sluggify( $font_arr[ $json['id'] ]['name'] );
+							$new_font                         = $font_arr[ $json['id'] ];
+							$json['id']                       = $font_slug;
+							$new_font['slug']                 = $font_slug;
+							$this->global_fonts[ $font_slug ] = $new_font;
+
+						}
+					}
+
+					return wp_json_encode( $json, JSON_UNESCAPED_SLASHES );
+				},
+				$pattern
+			);
 		}
 		return $pattern;
 	}
@@ -564,7 +593,7 @@ class Export_Templates {
 		$font_arr = array();
 
 		foreach ( $fonts as $value ) {
-			$font_arr[ $value['id'] ] = wp_json_encode( $value['font'] );
+			$font_arr[ $value['id'] ] = $value;
 		}
 
 		return $font_arr;
@@ -579,26 +608,93 @@ class Export_Templates {
 			$new_arr = array();
 
 			// Manually add default colors for now.
-			$new_arr['black']                 = $this->hex2rgb( '#000000' );
-			$new_arr['cyan-bluish-gray']      = $this->hex2rgb( '#abb8c3' );
-			$new_arr['white']                 = $this->hex2rgb( '#ffffff' );
-			$new_arr['pale-pink']             = $this->hex2rgb( '#f78da7' );
-			$new_arr['vivid-red']             = $this->hex2rgb( '#cf2e2e' );
-			$new_arr['luminous-vivid-orange'] = $this->hex2rgb( '#ff6900' );
-			$new_arr['luminous-vivid-amber']  = $this->hex2rgb( '#fcb900' );
-			$new_arr['light-green-cyan']      = $this->hex2rgb( '#7bdcb5' );
-			$new_arr['vivid-green-cyan']      = $this->hex2rgb( '#00d084' );
-			$new_arr['pale-cyan-blue']        = $this->hex2rgb( '#8ed1fc' );
-			$new_arr['vivid-cyan-blue']       = $this->hex2rgb( '#0693e3' );
-			$new_arr['vivid-purple']          = $this->hex2rgb( '#9b51e0' );
+			$new_arr = array(
+				'black'                 => array(
+					'name'  => 'Black',
+					'slug'  => 'black',
+					'color' => $this->hex2rgb( '#000000' ),
+				),
+				'cyan-bluish-gray'      => array(
+					'name'  => 'Cyan Bluish Gray',
+					'slug'  => 'cyan-bluish-gray',
+					'color' => $this->hex2rgb( '#abb8c3' ),
+				),
+				'white'                 => array(
+					'name'  => 'White',
+					'slug'  => 'white',
+					'color' => $this->hex2rgb( '#ffffff' ),
+				),
+				'pale-pink'             => array(
+					'name'  => 'Pale Pink',
+					'slug'  => 'pale-pink',
+					'color' => $this->hex2rgb( '#f78da7' ),
+				),
+				'vivid-red'             => array(
+					'name'  => 'Vivid Red',
+					'slug'  => 'vivid-red',
+					'color' => $this->hex2rgb( '#cf2e2e' ),
+				),
+				'luminous-vivid-orange' => array(
+					'name'  => 'Luminous Vivid Orange',
+					'slug'  => 'luminous-vivid-orange',
+					'color' => $this->hex2rgb( '#ff6900' ),
+				),
+				'luminous-vivid-amber'  => array(
+					'name'  => 'Luminous Vivid Amber',
+					'slug'  => 'luminous-vivid-amber',
+					'color' => $this->hex2rgb( '#fcb900' ),
+				),
+				'light-green-cyan'      => array(
+					'name'  => 'Light Green Cyan',
+					'slug'  => 'light-green-cyan',
+					'color' => $this->hex2rgb( '#7bdcb5' ),
+				),
+				'vivid-green-cyan'      => array(
+					'name'  => 'Vivid Green Cyan',
+					'slug'  => 'vivid-green-cyan',
+					'color' => $this->hex2rgb( '#00d084' ),
+				),
+				'pale-cyan-blue'        => array(
+					'name'  => 'Pale Cyan Blue',
+					'slug'  => 'pale-cyan-blue',
+					'color' => $this->hex2rgb( '#8ed1fc' ),
+				),
+				'vivid-cyan-blue'       => array(
+					'name'  => 'Vivid Cyan Blue',
+					'slug'  => 'vivid-cyan-blue',
+					'color' => $this->hex2rgb( '#0693e3' ),
+				),
+				'vivid-purple'          => array(
+					'name'  => 'Vivid Purple',
+					'slug'  => 'vivid-purple',
+					'color' => $this->hex2rgb( '#9b51e0' ),
+				),
+			);
 
 			foreach ( $colors as $color ) {
-				$new_arr[ $color->slug ] = $this->hex2rgb( $color->color );
+				$new_arr[ $color->slug ] = array(
+					'name'  => ucfirst( str_replace( '-', ' ', $color->name ) ),
+					'slug'  => $color->slug,
+					'color' => $this->hex2rgb( $color->color ),
+				);
 			}
 			return $new_arr;
 		}
 
 		return null;
+	}
+
+	/**
+	 * String to slug
+	 *
+	 * @param string $string .
+	 * @param string $separator .
+	 */
+	public function sluggify( $string, $separator = '-' ) {
+		$string = mb_strtolower( $string, 'UTF-8' );
+		$string = preg_replace( '/[^a-z0-9]+/u', $separator, $string );
+		$string = trim( $string, $separator );
+		return $string;
 	}
 
 	/**
