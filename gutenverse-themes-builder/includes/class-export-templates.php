@@ -611,62 +611,62 @@ class Export_Templates {
 				'black'                 => array(
 					'name'  => 'Black',
 					'slug'  => 'black',
-					'color' => $this->hex2rgb( '#000000' ),
+					'color' => '#000000',
 				),
 				'cyan-bluish-gray'      => array(
 					'name'  => 'Cyan Bluish Gray',
 					'slug'  => 'cyan-bluish-gray',
-					'color' => $this->hex2rgb( '#abb8c3' ),
+					'color' => '#abb8c3',
 				),
 				'white'                 => array(
 					'name'  => 'White',
 					'slug'  => 'white',
-					'color' => $this->hex2rgb( '#ffffff' ),
+					'color' => '#ffffff',
 				),
 				'pale-pink'             => array(
 					'name'  => 'Pale Pink',
 					'slug'  => 'pale-pink',
-					'color' => $this->hex2rgb( '#f78da7' ),
+					'color' => '#f78da7',
 				),
 				'vivid-red'             => array(
 					'name'  => 'Vivid Red',
 					'slug'  => 'vivid-red',
-					'color' => $this->hex2rgb( '#cf2e2e' ),
+					'color' => '#cf2e2e',
 				),
 				'luminous-vivid-orange' => array(
 					'name'  => 'Luminous Vivid Orange',
 					'slug'  => 'luminous-vivid-orange',
-					'color' => $this->hex2rgb( '#ff6900' ),
+					'color' => '#ff6900',
 				),
 				'luminous-vivid-amber'  => array(
 					'name'  => 'Luminous Vivid Amber',
 					'slug'  => 'luminous-vivid-amber',
-					'color' => $this->hex2rgb( '#fcb900' ),
+					'color' => '#fcb900',
 				),
 				'light-green-cyan'      => array(
 					'name'  => 'Light Green Cyan',
 					'slug'  => 'light-green-cyan',
-					'color' => $this->hex2rgb( '#7bdcb5' ),
+					'color' => '#7bdcb5',
 				),
 				'vivid-green-cyan'      => array(
 					'name'  => 'Vivid Green Cyan',
 					'slug'  => 'vivid-green-cyan',
-					'color' => $this->hex2rgb( '#00d084' ),
+					'color' => '#00d084',
 				),
 				'pale-cyan-blue'        => array(
 					'name'  => 'Pale Cyan Blue',
 					'slug'  => 'pale-cyan-blue',
-					'color' => $this->hex2rgb( '#8ed1fc' ),
+					'color' => '#8ed1fc',
 				),
 				'vivid-cyan-blue'       => array(
 					'name'  => 'Vivid Cyan Blue',
 					'slug'  => 'vivid-cyan-blue',
-					'color' => $this->hex2rgb( '#0693e3' ),
+					'color' => '#0693e3',
 				),
 				'vivid-purple'          => array(
 					'name'  => 'Vivid Purple',
 					'slug'  => 'vivid-purple',
-					'color' => $this->hex2rgb( '#9b51e0' ),
+					'color' => '#9b51e0',
 				),
 			);
 
@@ -674,7 +674,7 @@ class Export_Templates {
 				$new_arr[ $color->slug ] = array(
 					'name'  => ucfirst( str_replace( '-', ' ', $color->name ) ),
 					'slug'  => $color->slug,
-					'color' => $this->hex2rgb( $color->color ),
+					'color' => $color->color,
 				);
 			}
 			return $new_arr;
@@ -694,26 +694,6 @@ class Export_Templates {
 		$string = preg_replace( '/[^a-z0-9]+/u', $separator, $string );
 		$string = trim( $string, $separator );
 		return $string;
-	}
-
-	/**
-	 * Hex to RGB
-	 *
-	 * @param string $hex .
-	 */
-	public function hex2rgb( $hex ) {
-		$hex = str_replace( '#', '', $hex );
-
-		$r = hexdec( substr( $hex, 0, 2 ) );
-		$g = hexdec( substr( $hex, 2, 2 ) );
-		$b = hexdec( substr( $hex, 4, 2 ) );
-		$a = 1;
-
-		if ( strlen( $hex ) === 8 ) {
-			$a = hexdec( substr( $hex, 6, 2 ) ) / 255;
-		}
-
-		return '{"r":' . $r . ',"g":' . $g . ',"b":' . $b . ',"a":' . $a . '}';
 	}
 
 	/**
