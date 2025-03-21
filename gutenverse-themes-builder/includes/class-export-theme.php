@@ -797,7 +797,8 @@ class Export_Theme {
 						}
 
 						/**Preparing image replacement */
-						$image_uri  = Misc::get_constant_name( $slug ) . '_URI';
+						// $image_uri  = Misc::get_constant_name( $slug ) . '_URI';
+						$image_uri  = 'get_template_directory()';
 						$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
 						if ( $is_outside_pattern_wrapper ) {
 							$image_code = "{{home_url}}/assets/img/$image_name";
