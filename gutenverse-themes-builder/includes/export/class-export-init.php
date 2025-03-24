@@ -459,7 +459,7 @@ class Export_Init {
                 overflow: hidden;
                 padding: 0 !important;
                 margin-bottom: 30px !important;
-                background: url( <?php echo esc_url( ' . Misc::get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/background-banner.png\' ); ?> );
+                background: url( <?php echo esc_url( get_template_directory_uri() . \'/assets/img/background-banner.png\' ); ?> );
                 background-size: cover;
                 background-position: center;
             }
@@ -750,7 +750,7 @@ class Export_Init {
 	 * @return string
 	 */
 	private function add_screenshot_page_list( $placeholder, $other, $theme_data, $system ) {
-		$uri   = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
+		// $uri   = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
 		if ( ! empty( $other['screenshots'] ) && ! empty( $other['screenshots']['dashboard'] ) ) {
 			if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
@@ -768,7 +768,7 @@ class Export_Init {
 					);
 				}
 
-				$pages[] = "'page-{$key}' => {$uri} . 'assets/img/{$dashboard['filename']}'";
+				$pages[] = "'page-{$key}' => get_template_directory_uri() . '/assets/img/{$dashboard['filename']}'";
 			}
 		}
 
