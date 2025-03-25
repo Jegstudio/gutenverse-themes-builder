@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 defined( '{{constant}}_VERSION' ) || define( '{{constant}}_VERSION', '{{theme_version}}' );
 defined( '{{constant}}_DIR' ) || define( '{{constant}}_DIR', trailingslashit( get_template_directory() ) );
-defined( '{{constant}}_URI' ) || define( '{{constant}}_URI', trailingslashit( get_template_directory_uri() ) );
 
 require get_parent_theme_file_path( 'inc/autoload.php' );
 

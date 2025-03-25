@@ -92,24 +92,24 @@ class Block_Patterns {
 
 				if ( (bool) $pattern_data['is_sync'] ) {
 					$post = get_page_by_path( $block_pattern . '-synced', OBJECT, 'wp_block' );
-					/**Download Image */
-					$content = wp_slash( $pattern_data['content'] );
-					if ( $pattern_data['images'] ) {
-						$images = json_decode( $pattern_data['images'] );
-						foreach ( $images as $key => $image ) {
-							$url  = $image->image_url;
-							$data = Helper::check_image_exist( $url );
-							if ( ! $data ) {
-								$data = Helper::handle_file( $url );
-							}
-							$content = str_replace( $url, $data['url'], $content );
-							$image_id = $image->image_id;
-							if ( $image_id && 'null' !== $image_id ) {
-								$content = str_replace( '"imageId\":' . $image_id, '"imageId\":' . $data['id'], $content );
+					if ( empty( $post ) ) {
+						/**Download Image */
+						$content = wp_slash( $pattern_data['content'] );
+						if ( $pattern_data['images'] ) {
+							$images = json_decode( $pattern_data['images'] );
+							foreach ( $images as $key => $image ) {
+								$url  = $image->image_url;
+								$data = Helper::check_image_exist( $url );
+								if ( ! $data ) {
+									$data = Helper::handle_file( $url );
+								}
+								$content = str_replace( $url, $data['url'], $content );
+								$image_id = $image->image_id;
+								if ( $image_id && 'null' !== $image_id ) {
+									$content = str_replace( '"imageId\":' . $image_id, '"imageId\":' . $data['id'], $content );
+								}
 							}
 						}
-					}
-					if ( empty( $post ) ) {
 						$post_id = wp_insert_post(
 							array(
 								'post_name'    => $block_pattern . '-synced',

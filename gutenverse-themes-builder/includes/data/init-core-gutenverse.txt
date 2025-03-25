@@ -326,7 +326,7 @@ class Init {
 			// enqueue css.
 			wp_enqueue_style(
 				'{{slug}}-dashboard',
-				{{constant}}_URI . '/assets/css/theme-dashboard.css',
+				get_template_directory_uri() . '/assets/css/theme-dashboard.css',
 				array(),
 				{{constant}}_VERSION
 			);
@@ -334,7 +334,7 @@ class Init {
 			// enqueue js.
 			wp_enqueue_script(
 				'{{slug}}-dashboard',
-				{{constant}}_URI . '/assets/js/theme-dashboard.js',
+				get_template_directory_uri() . '/assets/js/theme-dashboard.js',
 				array( 'wp-api-fetch' ),
 				{{constant}}_VERSION,
 				true
@@ -377,7 +377,7 @@ class Init {
 		$config = array(
 			'home_url'     => home_url(),
 			'version'      => {{constant}}_VERSION,
-			'images'       => {{constant}}_URI . '/assets/img/',
+			'images'       => get_template_directory_uri() . '/assets/img/',
 			'title'        => esc_html__( '{{title}}', '{{slug}}' ),
 			'description'  => esc_html__( '{{description}}', '{{slug}}' ),
 			'pluginTitle'  => esc_html__( 'Plugin Requirement', '{{slug}}' ),

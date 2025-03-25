@@ -5,7 +5,7 @@
  * Description: Build advance themes that fit for wp.org and any other marketplace.
  * Plugin URI: https://gutenverse.com/
  * Author: Jegstudio
- * Version: 1.0.3
+ * Version: 1.0.6
  * Author URI: https://jegtheme.com/
  * License: GPLv3
  * Text Domain: gutenverse-themes-builder
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 defined( 'GUTENVERSE_THEMES_BUILDER' ) || define( 'GUTENVERSE_THEMES_BUILDER', 'gutenverse-themes-builder' );
-defined( 'GUTENVERSE_THEMES_BUILDER_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_VERSION', '1.0.3' );
+defined( 'GUTENVERSE_THEMES_BUILDER_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_VERSION', '1.0.6' );
 defined( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION' ) || define( 'GUTENVERSE_THEMES_BUILDER_NOTICE_VERSION', '1.0.0' );
 defined( 'GUTENVERSE_THEMES_BUILDER_NAME' ) || define( 'GUTENVERSE_THEMES_BUILDER_NAME', 'Gutenverse Themes Builder' );
 defined( 'GUTENVERSE_THEMES_BUILDER_URL' ) || define( 'GUTENVERSE_THEMES_BUILDER_URL', plugins_url( GUTENVERSE_THEMES_BUILDER ) );
