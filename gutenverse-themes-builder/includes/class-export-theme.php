@@ -501,7 +501,7 @@ class Export_Theme {
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->build_patterns( $html_content[ $slug_key ], $theme_id, $system, $theme_slug, false, 'template' );
 					$content = str_replace( "'", "\'", $content );
-					$content = $this->extract_images( $content, 'template' );
+					$content = $this->extract_images( $content, 'template', null, true );
 					$content = $this->extract_menus( $content, $system );
 					$content = Misc::fix_colors( $content );
 					$content = Misc::fix_core_navigation( $content );
@@ -704,11 +704,12 @@ class Export_Theme {
 	/**
 	 * Extract Images
 	 *
-	 * @param string $content .
-	 * @param string $type .
-	 * @param string $parent_id .
+	 * @param string  $content .
+	 * @param string  $type .
+	 * @param string  $parent_id .
+	 * @param boolean $is_outside_pattern_wrapper .
 	 */
-	private function extract_images( $content, $type, $parent_id = '' ) {
+	private function extract_images( $content, $type, $parent_id = '', $is_outside_pattern_wrapper = false ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
@@ -779,6 +780,10 @@ class Export_Theme {
 					case 'template':
 					case 'async':
 					default:
+						if ( $is_outside_pattern_wrapper ) {
+							continue;
+						}
+
 						/**Filter image list to check if the same image and type already registered inside the array */
 						$filter_data  = array_filter(
 							$this->image_list,
