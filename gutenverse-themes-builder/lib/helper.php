@@ -69,7 +69,7 @@ if ( ! function_exists( 'gutenverse_themes_builder_is_image_url' ) ) {
 		$image_extensions = array( 'webp', 'jpeg', 'jpg', 'png' );
 		$path             = wp_parse_url( $url, PHP_URL_PATH );
 		$extension        = pathinfo( $path, PATHINFO_EXTENSION );
-		return in_array( strtolower( $extension ), $image_extensions );
+		return in_array( strtolower( $extension ), $image_extensions, true );
 	}
 }
 if ( ! function_exists( 'gutenverse_themes_builder_to_unicode_escape' ) ) {
@@ -321,7 +321,8 @@ if ( ! function_exists( 'gutenverse_themes_builder_sort_data' ) ) {
 		usort(
 			$data,
 			function ( $a, $b ) use ( $key ) {
-				return (array) $a[ $key ] <=> (array) $b[ $key ]; // Spaceship operator for comparison
+				/** Spaceship operator for comparison */
+				return (array) $a[ $key ] <=> (array) $b[ $key ];
 			}
 		);
 	}

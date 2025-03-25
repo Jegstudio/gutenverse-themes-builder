@@ -31,21 +31,6 @@ class Export_Templates {
 	public $fileresult;
 
 	/**
-	 * Core Patterns
-	 *
-	 * @var array
-	 */
-	private $core_patterns;
-
-	/**
-	 * Gutenverse Patterns
-	 *
-	 * @var array
-	 */
-	private $gutenverse_patterns;
-
-
-	/**
 	 * Template Core Patterns
 	 *
 	 * @var array
@@ -88,18 +73,11 @@ class Export_Templates {
 	private $page_gutenverse_patterns;
 
 	/**
-	 * Pro Patterns
+	 * List of Menus
 	 *
 	 * @var array
 	 */
-	private $pro_patterns;
-
-	/**
-	 * List of Images
-	 *
-	 * @var array
-	 */
-	private $image_list;
+	private $menu_list = array();
 
 	/**
 	 * List of Global Colors.
@@ -119,8 +97,6 @@ class Export_Templates {
 	 * Init constructor.
 	 */
 	public function __construct() {
-		$this->image_list = array();
-
 		$this->start();
 	}
 
@@ -200,8 +176,9 @@ class Export_Templates {
 			/**Add Content */
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
+			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->fix_core_navigation( $content );
-			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
+			$placeholder = str_replace( '{{content}}', wp_json_encode( $content ), $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -283,6 +260,7 @@ class Export_Templates {
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_core_navigation( $html_content[ $slug_key ] );
 					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->extract_menus( $content, $system );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header|template_part)")?\s*} \/-->/';
 						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
@@ -428,7 +406,7 @@ class Export_Templates {
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
 						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
 
-						/**replace additional object with object sync */
+						/**Replace additional object with object sync */
 
 						$additional  = "'pattern_slug' => '" . $theme_slug . '/' . $pattern_name . "',
 						'images' => array(" . $this->format_image_array( $images ) . ')';
@@ -500,7 +478,7 @@ class Export_Templates {
 	 * @param array $data .
 	 */
 	public function extractor_send_file( $data ) {
-		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-demos' . '.zip';
+		$zip_path = trailingslashit( wp_upload_dir()['basedir'] ) . $data['slug'] . '-demos.zip';
 
 		$zip = new ZipArchive();
 		$zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE );
@@ -534,9 +512,9 @@ class Export_Templates {
 		$zip->close();
 
 		$this->fileresult = array(
-			'filename' => $data['slug'] . '-demos' . '.zip',
+			'filename' => $data['slug'] . '-demos.zip',
 			'filepath' => $zip_path,
-			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos' . '.zip',
+			'fileurl'  => wp_upload_dir()['baseurl'] . '/' . $data['slug'] . '-demos.zip',
 		);
 	}
 
@@ -835,11 +813,10 @@ class Export_Templates {
 	 * Replace Template Part
 	 *
 	 * @param string $content .
-	 * @param string $theme_slug .
 	 *
 	 * @return string
 	 */
-	public function replace_template_part( $content, $theme_slug ) {
+	public function replace_template_part( $content ) {
 		preg_match_all( '/<!-- wp:template-part {[^}]+} \\/-->/', $content, $matches );
 		if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
 			foreach ( $matches as $match ) {
@@ -886,6 +863,74 @@ class Export_Templates {
 			case 'pro-only':
 			default:
 				return $default_dir;
+		}
+	}
+
+	/**
+	 * Extract Menu
+	 *
+	 * @param string $content .
+	 */
+	public function extract_menus( $content ) {
+		preg_match_all( '/"menuId":(\d+)/', $content, $matches );
+		if ( ! empty( $matches[0] ) ) {
+			foreach ( $matches[1] as $match ) {
+				$menu_id    = $match;
+				$menu_items = wp_get_nav_menu_items( $menu_id );
+				$arr_menu   = array();
+				foreach ( $menu_items as $item ) {
+					$url         = $item->url;
+					$object_slug = null;
+					$parent_idx  = null;
+					if ( 'page' === $item->object || 'post' === $item->object ) {
+						$url         = '#';
+						$post        = get_post( $item->object_id );
+						$object_slug = str_replace( ' ', '-', strtolower( $post->post_title ) );
+					}
+					if ( 0 !== intval( $item->menu_item_parent ) ) {
+						$parent_id = intval( $item->menu_item_parent );
+						foreach ( $arr_menu as $key => $parent ) {
+							if ( intval( $parent['id'] ) === $parent_id ) {
+								$parent_idx = $key;
+								break;
+							}
+						}
+					}
+
+					$arr_menu[] = array(
+						'id'          => $item->ID,
+						'title'       => $item->title,
+						'url'         => $url,
+						'parent'      => strval( $parent_idx ),
+						'type'        => $item->object,
+						'object_slug' => $object_slug,
+						'have_child'  => false,
+					);
+					if ( null !== $parent_idx ) {
+						$arr_menu[ $parent_idx ]['have_child'] = true;
+					}
+					$parent_idx = null;
+				}
+				$this->add_menus(
+					array(
+						'menu_id'   => $menu_id,
+						'menu_data' => $arr_menu,
+					)
+				);
+			}
+		}
+		return $content;
+	}
+
+	/**
+	 * Add Menu
+	 *
+	 * @param string $menus .
+	 */
+	public function add_menus( $menus ) {
+		$ids = array_column( $this->menu_list, 'menu_id' );
+		if ( array_search( $menus['menu_id'], $ids, true ) === false ) {
+			$this->menu_list[] = $menus;
 		}
 	}
 }
