@@ -23,6 +23,7 @@ const SelectControl = (props) => {
                 <div className="select-inner">
                     <Select
                         id={id}
+                        required={important}
                         styles={{
                             control: (styles) => ({
                                 ...styles,

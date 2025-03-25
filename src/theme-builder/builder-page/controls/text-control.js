@@ -24,6 +24,7 @@ const TextControl = (props) => {
                     placeholder={placeholder}
                     value={value}
                     onChange={onTextChange}
+                    required={important}
                 />
                 <ul className="error-list">
                     {

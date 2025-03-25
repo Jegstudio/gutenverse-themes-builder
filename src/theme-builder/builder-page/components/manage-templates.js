@@ -42,11 +42,11 @@ const ManageTemplates = () => {
     }, []);
 
     const addTemplate = (category) => {
-        setAddTemplateLoading({
-            ...addTemplateLoading,
-            [category] : true
-        })
         if (templateData?.[category]?.name && templateData?.[category]?.template_type) {
+            setAddTemplateLoading({
+                ...addTemplateLoading,
+                [category] : true
+            })
             const params = {
                 template_data: {
                     category,
@@ -163,12 +163,14 @@ const ManageTemplates = () => {
                                     value={templateData?.[item.id]?.template_type}
                                     options={filteredOptions}
                                     onChange={onDataChange(item.id, 'template_type')}
+                                    important={true}
                                 />
                                 {NAMABLE_TEMPLATES.includes(templateData?.[item.id]?.template_type) && <TextControl
                                     id={'template_name'}
                                     title={__('Name', 'gutenverse-themes-builder')}
                                     value={templateData?.[item.id]?.name}
                                     onChange={onDataChange(item.id, 'name')}
+                                    important={true}
                                 />}
                                 <div className="buttons">
                                     {
