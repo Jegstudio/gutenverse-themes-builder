@@ -41,7 +41,7 @@ class Notice {
 	public function enqueue_admin_assets() {
 		wp_enqueue_script(
 			'base-admin-script',
-			{{constant}}_URI . 'assets/js/notice.js',
+			trailingslashit( get_template_directory_uri() ) . 'assets/js/notice.js',
 			array( 'jquery', 'wp-api' ),
 			{{constant}}_VERSION,
 			true
@@ -82,7 +82,7 @@ class Notice {
 
 		wp_enqueue_style(
 			'base-admin-style',
-			{{constant}}_URI . 'assets/css/notice.css',
+			trailingslashit( get_template_directory_uri() ) . 'assets/css/notice.css',
 			array(),
 			{{constant}}_VERSION
 		);
@@ -136,7 +136,7 @@ class Notice {
 		}
 
 		?>
-		<div class="notice is-dismissible install-gutenverse-plugin-notice" style="background: url( <?php echo esc_url( {{constant}}_URI . '/assets/img/background-banner.png' ); ?> );">
+		<div class="notice is-dismissible install-gutenverse-plugin-notice" style="background: url( <?php echo esc_url( trailingslashit( get_template_directory_uri() ) . '/assets/img/background-banner.png' ); ?> );">
 				<div class="gutenverse-notice-inner">
 					<div class="gutenverse-notice-content">
 						<div class="gutenverse-notice-text">
@@ -149,7 +149,7 @@ class Notice {
 							</div>
 						</div>
 						<div class="gutenverse-notice-image">
-							<img src="<?php echo esc_url( {{constant}}_URI . '/assets/img/banner-install-gutenverse-2.png' ); ?>"/>
+							<img src="<?php echo esc_url( trailingslashit( get_template_directory_uri() ) . '/assets/img/banner-install-gutenverse-2.png' ); ?>"/>
 						</div>
 					</div>
 				</div>

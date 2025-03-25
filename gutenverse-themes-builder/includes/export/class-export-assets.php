@@ -57,7 +57,7 @@ class Export_Assets {
 					$string = Misc::create_enqueue_string( $asset['handler'], $asset['type'], $asset['content'], $theme_data );
 					break;
 				case 'content':
-					$media  = "{$theme_slug}_URI . '/assets/{$asset['type']}/{$asset['handler']}.{$asset['type']}'";
+					$media  = "trailingslashit( get_template_directory_uri() ) . '/assets/{$asset['type']}/{$asset['handler']}.{$asset['type']}'";
 					$string = Misc::create_enqueue_string( $asset['handler'], $asset['type'], $media, $theme_data );
 					break;
 				case 'WordPress':

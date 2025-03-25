@@ -66,7 +66,7 @@ class Export_Init {
 			if ( isset( $event_banner ) ) {
 				$banner_data = wp_remote_get( $event_banner['url'], array( 'sslverify' => true ) );
 				$banner_path = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $event_banner['filename'];
-				$banner_url  = "{$theme_slug}_URI . 'assets/img/" . $event_banner['filename'] . "'";
+				$banner_url  = "trailingslashit( get_template_directory_uri() ) . 'assets/img/" . $event_banner['filename'] . "'";
 				if ( ! is_wp_error( $banner_data ) ) {
 					$system->put_contents(
 						$banner_path,
@@ -98,7 +98,7 @@ class Export_Init {
 			if ( isset( $other['dashboard']['logo'] ) ) {
 				$image_data = wp_remote_get( $other['dashboard']['logo']['url'], array( 'sslverify' => true ) );
 				$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $other['dashboard']['logo']['filename'];
-				$theme_logo = "{$theme_slug}_URI . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
+				$theme_logo = "trailingslashit( get_template_directory_uri() ) . 'assets/img/" . $other['dashboard']['logo']['filename'] . "'";
 				if ( ! is_wp_error( $image_data ) ) {
 					$system->put_contents(
 						$thumbnail,
@@ -129,7 +129,7 @@ class Export_Init {
 					$file_path  = get_post_meta( $image_id, '_wp_attached_file', true );
 					$filename   = basename( $file_path );
 					$thumbnail  = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $filename;
-					$thumb_url  = "{$theme_slug}_URI . 'assets/img/" . $filename . "'";
+					$thumb_url  = "trailingslashit( get_template_directory_uri() ) . 'assets/img/" . $filename . "'";
 					$post_demo  = get_post_meta( $post->ID, '_gtb_page_preview', true );
 					$template   = get_post_meta( $post->ID, '_wp_page_template', true );
 					$order      = get_post_meta( $post->ID, '_gtb_page_order', true );
@@ -637,7 +637,7 @@ class Export_Init {
                         </div>
                     </div>
                     <div class="gutenverse-notice-image">
-                        <img src="<?php echo esc_url( ' . Misc::get_constant_name( $theme_data['slug'] ) . '_URI . \'/assets/img/banner-install-gutenverse.png\' ); ?>"/>
+                        <img src="<?php echo esc_url( trailingslashit( get_template_directory_uri() ) ) . \'/assets/img/banner-install-gutenverse.png\'; ?>"/>
                     </div>
                 </div>
             </div>
@@ -750,7 +750,6 @@ class Export_Init {
 	 * @return string
 	 */
 	private function add_screenshot_page_list( $placeholder, $other, $theme_data, $system ) {
-		// $uri   = Misc::get_constant_name( $theme_data['slug'] ) . '_URI';
 		$pages = array();
 		if ( ! empty( $other['screenshots'] ) && ! empty( $other['screenshots']['dashboard'] ) ) {
 			if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
