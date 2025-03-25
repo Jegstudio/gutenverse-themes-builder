@@ -163,7 +163,7 @@ class Export_Theme {
 		if ( ! is_dir( $custom_dir ) ) {
 			wp_mkdir_p( $custom_dir );
 		}
-		$content     = json_encode( $this->menu_list );
+		$content     = wp_json_encode( $this->menu_list );
 		$placeholder = ! empty( $this->menu_list ) ? str_replace( '{{menus}}', $content, $placeholder ) : '{}';
 		$system->put_contents(
 			gutenverse_themes_builder_theme_built_path() . '/assets/misc/menu.json',
@@ -238,7 +238,7 @@ class Export_Theme {
 			$content     = $this->extract_images( $content, 'page', $data['slug'], true, $page->ID );
 			$content     = Misc::fix_colors( $content );
 			$content     = Misc::fix_core_navigation( $content );
-			$placeholder = str_replace( '{{content}}', json_encode( $content ), $placeholder );
+			$placeholder = str_replace( '{{content}}', wp_json_encode( $content ), $placeholder );
 
 			/**Add Pattern */
 			$core_pattern_list = '';
@@ -270,7 +270,7 @@ class Export_Theme {
 			);
 			$reindexed_images = array_values( $page_images );
 			gutenverse_themes_builder_sort_data( $reindexed_images, 'image_id' );
-			$placeholder = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", json_encode( $reindexed_images ) ) : '', $placeholder );
+			$placeholder = str_replace( '{{image_arr}}', ! empty( $page_images ) ? str_replace( '"', "'", wp_json_encode( $reindexed_images ) ) : '', $placeholder );
 
 			/**Create the file*/
 			$filename = strtolower( str_replace( ' ', '_', $page->post_title ) );
@@ -618,7 +618,7 @@ class Export_Theme {
 									}
 								);
 								$reindexed        = array_values( $pattern_images );
-								$placeholder      = str_replace( '{{pattern_image}}', ! empty( $pattern_images ) ? json_encode( $reindexed ) : '', $placeholder );
+								$placeholder      = str_replace( '{{pattern_image}}', ! empty( $pattern_images ) ? wp_json_encode( $reindexed ) : '', $placeholder );
 
 								/**Replace additional object with object sync */
 								if ( $pattern_sync ) {
@@ -674,11 +674,10 @@ class Export_Theme {
 	 * Replace Template Part
 	 *
 	 * @param string $content .
-	 * @param string $theme_slug .
 	 *
 	 * @return string
 	 */
-	public function replace_template_part( $content, $theme_slug ) {
+	public function replace_template_part( $content ) {
 		preg_match_all( '/<!-- wp:template-part {[^}]+} \\/-->/', $content, $matches );
 		if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
 			foreach ( $matches as $match ) {
@@ -797,8 +796,7 @@ class Export_Theme {
 						}
 
 						/**Preparing image replacement */
-						// $image_uri  = Misc::get_constant_name( $slug ) . '_URI';
-						$image_uri  = 'trailingslashit( get_template_directory_uri() )';
+						$image_uri  = Misc::get_constant_name( $slug ) . '_URI';
 						$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
 						if ( $is_outside_pattern_wrapper ) {
 							$image_code = "{{home_url}}/assets/img/$image_name";
