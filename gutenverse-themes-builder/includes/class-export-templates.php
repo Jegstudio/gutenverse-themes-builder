@@ -10,7 +10,6 @@
 namespace Gutenverse_Themes_Builder;
 
 use Gutenverse_Themes_Builder\Database\Database;
-use InvalidArgumentException;
 use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -392,6 +391,7 @@ class Export_Templates {
 						$images           = $content['images'];
 						$content          = $this->export_global_variables( $content['contents'] );
 						$content          = $this->fix_core_navigation( $content );
+						$content          = $this->extract_menus( $content, $system );
 						$pattern_name     = $posts[0]->post_name;
 						$pattern_title    = $posts[0]->post_title;
 						$pattern_category = get_post_meta( $posts[0]->ID, '_pattern_category', true );
@@ -508,7 +508,7 @@ class Export_Templates {
 		}
 		$zip->addFromString( 'global/color.json', wp_json_encode( $this->global_colors, JSON_UNESCAPED_SLASHES ) );
 		$zip->addFromString( 'global/font.json', wp_json_encode( $this->global_fonts, JSON_UNESCAPED_SLASHES ) );
-
+		$zip->addFromString( 'misc/menu.json', wp_json_encode( $this->menu_list, JSON_UNESCAPED_SLASHES ) );
 		$zip->close();
 
 		$this->fileresult = array(
