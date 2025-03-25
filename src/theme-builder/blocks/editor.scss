@@ -35,3 +35,18 @@
         }
     }
 }
+.block-editor-block-preview__container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    .block-editor-block-preview__content {
+    
+        margin: 0;
+        min-height: auto;
+        overflow: visible;
+        text-align: initial;
+        transform-origin: top left;
+        width: 100%;
+    }
+}
