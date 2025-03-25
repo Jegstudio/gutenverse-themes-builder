@@ -235,7 +235,7 @@ class Export_Theme {
 			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
 			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_menus( $content, $system );
-			$content     = $this->extract_images( $content, 'page', $data['slug'], true, $page->ID );
+			$content     = $this->extract_images( $content, 'page', $page->ID );
 			$content     = Misc::fix_colors( $content );
 			$content     = Misc::fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', wp_json_encode( $content ), $placeholder );
@@ -501,7 +501,7 @@ class Export_Theme {
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->build_patterns( $html_content[ $slug_key ], $theme_id, $system, $theme_slug, false, 'template' );
 					$content = str_replace( "'", "\'", $content );
-					$content = $this->extract_images( $content, 'template', $theme_slug, true );
+					$content = $this->extract_images( $content, 'template' );
 					$content = $this->extract_menus( $content, $system );
 					$content = Misc::fix_colors( $content );
 					$content = Misc::fix_core_navigation( $content );
@@ -595,7 +595,7 @@ class Export_Theme {
 								$pattern_after = $posts[0]->post_content;
 							} else {
 								$content       = str_replace( "'", "\'", $posts[0]->post_content );
-								$content       = $this->extract_images( $content, $pattern_sync ? 'sync' : 'async', $theme_slug, false, $posts[0]->ID );
+								$content       = $this->extract_images( $content, $pattern_sync ? 'sync' : 'async', $posts[0]->ID );
 								$content       = $this->extract_menus( $content, $system );
 								$content       = Misc::fix_colors( $content );
 								$content       = Misc::fix_core_navigation( $content );
@@ -704,13 +704,11 @@ class Export_Theme {
 	/**
 	 * Extract Images
 	 *
-	 * @param string  $content .
-	 * @param string  $type .
-	 * @param string  $slug .
-	 * @param boolean $is_outside_pattern_wrapper .
-	 * @param string  $parent_id .
+	 * @param string $content .
+	 * @param string $type .
+	 * @param string $parent_id .
 	 */
-	private function extract_images( $content, $type, $slug, $is_outside_pattern_wrapper = false, $parent_id = '' ) {
+	private function extract_images( $content, $type, $parent_id = '' ) {
 		// Capture image url inside double quotes.
 		preg_match_all( '/http[^"]*(?:\.png|\.jpg|\.svg|\.jpeg|\.gif|\.webp|\.json)/U', $content, $matches );
 		if ( ! empty( $matches[0] ) ) {
@@ -798,9 +796,6 @@ class Export_Theme {
 						/**Preparing image replacement */
 						$image_uri  = 'trailingslashit( get_template_directory_uri() )';
 						$image_code = "' . esc_url( $image_uri ) . 'assets/img/$image_name";
-						if ( $is_outside_pattern_wrapper ) {
-							$image_code = "{{home_url}}/assets/img/$image_name";
-						}
 
 						/**Replace image with new content */
 						$content = str_replace( $image, $image_code, $content );
