@@ -1297,12 +1297,12 @@ class Backend_Api {
 			}
 
 			$wpdb->query( 'COMMIT' );
-			// Reset post data to the original global $post object
+			/** Reset post data to the original global $post object  */
 			wp_reset_postdata();
 			return array( 'status' => 'success' );
-			// If everything is successful, commit the transaction
+			/** If everything is successful, commit the transaction  */
 		} catch ( Exception $e ) {
-			// If something went wrong, roll back the transaction
+			/** If something went wrong, roll back the transaction */
 			$wpdb->query( 'ROLLBACK' );
 		}
 	}
@@ -1329,19 +1329,17 @@ class Backend_Api {
 	 * @param object $request .
 	 */
 	public function export_theme( $request ) {
-		$result = new Export_Theme();
+		$include_global_import = $request->get_param( 'globalImport' );
+		$result                = new Export_Theme( $include_global_import );
 
 		return $result;
 	}
 
 	/**
 	 * Export Templates
-	 *
-	 * @param object $request .
 	 */
-	public function export_templates( $request ) {
+	public function export_templates() {
 		$result = new Export_Templates();
-
 		return $result;
 	}
 
@@ -1351,7 +1349,8 @@ class Backend_Api {
 	 * @param object $request .
 	 */
 	public function export_base_theme( $request ) {
-		$result = new Export_Base_Theme();
+		$include_global_import = $request->get_param( 'globalImport' );
+		$result                = new Export_Base_Theme( $include_global_import );
 
 		return $result;
 	}

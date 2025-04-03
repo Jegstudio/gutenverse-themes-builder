@@ -24,19 +24,21 @@ class Export_Init {
 	 * @param array  $data .
 	 * @param string $theme_id .
 	 */
-	public static function create_init_php( $system, $data, $theme_id ) {
+	public static function create_init_php( $system, $data, $theme_id, $include_global_import ) {
 		$instance       = new self();
 		$theme_data     = maybe_unserialize( $data['theme_data'] );
 		$templates_db   = Database::instance()->theme_templates;
 		$templates_data = $templates_db->get_data( $theme_id );
 		$class_dir      = gutenverse_themes_builder_theme_built_path() . 'inc/class';
-		$theme_slug     = Misc::get_constant_name( $theme_data['slug'] );
+
 		if ( ! is_dir( $class_dir ) ) {
 			wp_mkdir_p( $class_dir );
 		}
+
 		if ( ! is_dir( gutenverse_themes_builder_theme_built_path() . 'assets/img' ) ) {
 			wp_mkdir_p( gutenverse_themes_builder_theme_built_path() . 'assets/img' );
 		}
+
 		// Take which placeholder.
 		if ( 'core-gutenverse' === $theme_data['theme_mode'] ) {
 			$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/init-core-gutenverse.txt' );
@@ -54,15 +56,22 @@ class Export_Init {
 		$other             = maybe_unserialize( $data['other'] );
 		$config            = array();
 		$additional_filter = array();
+
+		if ( $include_global_import ) {
+			$additional_filter[] = "add_filter( 'gutenverse_themes_support_section_global_style', '__return_true' );";
+		}
+
 		if ( ! empty( $other['dashboard'] ) && isset( $other['dashboard']['mode'] ) && 'themeforest' === $other['dashboard']['mode']['value'] ) {
 			$config[]            = "'isThemeforest' => true,";
 			$additional_filter[] = "add_filter( 'gutenverse_show_theme_list', '__return_false' );";
 		}
+
 		if ( ! empty( $other['notice']['eventNotice'] ) ) {
 			$event_url     = $other['notice']['eventNotice']['url'];
 			$event_expired = $other['notice']['eventNotice']['expired'];
 			$event_banner  = $other['notice']['eventNotice']['banner'];
 			$banner_url    = 'null';
+
 			if ( isset( $event_banner ) ) {
 				$banner_data = wp_remote_get( $event_banner['url'], array( 'sslverify' => true ) );
 				$banner_path = gutenverse_themes_builder_theme_built_path() . 'assets/img/' . $event_banner['filename'];
@@ -75,6 +84,7 @@ class Export_Init {
 					);
 				}
 			}
+
 			$config[] = "'eventBanner' => array(
 				'url' => '{$event_url}', 
 				'expired' => '{$event_expired}', 
@@ -121,6 +131,7 @@ class Export_Init {
 					),
 				)
 			);
+
 			if ( $pages->have_posts() ) {
 				foreach ( $pages->posts as $post ) {
 					$image_id   = get_post_meta( $post->ID, '_gtb_page_image', true );
@@ -152,6 +163,7 @@ class Export_Init {
 						);
 					}
 				}
+
 				usort(
 					$data_page,
 					function ( $a, $b ) {
@@ -164,6 +176,7 @@ class Export_Init {
 						return $a->order - $b->order;
 					}
 				);
+				
 				foreach ( $data_page as $dt ) {
 					$assigns[] = "array(
 						'title' => '{$dt->title}',

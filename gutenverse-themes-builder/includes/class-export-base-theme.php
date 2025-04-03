@@ -39,8 +39,10 @@ class Export_Base_Theme {
 
 	/**
 	 * Init constructor.
+	 *
+	 * @param bool $include_global_import .
 	 */
-	public function __construct() {
+	public function __construct( $include_global_import = false ) {
 		$theme_id   = get_option( 'gtb_active_theme_id' );
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
@@ -59,15 +61,17 @@ class Export_Base_Theme {
 			);
 
 			if ( ! empty( $this->config['slug'] ) ) {
-				$this->start();
+				$this->start( $include_global_import );
 			}
 		}
 	}
 
 	/**
 	 * Export Theme
+	 *
+	 * @param bool $include_global_import .
 	 */
-	public function start() {
+	public function start( $include_global_import ) {
 		$zip_path         = rtrim( trailingslashit( wp_upload_dir()['basedir'] . '/' . $this->config['slug'] ), '/' ) . '.zip';
 		$target_directory = GUTENVERSE_THEMES_BUILDER_DIR . 'includes/data/base';
 
@@ -77,6 +81,11 @@ class Export_Base_Theme {
 				new RecursiveDirectoryIterator( $target_directory ),
 				RecursiveIteratorIterator::LEAVES_ONLY
 			);
+
+			$additional_hooks = array();
+			if ( $include_global_import ) {
+				$additional_hooks[] = "add_filter( 'gutenverse_themes_support_section_global_style', '__return_true' );";
+			}
 
 			foreach ( $files as $name => $file ) {
 				if ( ! $file->isDir() ) {
@@ -101,6 +110,7 @@ class Export_Base_Theme {
 							'{{namespace}}'         => $this->config['namespace'] ?? '',
 							'{{slug}}'              => $this->config['slug'] ?? '',
 							'{{tags}}'              => $theme_tags,
+							'{{additional_hooks}}'  => join( "\n\t\t", $additional_hooks ),
 						);
 
 						foreach ( $replacements as $placeholder => $replacement ) {

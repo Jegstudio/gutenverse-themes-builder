@@ -258,16 +258,16 @@ class Export_Templates {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_core_navigation( $html_content[ $slug_key ] );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, $template_type );
 					$content = $this->extract_menus( $content, $system );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header|template_part)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","theme":"' . $theme_slug . '","area":"header"} /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $header['to'] . '","area":"header"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 					foreach ( $footers as $footer ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $footer['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|footer|template_part)")?\s*} \/-->/';
-						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","theme":"' . $theme_slug . '","area":"footer"} /-->';
+						$replace = '<!-- wp:template-part {"slug":"' . $footer['to'] . '","area":"footer"} /-->';
 						$content = preg_replace( $search, $replace, $content );
 					}
 
@@ -280,85 +280,85 @@ class Export_Templates {
 			}
 
 			// add blank and basic tempaltes.
-			$canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:post-content /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$system->put_contents(
-						$canvas_target_dir . '/blank-canvas.html',
-						'<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-<div class="guten-element guten-post-content guten-gwZ6H6"></div>
-<!-- /wp:gutenverse/post-content -->',
-						FS_CHMOD_FILE
-					);
-				}
-			}
-			if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-				if ( 'core' === $template['category'] ) {
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						'<!-- wp:template-part {"slug":"header"} /-->
+			// $canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
+			// if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
+			// if ( 'core' === $template['category'] ) {
+			// $system->put_contents(
+			// $canvas_target_dir . '/blank-canvas.html',
+			// '<!-- wp:post-content /-->',
+			// FS_CHMOD_FILE
+			// );
+			// } else {
+			// $system->put_contents(
+			// $canvas_target_dir . '/blank-canvas.html',
+			// '<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
+			// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
+			// <!-- /wp:gutenverse/post-content -->',
+			// FS_CHMOD_FILE
+			// );
+			// }
+			// }
+			// if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
+			// if ( 'core' === $template['category'] ) {
+			// $system->put_contents(
+			// $canvas_target_dir . '/template-basic.html',
+			// '<!-- wp:template-part {"slug":"header"} /-->
 
-<!-- wp:post-content /-->
+			// <!-- wp:post-content /-->
 
-<!-- wp:template-part {"slug":"footer"} /-->',
-						FS_CHMOD_FILE
-					);
-				} else {
-					$content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
+			// <!-- wp:template-part {"slug":"footer"} /-->',
+			// FS_CHMOD_FILE
+			// );
+			// } else {
+			// $content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
 
-<!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-<div class="guten-element guten-post-content guten-ReyA1K"></div>
-<!-- /wp:gutenverse/post-content -->
+			// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
+			// <div class="guten-element guten-post-content guten-ReyA1K"></div>
+			// <!-- /wp:gutenverse/post-content -->
 
-<!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
+			// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
 
-					$content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-					$header_slug = false;
-					$footer_slug = false;
-					foreach ( $headers as $header ) {
-						$header_slug = $header['to'];
-					}
-					foreach ( $footers as $footer ) {
-						$footer_slug = $footer['to'];
-					}
-					if ( $header_slug ) {
-						$content = preg_replace( "'--header_slug--'", $header_slug, $content );
-					} else {
-						$content = preg_replace( "'--header_slug--'", 'header', $content );
-					}
-					if ( $footer_slug ) {
-						$content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-					} else {
-						$content = preg_replace( "'--footer_slug--'", 'footer', $content );
-					}
+			// $content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
+			// $header_slug = false;
+			// $footer_slug = false;
+			// foreach ( $headers as $header ) {
+			// $header_slug = $header['to'];
+			// }
+			// foreach ( $footers as $footer ) {
+			// $footer_slug = $footer['to'];
+			// }
+			// if ( $header_slug ) {
+			// $content = preg_replace( "'--header_slug--'", $header_slug, $content );
+			// } else {
+			// $content = preg_replace( "'--header_slug--'", 'header', $content );
+			// }
+			// if ( $footer_slug ) {
+			// $content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
+			// } else {
+			// $content = preg_replace( "'--footer_slug--'", 'footer', $content );
+			// }
 
-					$system->put_contents(
-						$canvas_target_dir . '/template-basic.html',
-						$content,
-						FS_CHMOD_FILE
-					);
-				}
-			}
+			// $system->put_contents(
+			// $canvas_target_dir . '/template-basic.html',
+			// $content,
+			// FS_CHMOD_FILE
+			// );
+			// }
+			// }
 		}
 	}
 
 	/**
 	 * Build Patterns
 	 *
-	 * @param string  $html_content .
-	 * @param string  $theme_id .
-	 * @param object  $system .
-	 * @param string  $theme_slug .
-	 * @param boolean $only_get_content .
-	 * @param string  $place .
+	 * @param string $html_content .
+	 * @param string $theme_id .
+	 * @param object $system .
+	 * @param string $theme_slug .
+	 * @param string $template_type .
+	 * @param string $place .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $only_get_content = false, $place = 'template' ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $template_type, $place = 'template' ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
 
@@ -442,6 +442,10 @@ class Export_Templates {
 							$placeholder,
 							FS_CHMOD_FILE
 						);
+
+						if ( 'parts' === $template_type ) {
+							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
+						}
 
 						$pattern_after = '<!-- wp:block {"ref":{{' . $theme_slug . '/' . $pattern_name . '}}} /-->';
 					}

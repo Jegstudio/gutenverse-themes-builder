@@ -1100,6 +1100,22 @@ body {
                 display: block;
             }
         }
+
+        &.export-popup{
+            .switch-wrapper{
+                display: flex;
+                justify-content: space-between;
+            }
+            .input-wrapper.control-checkbox{
+                border-bottom: none;
+                padding: none;
+                align-items:initial;
+                margin: none;
+                .switch {
+                    right: 0px;
+                }
+            }
+        }
     }
 
     .popup-content {
