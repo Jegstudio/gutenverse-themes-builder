@@ -4,6 +4,7 @@ import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import { Loader } from 'react-feather';
 import { ImporterModal } from './wizard-page';
+import RatingButton from './rating-button';
 
 const BlinkIcon = () => <span className='blink-icon'>
     <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +76,7 @@ const ImportTemplates = () => {
 
             setAllImported(allDone);
         }
-    },[templateList])
+    }, [templateList])
 
     const openImportModal = (value) => {
         setModal(true);
@@ -92,19 +93,19 @@ const ImportTemplates = () => {
             completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
-            setImporterStep = {setImporterStep}
-            setImporterNotice = {setImporterNotice}
-            setImporterStatus = {setImporterStatus}
-            setImporterCurrent = {setImporterCurrent}
-            setDone = {setDone}
-            updateTemplateStatus = {updateTemplateStatus}
-            setCompleteSubtitle = {setCompleteSubtitle}
-            importMode ={importMode}
-            templateList = {templateList}
+            setImporterStep={setImporterStep}
+            setImporterNotice={setImporterNotice}
+            setImporterStatus={setImporterStatus}
+            setImporterCurrent={setImporterCurrent}
+            setDone={setDone}
+            updateTemplateStatus={updateTemplateStatus}
+            setCompleteSubtitle={setCompleteSubtitle}
+            importMode={importMode}
+            templateList={templateList}
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
-            <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
+            <div className={`button-import-all ${allImported ? 'imported' : ''}`} onClick={() => {
                 if (!allImported) {
                     openImportModal('all');
                 }
@@ -158,7 +159,7 @@ const Wave = () => {
 }
 
 const DashboardPage = () => {
-    const { home_url, version, logo, title, plugins, upgradePro = 'https://gutenverse.com/pro', supportLink = 'https://support.jegtheme.com', docsLink = 'https://gutenverse.com/docs', subscribed = false } = window['GutenThemeConfig'];
+    const { home_url, version, logo, title, plugins, ratingLink = 'https://themeforest.net/downloads', supportLink = 'https://support.jegtheme.com', docsLink = 'https://gutenverse.com/docs', subscribed = false } = window['GutenThemeConfig'];
     const [email, setEmail] = useState('');
     const [menu, setMenu] = useState('dashboard');
     const [pluginState, setPluginState] = useState('install');
@@ -219,11 +220,11 @@ const DashboardPage = () => {
             const plugin = plugins[index];
 
             if (!plugin?.installed) {
-                if(plugin?.download_url){
+                if (plugin?.download_url) {
                     wp?.apiFetch({
                         path: 'gtb-themes-backend/v1/install/plugins',
                         method: 'POST',
-                        data:{
+                        data: {
                             slug: plugin?.slug,
                             download_url: plugin?.download_url
                         }
@@ -241,7 +242,7 @@ const DashboardPage = () => {
                             installPlugins(index);
                         })
                     })
-                }else{
+                } else {
                     wp?.apiFetch({
                         path: 'wp/v2/plugins',
                         method: 'POST',
@@ -329,7 +330,11 @@ const DashboardPage = () => {
                                         {__('Thank You For Choosing ', '--gtb-theme-namespace--')}
                                         <span className='gradient-text'>{title}<BlinkIcon /></span>
                                     </p>
-                                    <p className='texts-description'>{sprintf(__('Thank you for bringing us happiness! We truly appreciate your purchase of the %s Theme. Dive into its features, explore all the possibilities, and create a stunning site with ease.', '--gtb-theme-namespace--'), title)}</p>
+                                    <p className='texts-description'>
+                                        {sprintf(__('Thank you for bringing us happiness! We truly appreciate your purchase of the %s Theme. Dive into its features, explore all the possibilities, and create a stunning site with ease.', '--gtb-theme-namespace--'), title)}
+                                        {__('To get started, be sure to check out the ', '--gtb-theme-namespace--')}
+                                        <a href={docsLink} target="_blank">{__('Documentation.', '--gtb-theme-namespace--')}</a>
+                                    </p>
                                 </div>
                                 <div className='dancer'>
                                     <img src={images + '/image-dancer.png'} />
@@ -340,7 +345,7 @@ const DashboardPage = () => {
                             <div className='content-1'>
                                 <Wave />
                                 <div className='content-icon'>
-                                    <img src={images + '/icon-plugin.png'}/>
+                                    <img src={images + '/icon-plugin.png'} />
                                 </div>
                                 <p className='content-title'>{__('Plugin Requirements', '--gtb-theme-namespace--')}</p>
                                 <p className='content-description'>{__('Install and activate the required plugins to unlock all theme features.', '--gtb-theme-namespace--')}</p>
@@ -349,7 +354,7 @@ const DashboardPage = () => {
                             <div className='content-2'>
                                 <Wave />
                                 <div className='content-icon'>
-                                    <img src={images + '/icon-demo.png'}/>
+                                    <img src={images + '/icon-demo.png'} />
                                 </div>
                                 <p className='content-title'>{__('Install Demo', '--gtb-theme-namespace--')}</p>
                                 <p className='content-description'>{__('Importing the demo and style takes only one click. It is easily customizable.', '--gtb-theme-namespace--')}</p>
@@ -358,7 +363,7 @@ const DashboardPage = () => {
                             <div className='content-3'>
                                 <Wave />
                                 <div className='content-icon'>
-                                    <img src={images + '/icon-docs.png'}/>
+                                    <img src={images + '/icon-docs.png'} />
                                 </div>
                                 <p className='content-title'>{__('Documentation', '--gtb-theme-namespace--')}</p>
                                 <p className='content-description'>{__('Check our documentation to find the best solution for you.', '--gtb-theme-namespace--')}</p>
@@ -370,16 +375,14 @@ const DashboardPage = () => {
                         <div className='top'>
                             <img className='background' src={images + '/bg-upgrade-pro.png'} />
                             <img className='image' src={images + '/mockup-upgrade-pro.png'} />
-                            <p className='content-title'>{__('Upgrade To ', '--gtb-theme-namespace--')}<span className='gradient-text'>{__('Gutenverse PRO', '--gtb-theme-namespace--')}</span></p>
-                            <p className='content-description'>{__('Unlock the WordPress Editor\'s potential with Gutenverse PRO.', '--gtb-theme-namespace--')}</p>
-                            <div className='action-button' onClick={() => { window.open(upgradePro, '_blank'); }}>
-                                {__('Upgrade To PRO', '--gtb-theme-namespace--')}
-                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2 11L0.5 2.75L4.625 6.5L7.25 2L9.875 6.5L14 2.75L12.5 11H2ZM12.5 13.25C12.5 13.7 12.2 14 11.75 14H2.75C2.3 14 2 13.7 2 13.25V12.5H12.5V13.25Z" fill="white" />
-                                </svg>
+                            <p className='content-title rating'>{__('Enjoy Using Our Theme? Let Us Know!', '--gtb-theme-namespace--')}</p>
+                            <p className='content-description'>{__('Sharing your kind words about us and our features means a lot us.', '--gtb-theme-namespace--')}</p>
+                            <div className='action-button-wrapper' onClick={() => { window.open(ratingLink, '_blank'); }}>
+                                <RatingButton/>
                             </div>
                         </div>
                         <div className='bottom'>
+                            <img className='background' src={images + '/bg-newsletter.png'} />
                             <p className='content-title'>{__('Join Our Newsletter', '--gtb-theme-namespace--')}</p>
                             <p className='content-description'>{__('Be the first to receive updates and stay informed about all our news', '--gtb-theme-namespace--')}</p>
                             <input type='text' placeholder={__('Your Email', '--gtb-theme-namespace--')} value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
@@ -400,11 +403,11 @@ const DashboardPage = () => {
                 <div className='support' onClick={() => window.open(supportLink, '_blank')}>
                     <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_19874_7889)">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M6.48793 1.89237C6.09975 1.88536 5.71401 1.95497 5.35276 2.09721C4.99152 2.23945 4.66187 2.45153 4.38269 2.72132C4.1035 2.9911 3.88025 3.3133 3.72573 3.66946C3.5712 4.02562 3.48843 4.40876 3.48214 4.79694V8.85666C3.48214 9.10293 3.38431 9.33912 3.21017 9.51326C3.03603 9.6874 2.79984 9.78523 2.55357 9.78523H1.39286C1.02345 9.78523 0.66917 9.63848 0.407958 9.37727C0.146747 9.11606 0 8.76178 0 8.39237L0 6.53523C0 6.16582 0.146747 5.81154 0.407958 5.55033C0.66917 5.28912 1.02345 5.14237 1.39286 5.14237H2.08929V4.78023C2.09776 4.20952 2.21857 3.64608 2.44483 3.12207C2.67109 2.59806 2.99835 2.12375 3.40794 1.72624C3.81752 1.32873 4.3014 1.01579 4.83195 0.805309C5.36249 0.594826 5.9293 0.490917 6.5 0.499517C7.0707 0.490917 7.63751 0.594826 8.16805 0.805309C8.6986 1.01579 9.18248 1.32873 9.59206 1.72624C10.0016 2.12375 10.3289 2.59806 10.5552 3.12207C10.7814 3.64608 10.9022 4.20952 10.9107 4.78023V5.14237H11.6071C11.9766 5.14237 12.3308 5.28912 12.592 5.55033C12.8533 5.81154 13 6.16582 13 6.53523V8.39237C13 8.76178 12.8533 9.11606 12.592 9.37727C12.3308 9.63848 11.9766 9.78523 11.6071 9.78523H10.9107V10.2495C10.9108 10.877 10.6799 11.4826 10.262 11.9507C9.84411 12.4187 9.26849 12.7166 8.645 12.7873C8.52392 13.0035 8.34736 13.1835 8.13353 13.3086C7.91971 13.4338 7.67635 13.4997 7.42857 13.4995H6.03571C5.66631 13.4995 5.31203 13.3528 5.05082 13.0916C4.7896 12.8303 4.64286 12.4761 4.64286 12.1067C4.64286 11.7373 4.7896 11.383 5.05082 11.1218C5.31203 10.8605 5.66631 10.7138 6.03571 10.7138H7.42857C7.93186 10.7138 8.37293 10.9803 8.61714 11.3805C8.87308 11.3217 9.10151 11.1778 9.26511 10.9724C9.42871 10.767 9.51781 10.5121 9.51786 10.2495V4.79602C9.51149 4.40583 9.42784 4.02078 9.27175 3.66312C9.11566 3.30545 8.89023 2.98228 8.60848 2.71227C8.32673 2.44227 7.99425 2.23079 7.63027 2.09006C7.2663 1.94933 6.87803 1.88214 6.48793 1.89237Z" fill="#011627"/>
+                            <path fillRule="evenodd" clipRule="evenodd" d="M6.48793 1.89237C6.09975 1.88536 5.71401 1.95497 5.35276 2.09721C4.99152 2.23945 4.66187 2.45153 4.38269 2.72132C4.1035 2.9911 3.88025 3.3133 3.72573 3.66946C3.5712 4.02562 3.48843 4.40876 3.48214 4.79694V8.85666C3.48214 9.10293 3.38431 9.33912 3.21017 9.51326C3.03603 9.6874 2.79984 9.78523 2.55357 9.78523H1.39286C1.02345 9.78523 0.66917 9.63848 0.407958 9.37727C0.146747 9.11606 0 8.76178 0 8.39237L0 6.53523C0 6.16582 0.146747 5.81154 0.407958 5.55033C0.66917 5.28912 1.02345 5.14237 1.39286 5.14237H2.08929V4.78023C2.09776 4.20952 2.21857 3.64608 2.44483 3.12207C2.67109 2.59806 2.99835 2.12375 3.40794 1.72624C3.81752 1.32873 4.3014 1.01579 4.83195 0.805309C5.36249 0.594826 5.9293 0.490917 6.5 0.499517C7.0707 0.490917 7.63751 0.594826 8.16805 0.805309C8.6986 1.01579 9.18248 1.32873 9.59206 1.72624C10.0016 2.12375 10.3289 2.59806 10.5552 3.12207C10.7814 3.64608 10.9022 4.20952 10.9107 4.78023V5.14237H11.6071C11.9766 5.14237 12.3308 5.28912 12.592 5.55033C12.8533 5.81154 13 6.16582 13 6.53523V8.39237C13 8.76178 12.8533 9.11606 12.592 9.37727C12.3308 9.63848 11.9766 9.78523 11.6071 9.78523H10.9107V10.2495C10.9108 10.877 10.6799 11.4826 10.262 11.9507C9.84411 12.4187 9.26849 12.7166 8.645 12.7873C8.52392 13.0035 8.34736 13.1835 8.13353 13.3086C7.91971 13.4338 7.67635 13.4997 7.42857 13.4995H6.03571C5.66631 13.4995 5.31203 13.3528 5.05082 13.0916C4.7896 12.8303 4.64286 12.4761 4.64286 12.1067C4.64286 11.7373 4.7896 11.383 5.05082 11.1218C5.31203 10.8605 5.66631 10.7138 6.03571 10.7138H7.42857C7.93186 10.7138 8.37293 10.9803 8.61714 11.3805C8.87308 11.3217 9.10151 11.1778 9.26511 10.9724C9.42871 10.767 9.51781 10.5121 9.51786 10.2495V4.79602C9.51149 4.40583 9.42784 4.02078 9.27175 3.66312C9.11566 3.30545 8.89023 2.98228 8.60848 2.71227C8.32673 2.44227 7.99425 2.23079 7.63027 2.09006C7.2663 1.94933 6.87803 1.88214 6.48793 1.89237Z" fill="#011627" />
                         </g>
                         <defs>
                             <clipPath id="clip0_19874_7889">
-                            <rect width="13" height="13" fill="white" transform="translate(0 0.5)"/>
+                                <rect width="13" height="13" fill="white" transform="translate(0 0.5)" />
                             </clipPath>
                         </defs>
                     </svg>
