@@ -246,7 +246,7 @@ class Export_Library {
 			'contents' => $pattern,
 		);
 		if ( $global ) {
-			$array['global'] = $global;
+			$array = array_merge( $array, $global );
 		}
 
 		return $array;
@@ -397,11 +397,21 @@ class Export_Library {
 
 			foreach ( $matches[1] as $match ) {
 				if ( $color_arr[ $match ] ) {
-					$global_color[ $match ] = $color_arr[ $match ];
+					$color_item     = array(
+						'slug'  => $color_arr[ $match ]['slug'],
+						'name'  => $color_arr[ $match ]['name'],
+						'color' => $color_arr[ $match ]['color'],
+					);
+					$global_color[] = $color_item;
 				}
 
 				if ( $font_arr[ $match ] ) {
-					$global_font[ $match ] = $font_arr[ $match ];
+					$font_item     = array(
+						'slug' => $font_arr[ $match ]['slug'],
+						'name' => $font_arr[ $match ]['name'],
+						'font' => $font_arr[ $match ]['font'],
+					);
+					$global_font[] = $font_item;
 				}
 			}
 
