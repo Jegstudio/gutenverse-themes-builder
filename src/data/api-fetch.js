@@ -132,6 +132,17 @@ export const exportBaseTheme = (options,callback = def_callback) => {
     });
 };
 
+export const exportLibrary = (callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/library/export'),
+        data: {}
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
 
 /* Templates */
 

@@ -10,8 +10,6 @@
 namespace Gutenverse_Themes_Builder;
 
 use Gutenverse_Themes_Builder\Database\Database;
-use InvalidArgumentException;
-use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;

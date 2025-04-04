@@ -100,22 +100,27 @@ class Export_Theme {
 	private $menu_list = array();
 
 	/**
-	 * Init constructor.
+	 * Include Global Import
 	 *
+	 * @var array
+	 */
+	private $include_global_import = false;
+
+	/**
+	 * Init constructor.
+	 * 
 	 * @param  bool $include_global_import .
 	 */
 	public function __construct( $include_global_import = false ) {
 		$this->image_list = array();
-
-		$this->start( $include_global_import );
+		$this->include_global_import = $include_global_import;
+		$this->start( );
 	}
 
 	/**
 	 * Export Theme
-	 *
-	 * @param bool $include_global_import .
 	 */
-	public function start( $include_global_import ) {
+	public function start( ) {
 		$theme_id   = get_option( 'gtb_active_theme_id' );
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
@@ -133,10 +138,10 @@ class Export_Theme {
 		wp_mkdir_p( $theme_dir );
 		Export_ReadMe::create_readme( $wp_filesystem, $data );
 		Export_Style_Css::create_style_css( $wp_filesystem, $data );
-		Export_Theme_Json::create_theme_json( $wp_filesystem, $data );
+		Export_Theme_Json::create_theme_json( $wp_filesystem, $data, $this->$include_global_import );
 		Export_Function::create_function_php( $wp_filesystem, $data );
 		Export_Autoload::create_autoload_php( $wp_filesystem, $data );
-		Export_Init::create_init_php( $wp_filesystem, $data, $theme_id, $include_global_import );
+		Export_Init::create_init_php( $wp_filesystem, $data, $theme_id, $this->$include_global_import );
 		Export_Upgrader::create_upgrader_php( $wp_filesystem, $data );
 		Export_Assets::create_assets( $wp_filesystem, $data );
 		Export_Themeforest_Data::create_themeforest_data( $wp_filesystem, $data );
@@ -240,7 +245,7 @@ class Export_Theme {
 			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->extract_images( $content, 'page', $page->ID );
-			$content     = Misc::fix_colors( $content );
+			$content     = Misc::fix_colors( $content, $this->include_global_import );
 			$content     = Misc::fix_core_navigation( $content );
 			$placeholder = str_replace( '{{content}}', wp_json_encode( $content ), $placeholder );
 
@@ -507,7 +512,7 @@ class Export_Theme {
 					$content = str_replace( "'", "\'", $content );
 					$content = $this->extract_images( $content, 'template', null, true );
 					$content = $this->extract_menus( $content, $system );
-					$content = Misc::fix_colors( $content );
+					$content = Misc::fix_colors( $content, $this->include_global_import );
 					$content = Misc::fix_core_navigation( $content );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header)")?\s*} \/-->/';
@@ -601,7 +606,7 @@ class Export_Theme {
 								$content       = str_replace( "'", "\'", $posts[0]->post_content );
 								$content       = $this->extract_images( $content, $pattern_sync ? 'sync' : 'async', $posts[0]->ID );
 								$content       = $this->extract_menus( $content, $system );
-								$content       = Misc::fix_colors( $content );
+								$content       = Misc::fix_colors( $content, $this->include_global_import );
 								$content       = Misc::fix_core_navigation( $content );
 								$pattern_name  = $posts[0]->post_name;
 								$pattern_title = $posts[0]->post_title;
