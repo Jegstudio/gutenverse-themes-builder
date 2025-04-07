@@ -110,11 +110,11 @@ export const exportTheme = (options, callback = def_callback) => {
     });
 };
 
-export const exportTemplate = (callback = def_callback) => {
+export const exportTemplate = (options, callback = def_callback) => {
     apiFetch({
         method: 'POST',
         path: addQueryArgs('gtb-backend/v1/templates/export'),
-        data: {}
+        data: options
     }).then((response) => {
         callback(response);
     }).catch(() => {

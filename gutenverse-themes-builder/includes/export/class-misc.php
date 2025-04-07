@@ -223,4 +223,17 @@ class Misc {
 			return "wp_enqueue_script( '{$handler}', {$media}, array(), {$theme_version}, true );";
 		}
 	}
+
+	/**
+	 * String to slug
+	 *
+	 * @param string $string .
+	 * @param string $separator .
+	 */
+	public static function sluggify( $string, $separator = '-' ) {
+		$string = mb_strtolower( $string, 'UTF-8' );
+		$string = preg_replace( '/[^a-z0-9]+/u', $separator, $string );
+		$string = trim( $string, $separator );
+		return $string;
+	}
 }

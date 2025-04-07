@@ -108,19 +108,19 @@ class Export_Theme {
 
 	/**
 	 * Init constructor.
-	 * 
+	 *
 	 * @param  bool $include_global_import .
 	 */
 	public function __construct( $include_global_import = false ) {
-		$this->image_list = array();
+		$this->image_list            = array();
 		$this->include_global_import = $include_global_import;
-		$this->start( );
+		$this->start();
 	}
 
 	/**
 	 * Export Theme
 	 */
-	public function start( ) {
+	public function start() {
 		$theme_id   = get_option( 'gtb_active_theme_id' );
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
@@ -138,10 +138,10 @@ class Export_Theme {
 		wp_mkdir_p( $theme_dir );
 		Export_ReadMe::create_readme( $wp_filesystem, $data );
 		Export_Style_Css::create_style_css( $wp_filesystem, $data );
-		Export_Theme_Json::create_theme_json( $wp_filesystem, $data, $this->$include_global_import );
+		Export_Theme_Json::create_theme_json( $wp_filesystem, $data, $this->include_global_import );
 		Export_Function::create_function_php( $wp_filesystem, $data );
 		Export_Autoload::create_autoload_php( $wp_filesystem, $data );
-		Export_Init::create_init_php( $wp_filesystem, $data, $theme_id, $this->$include_global_import );
+		Export_Init::create_init_php( $wp_filesystem, $data, $theme_id, $this->include_global_import );
 		Export_Upgrader::create_upgrader_php( $wp_filesystem, $data );
 		Export_Assets::create_assets( $wp_filesystem, $data );
 		Export_Themeforest_Data::create_themeforest_data( $wp_filesystem, $data );
@@ -790,7 +790,7 @@ class Export_Theme {
 					case 'async':
 					default:
 						if ( $is_outside_pattern_wrapper ) {
-							continue;
+							break;
 						}
 
 						/**Filter image list to check if the same image and type already registered inside the array */

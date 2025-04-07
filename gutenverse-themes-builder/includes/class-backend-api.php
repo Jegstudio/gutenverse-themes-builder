@@ -1347,16 +1347,17 @@ class Backend_Api {
 
 	/**
 	 * Export Templates
+	 *
+	 * @param object $request .
 	 */
-	public function export_templates() {
-		$result = new Export_Templates();
+	public function export_templates( $request ) {
+		$include_global_import = $request->get_param( 'globalImport' );
+		$result                = new Export_Templates( $include_global_import );
 		return $result;
 	}
 
 	/**
 	 * Export Base Theme
-	 *
-	 * @param object $request .
 	 */
 	public function export_base_theme( $request ) {
 		$include_global_import = $request->get_param( 'globalImport' );
@@ -1369,7 +1370,7 @@ class Backend_Api {
 	 * Export Base Theme
 	 */
 	public function export_library() {
-		$result                = new Export_Library();
+		$result = new Export_Library();
 		return $result;
 	}
 

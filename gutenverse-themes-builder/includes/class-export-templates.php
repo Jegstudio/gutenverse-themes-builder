@@ -10,6 +10,7 @@
 namespace Gutenverse_Themes_Builder;
 
 use Gutenverse_Themes_Builder\Database\Database;
+use Gutenverse_Themes_Builder\Export\Misc;
 use WP_Theme_Json_Resolver;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -93,9 +94,19 @@ class Export_Templates {
 	private $global_fonts = array();
 
 	/**
-	 * Init constructor.
+	 * Include Global Import
+	 *
+	 * @var array
 	 */
-	public function __construct() {
+	private $include_global_import = false;
+
+	/**
+	 * Init constructor.
+	 *
+	 * @param  bool $include_global_import .
+	 */
+	public function __construct( $include_global_import ) {
+		$this->include_global_import = $include_global_import;
 		$this->start();
 	}
 
@@ -278,73 +289,6 @@ class Export_Templates {
 					);
 				}
 			}
-
-			// add blank and basic tempaltes.
-			// $canvas_target_dir = $this->get_target_dir( $theme_id, $template['category'] ) . 'templates';
-			// if ( ! file_exists( $canvas_target_dir . '/blank-canvas.html' ) ) {
-			// if ( 'core' === $template['category'] ) {
-			// $system->put_contents(
-			// $canvas_target_dir . '/blank-canvas.html',
-			// '<!-- wp:post-content /-->',
-			// FS_CHMOD_FILE
-			// );
-			// } else {
-			// $system->put_contents(
-			// $canvas_target_dir . '/blank-canvas.html',
-			// '<!-- wp:gutenverse/post-content {"elementId":"guten-gwZ6H6"} -->
-			// <div class="guten-element guten-post-content guten-gwZ6H6"></div>
-			// <!-- /wp:gutenverse/post-content -->',
-			// FS_CHMOD_FILE
-			// );
-			// }
-			// }
-			// if ( ! file_exists( $canvas_target_dir . '/template-basic.html' ) ) {
-			// if ( 'core' === $template['category'] ) {
-			// $system->put_contents(
-			// $canvas_target_dir . '/template-basic.html',
-			// '<!-- wp:template-part {"slug":"header"} /-->
-
-			// <!-- wp:post-content /-->
-
-			// <!-- wp:template-part {"slug":"footer"} /-->',
-			// FS_CHMOD_FILE
-			// );
-			// } else {
-			// $content = '<!-- wp:template-part {"slug":"--header_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->
-
-			// <!-- wp:gutenverse/post-content {"elementId":"guten-ReyA1K","margin":{"Desktop":{"unit":"px","dimension":{"top":""}}},"padding":{"Desktop":{}}} -->
-			// <div class="guten-element guten-post-content guten-ReyA1K"></div>
-			// <!-- /wp:gutenverse/post-content -->
-
-			// <!-- wp:template-part {"slug":"--footer_slug--","theme":"--theme_slug--","area":"uncategorized"} /-->';
-
-			// $content     = preg_replace( "'--theme_slug--'", $theme_slug, $content );
-			// $header_slug = false;
-			// $footer_slug = false;
-			// foreach ( $headers as $header ) {
-			// $header_slug = $header['to'];
-			// }
-			// foreach ( $footers as $footer ) {
-			// $footer_slug = $footer['to'];
-			// }
-			// if ( $header_slug ) {
-			// $content = preg_replace( "'--header_slug--'", $header_slug, $content );
-			// } else {
-			// $content = preg_replace( "'--header_slug--'", 'header', $content );
-			// }
-			// if ( $footer_slug ) {
-			// $content = preg_replace( "'--footer_slug--'", $footer_slug, $content );
-			// } else {
-			// $content = preg_replace( "'--footer_slug--'", 'footer', $content );
-			// }
-
-			// $system->put_contents(
-			// $canvas_target_dir . '/template-basic.html',
-			// $content,
-			// FS_CHMOD_FILE
-			// );
-			// }
-			// }
 		}
 	}
 
@@ -540,18 +484,9 @@ class Export_Templates {
 
 					if ( isset( $json['id'] ) && is_string( $json['id'] ) ) {
 						if ( isset( $color_arr[ $json['id'] ] ) ) {
-							$color_slug                         = $this->sluggify( $color_arr[ $json['id'] ]['name'] );
-							$new_color                          = $color_arr[ $json['id'] ];
-							$json['id']                         = $color_slug;
-							$new_color['slug']                  = $color_slug;
-							$this->global_colors[ $color_slug ] = $new_color;
+							$this->global_colors[ $json['id'] ] = $color_arr[ $json['id'] ];
 						} elseif ( isset( $font_arr[ $json['id'] ] ) ) {
-							$font_slug                        = $this->sluggify( $font_arr[ $json['id'] ]['name'] );
-							$new_font                         = $font_arr[ $json['id'] ];
-							$json['id']                       = $font_slug;
-							$new_font['slug']                 = $font_slug;
-							$this->global_fonts[ $font_slug ] = $new_font;
-
+							$this->global_fonts[ $json['id'] ] = $font_arr[ $json['id'] ];
 						}
 					}
 
@@ -662,19 +597,6 @@ class Export_Templates {
 		}
 
 		return null;
-	}
-
-	/**
-	 * String to slug
-	 *
-	 * @param string $string .
-	 * @param string $separator .
-	 */
-	public function sluggify( $string, $separator = '-' ) {
-		$string = mb_strtolower( $string, 'UTF-8' );
-		$string = preg_replace( '/[^a-z0-9]+/u', $separator, $string );
-		$string = trim( $string, $separator );
-		return $string;
 	}
 
 	/**
@@ -842,32 +764,6 @@ class Export_Templates {
 			}
 		}
 		return $content;
-	}
-
-	/**
-	 * Check templates location
-	 *
-	 * @param string $theme_id .
-	 * @param string $category .
-	 *
-	 * @return string
-	 */
-	private function get_target_dir( $theme_id, $category ) {
-		$theme_mode  = gutenverse_themes_builder_get_theme_mode( $theme_id );
-		$custom_dir  = gutenverse_themes_builder_theme_built_path() . '/' . $category . '-files/';
-		$default_dir = gutenverse_themes_builder_theme_built_path();
-
-		switch ( $theme_mode ) {
-			case 'core-gutenverse':
-				return 'gutenverse' === $category ? $custom_dir : $default_dir;
-			case 'gutenverse-pro':
-				return 'pro' === $category ? $custom_dir : $default_dir;
-			case 'core-only':
-			case 'gutenverse-only':
-			case 'pro-only':
-			default:
-				return $default_dir;
-		}
 	}
 
 	/**

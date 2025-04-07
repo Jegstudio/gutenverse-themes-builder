@@ -33,21 +33,19 @@ const ExportTheme = () => {
                 }
             });
         }
+
+        if( options.type === 'demo') {
+            exportTemplate(options, response => {
+                window.open(response?.fileresult?.fileurl);
+                if (response?.fileresult?.child?.fileurl) {
+                    setTimeout(() => {
+                        window.open(response?.fileresult?.child?.fileurl);
+                    }, 500)
+                }
+            });
+        }
         setLoading(false);
     };
-
-    const startExportTemplate = () => {
-        setLoading(true);
-        exportTemplate(response => {
-            window.open(response?.fileresult?.fileurl);
-            if (response?.fileresult?.child?.fileurl) {
-                setTimeout(() => {
-                    window.open(response?.fileresult?.child?.fileurl);
-                }, 500)
-            }
-        });
-        setLoading(false);
-    }
 
     const startExportLibrary = () => {
         setLoading(true);
@@ -112,7 +110,7 @@ const ExportTheme = () => {
                         loading ? <div className="button button-loading" disabled>Loading... </div> : <>
                             <div className="button" onClick={() => openOptions('theme')}>{__('Export Themes', 'gutenverse-themes-builder')}</div>
                             <div className="button" onClick={() => openOptions('base-theme')}>{__('Export Companion Base Themes', 'gutenverse-themes-builder')}</div>
-                            <div className="button" onClick={startExportTemplate}>{__('Export Companion Demo', 'gutenverse-themes-builder')}</div>
+                            <div className="button" onClick={() => openOptions('demo')}>{__('Export Companion Demo', 'gutenverse-themes-builder')}</div>
                             <div className="button" onClick={startExportLibrary}>{__('Export Library Data', 'gutenverse-themes-builder')}</div>
                         </>
                     }

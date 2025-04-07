@@ -531,7 +531,7 @@ class Export_Library {
 		/** Add global color gutenverse */
 		if ( count( $color_settings ) > 0 ) {
 			foreach ( $color_settings as $key => $value ) {
-				$slug = strtolower( str_replace( ' ', '-', $value->name ) );
+				$slug = $value->slug ?? Misc::sluggify( $value->name );
 				if ( ! isset( $new_arr[ $slug ] ) ) {
 					$new_arr[ $value->slug ] = array(
 						'slug'  => $slug,
@@ -556,7 +556,6 @@ class Export_Library {
 		$r = hexdec( substr( $hex, 0, 2 ) );
 		$g = hexdec( substr( $hex, 2, 2 ) );
 		$b = hexdec( substr( $hex, 4, 2 ) );
-		$a = 1;
 
 		if ( strlen( $hex ) === 8 ) {
 			$a = hexdec( substr( $hex, 6, 2 ) ) / 255;
@@ -574,8 +573,7 @@ class Export_Library {
 		$fonts    = get_option( 'gutenverse-global-variable-font-' . get_stylesheet(), array() );
 		$font_arr = array();
 		foreach ( $fonts as $value ) {
-			$export_templates         = new Export_Templates();
-			$font_slug                = $export_templates->sluggify( $value['name'] );
+			$font_slug                = $value['id'] ?? Misc::sluggify( $value['name'] );
 			$font_arr[ $value['id'] ] = array(
 				'slug' => $font_slug,
 				'name' => $value['name'],

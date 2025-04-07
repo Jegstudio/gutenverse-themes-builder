@@ -38,12 +38,13 @@ class Export_Theme_Json {
 		foreach ( $colors as $color ) {
 			$slug         = 'theme-' . $idx;
 			$fix_colors[] = array(
-				'slug'  => $slug,
+				'slug'  => $include_global_import ? Misc::sluggify( $color->slug ) : $slug,
 				'name'  => $color->name,
 				'color' => $color->color,
 			);
 			++$idx;
 		}
+
 		$theme_id        = get_option( 'gtb_active_theme_id' );
 		$theme_db        = Database::instance()->theme_info;
 		$theme_info      = $theme_db->get_theme_data( $theme_id );
