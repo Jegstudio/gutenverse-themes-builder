@@ -37,10 +37,8 @@ class Export_Base_Theme {
 
 	/**
 	 * Init constructor.
-	 *
-	 * @param bool $include_global_import .
 	 */
-	public function __construct( $include_global_import = false ) {
+	public function __construct() {
 		$theme_id   = get_option( 'gtb_active_theme_id' );
 		$info_db    = Database::instance()->theme_info;
 		$theme_data = $info_db->get_theme_data( $theme_id );
@@ -59,7 +57,7 @@ class Export_Base_Theme {
 			);
 
 			if ( ! empty( $this->config['slug'] ) ) {
-				$this->start( $include_global_import );
+				$this->start( $theme_data['import_library_option'] );
 			}
 		}
 	}

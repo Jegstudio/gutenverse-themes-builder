@@ -4,6 +4,7 @@ import TextControl from '../controls/text-control';
 import TextareaControl from '../controls/textarea-control';
 import { TAGS, THEME_MODE } from '../data/default';
 import { useEffect, useState } from '@wordpress/element';
+import SwitchControl from '../controls/switch-control';
 
 const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) => {
     const [isCore, setIsCore] = useState(false);
@@ -130,6 +131,13 @@ const Details = ({ notice, backButton, actionButton, themeData, setThemeData }) 
                     value={themeData?.info_details?.core_wide_width}
                     onChange={updateDetails('core_wide_width')}
                     description={__('Width for wide layouts or media (in pixels)', 'gutenverse-themes-builder')}
+                />
+                <SwitchControl
+                    id={'import_library_option'}
+                    title={__('Include Import With Global Option Library', 'gutenverse-themes-builder')}
+                    description={__('This mode will export theme with import section with global option in gutenverse library.', 'gutenverse-themes-builder')}
+                    value={themeData?.info_details?.import_library_option}
+                    onChange={updateDetails('import_library_option')}
                 />
                 <SelectControl
                     id={'tags'}

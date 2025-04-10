@@ -1335,12 +1335,9 @@ class Backend_Api {
 
 	/**
 	 * Export Theme
-	 *
-	 * @param object $request .
 	 */
-	public function export_theme( $request ) {
-		$include_global_import = $request->get_param( 'globalImport' );
-		$result                = new Export_Theme( $include_global_import );
+	public function export_theme() {
+		$result = new Export_Theme();
 
 		return $result;
 	}
@@ -1355,13 +1352,9 @@ class Backend_Api {
 
 	/**
 	 * Export Base Theme
-	 *
-	 * @param object $request .
 	 */
-	public function export_base_theme( $request ) {
-		$include_global_import = $request->get_param( 'globalImport' );
-		$result                = new Export_Base_Theme( $include_global_import );
-
+	public function export_base_theme() {
+		$result = new Export_Base_Theme();
 		return $result;
 	}
 

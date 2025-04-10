@@ -108,12 +108,9 @@ class Export_Theme {
 
 	/**
 	 * Init constructor.
-	 *
-	 * @param  bool $include_global_import .
 	 */
-	public function __construct( $include_global_import = false ) {
-		$this->image_list            = array();
-		$this->include_global_import = $include_global_import;
+	public function __construct() {
+		$this->image_list = array();
 		$this->start();
 	}
 
@@ -121,11 +118,13 @@ class Export_Theme {
 	 * Export Theme
 	 */
 	public function start() {
-		$theme_id   = get_option( 'gtb_active_theme_id' );
-		$info_db    = Database::instance()->theme_info;
-		$theme_data = $info_db->get_theme_data( $theme_id );
-		$data       = $theme_data[0];
-		$theme_dir  = gutenverse_themes_builder_theme_built_path();
+		$theme_id                    = get_option( 'gtb_active_theme_id' );
+		$info_db                     = Database::instance()->theme_info;
+		$theme_data                  = $info_db->get_theme_data( $theme_id );
+		$data                        = $theme_data[0];
+		$theme_info                  = maybe_unserialize( $data['theme_data'] );
+		$this->include_global_import = $theme_info['import_library_option'];
+		$theme_dir                   = gutenverse_themes_builder_theme_built_path();
 
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		WP_Filesystem();
