@@ -110,11 +110,11 @@ export const exportTheme = (options, callback = def_callback) => {
     });
 };
 
-export const exportTemplate = (callback = def_callback) => {
+export const exportTemplate = (options, callback = def_callback) => {
     apiFetch({
         method: 'POST',
         path: addQueryArgs('gtb-backend/v1/templates/export'),
-        data: {}
+        data: options
     }).then((response) => {
         callback(response);
     }).catch(() => {
@@ -126,6 +126,17 @@ export const exportBaseTheme = (options,callback = def_callback) => {
         method: 'POST',
         path: addQueryArgs('gtb-backend/v1/base-theme/export'),
         data: options
+    }).then((response) => {
+        callback(response);
+    }).catch(() => {
+    });
+};
+
+export const exportLibrary = (callback = def_callback) => {
+    apiFetch({
+        method: 'POST',
+        path: addQueryArgs('gtb-backend/v1/library/export'),
+        data: {}
     }).then((response) => {
         callback(response);
     }).catch(() => {

@@ -54,19 +54,21 @@ class Misc {
 	 * Fix colors names
 	 *
 	 * @param string $content template content .
+	 * @param bool   $include_global_import .
 	 */
-	public static function fix_colors( $content ) {
+	public static function fix_colors( $content, $include_global_import ) {
 		$colors          = self::get_color_settings();
 		$theme_id        = get_option( 'gtb_active_theme_id' );
 		$theme_db        = Database::instance()->theme_info;
 		$theme_info      = $theme_db->get_theme_data( $theme_id );
 		$theme_slug      = $theme_info[0]['slug'];
-		$imported_colors = get_option( 'gutenverse-global-color-import-' . $theme_slug );
 		// change colors slug into lowercase to prevent errors.
-		foreach ( $colors as $index => $color ) {
-			$new_slug = 'theme-' . $index;
-			$content  = str_replace( $color->slug, $new_slug, $content );
-			$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
+		if ( ! $include_global_import ) {
+			foreach ( $colors as $index => $color ) {
+				$new_slug = 'theme-' . $index;
+				$content  = str_replace( $color->slug, $new_slug, $content );
+				$content  = str_replace( _wp_to_kebab_case( $color->slug ), $new_slug, $content );
+			}
 		}
 
 		return $content;
@@ -220,5 +222,18 @@ class Misc {
 		} else {
 			return "wp_enqueue_script( '{$handler}', {$media}, array(), {$theme_version}, true );";
 		}
+	}
+
+	/**
+	 * String to slug
+	 *
+	 * @param string $string .
+	 * @param string $separator .
+	 */
+	public static function sluggify( $string, $separator = '-' ) {
+		$string = mb_strtolower( $string, 'UTF-8' );
+		$string = preg_replace( '/[^a-z0-9]+/u', $separator, $string );
+		$string = trim( $string, $separator );
+		return $string;
 	}
 }

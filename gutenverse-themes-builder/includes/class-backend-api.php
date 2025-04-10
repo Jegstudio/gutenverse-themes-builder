@@ -165,6 +165,16 @@ class Backend_Api {
 			)
 		);
 
+		register_rest_route(
+			self::ENDPOINT,
+			'library/export',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'export_library' ),
+				'permission_callback' => 'gutenverse_permission_check_admin',
+			)
+		);
+
 		// Assets.
 		register_rest_route(
 			self::ENDPOINT,
@@ -1325,12 +1335,9 @@ class Backend_Api {
 
 	/**
 	 * Export Theme
-	 *
-	 * @param object $request .
 	 */
-	public function export_theme( $request ) {
-		$include_global_import = $request->get_param( 'globalImport' );
-		$result                = new Export_Theme( $include_global_import );
+	public function export_theme() {
+		$result = new Export_Theme();
 
 		return $result;
 	}
@@ -1345,13 +1352,17 @@ class Backend_Api {
 
 	/**
 	 * Export Base Theme
-	 *
-	 * @param object $request .
 	 */
-	public function export_base_theme( $request ) {
-		$include_global_import = $request->get_param( 'globalImport' );
-		$result                = new Export_Base_Theme( $include_global_import );
+	public function export_base_theme() {
+		$result = new Export_Base_Theme();
+		return $result;
+	}
 
+	/**
+	 * Export Base Theme
+	 */
+	public function export_library() {
+		$result = new Export_Library();
 		return $result;
 	}
 

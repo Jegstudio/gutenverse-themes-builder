@@ -450,6 +450,19 @@ body {
                     margin-bottom: 0px;
                 }
 
+                &.control-checkbox{
+                    display: block;
+                    border-bottom: none;
+                    padding: none;
+                    label {
+                        max-width: calc(100% - 60px);
+                    }
+                    .switch-wrapper{
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+
             }
         }
 

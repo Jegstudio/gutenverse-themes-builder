@@ -23,8 +23,9 @@ class Export_Theme_Json {
 	 *
 	 * @param object $system .
 	 * @param array  $data .
+	 * @param bool   $include_global_import .
 	 */
-	public static function create_theme_json( $system, $data ) {
+	public static function create_theme_json( $system, $data, $include_global_import ) {
 		$placeholder = $system->get_contents( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/theme-json.txt' );
 		/**
 		 * Generate Color Settings.
@@ -37,12 +38,13 @@ class Export_Theme_Json {
 		foreach ( $colors as $color ) {
 			$slug         = 'theme-' . $idx;
 			$fix_colors[] = array(
-				'slug'  => $slug,
+				'slug'  => $include_global_import ? Misc::sluggify( $color->slug ) : $slug,
 				'name'  => $color->name,
 				'color' => $color->color,
 			);
 			++$idx;
 		}
+
 		$theme_id        = get_option( 'gtb_active_theme_id' );
 		$theme_db        = Database::instance()->theme_info;
 		$theme_info      = $theme_db->get_theme_data( $theme_id );
@@ -83,7 +85,7 @@ class Export_Theme_Json {
 			$fix_styles[ $index ] = $style;
 		}
 
-		$fix_styles = Misc::fix_colors( wp_json_encode( $fix_styles ) );
+		$fix_styles = Misc::fix_colors( wp_json_encode( $fix_styles ), $include_global_import );
 
 		$placeholder = str_replace( '{{theme_color_styles}}', $fix_styles, $placeholder );
 
