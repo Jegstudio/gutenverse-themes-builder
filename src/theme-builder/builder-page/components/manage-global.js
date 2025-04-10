@@ -228,12 +228,6 @@ const ManageGlobal = () => {
                         buttonLoading: false,
                         buttonHide : totalData === 0
                     },
-                    {
-                        buttonText: __('Import Color', 'gutenverse-themes-builder'),
-                        buttonEvent: () => handleImportColor(),
-                        buttonIcon: false,
-                        buttonLoading: importLoad,
-                    }
                 ]}
             >
                 <>

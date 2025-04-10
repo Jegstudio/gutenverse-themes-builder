@@ -412,16 +412,6 @@ class Backend_Api {
 
 		register_rest_route(
 			self::ENDPOINT,
-			'template/import/global-color',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'import_global_color' ),
-				'permission_callback' => 'gutenverse_permission_check_admin',
-			)
-		);
-
-		register_rest_route(
-			self::ENDPOINT,
 			'pattern/delete',
 			array(
 				'methods'             => 'POST',
@@ -939,28 +929,31 @@ class Backend_Api {
 				'colors' => maybe_unserialize( $update[0]['colors'] ),
 			)
 		);
-
+		$update_colors = maybe_unserialize( $update[0]['colors'] );
 		$theme         = wp_get_theme();
 		$themedata     = WP_Theme_Json_Resolver::get_user_data_from_wp_global_styles( $theme );
-		$update_colors = json_decode( $themedata['post_content'] );
-		if ( ! isset( $update_colors->settings ) ) {
-			$update_colors->settings = (object) array(
-				'color' => (object) array(
-					'palette' => (object) array(
-						'custom' => (object) array(),
+		if ( 0 !== count( $themedata ) ) {
+			$update_colors = json_decode( $themedata['post_content'] );
+			if ( ! isset( $update_colors->settings ) ) {
+				$update_colors->settings = (object) array(
+					'color' => (object) array(
+						'palette' => (object) array(
+							'custom' => (object) array(),
+						),
 					),
-				),
-			);
+				);
+			}
+
+			if ( isset( $update_colors->settings->color->palette->custom ) ) {
+				$update_colors->settings->color->palette->custom = array();
+			}
+
+			$update_colors->settings->color->palette->custom = maybe_unserialize( $update[0]['colors'] );
+			$update_colors                                   = wp_json_encode( $update_colors );
 		}
-
-		if ( isset( $update_colors->settings->color->palette->custom ) ) {
-			$update_colors->settings->color->palette->custom = array();
-		}
-
-		$update_colors->settings->color->palette->custom = maybe_unserialize( $update[0]['colors'] );
-
-		$update_colors = wp_json_encode( $update_colors );
-		$result        = wp_update_post(
+		$themedata = get_page_by_path( sprintf( 'wp-global-styles-%s', urlencode( $theme->get_stylesheet() ) ), ARRAY_A, 'wp_global_styles' );
+		gutenverse_rlog( $themedata );
+		$result = wp_update_post(
 			array(
 				'ID'           => $themedata['ID'],
 				'post_content' => $update_colors,
@@ -1620,51 +1613,6 @@ class Backend_Api {
 	}
 
 	/**
-	 * Import Global Color
-	 */
-	public function import_global_color() {
-		$theme_id     = get_option( 'gtb_active_theme_id' );
-		$theme_db     = Database::instance()->theme_info;
-		$theme_info   = $theme_db->get_theme_data( $theme_id );
-		$theme_slug   = $theme_info[0]['slug'];
-		$active_theme = wp_get_theme();
-		$theme_dir    = $active_theme->get_stylesheet_directory();
-		global $wp_filesystem;
-
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
-
-		$json_file_path = $theme_dir . '/theme.json';
-
-		if ( ! $wp_filesystem->exists( $json_file_path ) ) {
-			gutenverse_rlog( 'Import Global Color Data Failed: theme.json file does not exist!' );
-		}
-
-		$json_data = $wp_filesystem->get_contents( $json_file_path );
-
-		if ( ! $json_data ) {
-			gutenverse_rlog( 'Import Global Color Data Failed: Unable to read theme.json file!' );
-		}
-
-		/** Decode the JSON data into a PHP array */
-		$data_array     = json_decode( $json_data, true );
-		$color_data     = $data_array['settings']['color']['palette'];
-		$new_color_data = array();
-		foreach ( $color_data as $key => $color ) {
-			$new_color_data[] = (object) $color;
-		}
-		$option_name = 'gutenverse-global-color-import-' . $theme_slug;
-		$options     = get_option( $option_name );
-		if ( ! isset( $options ) ) {
-			add_option( $option_name, $new_color_data );
-		} else {
-			update_option( $option_name, $new_color_data );
-		}
-	}
-
-	/**
 	 * Import Global Font
 	 */
 	public function import_global_font() {
@@ -1725,7 +1673,7 @@ class Backend_Api {
 				'title'  => $title,
 				'file'   => '',
 				'fonts'  => maybe_serialize( $active_theme_global_fonts ),
-				'colors' => '',
+				'colors' => maybe_serialize( $new_color_data ),
 			);
 			$global_db->create_data( $data );
 			$data = array(
@@ -3253,7 +3201,7 @@ class Backend_Api {
 			}
 			return new WP_REST_Response(
 				array(
-					'status' => 'success'
+					'status' => 'success',
 				),
 				200
 			);
@@ -3279,7 +3227,7 @@ class Backend_Api {
 		}
 		return new WP_REST_Response(
 			array(
-				'status' => 'success'
+				'status' => 'success',
 			),
 			200
 		);
