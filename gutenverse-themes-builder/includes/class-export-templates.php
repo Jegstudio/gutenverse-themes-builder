@@ -94,19 +94,9 @@ class Export_Templates {
 	private $global_fonts = array();
 
 	/**
-	 * Include Global Import
-	 *
-	 * @var array
-	 */
-	private $include_global_import = false;
-
-	/**
 	 * Init constructor.
-	 *
-	 * @param  bool $include_global_import .
 	 */
-	public function __construct( $include_global_import ) {
-		$this->include_global_import = $include_global_import;
+	public function __construct() {
 		$this->start();
 	}
 
@@ -184,7 +174,7 @@ class Export_Templates {
 			$placeholder = str_replace( '{{is_homepage}}', $is_homepage, $placeholder );
 
 			/**Add Content */
-			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], true, 'page' );
+			$content     = $this->build_patterns( $page->post_content, $theme_id, $system, $data['slug'], 'page' );
 			$content     = str_replace( "'", "\'", $content );
 			$content     = $this->extract_menus( $content, $system );
 			$content     = $this->fix_core_navigation( $content );
@@ -269,7 +259,7 @@ class Export_Templates {
 				$slug_key = strtolower( $template['category'] . '-' . $template_name );
 				if ( ! empty( $html_content[ $slug_key ] ) ) {
 					$content = $this->fix_core_navigation( $html_content[ $slug_key ] );
-					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug, $template_type );
+					$content = $this->build_patterns( $content, $theme_id, $system, $theme_slug );
 					$content = $this->extract_menus( $content, $system );
 					foreach ( $headers as $header ) {
 						$search  = '/<!--\s*wp:template-part\s*{"slug":"' . preg_quote( $header['from'], '/' ) . '","theme":"' . preg_quote( get_stylesheet(), '/' ) . '"(?:,"area":"(uncategorized|header|template_part)")?\s*} \/-->/';
@@ -299,10 +289,9 @@ class Export_Templates {
 	 * @param string $theme_id .
 	 * @param object $system .
 	 * @param string $theme_slug .
-	 * @param string $template_type .
 	 * @param string $place .
 	 */
-	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $template_type, $place = 'template' ) {
+	private function build_patterns( $html_content, $theme_id, $system, $theme_slug, $place = 'template' ) {
 		$html_blocks = parse_blocks( $html_content );
 		$blocks      = _flatten_blocks( $html_blocks );
 
@@ -327,6 +316,7 @@ class Export_Templates {
 
 					if ( ! empty( $posts ) ) {
 						$pattern_theme_id = get_post_meta( $posts[0]->ID, '_pattern_theme_id', true );
+						$pattern_sync     = get_post_meta( $posts[0]->ID, '_pattern_sync', true );
 					}
 
 					if ( $theme_id === $pattern_theme_id ) {
@@ -349,12 +339,18 @@ class Export_Templates {
 						$placeholder = str_replace( '{{theme_slug}}', $theme_slug, $placeholder );
 						$placeholder = str_replace( '{{pattern_category}}', $theme_slug . '-' . $pattern_category, $placeholder );
 						$placeholder = str_replace( '{{pattern_content}}', $content, $placeholder );
+						$placeholder = str_replace( '{{pattern_image}}', ! empty( $images ) ? wp_json_encode( $images ) : '', $placeholder );
 
 						/**Replace additional object with object sync */
+						$additional   = array();
+						$additional[] = "'pattern_slug' => '" . $theme_slug . '-companion/' . $pattern_name . "'";
 
-						$additional  = "'pattern_slug' => '" . $theme_slug . '/' . $pattern_name . "',
-						'images' => array(" . $this->format_image_array( $images ) . ')';
-						$placeholder = str_replace( '{{additional_object}}', $additional, $placeholder );
+						if ( $pattern_sync ) {
+							$additional[] = "'is_sync' => true,";
+						} else {
+							$additional[] = "'is_sync' => false,";
+						}
+						$placeholder = str_replace( '{{additional_object}}', join( ",\n\t", $additional ), $placeholder );
 
 						/**Add pattern to class_block_pattern array to register pattern */
 						switch ( $pattern_category ) {
@@ -387,11 +383,7 @@ class Export_Templates {
 							FS_CHMOD_FILE
 						);
 
-						if ( 'parts' === $template_type ) {
-							$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '/' . $pattern_name . '"} /-->';
-						}
-
-						$pattern_after = '<!-- wp:block {"ref":{{' . $theme_slug . '/' . $pattern_name . '}}} /-->';
+						$pattern_after = '<!-- wp:pattern {"slug":"' . $theme_slug . '-companion/' . $pattern_name . '"} /-->';
 					}
 
 					$html_content = str_replace( $pattern_before, $pattern_after, $html_content );
@@ -412,7 +404,7 @@ class Export_Templates {
 		$formatted_array = array();
 
 		foreach ( $images as $key => $value ) {
-			$formatted_array[] = "'$key' => '$value'";
+			$formatted_array[] = '"' . $key . '" => "' . $value . '"';
 		}
 
 		// Join the array elements into a string.
