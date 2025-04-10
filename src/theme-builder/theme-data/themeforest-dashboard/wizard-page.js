@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 
+
 const ImportLoading = (props) => {
     let progress = '0%';
     const width = () => {
@@ -74,16 +75,16 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
                 const plugin = plugins[index];
                 if (!plugin?.installed) {
-                    if (plugin?.download_url) {
+                    if(plugin?.download_url){
                         wp?.apiFetch({
                             path: 'gtb-themes-backend/v1/install/plugins',
                             method: 'POST',
-                            data: {
+                            data:{
                                 slug: plugin?.slug,
                                 download_url: plugin?.download_url
                             }
                         }).then((res) => {
-                            if ('success' === res.status) {
+                            if('success' === res.status){
                                 wp?.apiFetch({
                                     path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
                                     method: 'POST',
@@ -96,12 +97,12 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                                     alert('Error during plugin activation');
                                     installPlugins(index + 1);
                                 })
-                            } else {
+                            }else{
                                 alert(res.message);
                                 installPlugins(index + 1);
                             }
                         })
-                    } else {
+                    }else{
                         wp?.apiFetch({
                             path: 'wp/v2/plugins',
                             method: 'POST',
@@ -187,6 +188,41 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
     </div>
 }
 
+const UpgradePro = ({ updateProgress }) => {
+    const { images, upgradePro } = window['GutenThemeConfig'];
+
+    return <div className='upgrade-pro-wrapper'>
+        <div className='upgrade-pro-content'>
+            <img className='background' src={images + '/bg-upgrade-wizard.png'} />
+            <h3 className='content-title'>
+                {__('Unlock Limitless Possibilities with ', '--gtb-theme-namespace--')}
+                <span className='gradient-text'>{__('Gutenverse PRO', '--gtb-theme-namespace--')}</span>
+            </h3>
+            <p className='content-desc'>
+                {__('Empowering you to build a website that truly stands out with advanced features and seamless integration.', '--gtb-theme-namespace--')}
+            </p>
+            <div className='upgrade-pro-button' onClick={() => window.open(upgradePro, '_blank')}>
+                <div className='button-content-wrapper'>
+                    <span>{__('Upgrade To PRO', '--gtb-theme-namespace--')}</span>
+                    <svg width={18} height={18} viewBox="0 0 15 15" fill={'white'} transform={'translate(0,0)'} xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.25 9.5L2 2.625L5.4375 5.75L7.625 2L9.8125 5.75L13.25 2.625L12 9.5H3.25ZM12 11.375C12 11.75 11.75 12 11.375 12H3.875C3.5 12 3.25 11.75 3.25 11.375V10.75H12V11.375Z" fill={'white'} />
+                    </svg>
+                </div>
+            </div>
+            <img className='upgrade-image' src={images + '/upgrade-content.png'} />
+        </div>
+        <div className='upgrade-pro-actions'>
+            <div onClick={() => updateProgress('importTemplate', -1)} className='button-back'>
+                <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 5.1C15.3314 5.1 15.6 4.83137 15.6 4.5C15.6 4.16863 15.3314 3.9 15 3.9V5.1ZM0.575736 4.07574C0.341421 4.31005 0.341421 4.68995 0.575736 4.92426L4.39411 8.74264C4.62843 8.97696 5.00833 8.97696 5.24264 8.74264C5.47696 8.50833 5.47696 8.12843 5.24264 7.89411L1.84853 4.5L5.24264 1.10589C5.47696 0.871573 5.47696 0.491674 5.24264 0.257359C5.00833 0.0230446 4.62843 0.0230446 4.39411 0.257359L0.575736 4.07574ZM15 3.9L1 3.9V5.1L15 5.1V3.9Z" fill="#99A2A9" />
+                </svg>
+                {__('Back', '--gtb-theme-namespace--')}
+            </div>
+            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
+        </div>
+    </div>;
+}
+
 const ImportTemplates = ({ updateProgress }) => {
     const { assign } = window['GutenThemeConfig'];
     const [allImported, setAllImported] = useState(false);
@@ -236,7 +272,7 @@ const ImportTemplates = ({ updateProgress }) => {
 
             setAllImported(allDone);
         }
-    }, [templateList])
+    },[templateList])
 
     return <div className='template-install import-demo'>
         {modal && <ImporterModal
@@ -247,19 +283,19 @@ const ImportTemplates = ({ updateProgress }) => {
             completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
-            setImporterStep={setImporterStep}
-            setImporterNotice={setImporterNotice}
-            setImporterStatus={setImporterStatus}
-            setImporterCurrent={setImporterCurrent}
-            setDone={setDone}
-            updateTemplateStatus={updateTemplateStatus}
-            setCompleteSubtitle={setCompleteSubtitle}
-            importMode={importMode}
-            templateList={templateList}
+            setImporterStep = {setImporterStep}
+            setImporterNotice = {setImporterNotice}
+            setImporterStatus = {setImporterStatus}
+            setImporterCurrent = {setImporterCurrent}
+            setDone = {setDone}
+            updateTemplateStatus = {updateTemplateStatus}
+            setCompleteSubtitle = {setCompleteSubtitle}
+            importMode ={importMode}
+            templateList = {templateList}
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
-            <div className={`button-import-all ${allImported ? 'imported' : ''}`} onClick={() => {
+            <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
                 if (!allImported) {
                     openImportModal('all');
                 }
@@ -305,7 +341,7 @@ const ImportTemplates = ({ updateProgress }) => {
                 </svg>
                 {__('Back', '--gtb-theme-namespace--')}
             </div>
-            <div onClick={() => updateProgress('done', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
+            <div onClick={() => updateProgress('upgradePro', 1)} className='button-next'>{__('Next', '--gtb-theme-namespace--')}</div>
         </div>
     </div>
 }
@@ -342,13 +378,13 @@ export const ImporterModal = (props) => {
     const [isCreateMenu, setIsCreateMenu] = useState(true);
 
     const importTemplates = template => {
-        if (isCreateMenu) {
+        if(isCreateMenu){
             setImporterStep([
                 "Creating Pages",
                 "Assigning Templates",
                 "Importing Menu"
             ])
-        } else {
+        }else{
             setImporterStep([
                 "Creating Pages",
                 "Assigning Templates",
@@ -369,11 +405,11 @@ export const ImporterModal = (props) => {
             setImporterStatus(`Assigning Templates: ${template.page}....`)
             setImporterCurrent(2);
             updateTemplateStatus(template.title);
-            if (isCreateMenu) {
+            if(isCreateMenu){
                 setTimeout(() => {
                     setImporterStatus(`Importing Menu....`)
                     setImporterCurrent(3);
-
+    
                     wp?.apiFetch({
                         path: `gtb-themes-backend/v1/import/menus`,
                         method: 'GET',
@@ -386,9 +422,9 @@ export const ImporterModal = (props) => {
                         }, 500)
                     }).catch(() => {
                     })
-
+                    
                 }, 500)
-            } else {
+            }else{
                 setTimeout(() => {
                     setImporterStatus(`Done...`);
                     setImporterCurrent(3);
@@ -396,7 +432,7 @@ export const ImporterModal = (props) => {
                     setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
                 }, 500)
             }
-
+            
         }).catch(() => {
         })
     }
@@ -405,15 +441,15 @@ export const ImporterModal = (props) => {
         const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
 
         const steps = filteredTemplateList.map(element => element.title);
-        if (isCreateMenu) {
+        if(isCreateMenu){
             setImporterStep([
                 ...steps,
                 "Importing Menu"
             ]);
-        } else {
+        }else{
             setImporterStep(steps);
         }
-
+        
         setDone(false);
 
         for (let i = 0; i < filteredTemplateList.length; i++) {
@@ -444,7 +480,7 @@ export const ImporterModal = (props) => {
 
         setTimeout(() => {
             let count = 1;
-            if (isCreateMenu) {
+            if(isCreateMenu){
                 setImporterStatus(`Importing Menu....`);
                 setImporterCurrent(filteredTemplateList.length + count);
                 count++;
@@ -462,7 +498,7 @@ export const ImporterModal = (props) => {
                     setDone(true);
                     console.error(`Failed to import menu`, error);
                 })
-            } else {
+            }else{
                 setTimeout(() => {
                     setImporterStatus(`Done...`);
                     setImporterCurrent(filteredTemplateList.length + count);
@@ -475,15 +511,15 @@ export const ImporterModal = (props) => {
 
     const handleNextImport = () => {
         setModalCurrent(2);
-        if ('all' === importMode) {
+        if('all' === importMode){
             importAll();
-        } else {
+        }else{
             importTemplates(importMode);
         }
     }
 
     const modalContent = () => {
-        if (1 === modalCurrent && !done) {
+        if( 1 === modalCurrent && !done ){
             return <>
                 <div className='importer-header'>
                     <span>{headerText}</span>
@@ -506,10 +542,10 @@ export const ImporterModal = (props) => {
                                         id='with-menu'
                                         type="checkbox"
                                         checked={isCreateMenu}
-                                        onChange={() => { }}
+                                        onChange={() => {}}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => !isCreateMenu && setIsCreateMenu(!isCreateMenu)} />
+                                    <span className="checkmark" onClick={() => !isCreateMenu && setIsCreateMenu(!isCreateMenu)}/>
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Full Import`, '--gtb-theme-namespace--')}</p>
@@ -522,10 +558,10 @@ export const ImporterModal = (props) => {
                                         id='without-menu'
                                         type="checkbox"
                                         checked={!isCreateMenu}
-                                        onChange={() => { }}
+                                        onChange={() => {}}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => { isCreateMenu && setIsCreateMenu(!isCreateMenu) }} />
+                                    <span className="checkmark" onClick={() => { isCreateMenu && setIsCreateMenu(!isCreateMenu)}}/>
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Import Without Menu`, '--gtb-theme-namespace--')}</p>
@@ -541,7 +577,7 @@ export const ImporterModal = (props) => {
                     </div>
                 </div>
             </>
-        } else if (2 === modalCurrent && !done) {
+        }else if( 2 === modalCurrent && !done){
             return <>
                 <div className='importer-header'>
                     <span>{headerText}</span>
@@ -594,7 +630,7 @@ export const ImporterModal = (props) => {
                     <div className='loading-status' style={{ width: `${((importerCurrent / (importerStep.length)) * 100)}%` }}></div>
                 </div>
             </>
-        } else if (done) {
+        }else if( done ){
             return <div className='import-complete'>
                 <div className="auth-icon-status-wrapper">
                     <svg viewBox="0 0 160 160">
@@ -687,6 +723,8 @@ const WizardPage = () => {
                         }} className='button-visit'>{__('Visit Dashboard', '--gtb-theme-namespace--')}</div>
                     </div>
                 </div>;
+            case 'upgradePro':
+                return <UpgradePro updateProgress={updateProgress} />;
             case 'importTemplate':
                 return <ImportTemplates updateProgress={updateProgress} />;
             case 'installPlugin':
@@ -706,8 +744,12 @@ const WizardPage = () => {
                     <p className='number'>2</p>
                     <h3 className='progress-title'>{__('Import Demo', '--gtb-theme-namespace--')}</h3>
                 </div>
-                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 4 ? 'done' : ''}`}>
+                <div className={`progress ${progress === 'upgradePro' ? 'active' : ''} ${progressCount >= 3 ? 'done' : ''}`}>
                     <p className='number'>3</p>
+                    <h3 className='progress-title'>{__('Upgrade Your Site', '--gtb-theme-namespace--')}</h3>
+                </div>
+                <div className={`progress ${progress === 'done' ? 'active' : ''} ${progressCount >= 4 ? 'done' : ''}`}>
+                    <p className='number'>4</p>
                     <h3 className='progress-title'>{__('Finalizing', '--gtb-theme-namespace--')}</h3>
                 </div>
             </div>
