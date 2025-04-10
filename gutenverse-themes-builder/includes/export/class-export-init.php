@@ -263,7 +263,6 @@ class Export_Init {
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/css/themeforest/theme-dashboard.css', gutenverse_themes_builder_theme_built_path() . 'assets/css/theme-dashboard.css' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-dashboard-tf.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-dashboard-tf.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-pro.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-upgrade-pro.png' );
-				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-newsletter.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-newsletter.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/bg-upgrade-wizard.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/bg-upgrade-wizard.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/upgrade-content.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/upgrade-content.png' );
 				copy( GUTENVERSE_THEMES_BUILDER_DIR . '/includes/data/assets/img/final.png', gutenverse_themes_builder_theme_built_path() . 'assets/img/final.png' );

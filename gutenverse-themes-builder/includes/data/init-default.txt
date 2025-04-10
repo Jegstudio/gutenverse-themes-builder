@@ -365,7 +365,6 @@ class Init {
 			'logo'          => {{theme_logo}},
 			'slug'          => '{{slug}}',
 			'upgradePro'    => 'https://gutenverse.com/pro',
-			'ratingLink'    => 'https://themeforest.net/downloads',
 			'supportLink'   => 'https://support.jegtheme.com/forums/forum/fse-themes/',
 			'libraryApi'    => 'https://gutenverse.com//wp-json/gutenverse-server/v1',
 			'docsLink'      => 'https://support.jegtheme.com/theme/fse-themes/',
