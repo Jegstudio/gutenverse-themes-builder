@@ -75,16 +75,16 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                 setInstalling({ show: true, message: 'Installing Plugins...', progress: '2/4' });
                 const plugin = plugins[index];
                 if (!plugin?.installed) {
-                    if(plugin?.download_url){
+                    if (plugin?.download_url) {
                         wp?.apiFetch({
                             path: 'gtb-themes-backend/v1/install/plugins',
                             method: 'POST',
-                            data:{
+                            data: {
                                 slug: plugin?.slug,
                                 download_url: plugin?.download_url
                             }
                         }).then((res) => {
-                            if('success' === res.status){
+                            if ('success' === res.status) {
                                 wp?.apiFetch({
                                     path: `wp/v2/plugins/plugin?plugin=${plugin?.slug}/${plugin?.slug}`,
                                     method: 'POST',
@@ -97,12 +97,12 @@ const InstallPlugin = ({ action, setAction, updateProgress }) => {
                                     alert('Error during plugin activation');
                                     installPlugins(index + 1);
                                 })
-                            }else{
+                            } else {
                                 alert(res.message);
                                 installPlugins(index + 1);
                             }
                         })
-                    }else{
+                    } else {
                         wp?.apiFetch({
                             path: 'wp/v2/plugins',
                             method: 'POST',
@@ -272,7 +272,7 @@ const ImportTemplates = ({ updateProgress }) => {
 
             setAllImported(allDone);
         }
-    },[templateList])
+    }, [templateList])
 
     return <div className='template-install import-demo'>
         {modal && <ImporterModal
@@ -283,19 +283,19 @@ const ImportTemplates = ({ updateProgress }) => {
             completeSubtitle={completeSubtitle}
             done={done}
             close={() => { setModal(false) }}
-            setImporterStep = {setImporterStep}
-            setImporterNotice = {setImporterNotice}
-            setImporterStatus = {setImporterStatus}
-            setImporterCurrent = {setImporterCurrent}
-            setDone = {setDone}
-            updateTemplateStatus = {updateTemplateStatus}
-            setCompleteSubtitle = {setCompleteSubtitle}
-            importMode ={importMode}
-            templateList = {templateList}
+            setImporterStep={setImporterStep}
+            setImporterNotice={setImporterNotice}
+            setImporterStatus={setImporterStatus}
+            setImporterCurrent={setImporterCurrent}
+            setDone={setDone}
+            updateTemplateStatus={updateTemplateStatus}
+            setCompleteSubtitle={setCompleteSubtitle}
+            importMode={importMode}
+            templateList={templateList}
         />}
         <div className='template-title'>
             <h1 className='content-title'>{__('Import Prebuilt Demos', '--gtb-theme-namespace--')}</h1>
-            <div className={`button-import-all ${allImported? 'imported' : ''}`} onClick={() => {
+            <div className={`button-import-all ${allImported ? 'imported' : ''}`} onClick={() => {
                 if (!allImported) {
                     openImportModal('all');
                 }
@@ -378,13 +378,13 @@ export const ImporterModal = (props) => {
     const [isCreateMenu, setIsCreateMenu] = useState(true);
 
     const importTemplates = template => {
-        if(isCreateMenu){
+        if (isCreateMenu) {
             setImporterStep([
                 "Creating Pages",
                 "Assigning Templates",
                 "Importing Menu"
             ])
-        }else{
+        } else {
             setImporterStep([
                 "Creating Pages",
                 "Assigning Templates",
@@ -405,11 +405,11 @@ export const ImporterModal = (props) => {
             setImporterStatus(`Assigning Templates: ${template.page}....`)
             setImporterCurrent(2);
             updateTemplateStatus(template.title);
-            if(isCreateMenu){
+            if (isCreateMenu) {
                 setTimeout(() => {
                     setImporterStatus(`Importing Menu....`)
                     setImporterCurrent(3);
-    
+
                     wp?.apiFetch({
                         path: `gtb-themes-backend/v1/import/menus`,
                         method: 'GET',
@@ -422,9 +422,9 @@ export const ImporterModal = (props) => {
                         }, 500)
                     }).catch(() => {
                     })
-                    
+
                 }, 500)
-            }else{
+            } else {
                 setTimeout(() => {
                     setImporterStatus(`Done...`);
                     setImporterCurrent(3);
@@ -432,7 +432,7 @@ export const ImporterModal = (props) => {
                     setCompleteSubtitle(`Page ${template.page} is successfully imported!`);
                 }, 500)
             }
-            
+
         }).catch(() => {
         })
     }
@@ -441,15 +441,15 @@ export const ImporterModal = (props) => {
         const filteredTemplateList = templateList.filter(template => !template?.status?.using_template);
 
         const steps = filteredTemplateList.map(element => element.title);
-        if(isCreateMenu){
+        if (isCreateMenu) {
             setImporterStep([
                 ...steps,
                 "Importing Menu"
             ]);
-        }else{
+        } else {
             setImporterStep(steps);
         }
-        
+
         setDone(false);
 
         for (let i = 0; i < filteredTemplateList.length; i++) {
@@ -480,7 +480,7 @@ export const ImporterModal = (props) => {
 
         setTimeout(() => {
             let count = 1;
-            if(isCreateMenu){
+            if (isCreateMenu) {
                 setImporterStatus(`Importing Menu....`);
                 setImporterCurrent(filteredTemplateList.length + count);
                 count++;
@@ -498,7 +498,7 @@ export const ImporterModal = (props) => {
                     setDone(true);
                     console.error(`Failed to import menu`, error);
                 })
-            }else{
+            } else {
                 setTimeout(() => {
                     setImporterStatus(`Done...`);
                     setImporterCurrent(filteredTemplateList.length + count);
@@ -511,15 +511,15 @@ export const ImporterModal = (props) => {
 
     const handleNextImport = () => {
         setModalCurrent(2);
-        if('all' === importMode){
+        if ('all' === importMode) {
             importAll();
-        }else{
+        } else {
             importTemplates(importMode);
         }
     }
 
     const modalContent = () => {
-        if( 1 === modalCurrent && !done ){
+        if (1 === modalCurrent && !done) {
             return <>
                 <div className='importer-header'>
                     <span>{headerText}</span>
@@ -542,10 +542,10 @@ export const ImporterModal = (props) => {
                                         id='with-menu'
                                         type="checkbox"
                                         checked={isCreateMenu}
-                                        onChange={() => {}}
+                                        onChange={() => { }}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => !isCreateMenu && setIsCreateMenu(!isCreateMenu)}/>
+                                    <span className="checkmark" onClick={() => !isCreateMenu && setIsCreateMenu(!isCreateMenu)} />
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Full Import`, '--gtb-theme-namespace--')}</p>
@@ -558,10 +558,10 @@ export const ImporterModal = (props) => {
                                         id='without-menu'
                                         type="checkbox"
                                         checked={!isCreateMenu}
-                                        onChange={() => {}}
+                                        onChange={() => { }}
                                         hidden
                                     />
-                                    <span className="checkmark" onClick={() => { isCreateMenu && setIsCreateMenu(!isCreateMenu)}}/>
+                                    <span className="checkmark" onClick={() => { isCreateMenu && setIsCreateMenu(!isCreateMenu) }} />
                                 </div>
                                 <div className="label-wrapper">
                                     <p className='label-checkbox'>{__(`Import Without Menu`, '--gtb-theme-namespace--')}</p>
@@ -577,7 +577,7 @@ export const ImporterModal = (props) => {
                     </div>
                 </div>
             </>
-        }else if( 2 === modalCurrent && !done){
+        } else if (2 === modalCurrent && !done) {
             return <>
                 <div className='importer-header'>
                     <span>{headerText}</span>
@@ -630,7 +630,7 @@ export const ImporterModal = (props) => {
                     <div className='loading-status' style={{ width: `${((importerCurrent / (importerStep.length)) * 100)}%` }}></div>
                 </div>
             </>
-        }else if( done ){
+        } else if (done) {
             return <div className='import-complete'>
                 <div className="auth-icon-status-wrapper">
                     <svg viewBox="0 0 160 160">
